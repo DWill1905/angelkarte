@@ -20,7 +20,33 @@
    "fisch": "Hecht, Zander, Barsch, Aal, Karpfen, Schleie, Brachse (14 gemeldete Arten)",
    "methode": "Vom verankerten Boot: Gummifisch an den Havel-Rinnen auf Zander, große Köder an Schilfkanten auf Hecht. Schleppen verboten!",
    "karte": "Angelkarte Seenfischerei Obere Havel – online (fischerei-wesenberg.de) oder Fischereihof Wesenberg",
-   "note": "Havel durchfließt den See, im Sommer viel Hausboot-Verkehr – Morgen- und Abendstunden nutzen. Schilfgürtel & Seerosenfelder tabu.",
+   "note": "Ø nur 1,6 m tief, Max. 7 m! Havel durchfließt den See, im Sommer viel Hausboot-Verkehr – Morgen- und Abendstunden nutzen. Schilfgürtel & Seerosenfelder tabu, Scharkante liegt weit hinterm Schilf: Boot + Echolot.",
+   "hotspots": [
+    {
+     "name": "Havel-Einlauf & 7-m-Kuhle",
+     "lat": 53.307,
+     "lng": 13.004,
+     "tipp": "DIE Stelle: tiefste Kuhle des Sees (7 m) direkt vor der Havel-Einmündung am Campingpark Havelberge. Zander stehen tagsüber an der 5–7-m-Kante, abends Aal an der gepflasterten Buhne."
+    },
+    {
+     "name": "Halbinsel am Ostufer",
+     "lat": 53.299,
+     "lng": 13.018,
+     "tipp": "Trennt Nord- und Südbecken. Hecht und Karpfen laut Fangmeldungen am besten südlich der Halbinsel – Kanten mit flach laufenden Wobblern abklopfen."
+    },
+    {
+     "name": "Kammerkanal-Mündung",
+     "lat": 53.309,
+     "lng": 13.028,
+     "tipp": "Kanal Richtung Zierker See – bekannt für seinen Welsbestand. Abends raubende Barsche entlang der Stege. Lage ungefähr."
+    },
+    {
+     "name": "Havel-Auslauf Wesenberg",
+     "lat": 53.289,
+     "lng": 13.001,
+     "tipp": "Abfluss Richtung Drewensee: Aal-Strecke am Abend. Achtung: 100 m Mindestabstand zur Schleuse Wesenberg einhalten!"
+    }
+   ],
    "warn": false
   },
   {
@@ -39,6 +65,14 @@
    "methode": "Flacher, krautiger Hechtsee: Spinnerbait/Jerkbait über Kraut, Westbuchten mit Ankerplätzen",
    "karte": "Angelkarte Obere Havel (Meisterbereich Mirow, Tel. 039833 20423)",
    "note": "Wasser eher trüb, umliegender Wald teils überflutet – Mückenschutz einpacken. Schleusenpassage ab Mirow.",
+   "hotspots": [
+    {
+     "name": "Westbuchten",
+     "lat": 53.245,
+     "lng": 12.805,
+     "tipp": "Ruhige Ankerbuchten am Westufer – Hecht über und an den Krautfeldern, Spinnerbait/Chatterbait flach geführt. Lage ungefähr."
+    }
+   ],
    "warn": false
   },
   {
@@ -184,6 +218,12 @@
    "von": null,
    "bis": null,
    "mm": "50 cm"
+  },
+  {
+   "fisch": "Schleie",
+   "von": null,
+   "bis": null,
+   "mm": "25 cm"
   },
   {
    "fisch": "Wels",
