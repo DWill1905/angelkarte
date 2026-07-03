@@ -666,16 +666,47 @@ FISH.forEach(f=>fishEl.appendChild(fishChip(f.id,f.id)));
 
 /* Standort */
 let userPos=null, userMarker=null;
-document.getElementById('locbtn').onclick=()=>{
-  if(!navigator.geolocation) return alert('Standort wird von diesem Gerät nicht unterstützt.');
-  navigator.geolocation.getCurrentPosition(p=>{
-    userPos=[p.coords.latitude,p.coords.longitude];
-    if(userMarker) userMarker.remove();
-    userMarker=L.circleMarker(userPos,{radius:7,color:'#fff',fillColor:'#4cb8d4',fillOpacity:.95,weight:2})
-      .addTo(map).bindTooltip('Du');
-    map.setView(userPos,11);
-    renderList();
-  },()=>alert('Standort konnte nicht ermittelt werden.'),{enableHighAccuracy:false,timeout:8000});
+const locBtn=document.getElementById('locbtn');
+function locApply(p){
+  userPos=[p.coords.latitude,p.coords.longitude];
+  if(userMarker) userMarker.remove();
+  userMarker=L.circleMarker(userPos,{radius:7,color:'#fff',fillColor:'#4cb8d4',fillOpacity:.95,weight:2})
+    .addTo(map).bindTooltip('Du');
+  map.setView(userPos,11);
+  renderList();
+}
+function locFail(err){
+  const code=err&&err.code;
+  const msgs={
+    1:'Standortfreigabe verweigert.\n\niPhone: Einstellungen → Datenschutz & Sicherheit → Ortungsdienste → Safari-Websites (bzw. die Home-Bildschirm-App) → "Beim Verwenden" + Website-Berechtigung erlauben.\n\nAndroid/Chrome: Schloss-Symbol in der Adressleiste → Berechtigungen → Standort zulassen.',
+    2:'Position derzeit nicht ermittelbar (kein GPS-/WLAN-Fix). Kurz unter freien Himmel und nochmal versuchen.',
+    3:'Zeitüberschreitung bei der Ortung – bitte erneut versuchen.'
+  };
+  alert(msgs[code]||('Standortfehler: '+((err&&err.message)||'unbekannt')));
+}
+locBtn.onclick=()=>{
+  if(!navigator.geolocation) return alert('Standort wird von diesem Gerät/Browser nicht unterstützt.');
+  if(window.isSecureContext===false) return alert('Standort erfordert HTTPS.');
+  locBtn.disabled=true; const txt=locBtn.textContent; locBtn.textContent='⏳ Orte…';
+  const finish=fn=>x=>{locBtn.disabled=false;locBtn.textContent=txt;fn(x);};
+  navigator.geolocation.getCurrentPosition(
+    finish(locApply),
+    err=>{
+      if(err&&err.code===3){
+        /* iOS braucht für den ersten Fix oft länger: zweiter Versuch über watchPosition.
+           done-Flag + nachgelagertes clearWatch decken auch synchrone Callbacks ab. */
+        let wid=null, settled=false;
+        const stop=()=>{ if(wid!=null){navigator.geolocation.clearWatch(wid);wid=null;} };
+        wid=navigator.geolocation.watchPosition(
+          p=>{settled=true;stop();finish(locApply)(p);},
+          e=>{settled=true;stop();finish(locFail)(e);},
+          {enableHighAccuracy:true,timeout:20000,maximumAge:0}
+        );
+        if(settled) stop();
+      } else finish(locFail)(err);
+    },
+    {enableHighAccuracy:true,timeout:12000,maximumAge:60000}
+  );
 };
 
 /* Spotliste */
