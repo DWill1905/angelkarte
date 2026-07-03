@@ -321,6 +321,11 @@ const SPOTS_SN = [
     methode:'Gummifisch & Wobbler an den Kanten der Bachtäler, DropShot auf Barsch – weite Würfe nötig, Fische oft bis ~15 m Tiefe',
     karte:'AVS-Erlaubnisschein + TWT-Belehrung (Quittung im Fangbuch)',
     note:'Trinkwassertalsperre: kein Boot, kein Waten, kein Anfüttern, keine Maden/Fleisch, kein Nachtangeln. Schonmaß 60 cm für ALLE Salmoniden. Parkplatz am NO-Ufer (Lippersdorfer Str.), Rundwanderweg erschließt alle Ufer.',
+    hotspots:[
+      {name:'Staumauer-Bereich',lat:50.7340,lng:13.2318,tipp:'Tiefster Bereich der Talsperre. Sommer: Fische stehen tief – weite Würfe mit schweren Gummis, Barschtrupps über den Tiefenkanten suchen.'},
+      {name:'Übergang Vorsperre Forchheim',lat:50.7284,lng:13.2736,tipp:'Kante zwischen flacher Vorsperre und Hauptbecken – klassischer Zug für Hecht und Barsch, im Frühsommer zuerst warm.'},
+      {name:'NO-Ufer am Parkplatz',lat:50.7420,lng:13.2430,tipp:'Kürzester Weg ans Wasser (Lippersdorfer Str.), Scharkante in Wurfweite. Lage ungefähr – Beschilderung der erlaubten Angelbereiche beachten!'}
+    ],
     warn:false
   },
   {
@@ -455,13 +460,22 @@ const SPOTS_MV=[
    fisch:'Hecht, Zander, Barsch, Aal, Karpfen, Schleie, Brachse (14 gemeldete Arten)',
    methode:'Vom verankerten Boot: Gummifisch an den Havel-Rinnen auf Zander, große Köder an Schilfkanten auf Hecht. Schleppen verboten!',
    karte:'Angelkarte Seenfischerei Obere Havel – online (fischerei-wesenberg.de) oder Fischereihof Wesenberg',
-   note:'Havel durchfließt den See, im Sommer viel Hausboot-Verkehr – Morgen- und Abendstunden nutzen. Schilfgürtel & Seerosenfelder tabu.',warn:false},
+   note:'Ø nur 1,6 m tief, Max. 7 m! Havel durchfließt den See, im Sommer viel Hausboot-Verkehr – Morgen- und Abendstunden nutzen. Schilfgürtel & Seerosenfelder tabu, Scharkante liegt weit hinterm Schilf: Boot + Echolot.',
+   hotspots:[
+     {name:'Havel-Einlauf & 7-m-Kuhle',lat:53.3070,lng:13.0040,tipp:'DIE Stelle: tiefste Kuhle des Sees (7 m) direkt vor der Havel-Einmündung am Campingpark Havelberge. Zander stehen tagsüber an der 5–7-m-Kante, abends Aal an der gepflasterten Buhne.'},
+     {name:'Halbinsel am Ostufer',lat:53.2990,lng:13.0180,tipp:'Trennt Nord- und Südbecken. Hecht und Karpfen laut Fangmeldungen am besten südlich der Halbinsel – Kanten mit flach laufenden Wobblern abklopfen.'},
+     {name:'Kammerkanal-Mündung',lat:53.3090,lng:13.0280,tipp:'Kanal Richtung Zierker See – bekannt für seinen Welsbestand. Abends raubende Barsche entlang der Stege. Lage ungefähr.'},
+     {name:'Havel-Auslauf Wesenberg',lat:53.2890,lng:13.0010,tipp:'Abfluss Richtung Drewensee: Aal-Strecke am Abend. Achtung: 100 m Mindestabstand zur Schleuse Wesenberg einhalten!'}
+   ],warn:false},
   {name:'Zotzensee',nr:'Obere Havel',cat:'raub',arten:['Hecht','Barsch','Aal','Schleie'],
    lat:53.2437,lng:12.8125,
    fisch:'Hecht, Barsch, Aal, Schleie',
    methode:'Flacher, krautiger Hechtsee: Spinnerbait/Jerkbait über Kraut, Westbuchten mit Ankerplätzen',
    karte:'Angelkarte Obere Havel (Meisterbereich Mirow, Tel. 039833 20423)',
-   note:'Wasser eher trüb, umliegender Wald teils überflutet – Mückenschutz einpacken. Schleusenpassage ab Mirow.',warn:false},
+   note:'Wasser eher trüb, umliegender Wald teils überflutet – Mückenschutz einpacken. Schleusenpassage ab Mirow.',
+   hotspots:[
+     {name:'Westbuchten',lat:53.2450,lng:12.8050,tipp:'Ruhige Ankerbuchten am Westufer – Hecht über und an den Krautfeldern, Spinnerbait/Chatterbait flach geführt. Lage ungefähr.'}
+   ],warn:false},
   {name:'Vilzsee',nr:'Obere Havel',cat:'raub',arten:['Hecht','Barsch','Schleie'],
    lat:53.2099,lng:12.8336,
    fisch:'Hecht, Barsch, Schleie',
@@ -505,6 +519,7 @@ const SCHON_MV=[
   {fisch:'Barsch',von:null,bis:null,mm:'Entnahmefenster 25–40 cm'},
   {fisch:'Karpfen',von:null,bis:null,mm:'50 cm'},
   {fisch:'Aal',von:null,bis:null,mm:'50 cm'},
+  {fisch:'Schleie',von:null,bis:null,mm:'25 cm'},
   {fisch:'Wels',von:null,bis:null,mm:'90 cm'}
 ];
 
@@ -557,7 +572,10 @@ async function initRegions(){
   loadRegion(start);
 }
 function loadRegion(r){
-  if(REGION) SPOTS.forEach(sp=>{if(sp.marker&&map.hasLayer(sp.marker))map.removeLayer(sp.marker);});
+  if(REGION) SPOTS.forEach(sp=>{
+    if(sp.marker&&map.hasLayer(sp.marker))map.removeLayer(sp.marker);
+    (sp.hotMarkers||[]).forEach(m=>{if(map.hasLayer(m))map.removeLayer(m);});
+  });
   REGION=r; SPOTS=r.spots; SCHON=r.schon;
   buildMarkers(); buildChips(); buildBanner(); buildSchonUI(); buildRegeln(); buildFbOptions();
   fishSel=null; syncFishChips(); applyFilters();
@@ -653,6 +671,7 @@ function popupHtml(s){
     <div class="pop-row"><b>Methode &amp; Köder</b>${s.methode}</div>
     <div class="pop-row"><b>Erlaubnis</b>${s.karte}</div>
     <div class="pop-note${s.warn?' pop-warn':''}">${s.note}</div>
+    ${s.hotspots&&s.hotspots.length?'<div class="pop-row" style="margin-top:8px"><b>Hotspots (kleine Punkte auf der Karte)</b>'+s.hotspots.map(h=>h.name).join(' · ')+'</div>':''}
     <div class="pop-actions">
       <a class="pop-btn nav" href="${mapsLink(s)}" target="_blank" rel="noopener">Route</a>
       <button class="pop-btn log" onclick="prefillFang('${s.name.replace(/'/g,"\\'")}')">Fang loggen</button>
@@ -685,14 +704,28 @@ function applyFilters(){
     const v=spotVisible(s);
     if(v&&!map.hasLayer(s.marker)) s.marker.addTo(map);
     else if(!v&&map.hasLayer(s.marker)) s.marker.remove();
+    (s.hotMarkers||[]).forEach(m=>{
+      if(v&&!map.hasLayer(m)) m.addTo(map);
+      else if(!v&&map.hasLayer(m)) m.remove();
+    });
   });
   renderList();
 }
 
 const LINECOL={gelb:'#e8b93c',gruen:'#6fae6f',allg:'#7d9bc9',sperr:'#c94f3d'};
+function hotPopup(parent,h){
+  return `<span class="pop-cat" style="background:${CATS[parent.cat].color}">Hotspot</span>
+    <div class="pop-title">${h.name}</div>
+    <div class="pop-dist">gehört zu ${parent.name}</div>
+    <div class="pop-note">${h.tipp}</div>`;
+}
 function buildMarkers(){
   SPOTS.forEach(s=>{
     if(s.marker) return; /* bereits gebaut (Regionswechsel zurück) */
+    s.hotMarkers=(s.hotspots||[]).map(h=>
+      L.circleMarker([h.lat,h.lng],{radius:6,color:'#fff',weight:2,fillColor:CATS[s.cat].color,fillOpacity:.95})
+        .bindPopup(hotPopup(s,h),{autoPanPadding:[20,60]}).bindTooltip(h.name)
+    );
     if(s.line){
       s.marker=L.polyline(s.line,{
         color:LINECOL[s.farbe]||CATS[s.cat].color,
