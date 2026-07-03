@@ -161,6 +161,12 @@
   .g-inputrow button{background:var(--salmo);color:#082226;border:0;border-radius:8px;padding:0 16px;font-size:16px;cursor:pointer;font-weight:700}
   .g-inputrow button:disabled{opacity:.5}
   @media(min-width:820px){#view-guide{flex-direction:column!important}.g-chat{max-width:720px;margin:0 auto;width:100%}.g-quick,.g-inputrow{max-width:720px;margin:0 auto;width:100%}}
+  .mydlg-wrap{position:fixed;inset:0;background:rgba(6,16,18,.72);z-index:1200;display:flex;align-items:center;justify-content:center;padding:20px}
+  .mydlg{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;width:100%;max-width:380px}
+  .mydlg h3{font-family:Georgia,serif;font-size:16px;margin-bottom:10px;color:#f2f7f4}
+  .mydlg-btns{display:flex;gap:8px;margin-top:14px}
+  .mydlg-btns button{flex:1;border:0;border-radius:8px;padding:11px;font-size:14px;font-weight:700;cursor:pointer;background:var(--forelle);color:#3a2f10}
+  .mydlg-btns .ghost{background:var(--panel-2);color:var(--text);border:1px solid var(--line)}
   footer{grid-row:6;background:var(--panel);border-top:1px solid var(--line);
     padding:6px 14px calc(6px + env(safe-area-inset-bottom));font-size:10px;color:var(--muted)}
   footer a{color:var(--salmo)}
@@ -187,6 +193,7 @@
   <div class="eyebrow">Revierwasserlaufanstalt · Osterzgebirge</div>
   <h1>Angelrevier Großhartmannsdorf <span class="tilde">~</span></h1>
   <div class="sun" id="sunline"></div>
+  <div class="sun" id="wxline" aria-live="polite"></div>
   <select id="regionSel" aria-label="Region wählen" style="margin-top:6px;max-width:100%"></select>
 </header>
 
@@ -266,6 +273,20 @@
   </div>
 </div>
 
+<div class="mydlg-wrap" id="myDlg" hidden>
+  <div class="mydlg">
+    <h3>Eigenen Spot speichern</h3>
+    <label for="myName">Name</label>
+    <input id="myName" type="text" placeholder="z.B. Kante vor der Schilfspitze" maxlength="60">
+    <label for="myTipp" style="margin-top:8px">Notiz / Taktik</label>
+    <input id="myTipp" type="text" placeholder="z.B. Zander 18 Uhr, Gummifisch motoroil 12 cm" maxlength="160">
+    <div class="mydlg-btns">
+      <button id="myCancel" class="ghost">Abbrechen</button>
+      <button id="mySave">Speichern</button>
+    </div>
+  </div>
+</div>
+
 <footer>Koordinaten näherungsweise · Gastkarten: <a href="https://angeln-sachsen.de/avs/gastangler/gastkarten" target="_blank" rel="noopener">AVS Südsachsen</a> · Fischereischein Pflicht · <button id="keyBtn" style="background:none;border:0;color:var(--salmo);cursor:pointer;font-size:10px;padding:0">⚙ API-Key</button></footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
@@ -304,6 +325,7 @@ async function claudeCall(body){
 }
 
 const CATS = {
+  eigen:{label:'Eigene Spots',color:'#c9699e'},
   info:{label:'Service/Kartenausgabe',color:'#b58cc9'},
   raub:{label:'Raubfisch',color:'#e4572e'},
   salmo:{label:'Salmoniden',color:'#4cb8d4'},
@@ -571,16 +593,19 @@ async function initRegions(){
   sel.onchange=async()=>{loadRegion(REGIONS.find(r=>r.id===sel.value));try{await store.set('region',sel.value);}catch(e){}};
   loadRegion(start);
 }
-function loadRegion(r){
+async function loadRegion(r){
   if(REGION) SPOTS.forEach(sp=>{
     if(sp.marker&&map.hasLayer(sp.marker))map.removeLayer(sp.marker);
     (sp.hotMarkers||[]).forEach(m=>{if(map.hasLayer(m))map.removeLayer(m);});
   });
-  REGION=r; SPOTS=r.spots; SCHON=r.schon;
+  REGION=r; SCHON=r.schon;
+  const mine=await loadMySpots(r.id);
+  SPOTS=r.spots.concat(mine.map(mySpotObj));
   buildMarkers(); buildChips(); buildBanner(); buildSchonUI(); buildRegeln(); buildFbOptions();
   fishSel=null; syncFishChips(); applyFilters();
   const pts=SPOTS.map(sp=>[sp.lat,sp.lng]);
   if(pts.length) map.fitBounds(pts,{padding:[30,30]});
+  loadWeather();
 }
 
 
@@ -675,6 +700,7 @@ function popupHtml(s){
     <div class="pop-actions">
       <a class="pop-btn nav" href="${mapsLink(s)}" target="_blank" rel="noopener">Route</a>
       <button class="pop-btn log" onclick="prefillFang('${s.name.replace(/'/g,"\\'")}')">Fang loggen</button>
+      ${s.my?'<button class="pop-btn" style="background:#4a201a;color:#f0b6a8" onclick="delMySpot('+s.myId+')">Löschen</button>':''}
     </div>`;
 }
 
@@ -804,6 +830,7 @@ function locApply(p){
     .addTo(map).bindTooltip('Du');
   map.setView(userPos,11);
   renderList();
+  wxKey=''; loadWeather();
 }
 function locFail(err){
   const code=err&&err.code;
@@ -879,6 +906,84 @@ const sheet=document.getElementById('sheet'), handle=document.getElementById('sh
 function toggleSheet(){ if(window.innerWidth<820) sheet.classList.toggle('collapsed'); }
 handle.onclick=toggleSheet;
 handle.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleSheet();}};
+
+/* ============ Eigene Spots (Long-Press / Rechtsklick auf die Karte) ============ */
+var myPending=null;
+const myDlg=document.getElementById('myDlg');
+async function loadMySpots(rid){
+  try{const r=await store.get('myspots:'+rid);return JSON.parse(r.value)||[];}catch(e){return[];}
+}
+function mySpotObj(m){
+  return {name:esc(m.name),nr:'Eigener Spot',cat:'eigen',arten:[],lat:m.lat,lng:m.lng,
+    fisch:'–',methode:'–',karte:'Eigener Spot (nur auf diesem Gerät gespeichert)',
+    note:esc(m.tipp||'Keine Notiz.'),warn:false,my:true,myId:m.id};
+}
+function openMyDlg(){document.getElementById('myName').value='';document.getElementById('myTipp').value='';myDlg.hidden=false;document.getElementById('myName').focus();}
+function closeMyDlg(){myDlg.hidden=true;myPending=null;}
+async function saveMySpot(){
+  if(!myPending||!REGION) return closeMyDlg();
+  const m={id:Date.now(),
+    name:document.getElementById('myName').value.trim()||'Eigener Spot',
+    tipp:document.getElementById('myTipp').value.trim(),
+    lat:myPending[0],lng:myPending[1]};
+  const list=await loadMySpots(REGION.id); list.push(m);
+  try{await store.set('myspots:'+REGION.id,JSON.stringify(list));}catch(e){}
+  SPOTS.push(mySpotObj(m));
+  buildMarkers(); buildChips(); applyFilters();
+  closeMyDlg();
+}
+window.delMySpot=async function(id){
+  if(!REGION) return;
+  const list=(await loadMySpots(REGION.id)).filter(m=>m.id!==id);
+  try{await store.set('myspots:'+REGION.id,JSON.stringify(list));}catch(e){}
+  const i=SPOTS.findIndex(sp=>sp.myId===id);
+  if(i>-1){const sp=SPOTS[i]; if(sp.marker&&map.hasLayer(sp.marker))map.removeLayer(sp.marker); SPOTS.splice(i,1);}
+  map.closePopup(); buildChips(); applyFilters();
+};
+document.getElementById('mySave').onclick=saveMySpot;
+document.getElementById('myCancel').onclick=closeMyDlg;
+myDlg.addEventListener('click',e=>{if(e.target===myDlg)closeMyDlg();});
+map.on('contextmenu',e=>{ if(!REGION)return; myPending=[e.latlng.lat,e.latlng.lng]; openMyDlg(); });
+
+/* ============ Wetter & Pegel (Open-Meteo + PEGELONLINE, keylos) ============ */
+let wxKey='';
+async function loadWeather(){
+  if(!SPOTS.length) return;
+  const pts=SPOTS.filter(sp=>!sp.my);
+  const ctr=userPos?{lat:userPos[0],lng:userPos[1]}
+    :{lat:pts.reduce((a,sp)=>a+sp.lat,0)/pts.length,lng:pts.reduce((a,sp)=>a+sp.lng,0)/pts.length};
+  const key=ctr.lat.toFixed(2)+','+ctr.lng.toFixed(2);
+  if(key===wxKey) return; wxKey=key;
+  const el=document.getElementById('wxline');
+  try{
+    const u='https://api.open-meteo.com/v1/forecast?latitude='+ctr.lat.toFixed(3)+'&longitude='+ctr.lng.toFixed(3)
+      +'&current=temperature_2m,wind_speed_10m,wind_direction_10m,surface_pressure&hourly=surface_pressure&past_days=1&forecast_days=1&timezone=auto';
+    const d=await (await fetch(u)).json();
+    const c=d.current;
+    let trend='';
+    const idx=d.hourly&&d.hourly.time?d.hourly.time.indexOf(c.time.slice(0,13)+':00'):-1;
+    if(idx>2){
+      const dp=d.hourly.surface_pressure[idx]-d.hourly.surface_pressure[idx-3];
+      trend=dp<=-1.5?' ⇘ fällt – Beißtrigger!':dp>=1.5?' ⇗ steigt':' → stabil';
+    }
+    const dirs=['N','NO','O','SO','S','SW','W','NW'];
+    const dir=dirs[Math.round((c.wind_direction_10m||0)/45)%8];
+    el.textContent='🌡 '+Math.round(c.temperature_2m)+'°C · 💨 '+Math.round(c.wind_speed_10m)+' km/h '+dir
+      +' · '+Math.round(c.surface_pressure)+' hPa'+trend;
+    loadPegel(ctr,el);
+  }catch(e){ el.textContent=''; wxKey=''; }
+}
+async function loadPegel(ctr,el){
+  try{
+    const st=await (await fetch('https://www.pegelonline.wsv.de/webservices/rest-api/v2/stations.json?latitude='
+      +ctr.lat.toFixed(3)+'&longitude='+ctr.lng.toFixed(3)+'&radius=30')).json();
+    if(!Array.isArray(st)||!st.length) return;
+    const s0=st[0];
+    const m=await (await fetch('https://www.pegelonline.wsv.de/webservices/rest-api/v2/stations/'+s0.uuid+'/W/currentmeasurement.json')).json();
+    if(m&&typeof m.value!=='undefined')
+      el.textContent+=' · 🌊 '+s0.shortname.charAt(0)+s0.shortname.slice(1).toLowerCase()+': '+m.value+' cm';
+  }catch(e){}
+}
 
 /* ============ Guide-Chat ============ */
 const chatLog=[];
@@ -1123,6 +1228,11 @@ document.getElementById('keyBtn').onclick=()=>{
 };
 const fbReady=fbLoad();
 initRegions();
+
+/* Offline-Modus: Service Worker (nur auf eigener HTTPS-Domain, im Artifact still ignoriert) */
+if('serviceWorker' in navigator&&location.protocol==='https:'){
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
 </script>
 </body>
 </html>
