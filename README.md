@@ -23,6 +23,12 @@ api.anthropic.com gesendet. Kosten: Claude Sonnet, wenige Cent pro Anfrage.
 **Hinweis:** Repo ist public, aber der Key steht nirgends im Code – niemals den Key
 in eine Datei committen.
 
+## Neue Features
+
+- **Wetter & Pegel** im Header (Open-Meteo + PEGELONLINE, kein Key nötig): Temperatur, Wind, Luftdruck mit 3h-Trend (Beißtrigger bei Druckabfall), nächster Pegel im 30-km-Umkreis
+- **Eigene Spots**: Long-Press (Handy) oder Rechtsklick (Desktop) auf die Karte → Name + Taktik-Notiz, pro Region auf dem Gerät gespeichert, löschbar über das Popup
+- **Offline-Modus**: Service Worker cached App, Regionsdaten und besuchte Karten-Tiles – einmal geladen funktioniert die Karte auch ohne Empfang auf dem Wasser (Wetter/Guide brauchen Netz)
+
 ## Ohne API-Key
 
 Karte, Filter, Schonzeiten, Regeln und Fangbuch (localStorage) funktionieren
