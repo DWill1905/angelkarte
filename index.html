@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Angelkarte</title>
+<meta name="theme-color" content="#0f2b30">
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<style>
+  :root{
+    --ink:#0d1f22; --panel:#0f2b30; --panel-2:#12343b; --paper:#e9efe9;
+    --line:#2a4d54; --text:#dce8e4; --muted:#8fb0ac;
+    --raub:#e4572e; --salmo:#4cb8d4; --fried:#8fb069; --forelle:#e8b93c; --sperr:#8a93a0;
+    --warn:#c94f3d; --ok:#6fae6f;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    background:var(--ink);color:var(--text);
+    display:grid;grid-template-rows:auto auto auto 1fr auto auto;
+    height:100vh;height:100dvh;overflow:hidden;
+  }
+  header{background:var(--panel);border-bottom:1px solid var(--line);padding:10px 14px 8px}
+  .eyebrow{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+  h1{font-family:Georgia,'Times New Roman',serif;font-size:19px;font-weight:700;color:#f2f7f4}
+  h1 .tilde{color:var(--salmo);font-weight:400}
+  .sun{font-size:11px;color:var(--muted);margin-top:3px}
+
+  .banner{
+    background:#3a1f1a;border-bottom:1px solid #5c2e24;color:#f0c4b8;
+    font-size:12px;padding:7px 14px;display:none;line-height:1.4;
+  }
+  .banner.show{display:block}
+  .banner b{color:#ffd9cf}
+
+  .tabs{display:flex;background:var(--panel);border-bottom:1px solid var(--line)}
+  .tab{
+    flex:1;background:none;border:0;color:var(--muted);font-size:12px;font-weight:700;
+    letter-spacing:.08em;text-transform:uppercase;padding:10px 4px;cursor:pointer;
+    border-bottom:2px solid transparent;
+  }
+  .tab[aria-selected="true"]{color:#f2f7f4;border-bottom-color:var(--salmo)}
+  .tab:focus-visible{outline:2px solid var(--salmo);outline-offset:-2px}
+
+  .view{display:none;min-height:0;overflow:hidden;grid-row:4;position:relative;flex-direction:column}
+  .view.active{display:flex}
+
+  /* ===== Karte ===== */
+  .chips{display:flex;gap:6px;overflow-x:auto;padding:8px 14px;background:var(--panel);
+    border-bottom:1px solid var(--line);scrollbar-width:none;flex-shrink:0}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{display:flex;align-items:center;gap:6px;white-space:nowrap;font-size:12px;font-weight:600;
+    color:var(--text);background:var(--panel-2);border:1px solid var(--line);border-radius:999px;
+    padding:7px 12px;cursor:pointer;user-select:none;min-height:32px}
+  .chip .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+  .chip.off{opacity:.38}
+  .chip:focus-visible{outline:2px solid var(--salmo);outline-offset:2px}
+  .chips.sub{background:var(--ink);padding-top:6px;padding-bottom:6px}
+  .chips.sub .chip{background:transparent;border-color:var(--line);color:var(--muted);min-height:28px;padding:5px 11px}
+  .chips.sub .chip.on{background:var(--salmo);border-color:var(--salmo);color:#082226;opacity:1}
+  #map{flex:1;min-height:0;background:#0d1f22;z-index:0}
+  .leaflet-container{font:inherit}
+
+  #kibtn{bottom:calc(46px + 80px);background:#1d4048}
+  .locbtn{
+    position:absolute;right:10px;bottom:calc(46px + 28px);z-index:500;
+    background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:8px;
+    padding:9px 12px;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.4);
+  }
+
+  .sheet{background:var(--panel);border-top:1px solid var(--line);max-height:36dvh;
+    display:flex;flex-direction:column;transition:max-height .25s ease;flex-shrink:0}
+  .sheet.collapsed{max-height:46px}
+  .sheet-handle{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;
+    cursor:pointer;flex-shrink:0;user-select:none}
+  .sheet-handle h2{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:700}
+  .sheet-handle .arrow{color:var(--muted);font-size:12px;transition:transform .25s}
+  .sheet.collapsed .arrow{transform:rotate(180deg)}
+  .spot-list{overflow-y:auto;padding:0 8px 10px}
+  .spot-item{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:transparent;
+    border:0;color:var(--text);cursor:pointer;padding:10px 8px;border-radius:8px;font-size:13px}
+  .spot-item:hover,.spot-item:focus-visible{background:var(--panel-2);outline:none}
+  .spot-item .dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+  .spot-item .name{font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .spot-item .meta{font-size:11px;color:var(--muted);white-space:nowrap}
+
+  /* Popup */
+  .leaflet-popup-content-wrapper{background:var(--paper);color:var(--ink);border-radius:10px;
+    box-shadow:0 6px 22px rgba(0,0,0,.5)}
+  .leaflet-popup-content{margin:14px 16px;line-height:1.45;min-width:230px}
+  .leaflet-popup-tip{background:var(--paper)}
+  .pop-cat{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+    color:#fff;border-radius:4px;padding:2px 7px;margin-bottom:5px;margin-right:4px}
+  .pop-nr{font-size:10px;color:#5b6b66;letter-spacing:.05em}
+  .pop-title{font-family:Georgia,serif;font-size:16px;font-weight:700;margin-bottom:2px}
+  .pop-dist{font-size:11px;color:#5b6b66;margin-bottom:8px}
+  .pop-row{font-size:12.5px;margin-bottom:6px}
+  .pop-row b{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#5b6b66;margin-bottom:1px}
+  .pop-note{font-size:11.5px;background:#dfe7df;border-left:3px solid var(--forelle);
+    padding:6px 8px;border-radius:0 6px 6px 0;margin-top:8px;color:#33423d}
+  .pop-warn{border-left-color:var(--warn);background:#eddcd8;color:#4a2a24}
+  .pop-actions{display:flex;gap:6px;margin-top:10px}
+  .pop-btn{flex:1;text-align:center;font-size:12px;font-weight:700;text-decoration:none;
+    border-radius:7px;padding:8px 6px;border:0;cursor:pointer}
+  .pop-btn.nav{background:#0f2b30;color:#e9efe9}
+  .pop-btn.log{background:#e8b93c;color:#3a2f10}
+
+  /* ===== Regeln ===== */
+  .scrollpane{overflow-y:auto;padding:14px;flex:1}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:13px 14px;margin-bottom:12px}
+  .card h3{font-family:Georgia,serif;font-size:15px;margin-bottom:8px;color:#f2f7f4}
+  .rule-row{display:flex;align-items:center;justify-content:space-between;gap:10px;
+    padding:8px 0;border-bottom:1px solid var(--line);font-size:13px}
+  .rule-row:last-child{border-bottom:0}
+  .rule-fish{font-weight:600}
+  .rule-mm{color:var(--muted);font-size:12px}
+  .badge{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+    border-radius:5px;padding:3px 8px;white-space:nowrap}
+  .badge.closed{background:#4a201a;color:#f0b6a8}
+  .badge.open{background:#1f3d24;color:#a8dcae}
+  .badge.info{background:#2a3f47;color:#a8cbd8}
+  .card p{font-size:12.5px;color:var(--muted);line-height:1.5;margin-top:6px}
+  .card ul{margin:6px 0 0 16px;font-size:12.5px;color:var(--text);line-height:1.6}
+  .fineprint{font-size:11px;color:var(--muted);margin:4px 2px 20px;line-height:1.5}
+
+  /* ===== Fangbuch ===== */
+  .fb-form{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:13px;margin-bottom:12px}
+  .fb-form h3{font-family:Georgia,serif;font-size:15px;margin-bottom:10px;color:#f2f7f4}
+  .fb-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .fb-grid .full{grid-column:1/-1}
+  label{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+  input,select{width:100%;background:var(--panel-2);border:1px solid var(--line);border-radius:7px;
+    color:var(--text);font-size:14px;padding:9px 10px}
+  input:focus,select:focus{outline:2px solid var(--salmo);outline-offset:-1px}
+  .fb-save{width:100%;margin-top:10px;background:var(--forelle);color:#3a2f10;border:0;border-radius:8px;
+    padding:11px;font-size:14px;font-weight:700;cursor:pointer}
+  .fb-entry{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);
+    border-radius:10px;padding:10px 12px;margin-bottom:8px;font-size:13px}
+  .fb-entry .info{flex:1;min-width:0}
+  .fb-entry .fish{font-weight:700}
+  .fb-entry .sub{font-size:11px;color:var(--muted)}
+  .fb-del{background:none;border:0;color:var(--muted);font-size:16px;cursor:pointer;padding:6px}
+  .fb-empty{text-align:center;color:var(--muted);font-size:13px;padding:24px 10px;line-height:1.5}
+  .fb-status{font-size:11px;color:var(--muted);text-align:center;margin-top:8px}
+
+  /* Guide-Chat */
+  #view-guide{background:var(--ink)}
+  .g-chat{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
+  .g-msg{max-width:86%;padding:10px 13px;border-radius:14px;font-size:14px;line-height:1.5;white-space:pre-wrap;word-break:break-word}
+  .g-msg.user{align-self:flex-end;background:var(--salmo);color:#082226;border-bottom-right-radius:4px}
+  .g-msg.ai{align-self:flex-start;background:var(--panel);border:1px solid var(--line);border-bottom-left-radius:4px}
+  .g-msg.wait{color:var(--muted);font-style:italic}
+  .g-quick{display:flex;gap:6px;overflow-x:auto;padding:6px 14px;scrollbar-width:none;flex-shrink:0}
+  .g-quick::-webkit-scrollbar{display:none}
+  .g-inputrow{display:flex;gap:8px;padding:10px 14px;background:var(--panel);border-top:1px solid var(--line);flex-shrink:0}
+  .g-inputrow input{flex:1}
+  .g-inputrow button{background:var(--salmo);color:#082226;border:0;border-radius:8px;padding:0 16px;font-size:16px;cursor:pointer;font-weight:700}
+  .g-inputrow button:disabled{opacity:.5}
+  @media(min-width:820px){#view-guide{flex-direction:column!important}.g-chat{max-width:720px;margin:0 auto;width:100%}.g-quick,.g-inputrow{max-width:720px;margin:0 auto;width:100%}}
+  footer{grid-row:6;background:var(--panel);border-top:1px solid var(--line);
+    padding:6px 14px calc(6px + env(safe-area-inset-bottom));font-size:10px;color:var(--muted)}
+  footer a{color:var(--salmo)}
+
+  @media(min-width:820px){
+    .view.active{flex-direction:row;flex-wrap:wrap}
+    .chips{width:100%}
+    #map{flex:1;height:auto}
+    .sheet{width:320px;max-height:none;border-top:0;border-left:1px solid var(--line)}
+    .sheet.collapsed{max-height:none}
+    .sheet-handle .arrow{display:none}
+    .locbtn{right:calc(320px + 10px);bottom:28px}
+    #kibtn{bottom:80px}
+    .scrollpane{max-width:720px;margin:0 auto;width:100%}
+  }
+  @media(prefers-reduced-motion:reduce){
+    .sheet,.sheet-handle .arrow,.tab{transition:none}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Revierwasserlaufanstalt · Osterzgebirge</div>
+  <h1>Angelrevier Großhartmannsdorf <span class="tilde">~</span></h1>
+  <div class="sun" id="sunline"></div>
+</header>
+
+<div class="banner" id="banner"></div>
+
+<div class="tabs" role="tablist">
+  <button class="tab" role="tab" aria-selected="true" data-view="karte">Karte</button>
+  <button class="tab" role="tab" aria-selected="false" data-view="regeln">Regeln</button>
+  <button class="tab" role="tab" aria-selected="false" data-view="fangbuch">Fangbuch</button>
+  <button class="tab" role="tab" aria-selected="false" data-view="guide">Guide</button>
+</div>
+
+<!-- KARTE -->
+<div class="view active" id="view-karte">
+  <div class="chips" id="chips" role="group" aria-label="Kategorien filtern"></div>
+  <div class="chips sub" id="fishChips" role="group" aria-label="Nach Zielfisch filtern"></div>
+  <div id="map"></div>
+  <button class="locbtn" id="locbtn" title="Meinen Standort anzeigen">📍 Standort</button>
+  <button class="locbtn" id="kibtn" title="Gewässer in dieser Region per KI recherchieren">✨ Spots hier finden</button>
+  <div class="sheet collapsed" id="sheet">
+    <div class="sheet-handle" id="sheetHandle" role="button" tabindex="0" aria-label="Spotliste ein-/ausklappen">
+      <h2>Spots <span id="spotCount"></span></h2>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="spot-list" id="spotList"></div>
+  </div>
+</div>
+
+<!-- REGELN -->
+<div class="view" id="view-regeln">
+  <div class="scrollpane">
+    <div class="card">
+      <h3>Schonzeiten &amp; Mindestmaße Sachsen</h3>
+      <div id="schonzeiten"></div>
+      <p>Status wird live nach heutigem Datum berechnet. Barsch ist gesetzlich frei, aber der LVSA begrenzt die Entnahme auf 10 Barsche pro Tag, davon max. 5 über 30 cm.</p>
+    </div>
+    <div class="card">
+      <h3>Raubfisch-Sperrfrist (LVSA)</h3>
+      <div id="kunstkoeder"></div>
+      <p>Vom 01.02. bis 30.04. ist in allen LVSA-Angelgewässern das Angeln mit Ködern, die zum Raubfischfang geeignet sind, untersagt – faktisch Kunstköderverbot in der Hecht-Schonzeit.</p>
+    </div>
+    <div class="card">
+      <h3>Trinkwassertalsperren (Saidenbach, Dittersbach)</h3>
+      <ul>
+        <li>TWT-Belehrung nötig – Nachweis im Fangbuch/Erlaubnisschein</li>
+        <li>Kein Boot, kein Belly, kein Waten, kein Baden</li>
+        <li>Anfüttern verboten – auch Futterkorb</li>
+        <li>Maden &amp; Fleisch als Köder verboten</li>
+        <li>Kein Nachtangeln, kein Zelten, kein Feuer</li>
+        <li>Fische nicht am Gewässer schlachten</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Streckenfarben an Flüssen (Sachsen)</h3>
+      <ul>
+        <li><b style="color:#e8b93c">Gelb</b>: reine Salmonidenstrecke – nur mit Jahres-Salmonidenschein des AVS</li>
+        <li><b style="color:#6fae6f">Grün</b>: Salmonidenstrecke – allgemeine Berechtigung reicht, aber Salmonidenregeln gelten (Flug/Spinn, 1 Rute, Einzelhaken, kein Naturköder-Ansitz)</li>
+        <li><b style="color:#7d9bc9">Blau</b> (Kartendarstellung): allgemeines Angelgewässer – normale AVS-Karte</li>
+        <li><b style="color:#c94f3d">Rot gestrichelt</b>: Sperrstrecke / privates Fischereirecht – Angeln verboten</li>
+      </ul>
+      <p>Der Linienverlauf auf der Karte ist schematisch (Talorte als Stützpunkte) – die exakten Grenzen markieren die Schilder am Wasser.</p>
+    </div>
+    <div class="card">
+      <h3>Salmonidenstrecken (Mulde, Flöha)</h3>
+      <ul>
+        <li>01.01.–30.04.: Angeln komplett verboten</li>
+        <li>01.05.–30.09.: Flug- oder Spinnangel</li>
+        <li>01.10.–31.12.: nur Flugangel</li>
+        <li>Nur 1 Haken pro Köder (auch am Wobbler), Salmonidenschein nötig</li>
+        <li>Nachtangeln verboten, Salmoniden nicht hältern</li>
+      </ul>
+    </div>
+    <p class="fineprint">Angaben ohne Gewähr, zusammengestellt nach SächsFischVO 2022 und LVSA-Gewässerordnung 2024. Maßgeblich sind Erlaubnisschein, Gewässerverzeichnis und Beschilderung vor Ort. Äsche ist vielerorts ganzjährig geschont – vor Ort prüfen.</p>
+  </div>
+</div>
+
+<!-- FANGBUCH -->
+<div class="view" id="view-fangbuch">
+  <div class="scrollpane">
+    <div class="fb-form">
+      <h3>Fang eintragen</h3>
+      <div class="fb-grid">
+        <div><label for="fbFisch">Fischart</label>
+          <select id="fbFisch">
+            <option>Hecht</option><option>Zander</option><option>Barsch</option>
+            <option>Bachforelle</option><option>Regenbogenforelle</option><option>Döbel</option>
+            <option>Karpfen</option><option>Schleie</option><option>Aal</option><option>Sonstige</option>
+          </select></div>
+        <div><label for="fbLaenge">Länge (cm)</label><input id="fbLaenge" type="number" inputmode="numeric" min="0" max="200" placeholder="z.B. 54"></div>
+        <div class="full"><label for="fbSpot">Gewässer</label><select id="fbSpot"></select></div>
+        <div class="full"><label for="fbKoeder">Köder / Methode</label><input id="fbKoeder" type="text" placeholder="z.B. Gummifisch 12cm, motoroil"></div>
+      </div>
+      <button class="fb-save" id="fbSave">Fang speichern</button>
+      <div class="fb-status" id="fbStatus"></div>
+    </div>
+    <div id="fbList"></div>
+  </div>
+</div>
+
+<!-- GUIDE -->
+<div class="view" id="view-guide">
+  <div class="g-chat" id="gChat" role="log" aria-live="polite">
+    <div class="g-msg ai">Petri! Ich bin dein Angel-Guide. Frag mich, was hier gerade beißt, welche Montage passt oder wie die Bedingungen sind – ich kenne deine Karte, das Datum und die Schonzeiten und kann aktuelle Infos im Web nachschlagen.</div>
+  </div>
+  <div class="g-quick" id="gQuick">
+    <button class="chip">Was beißt heute hier?</button>
+    <button class="chip">Beste Montage bei dem Wetter?</button>
+    <button class="chip">Regeln am nächsten Spot?</button>
+  </div>
+  <div class="g-inputrow">
+    <input id="gInput" type="text" placeholder="Frag deinen Guide…" autocomplete="off" aria-label="Frage an den Angel-Guide" enterkeyhint="send">
+    <button id="gSend" aria-label="Senden">➤</button>
+  </div>
+</div>
+
+<footer>Koordinaten näherungsweise · Gastkarten: <a href="https://angeln-sachsen.de/avs/gastangler/gastkarten" target="_blank" rel="noopener">AVS Südsachsen</a> · Fischereischein Pflicht · <button id="keyBtn" style="background:none;border:0;color:var(--salmo);cursor:pointer;font-size:10px;padding:0">⚙ API-Key</button></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+/* ============ Daten ============ */
+/* Storage-Shim: läuft im Claude-Artifact (window.storage) und auf GitHub Pages (localStorage) */
+const store = (typeof window.storage!=='undefined' && window.storage) ? window.storage : {
+  async get(k){const v=localStorage.getItem('ak_'+k); if(v===null) throw new Error('nicht gefunden'); return {key:k,value:v};},
+  async set(k,v){localStorage.setItem('ak_'+k,String(v)); return {key:k,value:v};}
+};
+
+/* Zentraler API-Aufruf mit sauberer Fehlerbehandlung */
+function esc(x){const d=document.createElement('div');d.textContent=String(x==null?'':x);return d.innerHTML;}
+function apiKey(){ try{return localStorage.getItem('ak_apikey')||'';}catch(e){return '';} }
+async function claudeCall(body){
+  const headers={'Content-Type':'application/json'};
+  const k=apiKey();
+  if(k){
+    headers['x-api-key']=k;
+    headers['anthropic-version']='2023-06-01';
+    headers['anthropic-dangerous-direct-browser-access']='true';
+  }
+  let r;
+  try{ r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers,body:JSON.stringify(body)}); }
+  catch(e){ throw new Error('Netzwerkfehler: '+e.message); }
+  const data=await r.json().catch(()=>({}));
+  if(!r.ok||data.error){
+    const msg=(data.error&&data.error.message)||('HTTP '+r.status);
+    if(r.status===401||r.status===403||(r.status===400&&/key|auth/i.test(msg)))
+      throw new Error(msg+' — API-Key über ⚙ (unten) eintragen.');
+    throw new Error(msg);
+  }
+  if(data.stop_reason==='max_tokens')
+    console.warn('Antwort wurde am Token-Limit abgeschnitten.');
+  return data;
+}
+
+const CATS = {
+  raub:{label:'Raubfisch',color:'#e4572e'},
+  salmo:{label:'Salmoniden',color:'#4cb8d4'},
+  fried:{label:'Friedfisch',color:'#8fb069'},
+  fluss:{label:'Fluss allgemein',color:'#7d9bc9'},
+  forelle:{label:'Forellenteich',color:'#e8b93c'},
+  sperr:{label:'Gesperrt/eingeschränkt',color:'#8a93a0'}
+};
+
+const SPOTS = [
+  {
+    name:'Talsperre Saidenbach',
+    arten:['Barsch','Hecht','Karpfen','Schleie','Brachse','Zander'], nr:'C02-102', cat:'raub', lat:50.7358, lng:13.2342,
+    fisch:'Barsch, Hecht, Karpfen, Schleie, Brasse, Weißfisch (Zander selten)',
+    methode:'Gummifisch & Wobbler an den Kanten der Bachtäler, DropShot auf Barsch – weite Würfe nötig, Fische oft bis ~15 m Tiefe',
+    karte:'AVS-Erlaubnisschein + TWT-Belehrung (Quittung im Fangbuch)',
+    note:'Trinkwassertalsperre: kein Boot, kein Waten, kein Anfüttern, keine Maden/Fleisch, kein Nachtangeln. Schonmaß 60 cm für ALLE Salmoniden. Parkplatz am NO-Ufer (Lippersdorfer Str.), Rundwanderweg erschließt alle Ufer.',
+    warn:false
+  },
+  {
+    name:'Vorsperre Dittersbach',
+    arten:['Barsch','Hecht','Karpfen','Schleie','Regenbogenforelle'], nr:'C01-104', cat:'raub', lat:50.8009, lng:13.4798,
+    fisch:'Barsch, Hecht, Karpfen, Schleie, Regenbogenforelle, Weißfisch',
+    methode:'Spinnfischen vom Ufer, Pose/Grund auf Karpfen & Schleie (TWT-Köderregeln!)',
+    karte:'AVS-Erlaubnisschein + TWT-Belehrung',
+    note:'6 ha Vorsperre der TS Lichtenberg. Wegen der laufenden Hauptsperren-Sanierung vorab beim AVS prüfen, ob die Vorsperre beangelbar ist.',
+    warn:true
+  },
+  {
+    name:'Talsperre Lichtenberg (Hauptsperre)',
+    arten:['Hecht','Barsch'], nr:'C01-105', cat:'sperr', lat:50.8117, lng:13.4530,
+    fisch:'vor Sanierung: Hecht, Barsch, Rotauge',
+    methode:'—',
+    karte:'—',
+    note:'ACHTUNG: Herbst 2024 für die Staudamm-Sanierung (~30 Mio €) vollständig entleert, Bauarbeiten laufen. Aktuell kein Angelbetrieb – Status beim AVS erfragen.',
+    warn:true
+  },
+  {
+    name:'Freiberger Mulde – gelbe Salmonidenstrecke', nr:'C01-02', cat:'salmo',
+    arten:['Bachforelle','Regenbogenforelle','Äsche','Döbel','Barsch'],
+    lat:50.828, lng:13.418, farbe:'gelb',
+    line:[[50.712,13.603],[50.728,13.572],[50.741,13.541],[50.769,13.498],[50.789,13.459],[50.807,13.417],[50.838,13.410],[50.865,13.398],[50.882,13.395],[50.897,13.392],[50.910,13.380],[50.927,13.363]],
+    strecke:'Teichhaus (dt.-tschech. Grenze) bis Straßenbrücke Halsbach, 28 km',
+    fisch:'Bachforelle, Regenbogenforelle, Äsche, Döbel, Barsch',
+    methode:'Fliege &amp; UL-Spinner mit Einzelhaken – Gumpen, Kolke, unterspülte Ufer',
+    karte:'Gelbe Strecke: nur mit Jahres-Salmonidenschein des AVS',
+    note:'Für Gastangler ohne Jahres-Salmoschein NICHT zugänglich. Sperr- und Fly-only-Abschnitte vorhanden – Beschilderung beachten.',
+    warn:true
+  },
+  {
+    name:'Freiberger Mulde – allgemeine Strecke', nr:'C01-201', cat:'fluss',
+    arten:['Bachforelle','Regenbogenforelle','Äsche','Döbel','Barsch'],
+    lat:50.975, lng:13.325, farbe:'allg',
+    line:[[50.927,13.363],[50.938,13.345],[50.950,13.337],[50.968,13.330],[50.983,13.318],[51.000,13.320],[51.013,13.322],[51.028,13.318]],
+    strecke:'Straßenbrücke Halsbach bis A4-Brücke Siebenlehn (über Altväterbrücke Halsbrücke), 26 km',
+    fisch:'Bachforelle, Äsche, Döbel, Barsch – guter Salmonidenbestand',
+    methode:'Leichte Spinnrute bis 10 g oder Fliege, Wathose empfohlen (Gumpen &amp; Kolke!)',
+    karte:'Allgemeine AVS-Berechtigung / Gastkarte – kein Salmoschein nötig',
+    note:'Die realistische Mulde-Strecke für Gastangler: Forellen &amp; Döbel fast überall, Barsche in tiefen Gumpen.',
+    warn:false
+  },
+  {
+    name:'Flöha – grüne Salmonidenstrecke (Lengefeld)', nr:'C02-07', cat:'salmo',
+    arten:['Bachforelle','Regenbogenforelle','Äsche','Döbel','Barsch'],
+    lat:50.731, lng:13.170, farbe:'gruen',
+    line:[[50.718,13.184],[50.727,13.172],[50.736,13.163],[50.744,13.157]],
+    strecke:'Straßenbrücke Rauenstein bis Mühlenwehr am Bahnhof Floßmühle',
+    fisch:'Bachforelle, Regenbogenforelle, Äsche, Weißfisch',
+    methode:'Nymphe in den Taschen zwischen den Felsen, UL-Spinner – Wathose mit rutschfester Sohle',
+    karte:'Grüne Strecke: allgemeine AVS-Berechtigung, aber nach Salmonidenregeln (Flug/Spinn, 1 Rute, Einzelhaken)',
+    note:'Mäander zwischen bewaldeten Hängen, wechselnd sandig bis felsig – versteckte Rinnen und Löcher.',
+    warn:false
+  },
+  {
+    name:'Flöha – allgemeine Strecke (Borstendorf)', nr:'AVS', cat:'fluss',
+    arten:['Bachforelle','Regenbogenforelle','Döbel','Barsch','Hecht','Aal','Karpfen'],
+    lat:50.766, lng:13.128, farbe:'allg',
+    line:[[50.744,13.157],[50.752,13.146],[50.762,13.135],[50.771,13.125],[50.780,13.113],[50.787,13.100]],
+    strecke:'Mühlenwehr Bhf. Floßmühle bis Straßenbrücke Leubsdorf/Schellenberg, 14 km',
+    fisch:'Bachforelle, Regenbogenforelle, Döbel, Barsch, Hecht, Aal, Karpfen',
+    methode:'UL-Spinnfischen, Pose – laut Fangstatistik erfolgreichste Methode hier',
+    karte:'Allgemeine AVS-Berechtigung / Gastkarte',
+    note:'Fischreiche, stark befischte Strecke. Achtung: privates Fischereirecht zwischen Grünhainichen und Borstendorf – siehe rote Sperrstrecke.',
+    warn:false
+  },
+  {
+    name:'Flöha – Sperrstrecke Grünhainichen', nr:'privat', cat:'sperr',
+    arten:[],
+    lat:50.762, lng:13.135, farbe:'sperr',
+    line:[[50.752,13.146],[50.762,13.135],[50.771,13.125]],
+    strecke:'100 m unterhalb Straßenbrücke Grünhainichen bis Straßenbrücke Borstendorf',
+    fisch:'—', methode:'—',
+    karte:'Privates Fischereirecht – Angeln verboten',
+    note:'Dieser Abschnitt darf nicht befischt werden, auch nicht mit AVS-Karte.',
+    warn:true
+  },
+  {
+    name:'Mühlteich (Brand-Erbisdorf)',
+    arten:['Karpfen','Schleie','Aal','Barsch'], nr:'AVS', cat:'fried', lat:50.7999, lng:13.2761,
+    fisch:'Karpfen, Graskarpfen, Schleie, Aal, Barsch',
+    methode:'Grundangeln (Boilie, Mais), Pose in der Dämmerung auf Schleie, abends auf Aal',
+    karte:'AVS-Erlaubnisschein / Gastkarte',
+    note:'Kleiner Naturteich bei Gränitz (OT Brand-Erbisdorf). Angelstatus vorab im AVS-Gewässerverzeichnis prüfen – Lage/Zuordnung nicht eindeutig.',
+    warn:false
+  },
+  {
+    name:'Schlüsselteich (Freiberg)',
+    arten:['Karpfen','Brachse','Schleie','Aal','Barsch'], nr:'AVS', cat:'fried', lat:50.9226, lng:13.3427,
+    fisch:'Karpfen, Brachse, Schleie, Aal, Barsch',
+    methode:'Feeder & Method Feeder auf Karpfen, Madenbündel auf Brachse',
+    karte:'AVS-Erlaubnisschein / Gastkarte',
+    note:'Stadtnah und gut erreichbar – solides Friedfischgewässer.',
+    warn:false
+  },
+    {
+    name:'Richter’s Angelteich (Gränitz)', nr:'privat', cat:'forelle',
+    arten:['Regenbogenforelle'], lat:50.7946, lng:13.2894,
+    fisch:'Regenbogenforelle (Besatz), Stör im Teich',
+    methode:'Forellenteig, Spoons, Bienenmade – Put &amp; Take, auch ohne Fischereischein',
+    karte:'Eintritt 3 €, Fang nach Kilo – direkt beim Betreiber (Tel. 0173 9281089)',
+    note:'Sa 8–17, So 9–12 Uhr, Saison bis Ende Oktober. Sehr gut bewertet (4.8), Ausnehmen vor Ort möglich.',
+    warn:false
+  },
+  {
+    name:'Großhartmannsdorfer Großteich',
+    arten:[], nr:'RWA/LTV', cat:'sperr', lat:50.8088, lng:13.3398,
+    fisch:'Karpfenzucht (bewirtschaftet)',
+    methode:'—', karte:'Kein reguläres Angelgewässer',
+    note:'Naturschutzgebiet, Teil der Revierwasserlaufanstalt, wird alle 4 Jahre abgelassen. Schönes Vogelrevier, aber kein Zielgewässer.',
+    warn:false
+  }
+];
+
+/* Schonzeiten Sachsen (SächsFischVO 2022) – [Art, von(M,T), bis(M,T), Mindestmaß] */
+const SCHON = [
+  {fisch:'Hecht', von:[2,1], bis:[4,30], mm:'50 cm'},
+  {fisch:'Zander', von:[2,1], bis:[5,31], mm:'50 cm'},
+  {fisch:'Bachforelle', von:[10,1], bis:[4,30], mm:'28 cm'},
+  {fisch:'Regenbogenforelle', von:[10,1], bis:[4,30], mm:'– (Schonzeit nur Fließgewässer)'},
+  {fisch:'Karpfen', von:null, bis:null, mm:'40 cm'},
+  {fisch:'Aal', von:null, bis:null, mm:'50 cm'},
+  {fisch:'Barsch', von:null, bis:null, mm:'– (LVSA: max. 10/Tag)'}
+];
+
+/* ============ Helfer ============ */
+const NOW = new Date();
+function inSchonzeit(s){
+  if(!s.von) return false;
+  const y=NOW.getFullYear();
+  const md=(NOW.getMonth()+1)*100+NOW.getDate();
+  const von=s.von[0]*100+s.von[1], bis=s.bis[0]*100+s.bis[1];
+  return von<=bis ? (md>=von&&md<=bis) : (md>=von||md<=bis);
+}
+function fmtMD(a){return String(a[1]).padStart(2,'0')+'.'+String(a[0]).padStart(2,'0')+'.';}
+function haversine(a,b,c,d){
+  const R=6371,p=Math.PI/180;
+  const x=Math.sin((c-a)*p/2)**2+Math.cos(a*p)*Math.cos(c*p)*Math.sin((d-b)*p/2)**2;
+  return 2*R*Math.asin(Math.sqrt(x));
+}
+/* Sonnenauf-/untergang (vereinfacht, ausreichend genau) */
+function sunTimes(lat,lng,date){
+  const rad=Math.PI/180, J=Math.floor(date/864e5)+2440587.5-2451545+0.0009-lng/360;
+  const n=Math.round(J), Js=2451545+0.0009-lng/360+n;
+  const M=(357.5291+0.98560028*(Js-2451545))%360;
+  const C=1.9148*Math.sin(M*rad)+0.02*Math.sin(2*M*rad);
+  const L=(M+C+180+102.9372)%360;
+  const Jt=Js+0.0053*Math.sin(M*rad)-0.0069*Math.sin(2*L*rad);
+  const dec=Math.asin(Math.sin(L*rad)*Math.sin(23.4397*rad));
+  const cosH=(Math.sin(-0.833*rad)-Math.sin(lat*rad)*Math.sin(dec))/(Math.cos(lat*rad)*Math.cos(dec));
+  if(cosH<-1||cosH>1) return null;
+  const H=Math.acos(cosH)/rad/360;
+  const toDate=j=>new Date((j-2440587.5)*864e5);
+  return {rise:toDate(Jt-H), set:toDate(Jt+H)};
+}
+const hhmm=d=>d.toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'});
+
+/* ============ Header: Sonne & Banner ============ */
+const st=sunTimes(50.80,13.33,NOW);
+if(st) document.getElementById('sunline').textContent=
+  '☀ '+hhmm(st.rise)+' – '+hhmm(st.set)+' Uhr · beste Beißzeit: Dämmerung ±1,5 h';
+
+const banner=document.getElementById('banner');
+const hechtZu=inSchonzeit(SCHON[0]), zanderZu=inSchonzeit(SCHON[1]);
+if(hechtZu){
+  banner.innerHTML='<b>Raubfisch-Sperrfrist aktiv:</b> 01.02.–30.04. Kunstköderverbot in LVSA-Gewässern, Hecht geschont.';
+  banner.classList.add('show');
+}else if(zanderZu){
+  banner.innerHTML='<b>Zander geschont bis 31.05.</b> – Hecht &amp; Barsch sind offen.';
+  banner.classList.add('show');
+}
+
+/* ============ Tabs ============ */
+document.querySelectorAll('.tab').forEach(t=>{
+  t.onclick=()=>{
+    document.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-selected','false'));
+    document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
+    t.setAttribute('aria-selected','true');
+    document.getElementById('view-'+t.dataset.view).classList.add('active');
+    if(t.dataset.view==='karte') setTimeout(()=>map.invalidateSize(),50);
+  };
+});
+
+/* ============ Karte ============ */
+const map=L.map('map');
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+  maxZoom:18, attribution:'&copy; OpenStreetMap'
+}).addTo(map);
+L.control.scale({imperial:false}).addTo(map);
+map.fitBounds(SPOTS.map(s=>[s.lat,s.lng]),{padding:[30,30]});
+
+L.circleMarker([50.803,13.328],{radius:5,color:'#f2f7f4',fillColor:'#f2f7f4',fillOpacity:.9,weight:1})
+  .addTo(map).bindTooltip('Großhartmannsdorf');
+
+function pinIcon(cat){
+  const c=CATS[cat].color;
+  return L.divIcon({className:'',iconSize:[28,40],iconAnchor:[14,38],popupAnchor:[0,-34],
+    html:`<svg width="28" height="40" viewBox="0 0 28 40" aria-hidden="true">
+      <path d="M14 1C7 1 1.5 6.5 1.5 13.5 1.5 23 14 38 14 38s12.5-15 12.5-24.5C26.5 6.5 21 1 14 1z"
+        fill="${c}" stroke="rgba(255,255,255,.85)" stroke-width="2"/>
+      <circle cx="14" cy="13.5" r="4.5" fill="rgba(255,255,255,.9)"/></svg>`});
+}
+function mapsLink(s){return 'https://www.google.com/maps/dir/?api=1&destination='+s.lat+','+s.lng;}
+function popupHtml(s){
+  const c=CATS[s.cat];
+  return `<span class="pop-cat" style="background:${c.color}">${c.label}</span><span class="pop-nr">${s.nr}</span>
+    <div class="pop-title">${s.name}</div>
+    <div class="pop-dist" data-dist="${s.lat},${s.lng}"></div>
+    ${s.strecke?'<div class="pop-row"><b>Strecke</b>'+s.strecke+'</div>':''}
+    <div class="pop-row"><b>Zielfisch</b>${s.fisch}</div>
+    <div class="pop-row"><b>Methode &amp; Köder</b>${s.methode}</div>
+    <div class="pop-row"><b>Erlaubnis</b>${s.karte}</div>
+    <div class="pop-note${s.warn?' pop-warn':''}">${s.note}</div>
+    <div class="pop-actions">
+      <a class="pop-btn nav" href="${mapsLink(s)}" target="_blank" rel="noopener">Route</a>
+      <button class="pop-btn log" onclick="prefillFang('${s.name.replace(/'/g,"\\'")}')">Fang loggen</button>
+    </div>`;
+}
+
+const FISH=[
+  {id:'Hecht',match:['Hecht']},
+  {id:'Zander',match:['Zander']},
+  {id:'Barsch',match:['Barsch']},
+  {id:'Forelle',match:['Bachforelle','Regenbogenforelle']},
+  {id:'Äsche',match:['Äsche']},
+  {id:'Döbel',match:['Döbel']},
+  {id:'Karpfen',match:['Karpfen']},
+  {id:'Schleie',match:['Schleie']},
+  {id:'Aal',match:['Aal']},
+  {id:'Brachse',match:['Brachse']}
+];
+let fishSel=null;
+const active=Object.fromEntries(Object.keys(CATS).map(k=>[k,true]));
+
+function spotVisible(s){
+  if(!active[s.cat]) return false;
+  if(!fishSel) return true;
+  const f=FISH.find(x=>x.id===fishSel);
+  return s.arten.some(a=>f.match.includes(a));
+}
+function applyFilters(){
+  SPOTS.forEach(s=>{
+    const v=spotVisible(s);
+    if(v&&!map.hasLayer(s.marker)) s.marker.addTo(map);
+    else if(!v&&map.hasLayer(s.marker)) s.marker.remove();
+  });
+  renderList();
+}
+
+const LINECOL={gelb:'#e8b93c',gruen:'#6fae6f',allg:'#7d9bc9',sperr:'#c94f3d'};
+SPOTS.forEach(s=>{
+  if(s.line){
+    s.marker=L.polyline(s.line,{
+      color:LINECOL[s.farbe]||CATS[s.cat].color,
+      weight:5,opacity:.85,
+      dashArray:s.farbe==='sperr'?'7 7':null
+    }).bindPopup(popupHtml(s),{autoPanPadding:[20,60]}).addTo(map);
+  }else{
+    s.marker=L.marker([s.lat,s.lng],{icon:pinIcon(s.cat),title:s.name})
+      .bindPopup(popupHtml(s),{autoPanPadding:[20,60]}).addTo(map);
+  }
+});
+
+/* Kategorie-Chips */
+const chipsEl=document.getElementById('chips');
+Object.entries(CATS).forEach(([k,c])=>{
+  const n=SPOTS.filter(s=>s.cat===k).length;
+  const b=document.createElement('button');
+  b.className='chip'; b.setAttribute('aria-pressed','true');
+  b.innerHTML=`<span class="dot" style="background:${c.color}"></span>${c.label} · ${n}`;
+  b.onclick=()=>{
+    active[k]=!active[k];
+    b.classList.toggle('off',!active[k]);
+    b.setAttribute('aria-pressed',String(active[k]));
+    applyFilters();
+  };
+  chipsEl.appendChild(b);
+});
+
+/* Zielfisch-Chips (Einfachauswahl) */
+const fishEl=document.getElementById('fishChips');
+function fishChip(label,id){
+  const b=document.createElement('button');
+  b.className='chip'; b.dataset.fish=id||''; b.textContent=label;
+  b.setAttribute('aria-pressed',String(id===fishSel));
+  b.onclick=()=>{
+    fishSel=(id===fishSel)?null:id; /* erneutes Tippen hebt Filter auf */
+    fishEl.querySelectorAll('.chip').forEach(x=>{
+      const on=(x.dataset.fish||null)===fishSel||(!fishSel&&x.dataset.fish==='');
+      x.classList.toggle('on',on);
+      x.setAttribute('aria-pressed',String(on));
+    });
+    applyFilters();
+  };
+  return b;
+}
+const allChip=fishChip('Alle',null); allChip.classList.add('on'); allChip.onclick=()=>{
+  fishSel=null;
+  fishEl.querySelectorAll('.chip').forEach(x=>{
+    const on=x.dataset.fish==='';
+    x.classList.toggle('on',on); x.setAttribute('aria-pressed',String(on));
+  });
+  applyFilters();
+};
+fishEl.appendChild(allChip);
+FISH.forEach(f=>fishEl.appendChild(fishChip(f.id,f.id)));
+
+/* Standort */
+let userPos=null, userMarker=null;
+document.getElementById('locbtn').onclick=()=>{
+  if(!navigator.geolocation) return alert('Standort wird von diesem Gerät nicht unterstützt.');
+  navigator.geolocation.getCurrentPosition(p=>{
+    userPos=[p.coords.latitude,p.coords.longitude];
+    if(userMarker) userMarker.remove();
+    userMarker=L.circleMarker(userPos,{radius:7,color:'#fff',fillColor:'#4cb8d4',fillOpacity:.95,weight:2})
+      .addTo(map).bindTooltip('Du');
+    map.setView(userPos,11);
+    renderList();
+  },()=>alert('Standort konnte nicht ermittelt werden.'),{enableHighAccuracy:false,timeout:8000});
+};
+
+/* Spotliste */
+const listEl=document.getElementById('spotList'), countEl=document.getElementById('spotCount');
+const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function renderList(){
+  listEl.innerHTML='';
+  let vis=SPOTS.filter(spotVisible);
+  if(userPos){
+    vis.forEach(s=>s._d=haversine(userPos[0],userPos[1],s.lat,s.lng));
+    vis.sort((a,b)=>a._d-b._d);
+  }
+  countEl.textContent='('+vis.length+')';
+  vis.forEach(s=>{
+    const c=CATS[s.cat], b=document.createElement('button');
+    b.className='spot-item';
+    const meta=userPos?s._d.toFixed(1)+' km':s.fisch.split(',')[0];
+    b.innerHTML=`<span class="dot" style="background:${c.color}"></span>
+      <span class="name">${s.name}</span><span class="meta">${meta}</span>`;
+    b.onclick=()=>{
+      let opened=false;
+      const open=()=>{if(!opened){opened=true;s.marker.openPopup(s.line?[s.lat,s.lng]:undefined);}};
+      if(s.line){
+        map.fitBounds(s.marker.getBounds(),{padding:[40,40]});
+        map.once('moveend',open); setTimeout(open,800);
+      }else if(reduceMotion){map.setView([s.lat,s.lng],13);open();}
+      else{
+        map.flyTo([s.lat,s.lng],13,{duration:.6});
+        map.once('moveend',open);
+        setTimeout(open,800); /* Fallback: Ziel = aktuelle Ansicht */
+      }
+      if(window.innerWidth<820) sheet.classList.add('collapsed');
+    };
+    listEl.appendChild(b);
+  });
+}
+renderList();
+
+const sheet=document.getElementById('sheet'), handle=document.getElementById('sheetHandle');
+function toggleSheet(){ if(window.innerWidth<820) sheet.classList.toggle('collapsed'); }
+handle.onclick=toggleSheet;
+handle.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleSheet();}};
+
+/* ============ Guide-Chat ============ */
+const chatLog=[];
+const gChat=document.getElementById('gChat'), gInput=document.getElementById('gInput'), gSend=document.getElementById('gSend');
+
+function buildGuideCtx(){
+  const c=map.getCenter();
+  const pos=userPos||[c.lat,c.lng];
+  const schonAktiv=SCHON.filter(inSchonzeit).map(x=>x.fisch).join(', ')||'keine';
+  const spotsNah=SPOTS.filter(s=>!s.ki).map(s=>{
+    const d=haversine(pos[0],pos[1],s.lat,s.lng).toFixed(0);
+    return s.name+' ('+d+' km, '+(s.arten.join('/')||'gesperrt')+')';
+  }).join('; ');
+  const faenge=fbMem.slice(-5).map(e=>e.fisch+(e.laenge?' '+e.laenge+'cm':'')+' @ '+e.spot+' ('+e.datum+(e.koeder?', '+e.koeder:'')+')').join('; ')||'keine';
+  return 'Du bist ein erfahrener, direkter Angel-Guide (deutsch, knapp, konkrete Zahlen, kein Geschwafel). '
+    +'Kontext der Angelkarten-App des Nutzers: Datum '+NOW.toLocaleDateString('de-DE')+'. '
+    +'Position: '+pos[0].toFixed(3)+','+pos[1].toFixed(3)+(userPos?' (echter Standort)':' (Kartenmitte)')+'. '
+    +'Aktive Schonzeiten (Sachsen): '+schonAktiv+'. '
+    +'Spots auf der Karte: '+spotsNah+'. '
+    +'Letzte Fänge des Nutzers: '+faenge+'. '
+    +'Nutze Websuche für aktuelle Infos (Wetter, Pegel, Regeln anderer Bundesländer). '
+    +'Rechtliche Angaben immer mit Hinweis auf Erlaubnisschein/Beschilderung.';
+}
+function addMsg(role,text,wait){
+  const d=document.createElement('div');
+  d.className='g-msg '+(role==='user'?'user':'ai')+(wait?' wait':'');
+  d.textContent=text;
+  gChat.appendChild(d); gChat.scrollTop=gChat.scrollHeight;
+  return d;
+}
+async function guideSend(q){
+  q=(q||gInput.value).trim(); if(!q) return;
+  gInput.value=''; gSend.disabled=true; gInput.disabled=true;
+  addMsg('user',q);
+  chatLog.push({role:'user',content:q});
+  const waitEl=addMsg('ai','Guide denkt nach…',true);
+  try{
+    const data=await claudeCall({
+      model:'claude-sonnet-4-6',max_tokens:2000,
+      messages:[
+        {role:'user',content:buildGuideCtx()},
+        {role:'assistant',content:'Verstanden – ich bin bereit als dein Angel-Guide.'},
+        ...chatLog
+      ],
+      tools:[{type:'web_search_20250305',name:'web_search'}]
+    });
+    const text=(data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('\n').trim()||'(keine Antwort)';
+    chatLog.push({role:'assistant',content:text});
+    waitEl.classList.remove('wait'); waitEl.textContent=text;
+  }catch(e){
+    waitEl.classList.remove('wait'); waitEl.textContent='Fehler: '+e.message;
+    chatLog.pop(); /* Frage aus Verlauf nehmen, damit Retry sauber ist */
+  }
+  gSend.disabled=false; gInput.disabled=false; gInput.focus();
+  gChat.scrollTop=gChat.scrollHeight;
+}
+gSend.onclick=()=>guideSend();
+gInput.onkeydown=e=>{if(e.key==='Enter')guideSend();};
+document.querySelectorAll('#gQuick .chip').forEach(b=>b.onclick=()=>guideSend(b.textContent));
+
+/* ============ KI-Recherche: Spots je nach Standort ============ */
+const ARTEN_KANON=['Hecht','Zander','Barsch','Bachforelle','Regenbogenforelle','Äsche','Döbel','Karpfen','Schleie','Aal','Brachse'];
+const kiBtn=document.getElementById('kibtn');
+kiBtn.onclick=async()=>{
+  const c=map.getCenter();
+  const pos=userPos||[c.lat,c.lng]; /* Standort, sonst Kartenmitte */
+  kiBtn.disabled=true; const oldTxt=kiBtn.textContent; kiBtn.textContent='⏳ Recherchiere…';
+  try{
+    const key='region:'+pos[0].toFixed(1)+','+pos[1].toFixed(1);
+    let spots=null;
+    try{const cch=await store.get(key); if(cch&&cch.value) spots=JSON.parse(cch.value);}catch(e){}
+    if(!spots||!spots.length){
+      spots=await kiResearch(pos);
+      try{await store.set(key,JSON.stringify(spots));}catch(e){}
+    }
+    const n=addKiSpots(spots);
+    if(!n) alert('Keine neuen Gewässer in dieser Region gefunden.');
+  }catch(e){ alert('Recherche fehlgeschlagen: '+e.message); }
+  kiBtn.disabled=false; kiBtn.textContent=oldTxt;
+};
+
+async function kiResearch(pos){
+  const prompt='Du recherchierst Angelgewässer. Standort-Koordinaten: '+pos[0].toFixed(4)+', '+pos[1].toFixed(4)+'. '
+    +'Ermittle per Websuche die Region (Land beachten – Regeln unterscheiden sich je Bundesland/Land!) und finde bis zu 5 real existierende, beangelbare Gewässer im Umkreis von ca. 25 km. '
+    +'Antworte AUSSCHLIESSLICH mit einem JSON-Array, ohne Markdown und ohne Erklärtext. Schema pro Eintrag: '
+    +'{"name":string,"lat":number,"lng":number,"cat":"raub"|"salmo"|"fried"|"forelle",'
+    +'"arten":Array nur aus ['+ARTEN_KANON.join(',')+'],'
+    +'"fisch":string,"methode":string(konkrete Köder/Technik),"karte":string(Erlaubnisschein/Verein/Preis),'
+    +'"note":string(wichtigste Regeln, Schonzeiten-Besonderheiten, Warnungen)}. '
+    +'Koordinaten so genau wie möglich auf dem Gewässer platzieren.';
+  const data=await claudeCall({
+    model:'claude-sonnet-4-6',max_tokens:2000,
+    messages:[{role:'user',content:prompt}],
+    tools:[{type:'web_search_20250305',name:'web_search'}]
+  });
+  const text=(data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('\n');
+  const clean=text.replace(/```json|```/g,'').trim();
+  const a=clean.indexOf('['), b=clean.lastIndexOf(']');
+  if(a<0||b<0||b<=a) throw new Error(data.stop_reason==='max_tokens'
+    ?'Antwort am Token-Limit abgeschnitten – bitte erneut versuchen.'
+    :'Keine verwertbare Antwort');
+  let arr;
+  try{ arr=JSON.parse(clean.slice(a,b+1)); }
+  catch(e){ throw new Error('Antwort unvollständig ('+(data.stop_reason||'Parse-Fehler')+') – bitte erneut versuchen.'); }
+  return arr.filter(x=>x&&x.name&&typeof x.lat==='number'&&typeof x.lng==='number');
+}
+
+function addKiSpots(arr){
+  let added=0;
+  arr.forEach(x=>{
+    if(SPOTS.some(s=>s.name===x.name)) return;
+    const s={
+      name:esc(x.name), nr:'KI-Recherche', cat:CATS[x.cat]?x.cat:'fried',
+      arten:Array.isArray(x.arten)?x.arten.filter(a=>ARTEN_KANON.includes(a)):[],
+      lat:x.lat, lng:x.lng,
+      fisch:esc(x.fisch||'–'), methode:esc(x.methode||'–'), karte:esc(x.karte||'–'),
+      note:esc(x.note?x.note+' ':'')+'⚠ KI-recherchiert: Lage, Regeln und Erlaubnis vor dem Trip unbedingt verifizieren.',
+      warn:true, ki:true
+    };
+    s.marker=L.marker([s.lat,s.lng],{icon:pinIcon(s.cat),title:s.name,opacity:.85})
+      .bindPopup(popupHtml(s),{autoPanPadding:[20,60]});
+    SPOTS.push(s); added++;
+  });
+  if(added){
+    applyFilters();
+    const pts=SPOTS.filter(spotVisible).map(s=>[s.lat,s.lng]);
+    if(pts.length) map.fitBounds(pts,{padding:[30,30]});
+  }
+  return added;
+}
+
+/* Handy gedreht / Fenster skaliert: Karte neu vermessen */
+let rsT; addEventListener('resize',()=>{clearTimeout(rsT);rsT=setTimeout(()=>map.invalidateSize(),150);});
+
+/* Distanz im Popup nachtragen */
+map.on('popupopen',e=>{
+  const el=e.popup.getElement().querySelector('[data-dist]');
+  if(el){
+    const [la,ln]=el.dataset.dist.split(',').map(Number);
+    const ref=userPos||[50.803,13.328];
+    el.textContent='~'+haversine(ref[0],ref[1],la,ln).toFixed(1)+' km '+(userPos?'von dir':'von Großhartmannsdorf');
+  }
+});
+
+/* ============ Regeln ============ */
+const schonEl=document.getElementById('schonzeiten');
+SCHON.forEach(s=>{
+  const zu=inSchonzeit(s);
+  const badge=s.von
+    ? (zu?`<span class="badge closed">geschont bis ${fmtMD(s.bis)}</span>`
+         :`<span class="badge open">offen · Schonzeit ${fmtMD(s.von)}–${fmtMD(s.bis)}</span>`)
+    : `<span class="badge info">keine Schonzeit</span>`;
+  schonEl.insertAdjacentHTML('beforeend',
+    `<div class="rule-row"><div><div class="rule-fish">${s.fisch}</div>
+     <div class="rule-mm">Mindestmaß: ${s.mm}</div></div>${badge}</div>`);
+});
+document.getElementById('kunstkoeder').innerHTML=
+  hechtZu?'<span class="badge closed">Aktuell in Kraft</span>'
+         :'<span class="badge open">Aktuell nicht in Kraft (gilt 01.02.–30.04.)</span>';
+
+/* ============ Fangbuch ============ */
+const fbSpotSel=document.getElementById('fbSpot');
+SPOTS.filter(s=>s.cat!=='sperr').forEach(s=>{
+  const o=document.createElement('option'); o.textContent=s.name; fbSpotSel.appendChild(o);
+});
+const oAnd=document.createElement('option'); oAnd.textContent='Anderes Gewässer'; fbSpotSel.appendChild(oAnd);
+
+let fbMem=[]; let persistent=true;
+async function fbLoad(){
+  try{
+    const r=await store.get('fangbuch');
+    fbMem=r&&r.value?JSON.parse(r.value):[];
+  }catch(e){ fbMem=[]; }
+  fbRender();
+}
+async function fbPersist(){
+  try{ await store.set('fangbuch',JSON.stringify(fbMem)); }
+  catch(e){ persistent=false; }
+  fbRender();
+}
+function fbRender(){
+  const list=document.getElementById('fbList');
+  document.getElementById('fbStatus').textContent=
+    persistent?'Wird dauerhaft gespeichert':'Hinweis: Speicherung nur für diese Sitzung';
+  if(!fbMem.length){
+    list.innerHTML='<div class="fb-empty">Noch keine Fänge eingetragen.<br>Petri Heil – der erste kommt bestimmt! 🐟</div>';
+    return;
+  }
+  list.innerHTML='';
+  [...fbMem].reverse().forEach(e=>{
+    const d=document.createElement('div'); d.className='fb-entry';
+    d.innerHTML=`<div class="info"><div class="fish">${esc(e.fisch)} ${e.laenge?'· '+esc(e.laenge)+' cm':''}</div>
+      <div class="sub">${esc(e.spot)} · ${esc(e.datum)}${e.koeder?' · '+esc(e.koeder):''}</div></div>
+      <button class="fb-del" aria-label="Eintrag löschen" data-id="${esc(e.id)}">✕</button>`;
+    d.querySelector('.fb-del').onclick=async ev=>{
+      await fbReady;
+      fbMem=fbMem.filter(x=>x.id!==Number(ev.currentTarget.dataset.id));
+      await fbPersist();
+    };
+    list.appendChild(d);
+  });
+}
+document.getElementById('fbSave').onclick=async ()=>{
+  await fbReady; /* verhindert, dass fbLoad einen frischen Eintrag überschreibt */
+  const fisch=document.getElementById('fbFisch').value;
+  const laenge=document.getElementById('fbLaenge').value;
+  fbMem.push({
+    id:Date.now(), fisch, laenge,
+    spot:fbSpotSel.value,
+    koeder:document.getElementById('fbKoeder').value.trim(),
+    datum:new Date().toLocaleDateString('de-DE')
+  });
+  document.getElementById('fbLaenge').value='';
+  document.getElementById('fbKoeder').value='';
+  await fbPersist();
+};
+function prefillFang(spotName){
+  document.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-selected','false'));
+  document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
+  document.querySelector('[data-view="fangbuch"]').setAttribute('aria-selected','true');
+  document.getElementById('view-fangbuch').classList.add('active');
+  [...fbSpotSel.options].forEach(o=>{if(o.textContent===spotName)fbSpotSel.value=spotName;});
+}
+window.prefillFang=prefillFang;
+document.getElementById('keyBtn').onclick=()=>{
+  const k=prompt('Anthropic API-Key für Guide & Spot-Recherche.\nBleibt ausschließlich in diesem Browser (localStorage).',apiKey());
+  if(k!==null){ try{localStorage.setItem('ak_apikey',k.trim());}catch(e){alert('Speichern nicht möglich: '+e.message);} }
+};
+const fbReady=fbLoad();
+</script>
+</body>
+</html>
