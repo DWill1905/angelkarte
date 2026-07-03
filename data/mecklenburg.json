@@ -1,0 +1,262 @@
+{
+ "id": "mecklenburg",
+ "name": "Mecklenburgische Kleinseenplatte (MV)",
+ "spots": [
+  {
+   "name": "Woblitzsee",
+   "nr": "Obere Havel",
+   "cat": "raub",
+   "arten": [
+    "Hecht",
+    "Zander",
+    "Barsch",
+    "Aal",
+    "Karpfen",
+    "Schleie",
+    "Brachse"
+   ],
+   "lat": 53.3001,
+   "lng": 13.0102,
+   "fisch": "Hecht, Zander, Barsch, Aal, Karpfen, Schleie, Brachse (14 gemeldete Arten)",
+   "methode": "Vom verankerten Boot: Gummifisch an den Havel-Rinnen auf Zander, große Köder an Schilfkanten auf Hecht. Schleppen verboten!",
+   "karte": "Angelkarte Seenfischerei Obere Havel – online (fischerei-wesenberg.de) oder Fischereihof Wesenberg",
+   "note": "Havel durchfließt den See, im Sommer viel Hausboot-Verkehr – Morgen- und Abendstunden nutzen. Schilfgürtel & Seerosenfelder tabu.",
+   "warn": false
+  },
+  {
+   "name": "Zotzensee",
+   "nr": "Obere Havel",
+   "cat": "raub",
+   "arten": [
+    "Hecht",
+    "Barsch",
+    "Aal",
+    "Schleie"
+   ],
+   "lat": 53.2437,
+   "lng": 12.8125,
+   "fisch": "Hecht, Barsch, Aal, Schleie",
+   "methode": "Flacher, krautiger Hechtsee: Spinnerbait/Jerkbait über Kraut, Westbuchten mit Ankerplätzen",
+   "karte": "Angelkarte Obere Havel (Meisterbereich Mirow, Tel. 039833 20423)",
+   "note": "Wasser eher trüb, umliegender Wald teils überflutet – Mückenschutz einpacken. Schleusenpassage ab Mirow.",
+   "warn": false
+  },
+  {
+   "name": "Vilzsee",
+   "nr": "Obere Havel",
+   "cat": "raub",
+   "arten": [
+    "Hecht",
+    "Barsch",
+    "Schleie"
+   ],
+   "lat": 53.2099,
+   "lng": 12.8336,
+   "fisch": "Hecht, Barsch, Schleie",
+   "methode": "Flach, Seerosenfelder: flachlaufende Wobbler und Spinnerbaits an den Kanten VOR den Feldern (Felder selbst tabu)",
+   "karte": "Angelkarte Obere Havel (Meisterbereich Mirow)",
+   "note": "Klares, flaches Wasser – Sichtangeln möglich, Raubvogel-Revier.",
+   "warn": false
+  },
+  {
+   "name": "Großer Labussee",
+   "nr": "Obere Havel",
+   "cat": "raub",
+   "arten": [
+    "Hecht",
+    "Zander",
+    "Barsch",
+    "Aal"
+   ],
+   "lat": 53.3067,
+   "lng": 12.9504,
+   "fisch": "Hecht, Zander, Barsch, Aal",
+   "methode": "Tieferes Havelbecken: Zander an Kanten und Löchern jiggen, Barschtrupps mit DropShot suchen",
+   "karte": "Angelkarte Obere Havel (Meisterbereich Wesenberg)",
+   "note": "Ruhiger als der Woblitzsee, Übergang zum Useriner See (Nationalpark!).",
+   "warn": false
+  },
+  {
+   "name": "Useriner See",
+   "nr": "Obere Havel / Müritz-NP",
+   "cat": "raub",
+   "arten": [
+    "Hecht",
+    "Zander",
+    "Barsch"
+   ],
+   "lat": 53.3431,
+   "lng": 12.968,
+   "fisch": "Hecht, Zander, Barsch",
+   "methode": "Vom verankerten Boot an den Fahrwasser-Kanten; bei Wind schnell kabbelig (5,2 km lang)",
+   "karte": "Angelkarte Obere Havel – Nationalpark-Regeln beachten",
+   "note": "Liegt im Müritz-Nationalpark: Schutzzonen und Befahrensregeln beachten, Uferbereiche teils gesperrt.",
+   "warn": true
+  },
+  {
+   "name": "Mirower See",
+   "nr": "Obere Havel",
+   "cat": "raub",
+   "arten": [
+    "Hecht",
+    "Zander",
+    "Barsch",
+    "Aal"
+   ],
+   "lat": 53.2826,
+   "lng": 12.8074,
+   "fisch": "Hecht, Zander, Barsch, Aal",
+   "methode": "Stadtnaher Allrounder: abends auf Zander an der Fahrrinne, Aal vom Ufer (Nachtangeln erlaubt)",
+   "karte": "Angelkarte Obere Havel (Meisterbereich Mirow, Mühlenstr. 21)",
+   "note": "Schlossinsel und Bootsverkehr – Randbereiche und frühe Stunden wählen.",
+   "warn": false
+  },
+  {
+   "name": "Drewensee",
+   "nr": "Obere Havel",
+   "cat": "raub",
+   "arten": [
+    "Hecht",
+    "Zander",
+    "Barsch"
+   ],
+   "lat": 53.26,
+   "lng": 13.033,
+   "fisch": "Hecht, Zander, Barsch",
+   "methode": "Klassisches Ansitz- und Spinnrevier am Havelkanal Ahrensberg",
+   "karte": "Angelkarte Obere Havel (Meisterbereich Ahrensberg, Tel. 039832 20230)",
+   "note": "Ruhiges Revier zwischen Wesenberg und Ahrensberg.",
+   "warn": false
+  },
+  {
+   "name": "Fischereihof Wesenberg",
+   "nr": "Kartenausgabe",
+   "cat": "info",
+   "arten": [],
+   "lat": 53.2817,
+   "lng": 12.9786,
+   "fisch": "– (Hofladen mit Fischverkauf)",
+   "methode": "–",
+   "karte": "Angelkarten-Verkauf vor Ort, täglich 8–19 Uhr, Tel. 039832 20268",
+   "note": "Zentrale Anlaufstelle der Seenfischerei Obere Havel: Karten, aktuelle Infos, Räucherfisch für die Heimfahrt.",
+   "warn": false
+  }
+ ],
+ "schon": [
+  {
+   "fisch": "Hecht",
+   "von": [
+    2,
+    1
+   ],
+   "bis": [
+    4,
+    30
+   ],
+   "mm": "Entnahmefenster 55–85 cm"
+  },
+  {
+   "fisch": "Zander",
+   "von": [
+    3,
+    15
+   ],
+   "bis": [
+    6,
+    15
+   ],
+   "mm": "Entnahmefenster 55–75 cm"
+  },
+  {
+   "fisch": "Barsch",
+   "von": null,
+   "bis": null,
+   "mm": "Entnahmefenster 25–40 cm"
+  },
+  {
+   "fisch": "Karpfen",
+   "von": null,
+   "bis": null,
+   "mm": "50 cm"
+  },
+  {
+   "fisch": "Aal",
+   "von": null,
+   "bis": null,
+   "mm": "50 cm"
+  },
+  {
+   "fisch": "Wels",
+   "von": null,
+   "bis": null,
+   "mm": "90 cm"
+  }
+ ],
+ "banner": [
+  {
+   "von": [
+    2,
+    1
+   ],
+   "bis": [
+    3,
+    14
+   ],
+   "text": "<b>Hecht-Fangverbot aktiv</b> (01.02.–30.04., Obere-Havel-Gewässer)."
+  },
+  {
+   "von": [
+    3,
+    15
+   ],
+   "bis": [
+    4,
+    30
+   ],
+   "text": "<b>Hecht- UND Zander-Verbot aktiv</b> – Hecht bis 30.04., Zander bis 15.06."
+  },
+  {
+   "von": [
+    5,
+    1
+   ],
+   "bis": [
+    6,
+    15
+   ],
+   "text": "<b>Zander-Angelverbot bis 15.06.</b> – Hecht &amp; Barsch sind offen."
+  }
+ ],
+ "regeln": [
+  {
+   "titel": "Kartenregeln Seenfischerei Obere Havel (~5.300 ha)",
+   "punkte": [
+    "Max. 2 Ruten, Angeln ständig beaufsichtigen",
+    "Boot verankern – Schlepp- und Driftangeln verboten!",
+    "Schilfgürtel, Seerosenfelder und Fischschonbezirke nicht befahren/beangeln",
+    "50 m Abstand zu Fischereigeräten, 100 m zu Schleusen/Stromwehren",
+    "Entnahme: max. 3 Fische/Tag gesamt aus Hecht, Zander, Aal, Karpfen",
+    "Entnahmefenster: Hecht über 85, Zander über 75, Barsch über 40 cm zurücksetzen",
+    "Nachtangeln erlaubt · der Fischer hat Vorrecht"
+   ]
+  },
+  {
+   "titel": "Scheine &amp; Abgaben (MV)",
+   "punkte": [
+    "Fischereischein anderer Bundesländer wird anerkannt (Hauptwohnsitz außerhalb MV)",
+    "Alternativ: Touristenfischereischein, 28 Tage, ~24 €, ohne Prüfung – Touristinfo Mirow/Wesenberg oder erlaubnis.angeln-mv.de",
+    "Zusätzlich Pflicht: Fischereiabgabe MV, 10 €/Kalenderjahr (auch für Auswärtige)",
+    "Angelkarten online: fischerei-wesenberg.de – oder Meisterbereiche Wesenberg, Mirow, Canow, Ahrensberg"
+   ]
+  },
+  {
+   "titel": "Boot &amp; Praxis",
+   "punkte": [
+    "Riesige Schilfgürtel: ohne Boot geht wenig – führerscheinfreie 5-PS-Boote vielerorts charterbar",
+    "Useriner See liegt im Müritz-Nationalpark: Schutzzonen beachten",
+    "Sommer = Hausboot-Hochsaison: Dämmerung und Nebenseen nutzen"
+   ]
+  }
+ ],
+ "hinweis": "Angaben ohne Gewähr, recherchiert 07/2026 (Bedingungen Seenfischerei Obere Havel, klein-seenplatte.de). Maßgeblich: Angelkarte und LFischG M-V. Rätzsee &amp; weitere Seen gehören ebenfalls zum Kartengebiet."
+}
