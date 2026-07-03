@@ -20,6 +20,26 @@
    "methode": "Gummifisch & Wobbler an den Kanten der Bachtäler, DropShot auf Barsch – weite Würfe nötig, Fische oft bis ~15 m Tiefe",
    "karte": "AVS-Erlaubnisschein + TWT-Belehrung (Quittung im Fangbuch)",
    "note": "Trinkwassertalsperre: kein Boot, kein Waten, kein Anfüttern, keine Maden/Fleisch, kein Nachtangeln. Schonmaß 60 cm für ALLE Salmoniden. Parkplatz am NO-Ufer (Lippersdorfer Str.), Rundwanderweg erschließt alle Ufer.",
+   "hotspots": [
+    {
+     "name": "Staumauer-Bereich",
+     "lat": 50.734,
+     "lng": 13.2318,
+     "tipp": "Tiefster Bereich der Talsperre. Sommer: Fische stehen tief – weite Würfe mit schweren Gummis, Barschtrupps über den Tiefenkanten suchen."
+    },
+    {
+     "name": "Übergang Vorsperre Forchheim",
+     "lat": 50.7284,
+     "lng": 13.2736,
+     "tipp": "Kante zwischen flacher Vorsperre und Hauptbecken – klassischer Zug für Hecht und Barsch, im Frühsommer zuerst warm."
+    },
+    {
+     "name": "NO-Ufer am Parkplatz",
+     "lat": 50.742,
+     "lng": 13.243,
+     "tipp": "Kürzester Weg ans Wasser (Lippersdorfer Str.), Scharkante in Wurfweite. Lage ungefähr – Beschilderung der erlaubten Angelbereiche beachten!"
+    }
+   ],
    "warn": false
   },
   {
