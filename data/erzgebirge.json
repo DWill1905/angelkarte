@@ -1,0 +1,504 @@
+{
+ "id": "erzgebirge",
+ "name": "Erzgebirge / Freiberg (Sachsen)",
+ "spots": [
+  {
+   "name": "Talsperre Saidenbach",
+   "arten": [
+    "Barsch",
+    "Hecht",
+    "Karpfen",
+    "Schleie",
+    "Brachse",
+    "Zander"
+   ],
+   "nr": "C02-102",
+   "cat": "raub",
+   "lat": 50.7358,
+   "lng": 13.2342,
+   "fisch": "Barsch, Hecht, Karpfen, Schleie, Brasse, Weißfisch (Zander selten)",
+   "methode": "Gummifisch & Wobbler an den Kanten der Bachtäler, DropShot auf Barsch – weite Würfe nötig, Fische oft bis ~15 m Tiefe",
+   "karte": "AVS-Erlaubnisschein + TWT-Belehrung (Quittung im Fangbuch)",
+   "note": "Trinkwassertalsperre: kein Boot, kein Waten, kein Anfüttern, keine Maden/Fleisch, kein Nachtangeln. Schonmaß 60 cm für ALLE Salmoniden. Parkplatz am NO-Ufer (Lippersdorfer Str.), Rundwanderweg erschließt alle Ufer.",
+   "warn": false
+  },
+  {
+   "name": "Vorsperre Dittersbach",
+   "arten": [
+    "Barsch",
+    "Hecht",
+    "Karpfen",
+    "Schleie",
+    "Regenbogenforelle"
+   ],
+   "nr": "C01-104",
+   "cat": "raub",
+   "lat": 50.8009,
+   "lng": 13.4798,
+   "fisch": "Barsch, Hecht, Karpfen, Schleie, Regenbogenforelle, Weißfisch",
+   "methode": "Spinnfischen vom Ufer, Pose/Grund auf Karpfen & Schleie (TWT-Köderregeln!)",
+   "karte": "AVS-Erlaubnisschein + TWT-Belehrung",
+   "note": "6 ha Vorsperre der TS Lichtenberg. Wegen der laufenden Hauptsperren-Sanierung vorab beim AVS prüfen, ob die Vorsperre beangelbar ist.",
+   "warn": true
+  },
+  {
+   "name": "Talsperre Lichtenberg (Hauptsperre)",
+   "arten": [
+    "Hecht",
+    "Barsch"
+   ],
+   "nr": "C01-105",
+   "cat": "sperr",
+   "lat": 50.8117,
+   "lng": 13.453,
+   "fisch": "vor Sanierung: Hecht, Barsch, Rotauge",
+   "methode": "—",
+   "karte": "—",
+   "note": "ACHTUNG: Herbst 2024 für die Staudamm-Sanierung (~30 Mio €) vollständig entleert, Bauarbeiten laufen. Aktuell kein Angelbetrieb – Status beim AVS erfragen.",
+   "warn": true
+  },
+  {
+   "name": "Freiberger Mulde – gelbe Salmonidenstrecke",
+   "nr": "C01-02",
+   "cat": "salmo",
+   "arten": [
+    "Bachforelle",
+    "Regenbogenforelle",
+    "Äsche",
+    "Döbel",
+    "Barsch"
+   ],
+   "lat": 50.828,
+   "lng": 13.418,
+   "farbe": "gelb",
+   "line": [
+    [
+     50.712,
+     13.603
+    ],
+    [
+     50.728,
+     13.572
+    ],
+    [
+     50.741,
+     13.541
+    ],
+    [
+     50.769,
+     13.498
+    ],
+    [
+     50.789,
+     13.459
+    ],
+    [
+     50.807,
+     13.417
+    ],
+    [
+     50.838,
+     13.41
+    ],
+    [
+     50.865,
+     13.398
+    ],
+    [
+     50.882,
+     13.395
+    ],
+    [
+     50.897,
+     13.392
+    ],
+    [
+     50.91,
+     13.38
+    ],
+    [
+     50.927,
+     13.363
+    ]
+   ],
+   "strecke": "Teichhaus (dt.-tschech. Grenze) bis Straßenbrücke Halsbach, 28 km",
+   "fisch": "Bachforelle, Regenbogenforelle, Äsche, Döbel, Barsch",
+   "methode": "Fliege &amp; UL-Spinner mit Einzelhaken – Gumpen, Kolke, unterspülte Ufer",
+   "karte": "Gelbe Strecke: nur mit Jahres-Salmonidenschein des AVS",
+   "note": "Für Gastangler ohne Jahres-Salmoschein NICHT zugänglich. Sperr- und Fly-only-Abschnitte vorhanden – Beschilderung beachten.",
+   "warn": true
+  },
+  {
+   "name": "Freiberger Mulde – allgemeine Strecke",
+   "nr": "C01-201",
+   "cat": "fluss",
+   "arten": [
+    "Bachforelle",
+    "Regenbogenforelle",
+    "Äsche",
+    "Döbel",
+    "Barsch"
+   ],
+   "lat": 50.975,
+   "lng": 13.325,
+   "farbe": "allg",
+   "line": [
+    [
+     50.927,
+     13.363
+    ],
+    [
+     50.938,
+     13.345
+    ],
+    [
+     50.95,
+     13.337
+    ],
+    [
+     50.968,
+     13.33
+    ],
+    [
+     50.983,
+     13.318
+    ],
+    [
+     51,
+     13.32
+    ],
+    [
+     51.013,
+     13.322
+    ],
+    [
+     51.028,
+     13.318
+    ]
+   ],
+   "strecke": "Straßenbrücke Halsbach bis A4-Brücke Siebenlehn (über Altväterbrücke Halsbrücke), 26 km",
+   "fisch": "Bachforelle, Äsche, Döbel, Barsch – guter Salmonidenbestand",
+   "methode": "Leichte Spinnrute bis 10 g oder Fliege, Wathose empfohlen (Gumpen &amp; Kolke!)",
+   "karte": "Allgemeine AVS-Berechtigung / Gastkarte – kein Salmoschein nötig",
+   "note": "Die realistische Mulde-Strecke für Gastangler: Forellen &amp; Döbel fast überall, Barsche in tiefen Gumpen.",
+   "warn": false
+  },
+  {
+   "name": "Flöha – grüne Salmonidenstrecke (Lengefeld)",
+   "nr": "C02-07",
+   "cat": "salmo",
+   "arten": [
+    "Bachforelle",
+    "Regenbogenforelle",
+    "Äsche",
+    "Döbel",
+    "Barsch"
+   ],
+   "lat": 50.731,
+   "lng": 13.17,
+   "farbe": "gruen",
+   "line": [
+    [
+     50.718,
+     13.184
+    ],
+    [
+     50.727,
+     13.172
+    ],
+    [
+     50.736,
+     13.163
+    ],
+    [
+     50.744,
+     13.157
+    ]
+   ],
+   "strecke": "Straßenbrücke Rauenstein bis Mühlenwehr am Bahnhof Floßmühle",
+   "fisch": "Bachforelle, Regenbogenforelle, Äsche, Weißfisch",
+   "methode": "Nymphe in den Taschen zwischen den Felsen, UL-Spinner – Wathose mit rutschfester Sohle",
+   "karte": "Grüne Strecke: allgemeine AVS-Berechtigung, aber nach Salmonidenregeln (Flug/Spinn, 1 Rute, Einzelhaken)",
+   "note": "Mäander zwischen bewaldeten Hängen, wechselnd sandig bis felsig – versteckte Rinnen und Löcher.",
+   "warn": false
+  },
+  {
+   "name": "Flöha – allgemeine Strecke (Borstendorf)",
+   "nr": "AVS",
+   "cat": "fluss",
+   "arten": [
+    "Bachforelle",
+    "Regenbogenforelle",
+    "Döbel",
+    "Barsch",
+    "Hecht",
+    "Aal",
+    "Karpfen"
+   ],
+   "lat": 50.766,
+   "lng": 13.128,
+   "farbe": "allg",
+   "line": [
+    [
+     50.744,
+     13.157
+    ],
+    [
+     50.752,
+     13.146
+    ],
+    [
+     50.762,
+     13.135
+    ],
+    [
+     50.771,
+     13.125
+    ],
+    [
+     50.78,
+     13.113
+    ],
+    [
+     50.787,
+     13.1
+    ]
+   ],
+   "strecke": "Mühlenwehr Bhf. Floßmühle bis Straßenbrücke Leubsdorf/Schellenberg, 14 km",
+   "fisch": "Bachforelle, Regenbogenforelle, Döbel, Barsch, Hecht, Aal, Karpfen",
+   "methode": "UL-Spinnfischen, Pose – laut Fangstatistik erfolgreichste Methode hier",
+   "karte": "Allgemeine AVS-Berechtigung / Gastkarte",
+   "note": "Fischreiche, stark befischte Strecke. Achtung: privates Fischereirecht zwischen Grünhainichen und Borstendorf – siehe rote Sperrstrecke.",
+   "warn": false
+  },
+  {
+   "name": "Flöha – Sperrstrecke Grünhainichen",
+   "nr": "privat",
+   "cat": "sperr",
+   "arten": [],
+   "lat": 50.762,
+   "lng": 13.135,
+   "farbe": "sperr",
+   "line": [
+    [
+     50.752,
+     13.146
+    ],
+    [
+     50.762,
+     13.135
+    ],
+    [
+     50.771,
+     13.125
+    ]
+   ],
+   "strecke": "100 m unterhalb Straßenbrücke Grünhainichen bis Straßenbrücke Borstendorf",
+   "fisch": "—",
+   "methode": "—",
+   "karte": "Privates Fischereirecht – Angeln verboten",
+   "note": "Dieser Abschnitt darf nicht befischt werden, auch nicht mit AVS-Karte.",
+   "warn": true
+  },
+  {
+   "name": "Mühlteich (Brand-Erbisdorf)",
+   "arten": [
+    "Karpfen",
+    "Schleie",
+    "Aal",
+    "Barsch"
+   ],
+   "nr": "AVS",
+   "cat": "fried",
+   "lat": 50.7999,
+   "lng": 13.2761,
+   "fisch": "Karpfen, Graskarpfen, Schleie, Aal, Barsch",
+   "methode": "Grundangeln (Boilie, Mais), Pose in der Dämmerung auf Schleie, abends auf Aal",
+   "karte": "AVS-Erlaubnisschein / Gastkarte",
+   "note": "Kleiner Naturteich bei Gränitz (OT Brand-Erbisdorf). Angelstatus vorab im AVS-Gewässerverzeichnis prüfen – Lage/Zuordnung nicht eindeutig.",
+   "warn": false
+  },
+  {
+   "name": "Schlüsselteich (Freiberg)",
+   "arten": [
+    "Karpfen",
+    "Brachse",
+    "Schleie",
+    "Aal",
+    "Barsch"
+   ],
+   "nr": "AVS",
+   "cat": "fried",
+   "lat": 50.9226,
+   "lng": 13.3427,
+   "fisch": "Karpfen, Brachse, Schleie, Aal, Barsch",
+   "methode": "Feeder & Method Feeder auf Karpfen, Madenbündel auf Brachse",
+   "karte": "AVS-Erlaubnisschein / Gastkarte",
+   "note": "Stadtnah und gut erreichbar – solides Friedfischgewässer.",
+   "warn": false
+  },
+  {
+   "name": "Richter’s Angelteich (Gränitz)",
+   "nr": "privat",
+   "cat": "forelle",
+   "arten": [
+    "Regenbogenforelle"
+   ],
+   "lat": 50.7946,
+   "lng": 13.2894,
+   "fisch": "Regenbogenforelle (Besatz), Stör im Teich",
+   "methode": "Forellenteig, Spoons, Bienenmade – Put &amp; Take, auch ohne Fischereischein",
+   "karte": "Eintritt 3 €, Fang nach Kilo – direkt beim Betreiber (Tel. 0173 9281089)",
+   "note": "Sa 8–17, So 9–12 Uhr, Saison bis Ende Oktober. Sehr gut bewertet (4.8), Ausnehmen vor Ort möglich.",
+   "warn": false
+  },
+  {
+   "name": "Großhartmannsdorfer Großteich",
+   "arten": [],
+   "nr": "RWA/LTV",
+   "cat": "sperr",
+   "lat": 50.8088,
+   "lng": 13.3398,
+   "fisch": "Karpfenzucht (bewirtschaftet)",
+   "methode": "—",
+   "karte": "Kein reguläres Angelgewässer",
+   "note": "Naturschutzgebiet, Teil der Revierwasserlaufanstalt, wird alle 4 Jahre abgelassen. Schönes Vogelrevier, aber kein Zielgewässer.",
+   "warn": false
+  }
+ ],
+ "schon": [
+  {
+   "fisch": "Hecht",
+   "von": [
+    2,
+    1
+   ],
+   "bis": [
+    4,
+    30
+   ],
+   "mm": "50 cm"
+  },
+  {
+   "fisch": "Zander",
+   "von": [
+    2,
+    1
+   ],
+   "bis": [
+    5,
+    31
+   ],
+   "mm": "50 cm"
+  },
+  {
+   "fisch": "Bachforelle",
+   "von": [
+    10,
+    1
+   ],
+   "bis": [
+    4,
+    30
+   ],
+   "mm": "28 cm"
+  },
+  {
+   "fisch": "Regenbogenforelle",
+   "von": [
+    10,
+    1
+   ],
+   "bis": [
+    4,
+    30
+   ],
+   "mm": "– (Schonzeit nur Fließgewässer)"
+  },
+  {
+   "fisch": "Karpfen",
+   "von": null,
+   "bis": null,
+   "mm": "40 cm"
+  },
+  {
+   "fisch": "Aal",
+   "von": null,
+   "bis": null,
+   "mm": "50 cm"
+  },
+  {
+   "fisch": "Barsch",
+   "von": null,
+   "bis": null,
+   "mm": "– (LVSA: max. 10/Tag)"
+  }
+ ],
+ "banner": [
+  {
+   "von": [
+    2,
+    1
+   ],
+   "bis": [
+    4,
+    30
+   ],
+   "text": "<b>Raubfisch-Sperrfrist aktiv:</b> 01.02.–30.04. Kunstköderverbot in LVSA-Gewässern, Hecht geschont."
+  },
+  {
+   "von": [
+    5,
+    1
+   ],
+   "bis": [
+    5,
+    31
+   ],
+   "text": "<b>Zander geschont bis 31.05.</b> – Hecht &amp; Barsch sind offen."
+  }
+ ],
+ "regeln": [
+  {
+   "titel": "Raubfisch-Sperrfrist (LVSA)",
+   "punkte": [
+    "01.02.–30.04.: Angeln mit raubfischtauglichen Ködern in allen LVSA-Gewässern untersagt (faktisch Kunstköderverbot)",
+    "Barsch: max. 10/Tag, davon 5 über 30 cm",
+    "Fangbuch vor Angelbeginn ausfüllen",
+    "Nachtangelzeit: 1 h nach Sonnenuntergang bis 1 h vor Sonnenaufgang"
+   ]
+  },
+  {
+   "titel": "Trinkwassertalsperren (Saidenbach, Dittersbach)",
+   "punkte": [
+    "TWT-Belehrung nötig – Nachweis im Fangbuch/Erlaubnisschein",
+    "Kein Boot, kein Belly, kein Waten, kein Baden",
+    "Anfüttern verboten – auch Futterkorb",
+    "Maden &amp; Fleisch als Köder verboten",
+    "Kein Nachtangeln, kein Zelten, kein Feuer",
+    "Fische nicht am Gewässer schlachten"
+   ]
+  },
+  {
+   "titel": "Streckenfarben an Flüssen (Sachsen)",
+   "punkte": [
+    "<b style=\"color:#e8b93c\">Gelb</b>: nur mit Jahres-Salmonidenschein des AVS",
+    "<b style=\"color:#6fae6f\">Grün</b>: allgemeine Berechtigung, aber Salmonidenregeln",
+    "<b style=\"color:#7d9bc9\">Blau</b> (Karte): allgemeines Angelgewässer",
+    "<b style=\"color:#c94f3d\">Rot gestrichelt</b>: Sperrstrecke – Angeln verboten",
+    "Linienverlauf schematisch – maßgeblich sind die Schilder am Wasser"
+   ]
+  },
+  {
+   "titel": "Salmonidenstrecken (Mulde, Flöha)",
+   "punkte": [
+    "01.01.–30.04.: Angeln komplett verboten",
+    "01.05.–30.09.: Flug- oder Spinnangel",
+    "01.10.–31.12.: nur Flugangel",
+    "Nur 1 Einzelhaken pro Köder (Drillinge tauschen), Salmonidenschein je nach Strecke",
+    "Nachtangeln verboten, Salmoniden nicht hältern"
+   ]
+  }
+ ],
+ "hinweis": "Angaben ohne Gewähr, nach SächsFischVO 2022 und LVSA-Gewässerordnung 2024. Maßgeblich: Erlaubnisschein, Gewässerverzeichnis, Beschilderung. Äsche vielerorts ganzjährig geschont – vor Ort prüfen. Gastkarten: angeln-sachsen.de"
+}
