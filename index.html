@@ -147,20 +147,6 @@
   .fb-empty{text-align:center;color:var(--muted);font-size:13px;padding:24px 10px;line-height:1.5}
   .fb-status{font-size:11px;color:var(--muted);text-align:center;margin-top:8px}
 
-  /* Guide-Chat */
-  #view-guide{background:var(--ink)}
-  .g-chat{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
-  .g-msg{max-width:86%;padding:10px 13px;border-radius:14px;font-size:14px;line-height:1.5;white-space:pre-wrap;word-break:break-word}
-  .g-msg.user{align-self:flex-end;background:var(--salmo);color:#082226;border-bottom-right-radius:4px}
-  .g-msg.ai{align-self:flex-start;background:var(--panel);border:1px solid var(--line);border-bottom-left-radius:4px}
-  .g-msg.wait{color:var(--muted);font-style:italic}
-  .g-quick{display:flex;gap:6px;overflow-x:auto;padding:6px 14px;scrollbar-width:none;flex-shrink:0}
-  .g-quick::-webkit-scrollbar{display:none}
-  .g-inputrow{display:flex;gap:8px;padding:10px 14px;background:var(--panel);border-top:1px solid var(--line);flex-shrink:0}
-  .g-inputrow input{flex:1}
-  .g-inputrow button{background:var(--salmo);color:#082226;border:0;border-radius:8px;padding:0 16px;font-size:16px;cursor:pointer;font-weight:700}
-  .g-inputrow button:disabled{opacity:.5}
-  @media(min-width:820px){#view-guide{flex-direction:column!important}.g-chat{max-width:720px;margin:0 auto;width:100%}.g-quick,.g-inputrow{max-width:720px;margin:0 auto;width:100%}}
   .mydlg-wrap{position:fixed;inset:0;background:rgba(6,16,18,.72);z-index:1200;display:flex;align-items:center;justify-content:center;padding:20px}
   .mydlg-wrap[hidden]{display:none!important}
   .mydlg{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;width:100%;max-width:380px}
@@ -204,7 +190,6 @@
   <button class="tab" role="tab" aria-selected="true" data-view="karte">Karte</button>
   <button class="tab" role="tab" aria-selected="false" data-view="regeln">Regeln</button>
   <button class="tab" role="tab" aria-selected="false" data-view="fangbuch">Fangbuch</button>
-  <button class="tab" role="tab" aria-selected="false" data-view="guide">Guide</button>
 </div>
 
 <!-- KARTE -->
@@ -255,22 +240,6 @@
       <div class="fb-status" id="fbStatus"></div>
     </div>
     <div id="fbList"></div>
-  </div>
-</div>
-
-<!-- GUIDE -->
-<div class="view" id="view-guide">
-  <div class="g-chat" id="gChat" role="log" aria-live="polite">
-    <div class="g-msg ai">Petri! Ich bin dein Angel-Guide. Frag mich, was hier gerade beißt, welche Montage passt oder wie die Bedingungen sind – ich kenne deine Karte, das Datum und die Schonzeiten und kann aktuelle Infos im Web nachschlagen.</div>
-  </div>
-  <div class="g-quick" id="gQuick">
-    <button class="chip">Was beißt heute hier?</button>
-    <button class="chip">Beste Montage bei dem Wetter?</button>
-    <button class="chip">Regeln am nächsten Spot?</button>
-  </div>
-  <div class="g-inputrow">
-    <input id="gInput" type="text" placeholder="Frag deinen Guide…" autocomplete="off" aria-label="Frage an den Angel-Guide" enterkeyhint="send">
-    <button id="gSend" aria-label="Senden">➤</button>
   </div>
 </div>
 
@@ -985,65 +954,6 @@ async function loadPegel(ctr,el){
       el.textContent+=' · 🌊 '+s0.shortname.charAt(0)+s0.shortname.slice(1).toLowerCase()+': '+m.value+' cm';
   }catch(e){}
 }
-
-/* ============ Guide-Chat ============ */
-const chatLog=[];
-const gChat=document.getElementById('gChat'), gInput=document.getElementById('gInput'), gSend=document.getElementById('gSend');
-
-function buildGuideCtx(){
-  const c=map.getCenter();
-  const pos=userPos||[c.lat,c.lng];
-  const schonAktiv=SCHON.filter(inSchonzeit).map(x=>x.fisch).join(', ')||'keine';
-  const spotsNah=SPOTS.filter(s=>!s.ki).map(s=>{
-    const d=haversine(pos[0],pos[1],s.lat,s.lng).toFixed(0);
-    return s.name+' ('+d+' km, '+(s.arten.join('/')||'gesperrt')+')';
-  }).join('; ');
-  const faenge=fbMem.slice(-5).map(e=>e.fisch+(e.laenge?' '+e.laenge+'cm':'')+' @ '+e.spot+' ('+e.datum+(e.koeder?', '+e.koeder:'')+')').join('; ')||'keine';
-  return 'Du bist ein erfahrener, direkter Angel-Guide (deutsch, knapp, konkrete Zahlen, kein Geschwafel). '
-    +'Kontext der Angelkarten-App des Nutzers: Datum '+NOW.toLocaleDateString('de-DE')+'. '
-    +'Position: '+pos[0].toFixed(3)+','+pos[1].toFixed(3)+(userPos?' (echter Standort)':' (Kartenmitte)')+'. '
-    +'Aktive Schonzeiten (Sachsen): '+schonAktiv+'. '
-    +'Spots auf der Karte: '+spotsNah+'. '
-    +'Letzte Fänge des Nutzers: '+faenge+'. '
-    +'Nutze Websuche für aktuelle Infos (Wetter, Pegel, Regeln anderer Bundesländer). '
-    +'Rechtliche Angaben immer mit Hinweis auf Erlaubnisschein/Beschilderung.';
-}
-function addMsg(role,text,wait){
-  const d=document.createElement('div');
-  d.className='g-msg '+(role==='user'?'user':'ai')+(wait?' wait':'');
-  d.textContent=text;
-  gChat.appendChild(d); gChat.scrollTop=gChat.scrollHeight;
-  return d;
-}
-async function guideSend(q){
-  q=(q||gInput.value).trim(); if(!q) return;
-  gInput.value=''; gSend.disabled=true; gInput.disabled=true;
-  addMsg('user',q);
-  chatLog.push({role:'user',content:q});
-  const waitEl=addMsg('ai','Guide denkt nach…',true);
-  try{
-    const data=await claudeCall({
-      model:'claude-sonnet-4-6',max_tokens:2000,
-      messages:[
-        {role:'user',content:buildGuideCtx()},
-        {role:'assistant',content:'Verstanden – ich bin bereit als dein Angel-Guide.'},
-        ...chatLog
-      ],
-      tools:[{type:'web_search_20250305',name:'web_search'}]
-    });
-    const text=(data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('\n').trim()||'(keine Antwort)';
-    chatLog.push({role:'assistant',content:text});
-    waitEl.classList.remove('wait'); waitEl.textContent=text;
-  }catch(e){
-    waitEl.classList.remove('wait'); waitEl.textContent='Fehler: '+e.message;
-    chatLog.pop(); /* Frage aus Verlauf nehmen, damit Retry sauber ist */
-  }
-  gSend.disabled=false; gInput.disabled=false; gInput.focus();
-  gChat.scrollTop=gChat.scrollHeight;
-}
-gSend.onclick=()=>guideSend();
-gInput.onkeydown=e=>{if(e.key==='Enter')guideSend();};
-document.querySelectorAll('#gQuick .chip').forEach(b=>b.onclick=()=>guideSend(b.textContent));
 
 /* ============ KI-Recherche: Spots je nach Standort ============ */
 const ARTEN_KANON=['Hecht','Zander','Barsch','Bachforelle','Regenbogenforelle','Äsche','Döbel','Karpfen','Schleie','Aal','Brachse'];
