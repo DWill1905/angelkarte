@@ -20,13 +20,13 @@
    "fisch": "Hecht, Zander, Barsch, Aal, Karpfen, Schleie, Brachse (14 gemeldete Arten)",
    "methode": "Vom verankerten Boot: Gummifisch an den Havel-Rinnen auf Zander, große Köder an Schilfkanten auf Hecht. Schleppen verboten!",
    "karte": "Angelkarte Seenfischerei Obere Havel – online (fischerei-wesenberg.de) oder Fischereihof Wesenberg",
-   "note": "Ø nur 1,6 m tief, Max. 7 m! Havel durchfließt den See, im Sommer viel Hausboot-Verkehr – Morgen- und Abendstunden nutzen. Schilfgürtel & Seerosenfelder tabu, Scharkante liegt weit hinterm Schilf: Boot + Echolot.",
+   "note": "Ø nur 1,6 m tief, Max. 7 m! Havel durchfließt den See, im Sommer viel Hausboot-Verkehr. Uferangeln laut Luftbild fast nur an Buhne (Campingpark) und Stadtufer Wesenberg möglich – sonst durchgehender Schilfgürtel, Scharkante weit dahinter: Boot + Echolot.",
    "hotspots": [
     {
      "name": "Havel-Einlauf & 7-m-Kuhle",
      "lat": 53.307,
      "lng": 13.004,
-     "tipp": "DIE Stelle: tiefste Kuhle des Sees (7 m) direkt vor der Havel-Einmündung am Campingpark Havelberge. Zander stehen tagsüber an der 5–7-m-Kante, abends Aal an der gepflasterten Buhne."
+     "tipp": "DIE Stelle: tiefste Kuhle des Sees (7 m) direkt vor der Havel-Einmündung am Campingpark Havelberge. Zander tagsüber an der 5–7-m-Kante. UFER-TIPP: Die gepflasterte Buhne ist einer von nur zwei schilffreien Uferzugängen am See – abends Aal, Barsch."
     },
     {
      "name": "Halbinsel am Ostufer",
@@ -41,10 +41,10 @@
      "tipp": "Kanal Richtung Zierker See – bekannt für seinen Welsbestand. Abends raubende Barsche entlang der Stege. Lage ungefähr."
     },
     {
-     "name": "Havel-Auslauf Wesenberg",
+     "name": "Ufer: Stadtufer/Havel-Auslauf Wesenberg",
      "lat": 53.289,
      "lng": 13.001,
-     "tipp": "Abfluss Richtung Drewensee: Aal-Strecke am Abend. Achtung: 100 m Mindestabstand zur Schleuse Wesenberg einhalten!"
+     "tipp": "Zweiter schilffreier Uferzugang (Luftbild): Stadtufer und Hafenumfeld Wesenberg. Aal-Strecke am Abend, Barsch an den Stegen. Achtung: 100 m Mindestabstand zur Schleuse!"
     }
    ],
    "warn": false
@@ -64,7 +64,7 @@
    "fisch": "Hecht, Barsch, Aal, Schleie",
    "methode": "Flacher, krautiger Hechtsee: Spinnerbait/Jerkbait über Kraut, Westbuchten mit Ankerplätzen",
    "karte": "Angelkarte Obere Havel (Meisterbereich Mirow, Tel. 039833 20423)",
-   "note": "Wasser eher trüb, umliegender Wald teils überflutet – Mückenschutz einpacken. Schleusenpassage ab Mirow.",
+   "note": "Reines Bootsrevier: Wald bis ans Wasser, laut Luftbild keine freien Uferzugänge. Wasser eher trüb, Wald teils überflutet – Mückenschutz einpacken. Schleusenpassage ab Mirow.",
    "hotspots": [
     {
      "name": "Westbuchten",
@@ -143,6 +143,14 @@
    "methode": "Stadtnaher Allrounder: abends auf Zander an der Fahrrinne, Aal vom Ufer (Nachtangeln erlaubt)",
    "karte": "Angelkarte Obere Havel (Meisterbereich Mirow, Mühlenstr. 21)",
    "note": "Schlossinsel und Bootsverkehr – Randbereiche und frühe Stunden wählen.",
+   "hotspots": [
+    {
+     "name": "Ufer: Stadtufer & Schlossinsel",
+     "lat": 53.272,
+     "lng": 12.815,
+     "tipp": "Bester Ufer-Spot der Kleinseenplatte (Luftbild): befestigtes Stadtufer mit vielen Stegen und der Schlossinsel-Brücke. Abends Barsch an den Stegen, nachts Aal – kurze Wege, kein Boot nötig."
+    }
+   ],
    "warn": false
   },
   {
