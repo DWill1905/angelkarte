@@ -243,6 +243,14 @@
   </div>
 </div>
 
+<div class="mydlg-wrap" id="kbDlg" hidden>
+  <div class="mydlg">
+    <h3>🎯 Köderberater</h3>
+    <div id="kbBody" style="font-size:13px;line-height:1.55;max-height:55dvh;overflow-y:auto"></div>
+    <div class="mydlg-btns"><button id="kbClose">Schließen</button></div>
+  </div>
+</div>
+
 <div class="mydlg-wrap" id="myDlg" hidden>
   <div class="mydlg">
     <h3>Eigenen Spot speichern</h3>
@@ -308,6 +316,7 @@ const CATS = {
 const SPOTS_SN = [
   {
     name:'Talsperre Saidenbach',
+    rig:'H-Spinnrute 20–60 g, Geflecht + FC-Vorfach. Erlaubte Köder: Kunstköder, Wurm, Mais/Teig – KEINE Maden, kein Fleisch, kein Anfüttern (TWT!).',
     arten:['Barsch','Hecht','Karpfen','Schleie','Brachse','Zander'], nr:'C02-102', cat:'raub', lat:50.7358, lng:13.2342,
     fisch:'Barsch, Hecht, Karpfen, Schleie, Brasse, Weißfisch (Zander selten)',
     methode:'Gummifisch & Wobbler an den Kanten der Bachtäler, DropShot auf Barsch – weite Würfe nötig, Fische oft bis ~15 m Tiefe',
@@ -322,6 +331,7 @@ const SPOTS_SN = [
   },
   {
     name:'Vorsperre Dittersbach',
+    rig:'Spinnrute mittel, Stahl- oder dickes FC-Vorfach (Hecht). TWT-Köderregeln wie Saidenbach.',
     arten:['Barsch','Hecht','Karpfen','Schleie','Regenbogenforelle'], nr:'C01-104', cat:'raub', lat:50.8009, lng:13.4798,
     fisch:'Barsch, Hecht, Karpfen, Schleie, Regenbogenforelle, Weißfisch',
     methode:'Spinnfischen vom Ufer, Pose/Grund auf Karpfen & Schleie (TWT-Köderregeln!)',
@@ -339,7 +349,8 @@ const SPOTS_SN = [
     warn:true
   },
   {
-    name:'Freiberger Mulde – gelbe Salmonidenstrecke', nr:'C01-02', cat:'salmo',
+    name:'Freiberger Mulde – gelbe Salmonidenstrecke',
+    rig:'UL/L-Rute bis 10 g, Watkescher, Einzelhaken-Umbau: Drillinge vorab tauschen (Sprengringzange mitnehmen!).', nr:'C01-02', cat:'salmo',
     arten:['Bachforelle','Regenbogenforelle','Äsche','Döbel','Barsch'],
     lat:50.828, lng:13.418, farbe:'gelb',
     line:[[50.712,13.603],[50.728,13.572],[50.741,13.541],[50.769,13.498],[50.789,13.459],[50.807,13.417],[50.838,13.410],[50.865,13.398],[50.882,13.395],[50.897,13.392],[50.910,13.380],[50.927,13.363]],
@@ -351,7 +362,8 @@ const SPOTS_SN = [
     warn:true
   },
   {
-    name:'Freiberger Mulde – allgemeine Strecke', nr:'C01-201', cat:'fluss',
+    name:'Freiberger Mulde – allgemeine Strecke',
+    rig:'Leichte Spinnrute bis 10 g oder Fliegenrute #4–5, Wathose mit Filz-/Spikesohle für die Gumpen.', nr:'C01-201', cat:'fluss',
     arten:['Bachforelle','Regenbogenforelle','Äsche','Döbel','Barsch'],
     lat:50.975, lng:13.325, farbe:'allg',
     line:[[50.927,13.363],[50.938,13.345],[50.950,13.337],[50.968,13.330],[50.983,13.318],[51.000,13.320],[51.013,13.322],[51.028,13.318]],
@@ -363,7 +375,8 @@ const SPOTS_SN = [
     warn:false
   },
   {
-    name:'Flöha – grüne Salmonidenstrecke (Lengefeld)', nr:'C02-07', cat:'salmo',
+    name:'Flöha – grüne Salmonidenstrecke (Lengefeld)',
+    rig:'UL-Spinnrute oder Fliegenrute, nur 1 Rute und 1 Einzelhaken pro Köder – rutschfeste Watsohlen für die Felspassagen.', nr:'C02-07', cat:'salmo',
     arten:['Bachforelle','Regenbogenforelle','Äsche','Döbel','Barsch'],
     lat:50.731, lng:13.170, farbe:'gruen',
     line:[[50.718,13.184],[50.727,13.172],[50.736,13.163],[50.744,13.157]],
@@ -375,7 +388,8 @@ const SPOTS_SN = [
     warn:false
   },
   {
-    name:'Flöha – allgemeine Strecke (Borstendorf)', nr:'AVS', cat:'fluss',
+    name:'Flöha – allgemeine Strecke (Borstendorf)',
+    rig:'Allround-Spinnrute 5–20 g plus leichte Posenrute – laut Fangstatistik ist die Pose hier am erfolgreichsten.', nr:'AVS', cat:'fluss',
     arten:['Bachforelle','Regenbogenforelle','Döbel','Barsch','Hecht','Aal','Karpfen'],
     lat:50.766, lng:13.128, farbe:'allg',
     line:[[50.744,13.157],[50.752,13.146],[50.762,13.135],[50.771,13.125],[50.780,13.113],[50.787,13.100]],
@@ -399,6 +413,7 @@ const SPOTS_SN = [
   },
   {
     name:'Mühlteich (Brand-Erbisdorf)',
+    rig:'Grundrute mit Freilaufrolle (Karpfen), zweite Rute fein auf Schleie – abends Tauwurm am Grund für Aal.',
     arten:['Karpfen','Schleie','Aal','Barsch'], nr:'AVS', cat:'fried', lat:50.7999, lng:13.2761,
     fisch:'Karpfen, Graskarpfen, Schleie, Aal, Barsch',
     methode:'Grundangeln (Boilie, Mais), Pose in der Dämmerung auf Schleie, abends auf Aal',
@@ -408,6 +423,7 @@ const SPOTS_SN = [
   },
   {
     name:'Schlüsselteich (Freiberg)',
+    rig:'Feederrute mittel, Method-Körbe, 10er–12er Haken – stadtnah reicht leichtes Gepäck.',
     arten:['Karpfen','Brachse','Schleie','Aal','Barsch'], nr:'AVS', cat:'fried', lat:50.9226, lng:13.3427,
     fisch:'Karpfen, Brachse, Schleie, Aal, Barsch',
     methode:'Feeder & Method Feeder auf Karpfen, Madenbündel auf Brachse',
@@ -416,13 +432,36 @@ const SPOTS_SN = [
     warn:false
   },
     {
-    name:'Richter’s Angelteich (Gränitz)', nr:'privat', cat:'forelle',
+    name:'Richter’s Angelteich (Gränitz)',
+    rig:'Leichte Forellenrute 5–20 g, 0,20er Mono, Sbirolino oder Pose – Teig, Spoons, Bienenmade.', nr:'privat', cat:'forelle',
     arten:['Regenbogenforelle'], lat:50.7946, lng:13.2894,
     fisch:'Regenbogenforelle (Besatz), Stör im Teich',
     methode:'Forellenteig, Spoons, Bienenmade – Put &amp; Take, auch ohne Fischereischein',
     karte:'Eintritt 3 €, Fang nach Kilo – direkt beim Betreiber (Tel. 0173 9281089)',
     note:'Sa 8–17, So 9–12 Uhr, Saison bis Ende Oktober. Sehr gut bewertet (4.8), Ausnehmen vor Ort möglich.',
     warn:false
+  },
+  {
+    name:'Erzengler Teich', nr:'RWA – AVS-Nr. prüfen', cat:'fried',
+    arten:['Karpfen','Schleie','Barsch'],
+    lat:50.8524, lng:13.3419,
+    fisch:'Karpfen, Schleie, Barsch (Bestand vor Ort prüfen)',
+    methode:'Grund/Pose außerhalb der Bade-Bojen, Randzeiten nutzen',
+    karte:'Fischereigewässer der RWA – Status/Nummer im AVS-Gewässerverzeichnis prüfen',
+    rig:'Feeder- oder Posenrute, 0,25er Mono reicht – Boilies/Mais auf Karpfen, Wurm auf Schleie in der Dämmerung',
+    note:'8-ha-Kunstteich (1570), zugleich EU-Badegewässer mit Naturbad und Bootsverleih: im Sommer tagsüber Badebetrieb – früh morgens oder abends angeln.',
+    warn:false
+  },
+  {
+    name:'Berthelsdorfer Hüttenteich', nr:'RWA – AVS-Nr. prüfen', cat:'fried',
+    arten:['Karpfen','Schleie','Barsch'],
+    lat:50.8761, lng:13.3591,
+    fisch:'Karpfen, Schleie, Barsch (Bestand vor Ort prüfen)',
+    methode:'Klassisches Ansitzangeln, Ufer gut zugänglich, Parken schwierig',
+    karte:'RWA-Kunstteich – Status/Nummer im AVS-Gewässerverzeichnis prüfen',
+    rig:'Method Feeder auf Karpfen, feine Posenmontage auf Schleie',
+    note:'FFH-Gebiet "Freiberger Bergwerksteiche", wird wie der Großteich zyklisch abgelassen – Wasserstand vor dem Trip prüfen.',
+    warn:true
   },
   {
     name:'Großhartmannsdorfer Großteich',
@@ -447,7 +486,8 @@ const SCHON_SN = [
 
 /* ============ Region: Mecklenburgische Kleinseenplatte (recherchiert 07/2026) ============ */
 const SPOTS_MV=[
-  {name:'Woblitzsee',nr:'Obere Havel',cat:'raub',arten:['Hecht','Zander','Barsch','Aal','Karpfen','Schleie','Brachse'],
+  {name:'Woblitzsee',
+    rig:'Stahl- oder Titanvorfach Pflichtprogramm (Hechtdichte!), H-Rute 40–80 g fürs Zanderjiggen, Echolot fürs Boot.',nr:'Obere Havel',cat:'raub',arten:['Hecht','Zander','Barsch','Aal','Karpfen','Schleie','Brachse'],
    lat:53.3001,lng:13.0102,
    fisch:'Hecht, Zander, Barsch, Aal, Karpfen, Schleie, Brachse (14 gemeldete Arten)',
    methode:'Vom verankerten Boot: Gummifisch an den Havel-Rinnen auf Zander, große Köder an Schilfkanten auf Hecht. Schleppen verboten!',
@@ -459,7 +499,8 @@ const SPOTS_MV=[
      {name:'Kammerkanal-Mündung',lat:53.3090,lng:13.0280,tipp:'Kanal Richtung Zierker See – bekannt für seinen Welsbestand. Abends raubende Barsche entlang der Stege. Lage ungefähr.'},
      {name:'Ufer: Stadtufer/Havel-Auslauf Wesenberg',lat:53.2890,lng:13.0010,tipp:'Zweiter schilffreier Uferzugang (Luftbild): Stadtufer und Hafenumfeld Wesenberg. Aal-Strecke am Abend, Barsch an den Stegen. Achtung: 100 m Mindestabstand zur Schleuse!'}
    ],warn:false},
-  {name:'Zotzensee',nr:'Obere Havel',cat:'raub',arten:['Hecht','Barsch','Aal','Schleie'],
+  {name:'Zotzensee',
+    rig:'Hechtcombo 30–80 g, Stahlvorfach, Weedless-Montagen fürs Kraut – Boot ist Pflicht.',nr:'Obere Havel',cat:'raub',arten:['Hecht','Barsch','Aal','Schleie'],
    lat:53.2437,lng:12.8125,
    fisch:'Hecht, Barsch, Aal, Schleie',
    methode:'Flacher, krautiger Hechtsee: Spinnerbait/Jerkbait über Kraut, Westbuchten mit Ankerplätzen',
@@ -468,25 +509,29 @@ const SPOTS_MV=[
    hotspots:[
      {name:'Westbuchten',lat:53.2450,lng:12.8050,tipp:'Ruhige Ankerbuchten am Westufer – Hecht über und an den Krautfeldern, Spinnerbait/Chatterbait flach geführt. Lage ungefähr.'}
    ],warn:false},
-  {name:'Vilzsee',nr:'Obere Havel',cat:'raub',arten:['Hecht','Barsch','Schleie'],
+  {name:'Vilzsee',
+    rig:'Mittlere Spinnrute, Stahlvorfach, flachlaufende Köder – Polbrille fürs Sichtangeln im klaren Wasser.',nr:'Obere Havel',cat:'raub',arten:['Hecht','Barsch','Schleie'],
    lat:53.2099,lng:12.8336,
    fisch:'Hecht, Barsch, Schleie',
    methode:'Flach, Seerosenfelder: flachlaufende Wobbler und Spinnerbaits an den Kanten VOR den Feldern (Felder selbst tabu)',
    karte:'Angelkarte Obere Havel (Meisterbereich Mirow)',
    note:'Klares, flaches Wasser – Sichtangeln möglich, Raubvogel-Revier.',warn:false},
-  {name:'Großer Labussee',nr:'Obere Havel',cat:'raub',arten:['Hecht','Zander','Barsch','Aal'],
+  {name:'Großer Labussee',
+    rig:'Zander-Jigrute 15–50 g, FC 0,40+ oder dünner Stahl, DropShot-Setup für die Barschtrupps.',nr:'Obere Havel',cat:'raub',arten:['Hecht','Zander','Barsch','Aal'],
    lat:53.3067,lng:12.9504,
    fisch:'Hecht, Zander, Barsch, Aal',
    methode:'Tieferes Havelbecken: Zander an Kanten und Löchern jiggen, Barschtrupps mit DropShot suchen',
    karte:'Angelkarte Obere Havel (Meisterbereich Wesenberg)',
    note:'Ruhiger als der Woblitzsee, Übergang zum Useriner See (Nationalpark!).',warn:false},
-  {name:'Useriner See',nr:'Obere Havel / Müritz-NP',cat:'raub',arten:['Hecht','Zander','Barsch'],
+  {name:'Useriner See',
+    rig:'Wie Woblitzsee: Stahlvorfach, Jigrute – dazu Driftsack/Anker (Schleppen verboten).',nr:'Obere Havel / Müritz-NP',cat:'raub',arten:['Hecht','Zander','Barsch'],
    lat:53.3431,lng:12.9680,
    fisch:'Hecht, Zander, Barsch',
    methode:'Vom verankerten Boot an den Fahrwasser-Kanten; bei Wind schnell kabbelig (5,2 km lang)',
    karte:'Angelkarte Obere Havel – Nationalpark-Regeln beachten',
    note:'Liegt im Müritz-Nationalpark: Schutzzonen und Befahrensregeln beachten, Uferbereiche teils gesperrt.',warn:true},
-  {name:'Mirower See',nr:'Obere Havel',cat:'raub',arten:['Hecht','Zander','Barsch','Aal'],
+  {name:'Mirower See',
+    rig:'Vom Ufer: Spinnrute 10–40 g mit Stahlvorfach an den Stegen, nachts Grundrute mit Tauwurm auf Aal.',nr:'Obere Havel',cat:'raub',arten:['Hecht','Zander','Barsch','Aal'],
    lat:53.2826,lng:12.8074,
    fisch:'Hecht, Zander, Barsch, Aal',
    methode:'Stadtnaher Allrounder: abends auf Zander an der Fahrrinne, Aal vom Ufer (Nachtangeln erlaubt)',
@@ -495,7 +540,8 @@ const SPOTS_MV=[
    hotspots:[
      {name:'Ufer: Stadtufer & Schlossinsel',lat:53.2720,lng:12.8150,tipp:'Bester Ufer-Spot der Kleinseenplatte (Luftbild): befestigtes Stadtufer mit vielen Stegen und der Schlossinsel-Brücke. Abends Barsch an den Stegen, nachts Aal – kurze Wege, kein Boot nötig.'}
    ],warn:false},
-  {name:'Drewensee',nr:'Obere Havel',cat:'raub',arten:['Hecht','Zander','Barsch'],
+  {name:'Drewensee',
+    rig:'Allround-Raubfischcombo mit Stahlvorfach, Gummifische 10–14 cm für die Fahrrinnen-Kanten.',nr:'Obere Havel',cat:'raub',arten:['Hecht','Zander','Barsch'],
    lat:53.2600,lng:13.0330,
    fisch:'Hecht, Zander, Barsch',
    methode:'Klassisches Ansitz- und Spinnrevier am Havelkanal Ahrensberg',
@@ -667,7 +713,9 @@ function popupHtml(s){
     ${s.strecke?'<div class="pop-row"><b>Strecke</b>'+s.strecke+'</div>':''}
     <div class="pop-row"><b>Zielfisch</b>${s.fisch}</div>
     <div class="pop-row"><b>Methode &amp; Köder</b>${s.methode}</div>
+    ${s.rig?'<div class="pop-row"><b>Gerät &amp; Rig</b>'+s.rig+'</div>':''}
     <div class="pop-row"><b>Erlaubnis</b>${s.karte}</div>
+    ${!s.line&&(s.cat==='raub'||s.cat==='fried')?'<div class="pop-row" data-wind="1"></div>':''}
     <div class="pop-note${s.warn?' pop-warn':''}">${s.note}</div>
     ${s.hotspots&&s.hotspots.length?'<div class="pop-row" style="margin-top:8px"><b>Hotspots (kleine Punkte auf der Karte)</b>'+s.hotspots.map(h=>h.name).join(' · ')+'</div>':''}
     <div class="pop-actions">
@@ -792,6 +840,10 @@ const allChip=fishChip('Alle',null); allChip.classList.add('on'); allChip.onclic
 };
 fishEl.appendChild(allChip);
 FISH.forEach(f=>fishEl.appendChild(fishChip(f.id,f.id)));
+const kbBtn=document.createElement('button');
+kbBtn.className='chip'; kbBtn.id='kbBtn'; kbBtn.textContent='🎯 Köderberater';
+kbBtn.onclick=openKb;
+fishEl.appendChild(kbBtn);
 
 /* Standort */
 let userPos=null, userMarker=null;
@@ -920,6 +972,7 @@ map.on('contextmenu',e=>{ if(!REGION)return; myPending=[e.latlng.lat,e.latlng.ln
 
 /* ============ Wetter & Pegel (Open-Meteo + PEGELONLINE, keylos) ============ */
 let wxKey='';
+let WX=null; /* {temp,wind,dirDeg,dir,press,trendVal} für Wind-Taktik & Köderberater */
 async function loadWeather(){
   if(!SPOTS.length) return;
   const pts=SPOTS.filter(sp=>!sp.my);
@@ -933,14 +986,15 @@ async function loadWeather(){
       +'&current=temperature_2m,wind_speed_10m,wind_direction_10m,surface_pressure&hourly=surface_pressure&past_days=1&forecast_days=1&timezone=auto';
     const d=await (await fetch(u)).json();
     const c=d.current;
-    let trend='';
+    let trend='', trendVal=0;
     const idx=d.hourly&&d.hourly.time?d.hourly.time.indexOf(c.time.slice(0,13)+':00'):-1;
     if(idx>2){
-      const dp=d.hourly.surface_pressure[idx]-d.hourly.surface_pressure[idx-3];
-      trend=dp<=-1.5?' ⇘ fällt – Beißtrigger!':dp>=1.5?' ⇗ steigt':' → stabil';
+      trendVal=d.hourly.surface_pressure[idx]-d.hourly.surface_pressure[idx-3];
+      trend=trendVal<=-1.5?' ⇘ fällt – Beißtrigger!':trendVal>=1.5?' ⇗ steigt':' → stabil';
     }
     const dirs=['N','NO','O','SO','S','SW','W','NW'];
     const dir=dirs[Math.round((c.wind_direction_10m||0)/45)%8];
+    WX={temp:c.temperature_2m,wind:c.wind_speed_10m,dirDeg:c.wind_direction_10m||0,dir,press:c.surface_pressure,trendVal};
     el.textContent='🌡 '+Math.round(c.temperature_2m)+'°C · 💨 '+Math.round(c.wind_speed_10m)+' km/h '+dir
       +' · '+Math.round(c.surface_pressure)+' hPa'+trend;
     loadPegel(ctr,el);
@@ -957,6 +1011,53 @@ async function loadPegel(ctr,el){
       el.textContent+=' · 🌊 '+s0.shortname.charAt(0)+s0.shortname.slice(1).toLowerCase()+': '+m.value+' cm';
   }catch(e){}
 }
+
+/* ============ Köderberater (regelbasiert, offline) ============ */
+function season(){const m=NOW.getMonth()+1;return m===12||m<=2?'winter':m<=5?'fruehjahr':m<=8?'sommer':'herbst';}
+const KB={
+ Hecht:{fruehjahr:'Nach der Schonzeit in den erwärmten Flachbuchten: mittelgroße Gummis 12–16 cm, flach laufende Wobbler.',
+  sommer:'Morgens/abends groß &amp; flach über Kraut: Jerkbaits, Spinnerbaits, 16–20-cm-Gummis. Mittags an die tiefen Kanten wechseln.',
+  herbst:'XXL-Zeit: 20 cm+ Gummis und Swimbaits, langsam an tiefen Kanten – jetzt beißen die Großen.',
+  winter:'Sehr langsam und tief: großer Gummifisch am schweren Kopf, lange Absinkphasen und Pausen.'},
+ Zander:{fruehjahr:'Direkt nach der Schonzeit (Sachsen ab 01.06., MV ab 16.06.): Kanten 3–6 m, Gummi 10–12 cm, Faulenzen.',
+  sommer:'Tagsüber tief an den Kanten jiggen (Gummi 10–12 cm), nachts flach ans Ufer – flach laufender Wobbler.',
+  herbst:'Fressphase: größere Gummis 12–15 cm, härtere Jigs an den tiefsten Kanten, auch tagsüber Chancen.',
+  winter:'Zentimeterarbeit am Grund: kleiner Gummi 8–10 cm, minimale Sprünge, sehr lange Pausen.'},
+ Barsch:{fruehjahr:'Kleine Gummis am DropShot in Ufernähe, ab Mai Cranks über den ersten Krautfeldern.',
+  sommer:'Morgens Oberfläche (Popper!), tagsüber Trupps mit DropShot und kleinen Cranks an Kanten suchen.',
+  herbst:'Schwärme jagen im Freiwasser: Spinner, kleine Blinker, Crankbaits – schnelle Führung.',
+  winter:'Tief und fein: DropShot mit kleinen Würmern, direkt vor der Nase anbieten.'},
+ Forelle:{fruehjahr:'Fluss zu (Schonzeit bis 30.04.) – am Forellenteich: helle Teigfarben, langsam geführte Spoons.',
+  sommer:'Früh und spät: kleine Spinner und Nymphen in den beschatteten Rinnen, mittags Pause.',
+  herbst:'Aggressive Farben, etwas größere Spinner – Bachforellen ab Oktober geschont, Refo prüfen!',
+  winter:'Fluss weitgehend zu – Forellenteich: Teig in Grundnähe, sehr langsam.'},
+ Karpfen:{fruehjahr:'Flache, sonnige Buchten: Mais und helle Pop-ups, wenig Futter.',
+  sommer:'Nachtangeln (wo erlaubt): Boilies fruchtig, Futterplatz klein halten – Schwimmbrot bei Sonne.',
+  herbst:'Fressphase vor dem Winter: fischige Boilies, größere Futtermengen zahlen sich aus.',
+  winter:'Sehr sparsam: einzelne helle Hookbaits an tiefen Löchern, Geduld.'},
+ Aal:{fruehjahr:'Ab den ersten warmen Nächten: Tauwurm am Grund in Ufernähe.',
+  sommer:'Beste Zeit: schwüle, dunkle Nächte – Tauwurmbündel oder Fischfetzen an Einläufen und Kanten.',
+  herbst:'Bis Oktober: letzte warme Nächte nutzen, danach wird es zäh.',
+  winter:'Praktisch aussichtslos – Aal ruht.'}
+};
+function kbHtml(){
+  const se=season();
+  const seName={fruehjahr:'Frühjahr',sommer:'Sommer',herbst:'Herbst',winter:'Winter'}[se];
+  const fische=fishSel?[fishSel==='Forelle'?'Forelle':fishSel].filter(f=>KB[f]):['Hecht','Zander','Barsch'];
+  let h='<p style="color:var(--muted);margin-bottom:10px">Saison: <b>'+seName+'</b>'
+    +(WX?' · '+Math.round(WX.temp)+'°C · '+Math.round(WX.press)+' hPa':'')+'</p>';
+  fische.forEach(f=>{ if(KB[f]) h+='<p style="margin-bottom:9px"><b>'+f+':</b> '+KB[f][se]+'</p>'; });
+  if(WX){
+    if(WX.trendVal<=-1.5) h+='<p style="margin-bottom:9px"><b>Druck fällt ('+WX.trendVal.toFixed(1)+' hPa/3h):</b> Fresslaune – aktiver und schneller führen, jetzt ans Wasser!</p>';
+    else if(WX.trendVal>=1.5) h+='<p style="margin-bottom:9px"><b>Druck steigt:</b> nach der Front oft zäh – Köder verkleinern, langsamer führen, Tiefe suchen.</p>';
+  }
+  h+='<p style="color:var(--muted)">Wasser trüb: Schockfarben (firetiger, chartreuse) und laute Köder · Wasser klar: Naturdekore, leiser, dünnere Vorfächer.</p>';
+  return h;
+}
+const kbDlg=document.getElementById('kbDlg');
+function openKb(){document.getElementById('kbBody').innerHTML=kbHtml();kbDlg.hidden=false;}
+document.getElementById('kbClose').onclick=()=>{kbDlg.hidden=true;};
+kbDlg.addEventListener('click',e=>{if(e.target===kbDlg)kbDlg.hidden=true;});
 
 /* ============ KI-Recherche: Spots je nach Standort ============ */
 const ARTEN_KANON=['Hecht','Zander','Barsch','Bachforelle','Regenbogenforelle','Äsche','Döbel','Karpfen','Schleie','Aal','Brachse'];
@@ -1034,6 +1135,16 @@ let rsT; addEventListener('resize',()=>{clearTimeout(rsT);rsT=setTimeout(()=>map
 
 /* Distanz im Popup nachtragen */
 map.on('popupopen',e=>{
+  const wEl=e.popup.getElement().querySelector('[data-wind]');
+  if(wEl){
+    if(WX&&WX.wind>=8){
+      const dirs=['Nord','Nordost','Ost','Südost','Süd','Südwest','West','Nordwest'];
+      const luv=dirs[Math.round(((WX.dirDeg+180)%360)/45)%8];
+      wEl.innerHTML='<b>Wind-Taktik jetzt</b>💨 '+WX.dir+' '+Math.round(WX.wind)+' km/h drückt Nahrung ans <b>'+luv+'ufer</b> – dort anwerfen.';
+    } else if(WX){
+      wEl.innerHTML='<b>Wind-Taktik jetzt</b>Wenig Wind ('+Math.round(WX.wind)+' km/h) – Uferwahl frei, Kanten und Struktur entscheiden.';
+    } else wEl.remove();
+  }
   const el=e.popup.getElement().querySelector('[data-dist]');
   if(el){
     const [la,ln]=el.dataset.dist.split(',').map(Number);
