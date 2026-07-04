@@ -4,6 +4,7 @@
  "spots": [
   {
    "name": "Talsperre Saidenbach",
+   "rig": "H-Spinnrute 20–60 g, Geflecht + FC-Vorfach. Erlaubte Köder: Kunstköder, Wurm, Mais/Teig – KEINE Maden, kein Fleisch, kein Anfüttern (TWT!).",
    "arten": [
     "Barsch",
     "Hecht",
@@ -44,6 +45,7 @@
   },
   {
    "name": "Vorsperre Dittersbach",
+   "rig": "Spinnrute mittel, Stahl- oder dickes FC-Vorfach (Hecht). TWT-Köderregeln wie Saidenbach.",
    "arten": [
     "Barsch",
     "Hecht",
@@ -79,6 +81,7 @@
   },
   {
    "name": "Freiberger Mulde – gelbe Salmonidenstrecke",
+   "rig": "UL/L-Rute bis 10 g, Watkescher, Einzelhaken-Umbau: Drillinge vorab tauschen (Sprengringzange mitnehmen!).",
    "nr": "C01-02",
    "cat": "salmo",
    "arten": [
@@ -150,6 +153,7 @@
   },
   {
    "name": "Freiberger Mulde – allgemeine Strecke",
+   "rig": "Leichte Spinnrute bis 10 g oder Fliegenrute #4–5, Wathose mit Filz-/Spikesohle für die Gumpen.",
    "nr": "C01-201",
    "cat": "fluss",
    "arten": [
@@ -205,6 +209,7 @@
   },
   {
    "name": "Flöha – grüne Salmonidenstrecke (Lengefeld)",
+   "rig": "UL-Spinnrute oder Fliegenrute, nur 1 Rute und 1 Einzelhaken pro Köder – rutschfeste Watsohlen für die Felspassagen.",
    "nr": "C02-07",
    "cat": "salmo",
    "arten": [
@@ -244,6 +249,7 @@
   },
   {
    "name": "Flöha – allgemeine Strecke (Borstendorf)",
+   "rig": "Allround-Spinnrute 5–20 g plus leichte Posenrute – laut Fangstatistik ist die Pose hier am erfolgreichsten.",
    "nr": "AVS",
    "cat": "fluss",
    "arten": [
@@ -322,6 +328,7 @@
   },
   {
    "name": "Mühlteich (Brand-Erbisdorf)",
+   "rig": "Grundrute mit Freilaufrolle (Karpfen), zweite Rute fein auf Schleie – abends Tauwurm am Grund für Aal.",
    "arten": [
     "Karpfen",
     "Schleie",
@@ -340,6 +347,7 @@
   },
   {
    "name": "Schlüsselteich (Freiberg)",
+   "rig": "Feederrute mittel, Method-Körbe, 10er–12er Haken – stadtnah reicht leichtes Gepäck.",
    "arten": [
     "Karpfen",
     "Brachse",
@@ -359,6 +367,7 @@
   },
   {
    "name": "Richter’s Angelteich (Gränitz)",
+   "rig": "Leichte Forellenrute 5–20 g, 0,20er Mono, Sbirolino oder Pose – Teig, Spoons, Bienenmade.",
    "nr": "privat",
    "cat": "forelle",
    "arten": [
@@ -371,6 +380,42 @@
    "karte": "Eintritt 3 €, Fang nach Kilo – direkt beim Betreiber (Tel. 0173 9281089)",
    "note": "Sa 8–17, So 9–12 Uhr, Saison bis Ende Oktober. Sehr gut bewertet (4.8), Ausnehmen vor Ort möglich.",
    "warn": false
+  },
+  {
+   "name": "Erzengler Teich",
+   "nr": "RWA – AVS-Nr. prüfen",
+   "cat": "fried",
+   "arten": [
+    "Karpfen",
+    "Schleie",
+    "Barsch"
+   ],
+   "lat": 50.8524,
+   "lng": 13.3419,
+   "fisch": "Karpfen, Schleie, Barsch (Bestand vor Ort prüfen)",
+   "methode": "Grund/Pose außerhalb der Bade-Bojen, Randzeiten nutzen",
+   "karte": "Fischereigewässer der RWA – Status/Nummer im AVS-Gewässerverzeichnis prüfen",
+   "rig": "Feeder- oder Posenrute, 0,25er Mono reicht – Boilies/Mais auf Karpfen, Wurm auf Schleie in der Dämmerung",
+   "note": "8-ha-Kunstteich (1570), zugleich EU-Badegewässer mit Naturbad und Bootsverleih: im Sommer tagsüber Badebetrieb – früh morgens oder abends angeln.",
+   "warn": false
+  },
+  {
+   "name": "Berthelsdorfer Hüttenteich",
+   "nr": "RWA – AVS-Nr. prüfen",
+   "cat": "fried",
+   "arten": [
+    "Karpfen",
+    "Schleie",
+    "Barsch"
+   ],
+   "lat": 50.8761,
+   "lng": 13.3591,
+   "fisch": "Karpfen, Schleie, Barsch (Bestand vor Ort prüfen)",
+   "methode": "Klassisches Ansitzangeln, Ufer gut zugänglich, Parken schwierig",
+   "karte": "RWA-Kunstteich – Status/Nummer im AVS-Gewässerverzeichnis prüfen",
+   "rig": "Method Feeder auf Karpfen, feine Posenmontage auf Schleie",
+   "note": "FFH-Gebiet \"Freiberger Bergwerksteiche\", wird wie der Großteich zyklisch abgelassen – Wasserstand vor dem Trip prüfen.",
+   "warn": true
   },
   {
    "name": "Großhartmannsdorfer Großteich",
