@@ -4,6 +4,7 @@
  "spots": [
   {
    "name": "Woblitzsee",
+   "rig": "Stahl- oder Titanvorfach Pflichtprogramm (Hechtdichte!), H-Rute 40–80 g fürs Zanderjiggen, Echolot fürs Boot.",
    "nr": "Obere Havel",
    "cat": "raub",
    "arten": [
@@ -51,6 +52,7 @@
   },
   {
    "name": "Zotzensee",
+   "rig": "Hechtcombo 30–80 g, Stahlvorfach, Weedless-Montagen fürs Kraut – Boot ist Pflicht.",
    "nr": "Obere Havel",
    "cat": "raub",
    "arten": [
@@ -77,6 +79,7 @@
   },
   {
    "name": "Vilzsee",
+   "rig": "Mittlere Spinnrute, Stahlvorfach, flachlaufende Köder – Polbrille fürs Sichtangeln im klaren Wasser.",
    "nr": "Obere Havel",
    "cat": "raub",
    "arten": [
@@ -94,6 +97,7 @@
   },
   {
    "name": "Großer Labussee",
+   "rig": "Zander-Jigrute 15–50 g, FC 0,40+ oder dünner Stahl, DropShot-Setup für die Barschtrupps.",
    "nr": "Obere Havel",
    "cat": "raub",
    "arten": [
@@ -112,6 +116,7 @@
   },
   {
    "name": "Useriner See",
+   "rig": "Wie Woblitzsee: Stahlvorfach, Jigrute – dazu Driftsack/Anker (Schleppen verboten).",
    "nr": "Obere Havel / Müritz-NP",
    "cat": "raub",
    "arten": [
@@ -129,6 +134,7 @@
   },
   {
    "name": "Mirower See",
+   "rig": "Vom Ufer: Spinnrute 10–40 g mit Stahlvorfach an den Stegen, nachts Grundrute mit Tauwurm auf Aal.",
    "nr": "Obere Havel",
    "cat": "raub",
    "arten": [
@@ -155,6 +161,7 @@
   },
   {
    "name": "Drewensee",
+   "rig": "Allround-Raubfischcombo mit Stahlvorfach, Gummifische 10–14 cm für die Fahrrinnen-Kanten.",
    "nr": "Obere Havel",
    "cat": "raub",
    "arten": [
