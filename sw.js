@@ -1,11 +1,11 @@
 /* Angelkarte Service Worker – Offline-Modus
    Shell + Daten: stale-while-revalidate · OSM-Tiles: cache-first (max. 600)
    API-Aufrufe (Wetter, Pegel, Anthropic): immer Netz */
-const CACHE='angelkarte-shell-v1';
+const CACHE='angelkarte-shell-v2';
 const TILES='angelkarte-tiles-v1';
 const SHELL=[
   './','index.html','manifest.json',
-  'data/regionen.json','data/erzgebirge.json','data/mecklenburg.json',
+  'data/regionen.json','data/erzgebirge.json','data/mecklenburg.json','data/mainz.json',
   'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css',
   'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js'
 ];

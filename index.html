@@ -537,7 +537,120 @@ const SCHON_MV=[
   {fisch:'Wels',von:null,bis:null,mm:'90 cm'}
 ];
 
+/* ============ Region: Rhein & Rheinhessen / Mainz (recherchiert 07/2026) ============ */
+const SPOTS_RLP=[
+  {name:'Rhein Mainz – Stadtstrecke',nr:'LFV RLP linksrheinisch',cat:'raub',
+   arten:['Zander','Barsch','Rapfen','Wels','Aal','Döbel','Brachse'],
+   lat:50.0010,lng:8.2790,
+   fisch:'Zander, Barsch, Rapfen, Wels, Aal, Barbe, Döbel, Brassen – Grundel ist Hauptfutter',
+   methode:'Nachts flach laufende Wobbler an der Steinpackung (schlägt am Rhein oft den Gummi), tagsüber jiggen an Kanten',
+   karte:'Rheinischer Erlaubnisschein LFV RLP (Angelladen, z.B. Angelgeräte Bode Heidesheim)',
+   rig:'Jigrute 30–60 g (Strömung!), Jigköpfe 10–30 g in Grundeldekoren, großer Bleikopf-Vorrat – die Steinpackungen fordern Tribut',
+   note:'Stadtufer stark frequentiert – die offensichtlichen Stellen sind überlaufen, Strecke machen zahlt sich aus. Wellenschlag der Schifffahrt: Ruten sichern!',
+   hotspots:[
+     {name:'Theodor-Heuss-Brücke',lat:50.0060,lng:8.2745,tipp:'Der dokumentierte Zander-Klassiker der Stadt: um und hinter den Brückenpfeilern, beste Zeit Dämmerung und nachts. Viel Angeldruck – antizyklisch angeln (unter der Woche, sehr früh).'},
+     {name:'Rapfen-Spundwände',lat:49.9960,lng:8.2830,tipp:'Rapfen treiben Kleinfisch an den Spundwänden in die Ecke – Sommer ab ca. 16 Uhr Oberflächenrauben, flach laufender schlanker Wobbler oder Spöket.'}
+   ],warn:false},
+  {name:'Winterhafen Mainz',nr:'Beschilderung!',cat:'raub',
+   arten:['Barsch','Hecht','Rapfen','Wels','Zander'],
+   lat:49.9926,lng:8.2854,
+   fisch:'Barsch, Hecht, Rapfen, Wels, Zander, Rotauge (Fangmeldungen)',
+   methode:'Spinnfischen an Spundwänden und Stegen, strömungsberuhigt – gut bei Hochwasser, wenn die Buhnen weg sind',
+   karte:'Rheinischer Erlaubnisschein – Angeln nur in ausgeschilderten Bereichen!',
+   rig:'Barschrute 5–21 g reicht im Hafen, Finesse-Montagen an den Wänden entlang',
+   note:'Nur teilweise freigegeben und es gab wiederholt Ärger – Beschilderung genau prüfen, im Zweifel weiterziehen. Viele Schaulustige.',warn:true},
+  {name:'Industriehafen Mombach – Hafenausfahrt',nr:'nur Ausfahrtsbereich',cat:'raub',
+   arten:['Zander','Barsch','Aal','Brachse','Wels'],
+   lat:50.0310,lng:8.2210,
+   fisch:'Zander, Barsch, Aal, Brassen, Wels',
+   methode:'Jiggen in der Hafenausfahrt (Zander-Klassiker bei trübem Wasser/Hochwasser), Feederstrecke im Industriegebiet',
+   karte:'Rheinischer Erlaubnisschein – Angeln NUR im Bereich der Hafenausfahrt',
+   rig:'Zander-Jigrute, Gummis 10–12 cm V-Tail natur; abends Grundrute mit Tauwurm auf Aal',
+   note:'Schild auf der Bauhaus-Seite markiert den Beginn des Angelverbots – dahinter ist Schluss. Stromab beginnt das NSG Mombacher Rheinufer (ganzjährig verboten).',
+   hotspots:[
+     {name:'Hinter dem Bauhaus',lat:50.0305,lng:8.2200,tipp:'Zugänglicher Klassiker am erlaubten Ausfahrtsbereich – Ansitz und Raubfisch, entsprechend frequentiert.'},
+     {name:'Auspitze Ingelheimer Aue',lat:50.0370,lng:8.2340,tipp:'Die Spitze der Insel an der Hafenausfahrt – Strömungskante trifft Stillwasser, klassischer Zanderzug. Lage ungefähr.'}
+   ],warn:true},
+  {name:'Buhnen & Rampen Budenheim',nr:'LFV RLP',cat:'raub',
+   arten:['Zander','Barsch','Döbel','Aal','Brachse'],
+   lat:50.0295,lng:8.1675,
+   fisch:'Zander, Barsch, Barbe, Döbel, Aal, Brassen',
+   methode:'Buhnenkessel systematisch abklopfen; nachts Wobbler flach über die Buhnenköpfe – strömungsberuhigte Taschen hinter den Rampen für die Pose',
+   karte:'Rheinischer Erlaubnisschein',
+   rig:'Jigköpfe 15–30 g je nach Strömung; fürs Posenangeln hinter den Rampen leichte Matchrute',
+   note:'Zwei Rampen an der chemischen Fabrik plus eine kleine stromauf – die ruhigen Bereiche dahinter sind die Friedfisch-Geheimecken. Parkplatz am Kiosk Rheinblick.',warn:false},
+  {name:'Altrhein Heidenfahrt',nr:'LFV RLP – Teilsperrung',cat:'fried',
+   arten:['Zander','Barsch','Hecht','Karpfen','Schleie','Brachse','Aal'],
+   lat:50.0121,lng:8.1021,
+   fisch:'Zander, Barsch, Hecht, Karpfen, Schleie, Brassen, Aal',
+   methode:'Strömungsberuhigt: Pose und Grund auf Friedfisch, am Altrhein-Ausgang Raubfisch',
+   karte:'Rheinischer Erlaubnisschein – nur der hintere Bereich, vorderer Teil ist Schutzgebiet!',
+   rig:'Feeder/Pose fürs Stillwasser, Spinnrute für den Ausgang zum Strom',
+   note:'Beliebt und teils saisonal gesperrt (Berichte über Sperrung bis 31.08. kursieren) – Beschilderung maßgeblich. Badestrand nebenan = Sommer-Trubel.',warn:true},
+  {name:'Hafen & Buhnen Oppenheim',nr:'LFV RLP',cat:'raub',
+   arten:['Zander','Barsch','Wels','Aal','Brachse'],
+   lat:49.8594,lng:8.3575,
+   fisch:'Zander, Barsch, Wels, Aal, Brassen, Barbe',
+   methode:'Hafeneinfahrt jiggen, Buhnenfeld stromauf/stromab ablaufen – weniger Druck als in Mainz',
+   karte:'Rheinischer Erlaubnisschein',
+   rig:'Rhein-Standard: Jigrute 30–60 g, Grundelfarben; Welsrute lohnt als zweite Rute',
+   note:'Gut kombinierbar: Hafeneinfahrt bei Hochwasser, Buhnen bei Normalpegel. Marina-Bereich respektieren.',warn:false},
+  {name:'Mainspitze & Maaraue',nr:'HESSEN-Schein!',cat:'raub',
+   arten:['Zander','Barsch','Wels','Rapfen','Aal'],
+   lat:49.9937,lng:8.2940,
+   fisch:'Zander, Barsch, Wels, Rapfen, Aal',
+   methode:'Die Mündung des Mains in den Rhein: Strömungskanten, Kehrwasser – Zander-Dauerbrenner laut Lokalmatadoren',
+   karte:'Hessischer Rheinschein (LAV Hessen) – NICHT der rheinland-pfälzische!',
+   rig:'Jigrute + nachts Wobbler; vor der Maarauespitze liegt ein Steinwall unter Wasser (Boot: ankern, Hängergefahr)',
+   note:'Grenze RLP/Hessen: Fußgängerbrücke zur Maaraue. Die Maarauespitze selbst ist Polizeigelände und unzugänglich – dort raubt es sichtbar, erreichbar ist der Bereich davor.',warn:true},
+  {name:'Ginsheimer Altrhein & Mündung',nr:'HESSEN-Schein!',cat:'raub',
+   arten:['Zander','Wels','Barsch','Hecht','Karpfen'],
+   lat:49.9440,lng:8.3524,
+   fisch:'Zander, Wels, Barsch, Hecht, Karpfen',
+   methode:'Der Altrhein für Ansitz, die Mündung in den Strom als dokumentierter Zander- und Wels-Hotspot',
+   karte:'Hessischer Rheinschein',
+   rig:'Wels-tauglich: 0,50er FC oder Stahl an der Mündung, Abrissmontage mit Tauwurm/Tintenfisch',
+   note:'Anfahrt über Trebur/Steindamm oder Fähre Ginsheim. Teils flach und verkrautet.',
+   hotspots:[
+     {name:'Treburer Buhnenfeld (km 487–493)',lat:49.9550,lng:8.3250,tipp:'6 km Buhnenfeld auf der Nonnenaue – Fahrrad mitnehmen und Kilometer machen, die hinteren Buhnen sehen kaum Angler. Lage ungefähr, hessischer Schein nötig.'}
+   ],warn:true},
+  {name:'Zollhafen Mainz',nr:'VERBOTEN',cat:'sperr',arten:[],
+   lat:50.0125,lng:8.2633,
+   fisch:'—',methode:'—',karte:'Angeln im Zollhafen ist verboten',
+   note:'Trotz verlockender Optik: komplett gesperrt. Kontrollen im Neubaugebiet sind häufig.',warn:true},
+  {name:'Schiersteiner Hafen',nr:'VERBOTEN',cat:'sperr',arten:[],
+   lat:50.0410,lng:8.1960,
+   fisch:'—',methode:'—',karte:'Seit 2005 komplett gesperrt',
+   note:'Verbot der Stadt Wiesbaden wegen Schadstoffbelastung – Gesundheitsgefahr, gilt bis zur Mündung in den Rhein. Lage ungefähr.',warn:true},
+  {name:'NSG Mombacher Rheinufer',nr:'VERBOTEN',cat:'sperr',arten:[],
+   lat:50.0240,lng:8.2380,
+   fisch:'—',methode:'—',karte:'Naturschutzgebiet – Angeln ganzjährig verboten',
+   note:'Liegt zwischen Stadtstrecke und Industriehafen, inkl. der Buhnen und Strände dahinter. Strom-km im Erlaubnisschein beachten. Lage ungefähr.',warn:true}
+];
+const SCHON_RLP=[
+  {fisch:'Hecht',von:[2,1],bis:[4,15],mm:'50 cm'},
+  {fisch:'Zander',von:[4,1],bis:[5,31],mm:'45 cm'},
+  {fisch:'Barsch',von:null,bis:null,mm:'– (kein gesetzl. Maß)'},
+  {fisch:'Aal',von:null,bis:null,mm:'50 cm'},
+  {fisch:'Barbe',von:[5,1],bis:[6,15],mm:'35 cm'},
+  {fisch:'Wels',von:null,bis:null,mm:'–'},
+  {fisch:'Rapfen',von:null,bis:null,mm:'– (regional prüfen)'}
+];
+
 /* ============ Regionsdefinitionen (eingebetteter Fallback zur JSON-Datenbank) ============ */
+const REGION_RLP={id:'mainz',name:'Rhein & Rheinhessen (Mainz)',
+  spots:SPOTS_RLP,schon:SCHON_RLP,
+  banner:[
+    {von:[2,1],bis:[3,31],text:'<b>Hecht geschont</b> (01.02.–15.04.).'},
+    {von:[4,1],bis:[4,14],text:'<b>Hecht &amp; Zander geschont</b> – Hecht bis 15.04., Zander bis 31.05.'},
+    {von:[4,15],bis:[5,31],text:'<b>Frühjahrsschonzeit:</b> Kunstköder (außer Fliege) verboten – Zander geschont bis 31.05.'}
+  ],
+  regeln:[
+    {titel:'Erlaubnisscheine am Rhein',punkte:['Linksrheinisch (Mainzer Ufer, Strom-km 436–545): rheinischer Erlaubnisschein des LFV RLP – erhältlich im Angelladen (z.B. Angelgeräte Bode, Heidesheim)','Ufer und handgerudertes Boot erlaubt (Bootsplakette sichtbar anbringen), Köderfischsenke vom Ufer zulässig','Rechtsrheinische Seite, Mainspitze &amp; Ginsheim: hessischer Rheinschein (LAV Hessen) nötig','Main km 0–2,89: Erlaubnis nur mit Vereinsmitgliedschaft im hessischen Verband']},
+    {titel:'Verbotszonen – teuer bei Kontrolle',punkte:['Zollhafen Mainz: komplett verboten','Schiersteiner Hafen: seit 2005 komplett gesperrt (Schadstoffe)','NSG Mombacher Rheinufer: ganzjährig verboten, inkl. Buhnen/Strände','Industrie- und Winterhafen: nur ausgeschilderte Bereiche','Altrhein Heidenfahrt: vorderer Teil Schutzgebiet']},
+    {titel:'Rhein-Praxis',punkte:['Pegel über ~4 m: Buhnen überspült – dann auf Hafenausfahrten ausweichen (Pegelanzeige oben in der App nutzen!)','Grundel ist Hauptfutter: Ködergrößen 9–12 cm in Grundeldekoren, Naturköder am Grund = Grundel-Lotterie','Nachts schlägt der flach geführte Wobbler an kurzen Buhnen oft den Gummifisch','Frühjahrsschonzeit 15.04.–31.05.: Kunstköder verboten (außer Fliege) – de facto Spinnstart am 1. Juni','Schifffahrt: Wellenschlag reißt Ruten ins Wasser – sichern!']}
+  ],
+  hinweis:'Angaben ohne Gewähr, recherchiert 07/2026 (FischGDV RP, LFV RLP, Anglerforen). Maßgeblich: Erlaubnisschein mit Strom-km-Angaben und Beschilderung. Mindestmaße RLP vor Entnahme gegenprüfen.'};
 const REGIONS_EMBEDDED=[
  {id:'erzgebirge',name:'Erzgebirge / Freiberg (Sachsen)',
   spots:SPOTS_SN,schon:SCHON_SN,
@@ -552,6 +665,7 @@ const REGIONS_EMBEDDED=[
    {titel:'Salmonidenstrecken (Mulde, Flöha)',punkte:['01.01.–30.04.: Angeln komplett verboten','01.05.–30.09.: Flug- oder Spinnangel','01.10.–31.12.: nur Flugangel','Nur 1 Einzelhaken pro Köder (Drillinge tauschen), Salmonidenschein je nach Strecke','Nachtangeln verboten, Salmoniden nicht hältern']}
   ],
   hinweis:'Angaben ohne Gewähr, nach SächsFischVO 2022 und LVSA-Gewässerordnung 2024. Maßgeblich: Erlaubnisschein, Gewässerverzeichnis, Beschilderung. Äsche vielerorts ganzjährig geschont – vor Ort prüfen. Gastkarten: angeln-sachsen.de'},
+ REGION_RLP,
  {id:'mecklenburg',name:'Mecklenburgische Kleinseenplatte (MV)',
   spots:SPOTS_MV,schon:SCHON_MV,
   banner:[
@@ -702,6 +816,8 @@ const FISH=[
   {id:'Karpfen',match:['Karpfen']},
   {id:'Schleie',match:['Schleie']},
   {id:'Aal',match:['Aal']},
+  {id:'Rapfen',match:['Rapfen']},
+  {id:'Wels',match:['Wels']},
   {id:'Brachse',match:['Brachse']}
 ];
 let fishSel=null;
