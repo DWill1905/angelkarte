@@ -61,6 +61,23 @@ const api = async (method, url, body) => {
   });
   await api('PATCH', `/repos/${REPO}/git/refs/heads/main`, { sha: newCommit.sha });
   console.log('Commit:', newCommit.sha.slice(0, 7), '->', message);
+
+  // 4) Deploy sicherstellen: GitHub triggert bei Git-Data-Pushes unzuverlässig.
+  //    Warten, prüfen ob ein Run für den neuen Commit läuft/lief – sonst (oder bei
+  //    failure/cancelled) genau EINEN Build anstoßen. Bis zu 3 Versuche.
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    await sleep(20000);
+    const runs = await api('GET', `/repos/${REPO}/actions/runs?per_page=5`);
+    const mine = (runs.workflow_runs || []).filter((r) => r.head_sha === newCommit.sha);
+    const ok = mine.find((r) => r.conclusion === 'success');
+    const active = mine.find((r) => r.status !== 'completed');
+    if (ok) { console.log('Deploy: success'); return; }
+    if (active) { console.log('Deploy läuft… (Versuch ' + attempt + ')'); attempt--; continue; }
+    console.log('Kein erfolgreicher Run – stoße Build an (Versuch ' + attempt + ')');
+    await api('POST', `/repos/${REPO}/pages/builds`, {});
+  }
+  console.log('WARNUNG: Deploy nach 3 Versuchen nicht bestätigt – Actions-Tab prüfen.');
 })().catch((e) => {
   console.error('FEHLER:', e.message);
   process.exit(1);
