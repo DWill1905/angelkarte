@@ -1,7 +1,7 @@
 {
  "id": "mainz",
  "name": "Rhein & Rheinhessen (Mainz)",
- "fusszeile": "Erlaubnisschein: LFV RLP (linksrheinisch) / LAV Hessen (rechtsrheinisch)",
+ "fusszeile": "Erlaubnis: <a href=\"https://lfv-rhl-rhh.de/fischerei-erlaubnisscheine/rhein/\" target=\"_blank\" rel=\"noopener\">LFV Rhl.-Rhh.</a> (links) · <a href=\"https://www.hejfish.com\" target=\"_blank\" rel=\"noopener\">hejfish</a> (Hessen-Seite)",
  "spots": [
   {
    "name": "Rhein Mainz – Stadtstrecke",
@@ -20,7 +20,7 @@
    "lng": 8.279,
    "fisch": "Zander, Barsch, Rapfen, Wels, Aal, Barbe, Döbel, Brassen – Grundel ist Hauptfutter",
    "methode": "Nachts flach laufende Wobbler an der Steinpackung (schlägt am Rhein oft den Gummi), tagsüber jiggen an Kanten",
-   "karte": "Rheinischer Erlaubnisschein LFV RLP (Angelladen, z.B. Angelgeräte Bode Heidesheim)",
+   "karte": "Rheinischer Erlaubnisschein (~31 €/Jahr): <a href=\"https://lfv-rhl-rhh.de/fischerei-erlaubnisscheine/rhein/\" target=\"_blank\" rel=\"noopener\">LFV Rheinland-Rheinhessen</a> oder Angelladen (z.B. Bode Heidesheim)",
    "rig": "Jigrute 30–60 g (Strömung!), Jigköpfe 10–30 g in Grundeldekoren, großer Bleikopf-Vorrat – die Steinpackungen fordern Tribut",
    "note": "Stadtufer stark frequentiert – die offensichtlichen Stellen sind überlaufen, Strecke machen zahlt sich aus. Wellenschlag der Schifffahrt: Ruten sichern!",
    "hotspots": [
@@ -170,7 +170,7 @@
    "lng": 8.294,
    "fisch": "Zander, Barsch, Wels, Rapfen, Aal",
    "methode": "Die Mündung des Mains in den Rhein: Strömungskanten, Kehrwasser – Zander-Dauerbrenner laut Lokalmatadoren",
-   "karte": "Hessischer Rheinschein (LAV Hessen) – NICHT der rheinland-pfälzische!",
+   "karte": "Hessischer Rheinschein – seit 2025 NUR online: <a href=\"https://www.hejfish.com\" target=\"_blank\" rel=\"noopener\">hejfish.com</a> (HLG)",
    "rig": "Jigrute + nachts Wobbler; vor der Maarauespitze liegt ein Steinwall unter Wasser (Boot: ankern, Hängergefahr)",
    "note": "Grenze RLP/Hessen: Fußgängerbrücke zur Maaraue. Die Maarauespitze selbst ist Polizeigelände und unzugänglich – dort raubt es sichtbar, erreichbar ist der Bereich davor.",
    "warn": true
@@ -190,7 +190,7 @@
    "lng": 8.3524,
    "fisch": "Zander, Wels, Barsch, Hecht, Karpfen",
    "methode": "Der Altrhein für Ansitz, die Mündung in den Strom als dokumentierter Zander- und Wels-Hotspot",
-   "karte": "Hessischer Rheinschein",
+   "karte": "Hessischer Rheinschein – online über <a href=\"https://www.hejfish.com\" target=\"_blank\" rel=\"noopener\">hejfish.com</a>",
    "rig": "Wels-tauglich: 0,50er FC oder Stahl an der Mündung, Abrissmontage mit Tauwurm/Tintenfisch",
    "note": "Anfahrt über Trebur/Steindamm oder Fähre Ginsheim. Teils flach und verkrautet.",
    "hotspots": [
@@ -201,6 +201,50 @@
      "tipp": "6 km Buhnenfeld auf der Nonnenaue – Fahrrad mitnehmen und Kilometer machen, die hinteren Buhnen sehen kaum Angler. Lage ungefähr, hessischer Schein nötig."
     }
    ],
+   "warn": true
+  },
+  {
+   "name": "Eicher See",
+   "nr": "Anglervereinigung Worms",
+   "cat": "raub",
+   "arten": [
+    "Zander",
+    "Hecht",
+    "Wels",
+    "Barsch",
+    "Karpfen",
+    "Schleie",
+    "Aal",
+    "Brachse"
+   ],
+   "lat": 49.7646,
+   "lng": 8.429,
+   "fisch": "Zander, Hecht, Wels, Barsch, Karpfen, Schleie, Aal, Brassen, Giebel",
+   "methode": "58-ha-Baggersee bis 15 m tief: Zander an den Scharkanten tief jiggen, Wels nachts, Hecht an den Flachzonen der Wochenendhaus-Seite",
+   "karte": "Pachtgewässer der Anglervereinigung Worms – Erlaubnis über den Verein/Ausgabestellen (Kombi mit Rhein möglich)",
+   "rig": "Tiefwasser-Setup: Jigköpfe bis 30 g, Vertikal-tauglich vom Boot; Welsrute mit 0,60er FC als Nachtoption",
+   "note": "Das Raubfisch-Stillgewässer Rheinhessens (~30 Autominuten): direkte Rheinverbindung, dadurch Wels- und Zanderbestand. Sommer: Badebetrieb, Randzeiten nutzen.",
+   "warn": false
+  },
+  {
+   "name": "Altrheinsee Eich",
+   "nr": "Ortsgemeinde Eich",
+   "cat": "fried",
+   "arten": [
+    "Karpfen",
+    "Schleie",
+    "Hecht",
+    "Barsch",
+    "Aal",
+    "Brachse"
+   ],
+   "lat": 49.7596,
+   "lng": 8.4036,
+   "fisch": "Karpfen, Schleie, Hecht, Barsch, Aal, Brassen",
+   "methode": "Klassisches Ansitzangeln am klaren Badesee",
+   "karte": "Angelkarte bei der Ortsgemeinde Eich (Tel. 06246-276) – 15 € Gastgebühr nur in Begleitung eines Eicher Bürgers!",
+   "rig": "Feeder/Pose; klares Wasser: feine Vorfächer",
+   "note": "Sehr restriktive Gastregelung – ohne Eicher Begleitung keine Karte. Eher Ergänzung zum Eicher See nebenan. Parken kostenpflichtig.",
    "warn": true
   },
   {
@@ -344,9 +388,9 @@
   {
    "titel": "Erlaubnisscheine am Rhein",
    "punkte": [
-    "Linksrheinisch (Mainzer Ufer, Strom-km 436–545): rheinischer Erlaubnisschein des LFV RLP – erhältlich im Angelladen (z.B. Angelgeräte Bode, Heidesheim)",
+    "Linksrheinisch (Mainzer Ufer): rheinischer Erlaubnisschein ~31 €/Jahr – online-Infos &amp; Ausgabestellen: <a href=\"https://lfv-rhl-rhh.de/fischerei-erlaubnisscheine/rhein/\" target=\"_blank\" rel=\"noopener\">lfv-rhl-rhh.de</a>, klassisch im Angelladen (z.B. Bode Heidesheim)",
     "Ufer und handgerudertes Boot erlaubt (Bootsplakette sichtbar anbringen), Köderfischsenke vom Ufer zulässig",
-    "Rechtsrheinische Seite, Mainspitze &amp; Ginsheim: hessischer Rheinschein (LAV Hessen) nötig",
+    "Rechtsrheinische Seite, Mainspitze &amp; Ginsheim: hessischer Rheinschein – seit 2025 nur noch online über <a href=\"https://www.hejfish.com\" target=\"_blank\" rel=\"noopener\">hejfish.com</a> (HLG)",
     "Main km 0–2,89: Erlaubnis nur mit Vereinsmitgliedschaft im hessischen Verband"
    ]
   },
