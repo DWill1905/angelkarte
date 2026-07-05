@@ -630,13 +630,7 @@ async function loadRegion(r){
 
 /* ============ Helfer ============ */
 const NOW = new Date();
-function inSchonzeit(s){
-  if(!s.von) return false;
-  const y=NOW.getFullYear();
-  const md=(NOW.getMonth()+1)*100+NOW.getDate();
-  const von=s.von[0]*100+s.von[1], bis=s.bis[0]*100+s.bis[1];
-  return von<=bis ? (md>=von&&md<=bis) : (md>=von||md<=bis);
-}
+function inSchonzeit(s){ return !!s.von && inWindow(s.von,s.bis); }
 function fmtMD(a){return String(a[1]).padStart(2,'0')+'.'+String(a[0]).padStart(2,'0')+'.';}
 function haversine(a,b,c,d){
   const R=6371,p=Math.PI/180;
@@ -815,29 +809,19 @@ function fishChip(label,id){
   b.setAttribute('aria-pressed',String(id===fishSel));
   b.onclick=()=>{
     fishSel=(id===fishSel)?null:id; /* erneutes Tippen hebt Filter auf */
-    fishEl.querySelectorAll('.chip').forEach(x=>{
-      const on=(x.dataset.fish||null)===fishSel||(!fishSel&&x.dataset.fish==='');
-      x.classList.toggle('on',on);
-      x.setAttribute('aria-pressed',String(on));
-    });
+    syncFishChips();
     applyFilters();
   };
   return b;
 }
 function syncFishChips(){
-  fishEl.querySelectorAll('.chip').forEach(x=>{
+  fishEl.querySelectorAll('.chip[data-fish]').forEach(x=>{
     const on=(x.dataset.fish||null)===fishSel||(!fishSel&&x.dataset.fish==='');
     x.classList.toggle('on',on); x.setAttribute('aria-pressed',String(on));
   });
 }
-const allChip=fishChip('Alle',null); allChip.classList.add('on'); allChip.onclick=()=>{
-  fishSel=null;
-  fishEl.querySelectorAll('.chip').forEach(x=>{
-    const on=x.dataset.fish==='';
-    x.classList.toggle('on',on); x.setAttribute('aria-pressed',String(on));
-  });
-  applyFilters();
-};
+const allChip=fishChip('Alle',null); allChip.classList.add('on');
+allChip.onclick=()=>{ fishSel=null; syncFishChips(); applyFilters(); };
 fishEl.appendChild(allChip);
 FISH.forEach(f=>fishEl.appendChild(fishChip(f.id,f.id)));
 const kbBtn=document.createElement('button');
