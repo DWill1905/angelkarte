@@ -1,6 +1,7 @@
 {
  "id": "mecklenburg",
  "name": "Mecklenburgische Kleinseenplatte (MV)",
+ "fusszeile": "Angelkarten: <a href=\"https://fischerei-wesenberg.de\" target=\"_blank\" rel=\"noopener\">Seenfischerei Obere Havel</a> + Fischereiabgabe MV",
  "spots": [
   {
    "name": "Woblitzsee",

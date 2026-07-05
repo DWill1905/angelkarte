@@ -262,7 +262,7 @@
   </div>
 </div>
 
-<footer>Koordinaten näherungsweise · Gastkarten: <a href="https://angeln-sachsen.de/avs/gastangler/gastkarten" target="_blank" rel="noopener">AVS Südsachsen</a> · Fischereischein Pflicht</footer>
+<footer>Koordinaten näherungsweise · <span id="footRegion"></span> · Fischereischein Pflicht</footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
@@ -639,6 +639,7 @@ const SCHON_RLP=[
 
 /* ============ Regionsdefinitionen (eingebetteter Fallback zur JSON-Datenbank) ============ */
 const REGION_RLP={id:'mainz',name:'Rhein & Rheinhessen (Mainz)',
+  fusszeile:'Erlaubnisschein: LFV RLP (linksrheinisch) / LAV Hessen (rechtsrheinisch)',
   spots:SPOTS_RLP,schon:SCHON_RLP,
   banner:[
     {von:[2,1],bis:[3,31],text:'<b>Hecht geschont</b> (01.02.–15.04.).'},
@@ -653,6 +654,7 @@ const REGION_RLP={id:'mainz',name:'Rhein & Rheinhessen (Mainz)',
   hinweis:'Angaben ohne Gewähr, recherchiert 07/2026 (FischGDV RP, LFV RLP, Anglerforen). Maßgeblich: Erlaubnisschein mit Strom-km-Angaben und Beschilderung. Mindestmaße RLP vor Entnahme gegenprüfen.'};
 const REGIONS_EMBEDDED=[
  {id:'erzgebirge',name:'Erzgebirge / Freiberg (Sachsen)',
+  fusszeile:'Gastkarten: <a href="https://angeln-sachsen.de/avs/gastangler/gastkarten" target="_blank" rel="noopener">AVS Südsachsen</a>',
   spots:SPOTS_SN,schon:SCHON_SN,
   banner:[
     {von:[2,1],bis:[4,30],text:'<b>Raubfisch-Sperrfrist aktiv:</b> 01.02.–30.04. Kunstköderverbot in LVSA-Gewässern, Hecht geschont.'},
@@ -667,6 +669,7 @@ const REGIONS_EMBEDDED=[
   hinweis:'Angaben ohne Gewähr, nach SächsFischVO 2022 und LVSA-Gewässerordnung 2024. Maßgeblich: Erlaubnisschein, Gewässerverzeichnis, Beschilderung. Äsche vielerorts ganzjährig geschont – vor Ort prüfen. Gastkarten: angeln-sachsen.de'},
  REGION_RLP,
  {id:'mecklenburg',name:'Mecklenburgische Kleinseenplatte (MV)',
+  fusszeile:'Angelkarten: <a href="https://fischerei-wesenberg.de" target="_blank" rel="noopener">Seenfischerei Obere Havel</a> + Fischereiabgabe MV',
   spots:SPOTS_MV,schon:SCHON_MV,
   banner:[
     {von:[2,1],bis:[3,14],text:'<b>Hecht-Fangverbot aktiv</b> (01.02.–30.04., Obere-Havel-Gewässer).'},
@@ -707,6 +710,7 @@ async function loadRegion(r){
   REGION=r; SCHON=r.schon;
   const mine=await loadMySpots(r.id);
   SPOTS=r.spots.concat(mine.map(mySpotObj));
+  document.getElementById('footRegion').innerHTML=r.fusszeile||'';
   buildMarkers(); buildChips(); buildBanner(); buildSchonUI(); buildRegeln(); buildFbOptions();
   fishSel=null; syncFishChips(); applyFilters();
   const pts=SPOTS.map(sp=>[sp.lat,sp.lng]);

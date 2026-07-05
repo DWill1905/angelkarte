@@ -1,6 +1,7 @@
 {
  "id": "erzgebirge",
  "name": "Erzgebirge / Freiberg (Sachsen)",
+ "fusszeile": "Gastkarten: <a href=\"https://angeln-sachsen.de/avs/gastangler/gastkarten\" target=\"_blank\" rel=\"noopener\">AVS Südsachsen</a>",
  "spots": [
   {
    "name": "Talsperre Saidenbach",
