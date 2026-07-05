@@ -65,7 +65,6 @@
   #map{flex:1;min-height:0;background:#0d1f22;z-index:0}
   .leaflet-container{font:inherit}
 
-  #kibtn{bottom:calc(46px + 80px);background:#1d4048}
   .locbtn{
     position:absolute;right:10px;bottom:calc(46px + 28px);z-index:500;
     background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:8px;
@@ -166,7 +165,6 @@
     .sheet.collapsed{max-height:none}
     .sheet-handle .arrow{display:none}
     .locbtn{right:calc(320px + 10px);bottom:28px}
-    #kibtn{bottom:80px}
     .scrollpane{max-width:720px;margin:0 auto;width:100%}
   }
   @media(prefers-reduced-motion:reduce){
@@ -198,7 +196,6 @@
   <div class="chips sub" id="fishChips" role="group" aria-label="Nach Zielfisch filtern"></div>
   <div id="map"></div>
   <button class="locbtn" id="locbtn" title="Meinen Standort anzeigen">📍 Standort</button>
-  <button class="locbtn" id="kibtn" title="Gewässer in dieser Region per KI recherchieren">✨ Spots hier finden</button>
   <div class="sheet collapsed" id="sheet">
     <div class="sheet-handle" id="sheetHandle" role="button" tabindex="0" aria-label="Spotliste ein-/ausklappen">
       <h2>Spots <span id="spotCount"></span></h2>
@@ -265,7 +262,7 @@
   </div>
 </div>
 
-<footer>Koordinaten näherungsweise · Gastkarten: <a href="https://angeln-sachsen.de/avs/gastangler/gastkarten" target="_blank" rel="noopener">AVS Südsachsen</a> · Fischereischein Pflicht · <button id="keyBtn" style="background:none;border:0;color:var(--salmo);cursor:pointer;font-size:10px;padding:0">⚙ API-Key</button></footer>
+<footer>Koordinaten näherungsweise · Gastkarten: <a href="https://angeln-sachsen.de/avs/gastangler/gastkarten" target="_blank" rel="noopener">AVS Südsachsen</a> · Fischereischein Pflicht</footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
@@ -276,31 +273,7 @@ const store = (typeof window.storage!=='undefined' && window.storage) ? window.s
   async set(k,v){localStorage.setItem('ak_'+k,String(v)); return {key:k,value:v};}
 };
 
-/* Zentraler API-Aufruf mit sauberer Fehlerbehandlung */
 function esc(x){const d=document.createElement('div');d.textContent=String(x==null?'':x);return d.innerHTML;}
-function apiKey(){ try{return localStorage.getItem('ak_apikey')||'';}catch(e){return '';} }
-async function claudeCall(body){
-  const headers={'Content-Type':'application/json'};
-  const k=apiKey();
-  if(k){
-    headers['x-api-key']=k;
-    headers['anthropic-version']='2023-06-01';
-    headers['anthropic-dangerous-direct-browser-access']='true';
-  }
-  let r;
-  try{ r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers,body:JSON.stringify(body)}); }
-  catch(e){ throw new Error('Netzwerkfehler: '+e.message); }
-  const data=await r.json().catch(()=>({}));
-  if(!r.ok||data.error){
-    const msg=(data.error&&data.error.message)||('HTTP '+r.status);
-    if(r.status===401||r.status===403||(r.status===400&&/key|auth/i.test(msg)))
-      throw new Error(msg+' — API-Key über ⚙ (unten) eintragen.');
-    throw new Error(msg);
-  }
-  if(data.stop_reason==='max_tokens')
-    console.warn('Antwort wurde am Token-Limit abgeschnitten.');
-  return data;
-}
 
 const CATS = {
   eigen:{label:'Eigene Spots',color:'#c9699e'},
@@ -1043,77 +1016,6 @@ function openKb(){document.getElementById('kbBody').innerHTML=kbHtml();kbDlg.hid
 document.getElementById('kbClose').onclick=()=>{kbDlg.hidden=true;};
 kbDlg.addEventListener('click',e=>{if(e.target===kbDlg)kbDlg.hidden=true;});
 
-/* ============ KI-Recherche: Spots je nach Standort ============ */
-const ARTEN_KANON=['Hecht','Zander','Barsch','Bachforelle','Regenbogenforelle','Äsche','Döbel','Karpfen','Schleie','Aal','Brachse'];
-const kiBtn=document.getElementById('kibtn');
-kiBtn.onclick=async()=>{
-  const c=map.getCenter();
-  const pos=userPos||[c.lat,c.lng]; /* Standort, sonst Kartenmitte */
-  kiBtn.disabled=true; const oldTxt=kiBtn.textContent; kiBtn.textContent='⏳ Recherchiere…';
-  try{
-    const key='region:'+pos[0].toFixed(1)+','+pos[1].toFixed(1);
-    let spots=null;
-    try{const cch=await store.get(key); if(cch&&cch.value) spots=JSON.parse(cch.value);}catch(e){}
-    if(!spots||!spots.length){
-      spots=await kiResearch(pos);
-      try{await store.set(key,JSON.stringify(spots));}catch(e){}
-    }
-    const n=addKiSpots(spots);
-    if(!n) alert('Keine neuen Gewässer in dieser Region gefunden.');
-  }catch(e){ alert('Recherche fehlgeschlagen: '+e.message); }
-  kiBtn.disabled=false; kiBtn.textContent=oldTxt;
-};
-
-async function kiResearch(pos){
-  const prompt='Du recherchierst Angelgewässer. Standort-Koordinaten: '+pos[0].toFixed(4)+', '+pos[1].toFixed(4)+'. '
-    +'Ermittle per Websuche die Region (Land beachten – Regeln unterscheiden sich je Bundesland/Land!) und finde bis zu 5 real existierende, beangelbare Gewässer im Umkreis von ca. 25 km. '
-    +'Antworte AUSSCHLIESSLICH mit einem JSON-Array, ohne Markdown und ohne Erklärtext. Schema pro Eintrag: '
-    +'{"name":string,"lat":number,"lng":number,"cat":"raub"|"salmo"|"fried"|"forelle",'
-    +'"arten":Array nur aus ['+ARTEN_KANON.join(',')+'],'
-    +'"fisch":string,"methode":string(konkrete Köder/Technik),"karte":string(Erlaubnisschein/Verein/Preis),'
-    +'"note":string(wichtigste Regeln, Schonzeiten-Besonderheiten, Warnungen)}. '
-    +'Koordinaten so genau wie möglich auf dem Gewässer platzieren.';
-  const data=await claudeCall({
-    model:'claude-sonnet-4-6',max_tokens:2000,
-    messages:[{role:'user',content:prompt}],
-    tools:[{type:'web_search_20250305',name:'web_search'}]
-  });
-  const text=(data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('\n');
-  const clean=text.replace(/```json|```/g,'').trim();
-  const a=clean.indexOf('['), b=clean.lastIndexOf(']');
-  if(a<0||b<0||b<=a) throw new Error(data.stop_reason==='max_tokens'
-    ?'Antwort am Token-Limit abgeschnitten – bitte erneut versuchen.'
-    :'Keine verwertbare Antwort');
-  let arr;
-  try{ arr=JSON.parse(clean.slice(a,b+1)); }
-  catch(e){ throw new Error('Antwort unvollständig ('+(data.stop_reason||'Parse-Fehler')+') – bitte erneut versuchen.'); }
-  return arr.filter(x=>x&&x.name&&typeof x.lat==='number'&&typeof x.lng==='number');
-}
-
-function addKiSpots(arr){
-  let added=0;
-  arr.forEach(x=>{
-    if(SPOTS.some(s=>s.name===x.name)) return;
-    const s={
-      name:esc(x.name), nr:'KI-Recherche', cat:CATS[x.cat]?x.cat:'fried',
-      arten:Array.isArray(x.arten)?x.arten.filter(a=>ARTEN_KANON.includes(a)):[],
-      lat:x.lat, lng:x.lng,
-      fisch:esc(x.fisch||'–'), methode:esc(x.methode||'–'), karte:esc(x.karte||'–'),
-      note:esc(x.note?x.note+' ':'')+'⚠ KI-recherchiert: Lage, Regeln und Erlaubnis vor dem Trip unbedingt verifizieren.',
-      warn:true, ki:true
-    };
-    s.marker=L.marker([s.lat,s.lng],{icon:pinIcon(s.cat),title:s.name,opacity:.85})
-      .bindPopup(popupHtml(s),{autoPanPadding:[20,60]});
-    SPOTS.push(s); added++;
-  });
-  if(added){
-    applyFilters();
-    const pts=SPOTS.filter(spotVisible).map(s=>[s.lat,s.lng]);
-    if(pts.length) map.fitBounds(pts,{padding:[30,30]});
-  }
-  return added;
-}
-
 /* Handy gedreht / Fenster skaliert: Karte neu vermessen */
 let rsT; addEventListener('resize',()=>{clearTimeout(rsT);rsT=setTimeout(()=>map.invalidateSize(),150);});
 
@@ -1231,10 +1133,6 @@ function prefillFang(spotName){
   [...fbSpotSel.options].forEach(o=>{if(o.textContent===spotName)fbSpotSel.value=spotName;});
 }
 window.prefillFang=prefillFang;
-document.getElementById('keyBtn').onclick=()=>{
-  const k=prompt('Anthropic API-Key für Guide & Spot-Recherche.\nBleibt ausschließlich in diesem Browser (localStorage).',apiKey());
-  if(k!==null){ try{localStorage.setItem('ak_apikey',k.trim());}catch(e){alert('Speichern nicht möglich: '+e.message);} }
-};
 const fbReady=fbLoad();
 initRegions();
 

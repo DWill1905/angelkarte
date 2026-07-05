@@ -34,7 +34,7 @@ self.addEventListener('fetch',e=>{
   const u=new URL(e.request.url);
 
   /* Live-APIs nie cachen */
-  if(u.hostname==='api.open-meteo.com'||u.hostname.endsWith('pegelonline.wsv.de')||u.hostname==='api.anthropic.com') return;
+  if(u.hostname==='api.open-meteo.com'||u.hostname.endsWith('pegelonline.wsv.de')) return;
 
   /* OSM-Tiles: cache-first, Hintergrund-Refresh, begrenzte Größe */
   if(u.hostname.endsWith('tile.openstreetmap.org')){
