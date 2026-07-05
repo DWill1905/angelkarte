@@ -26,24 +26,28 @@
    "hotspots": [
     {
      "name": "Havel-Einlauf & 7-m-Kuhle",
+     "saison": "Jun–Sep + Winter (tiefste Stelle)",
      "lat": 53.307,
      "lng": 13.004,
      "tipp": "DIE Stelle: tiefste Kuhle des Sees (7 m) direkt vor der Havel-Einmündung am Campingpark Havelberge. Zander tagsüber an der 5–7-m-Kante. UFER-TIPP: Die gepflasterte Buhne ist einer von nur zwei schilffreien Uferzugängen am See – abends Aal, Barsch."
     },
     {
      "name": "Halbinsel am Ostufer",
+     "saison": "Mai–Okt",
      "lat": 53.299,
      "lng": 13.018,
      "tipp": "Trennt Nord- und Südbecken. Hecht und Karpfen laut Fangmeldungen am besten südlich der Halbinsel – Kanten mit flach laufenden Wobblern abklopfen."
     },
     {
      "name": "Kammerkanal-Mündung",
+     "saison": "Jun–Aug, nachts",
      "lat": 53.309,
      "lng": 13.028,
      "tipp": "Kanal Richtung Zierker See – bekannt für seinen Welsbestand. Abends raubende Barsche entlang der Stege. Lage ungefähr."
     },
     {
      "name": "Ufer: Stadtufer/Havel-Auslauf Wesenberg",
+     "saison": "Mai–Okt, abends",
      "lat": 53.289,
      "lng": 13.001,
      "tipp": "Zweiter schilffreier Uferzugang (Luftbild): Stadtufer und Hafenumfeld Wesenberg. Aal-Strecke am Abend, Barsch an den Stegen. Achtung: 100 m Mindestabstand zur Schleuse!"
@@ -71,6 +75,7 @@
    "hotspots": [
     {
      "name": "Westbuchten",
+     "saison": "Mai–Okt",
      "lat": 53.245,
      "lng": 12.805,
      "tipp": "Ruhige Ankerbuchten am Westufer – Hecht über und an den Krautfeldern, Spinnerbait/Chatterbait flach geführt. Lage ungefähr."
@@ -153,6 +158,7 @@
    "hotspots": [
     {
      "name": "Ufer: Stadtufer & Schlossinsel",
+     "saison": "Mai–Okt abends, Aal Jun–Aug",
      "lat": 53.272,
      "lng": 12.815,
      "tipp": "Bester Ufer-Spot der Kleinseenplatte (Luftbild): befestigtes Stadtufer mit vielen Stegen und der Schlossinsel-Brücke. Abends Barsch an den Stegen, nachts Aal – kurze Wege, kein Boot nötig."

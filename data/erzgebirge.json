@@ -25,18 +25,21 @@
    "hotspots": [
     {
      "name": "Staumauer-Bereich",
+     "saison": "Jul–Sep (Sommerloch-Taktik)",
      "lat": 50.734,
      "lng": 13.2318,
      "tipp": "Tiefster Bereich der Talsperre. Sommer: Fische stehen tief – weite Würfe mit schweren Gummis, Barschtrupps über den Tiefenkanten suchen."
     },
     {
      "name": "Übergang Vorsperre Forchheim",
+     "saison": "Mai–Jun + Okt",
      "lat": 50.7284,
      "lng": 13.2736,
      "tipp": "Kante zwischen flacher Vorsperre und Hauptbecken – klassischer Zug für Hecht und Barsch, im Frühsommer zuerst warm."
     },
     {
      "name": "Ufer: Nordostufer am Parkplatz",
+     "saison": "ganzjährig",
      "lat": 50.742,
      "lng": 13.243,
      "tipp": "Bester Uferabschnitt (Luftbild): offene Wiesenkanten ohne Schilf, freie Wurfbahn Richtung Tiefenlinie. Kürzester Weg vom Parkplatz Lippersdorfer Str. Beschilderung der erlaubten Bereiche beachten!"
@@ -46,6 +49,7 @@
   },
   {
    "name": "Vorsperre Dittersbach",
+   "verif": "B",
    "rig": "Spinnrute mittel, Stahl- oder dickes FC-Vorfach (Hecht). TWT-Köderregeln wie Saidenbach.",
    "arten": [
     "Barsch",
@@ -329,6 +333,7 @@
   },
   {
    "name": "Mühlteich (Brand-Erbisdorf)",
+   "verif": "B",
    "rig": "Grundrute mit Freilaufrolle (Karpfen), zweite Rute fein auf Schleie – abends Tauwurm am Grund für Aal.",
    "arten": [
     "Karpfen",
@@ -368,6 +373,7 @@
   },
   {
    "name": "Richter’s Angelteich (Gränitz)",
+   "schonzeitInfo": "Privatgewässer: LVSA-Sperrfrist &amp; Salmonidenregeln gelten hier NICHT – Betreiberregeln maßgeblich.",
    "rig": "Leichte Forellenrute 5–20 g, 0,20er Mono, Sbirolino oder Pose – Teig, Spoons, Bienenmade.",
    "nr": "privat",
    "cat": "forelle",
@@ -384,6 +390,7 @@
   },
   {
    "name": "Erzengler Teich",
+   "verif": "B",
    "nr": "RWA – AVS-Nr. prüfen",
    "cat": "fried",
    "arten": [
@@ -402,6 +409,7 @@
   },
   {
    "name": "Berthelsdorfer Hüttenteich",
+   "verif": "B",
    "nr": "RWA – AVS-Nr. prüfen",
    "cat": "fried",
    "arten": [
@@ -510,7 +518,7 @@
     4,
     30
    ],
-   "text": "<b>Raubfisch-Sperrfrist aktiv:</b> 01.02.–30.04. Kunstköderverbot in LVSA-Gewässern, Hecht geschont."
+   "text": "<b>Raubfisch-Sperrfrist aktiv:</b> 01.02.–30.04. Kunstköderverbot in LVSA-Gewässern (gilt NICHT am privaten Angelteich Gränitz), Hecht geschont."
   },
   {
    "von": [

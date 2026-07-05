@@ -145,6 +145,10 @@
   .fb-del{background:none;border:0;color:var(--muted);font-size:16px;cursor:pointer;padding:6px}
   .fb-empty{text-align:center;color:var(--muted);font-size:13px;padding:24px 10px;line-height:1.5}
   .fb-status{font-size:11px;color:var(--muted);text-align:center;margin-top:8px}
+  .fbcheck{border-radius:8px;padding:9px 11px;font-size:12.5px;line-height:1.5;margin-top:2px}
+  .fbcheck.ok{background:#1f3d24;color:#a8dcae}
+  .fbcheck.bad{background:#4a201a;color:#f0b6a8;font-weight:600}
+  .verif{font-size:10px;color:#5b6b66;margin-top:7px;letter-spacing:.03em}
 
   .mydlg-wrap{position:fixed;inset:0;background:rgba(6,16,18,.72);z-index:1200;display:flex;align-items:center;justify-content:center;padding:20px}
   .mydlg-wrap[hidden]{display:none!important}
@@ -230,6 +234,7 @@
             <option>Karpfen</option><option>Schleie</option><option>Aal</option><option>Sonstige</option>
           </select></div>
         <div><label for="fbLaenge">Länge (cm)</label><input id="fbLaenge" type="number" inputmode="numeric" min="0" max="200" placeholder="z.B. 54"></div>
+        <div class="full" id="fbCheck" aria-live="polite"></div>
         <div class="full"><label for="fbSpot">Gewässer</label><select id="fbSpot"></select></div>
         <div class="full"><label for="fbKoeder">Köder / Methode</label><input id="fbKoeder" type="text" placeholder="z.B. Gummifisch 12cm, motoroil"></div>
       </div>
@@ -296,14 +301,14 @@ const SPOTS_SN = [
     karte:'AVS-Erlaubnisschein + TWT-Belehrung (Quittung im Fangbuch)',
     note:'Trinkwassertalsperre: kein Boot, kein Waten, kein Anfüttern, keine Maden/Fleisch, kein Nachtangeln. Schonmaß 60 cm für ALLE Salmoniden. Parkplatz am NO-Ufer (Lippersdorfer Str.), Rundwanderweg erschließt alle Ufer.',
     hotspots:[
-      {name:'Staumauer-Bereich',lat:50.7340,lng:13.2318,tipp:'Tiefster Bereich der Talsperre. Sommer: Fische stehen tief – weite Würfe mit schweren Gummis, Barschtrupps über den Tiefenkanten suchen.'},
-      {name:'Übergang Vorsperre Forchheim',lat:50.7284,lng:13.2736,tipp:'Kante zwischen flacher Vorsperre und Hauptbecken – klassischer Zug für Hecht und Barsch, im Frühsommer zuerst warm.'},
-      {name:'Ufer: Nordostufer am Parkplatz',lat:50.7420,lng:13.2430,tipp:'Bester Uferabschnitt (Luftbild): offene Wiesenkanten ohne Schilf, freie Wurfbahn Richtung Tiefenlinie. Kürzester Weg vom Parkplatz Lippersdorfer Str. Beschilderung der erlaubten Bereiche beachten!'}
+      {name:'Staumauer-Bereich',saison:'Jul–Sep (Sommerloch-Taktik)',lat:50.7340,lng:13.2318,tipp:'Tiefster Bereich der Talsperre. Sommer: Fische stehen tief – weite Würfe mit schweren Gummis, Barschtrupps über den Tiefenkanten suchen.'},
+      {name:'Übergang Vorsperre Forchheim',saison:'Mai–Jun + Okt',lat:50.7284,lng:13.2736,tipp:'Kante zwischen flacher Vorsperre und Hauptbecken – klassischer Zug für Hecht und Barsch, im Frühsommer zuerst warm.'},
+      {name:'Ufer: Nordostufer am Parkplatz',saison:'ganzjährig',lat:50.7420,lng:13.2430,tipp:'Bester Uferabschnitt (Luftbild): offene Wiesenkanten ohne Schilf, freie Wurfbahn Richtung Tiefenlinie. Kürzester Weg vom Parkplatz Lippersdorfer Str. Beschilderung der erlaubten Bereiche beachten!'}
     ],
     warn:false
   },
   {
-    name:'Vorsperre Dittersbach',
+    name:'Vorsperre Dittersbach',verif:'B',
     rig:'Spinnrute mittel, Stahl- oder dickes FC-Vorfach (Hecht). TWT-Köderregeln wie Saidenbach.',
     arten:['Barsch','Hecht','Karpfen','Schleie','Regenbogenforelle'], nr:'C01-104', cat:'raub', lat:50.8009, lng:13.4798,
     fisch:'Barsch, Hecht, Karpfen, Schleie, Regenbogenforelle, Weißfisch',
@@ -385,7 +390,7 @@ const SPOTS_SN = [
     warn:true
   },
   {
-    name:'Mühlteich (Brand-Erbisdorf)',
+    name:'Mühlteich (Brand-Erbisdorf)',verif:'B',
     rig:'Grundrute mit Freilaufrolle (Karpfen), zweite Rute fein auf Schleie – abends Tauwurm am Grund für Aal.',
     arten:['Karpfen','Schleie','Aal','Barsch'], nr:'AVS', cat:'fried', lat:50.7999, lng:13.2761,
     fisch:'Karpfen, Graskarpfen, Schleie, Aal, Barsch',
@@ -406,6 +411,7 @@ const SPOTS_SN = [
   },
     {
     name:'Richter’s Angelteich (Gränitz)',
+    schonzeitInfo:'Privatgewässer: LVSA-Sperrfrist &amp; Salmonidenregeln gelten hier NICHT – Betreiberregeln maßgeblich.',
     rig:'Leichte Forellenrute 5–20 g, 0,20er Mono, Sbirolino oder Pose – Teig, Spoons, Bienenmade.', nr:'privat', cat:'forelle',
     arten:['Regenbogenforelle'], lat:50.7946, lng:13.2894,
     fisch:'Regenbogenforelle (Besatz), Stör im Teich',
@@ -415,7 +421,7 @@ const SPOTS_SN = [
     warn:false
   },
   {
-    name:'Erzengler Teich', nr:'RWA – AVS-Nr. prüfen', cat:'fried',
+    name:'Erzengler Teich',verif:'B', nr:'RWA – AVS-Nr. prüfen', cat:'fried',
     arten:['Karpfen','Schleie','Barsch'],
     lat:50.8524, lng:13.3419,
     fisch:'Karpfen, Schleie, Barsch (Bestand vor Ort prüfen)',
@@ -426,7 +432,7 @@ const SPOTS_SN = [
     warn:false
   },
   {
-    name:'Berthelsdorfer Hüttenteich', nr:'RWA – AVS-Nr. prüfen', cat:'fried',
+    name:'Berthelsdorfer Hüttenteich',verif:'B', nr:'RWA – AVS-Nr. prüfen', cat:'fried',
     arten:['Karpfen','Schleie','Barsch'],
     lat:50.8761, lng:13.3591,
     fisch:'Karpfen, Schleie, Barsch (Bestand vor Ort prüfen)',
@@ -467,10 +473,10 @@ const SPOTS_MV=[
    karte:'Angelkarte Seenfischerei Obere Havel – online (fischerei-wesenberg.de) oder Fischereihof Wesenberg',
    note:'Ø nur 1,6 m tief, Max. 7 m! Havel durchfließt den See, im Sommer viel Hausboot-Verkehr. Uferangeln laut Luftbild fast nur an Buhne (Campingpark) und Stadtufer Wesenberg möglich – sonst durchgehender Schilfgürtel, Scharkante weit dahinter: Boot + Echolot.',
    hotspots:[
-     {name:'Havel-Einlauf & 7-m-Kuhle',lat:53.3070,lng:13.0040,tipp:'DIE Stelle: tiefste Kuhle des Sees (7 m) direkt vor der Havel-Einmündung am Campingpark Havelberge. Zander tagsüber an der 5–7-m-Kante. UFER-TIPP: Die gepflasterte Buhne ist einer von nur zwei schilffreien Uferzugängen am See – abends Aal, Barsch.'},
-     {name:'Halbinsel am Ostufer',lat:53.2990,lng:13.0180,tipp:'Trennt Nord- und Südbecken. Hecht und Karpfen laut Fangmeldungen am besten südlich der Halbinsel – Kanten mit flach laufenden Wobblern abklopfen.'},
-     {name:'Kammerkanal-Mündung',lat:53.3090,lng:13.0280,tipp:'Kanal Richtung Zierker See – bekannt für seinen Welsbestand. Abends raubende Barsche entlang der Stege. Lage ungefähr.'},
-     {name:'Ufer: Stadtufer/Havel-Auslauf Wesenberg',lat:53.2890,lng:13.0010,tipp:'Zweiter schilffreier Uferzugang (Luftbild): Stadtufer und Hafenumfeld Wesenberg. Aal-Strecke am Abend, Barsch an den Stegen. Achtung: 100 m Mindestabstand zur Schleuse!'}
+     {name:'Havel-Einlauf & 7-m-Kuhle',saison:'Jun–Sep + Winter (tiefste Stelle)',lat:53.3070,lng:13.0040,tipp:'DIE Stelle: tiefste Kuhle des Sees (7 m) direkt vor der Havel-Einmündung am Campingpark Havelberge. Zander tagsüber an der 5–7-m-Kante. UFER-TIPP: Die gepflasterte Buhne ist einer von nur zwei schilffreien Uferzugängen am See – abends Aal, Barsch.'},
+     {name:'Halbinsel am Ostufer',saison:'Mai–Okt',lat:53.2990,lng:13.0180,tipp:'Trennt Nord- und Südbecken. Hecht und Karpfen laut Fangmeldungen am besten südlich der Halbinsel – Kanten mit flach laufenden Wobblern abklopfen.'},
+     {name:'Kammerkanal-Mündung',saison:'Jun–Aug, nachts',lat:53.3090,lng:13.0280,tipp:'Kanal Richtung Zierker See – bekannt für seinen Welsbestand. Abends raubende Barsche entlang der Stege. Lage ungefähr.'},
+     {name:'Ufer: Stadtufer/Havel-Auslauf Wesenberg',saison:'Mai–Okt, abends',lat:53.2890,lng:13.0010,tipp:'Zweiter schilffreier Uferzugang (Luftbild): Stadtufer und Hafenumfeld Wesenberg. Aal-Strecke am Abend, Barsch an den Stegen. Achtung: 100 m Mindestabstand zur Schleuse!'}
    ],warn:false},
   {name:'Zotzensee',
     rig:'Hechtcombo 30–80 g, Stahlvorfach, Weedless-Montagen fürs Kraut – Boot ist Pflicht.',nr:'Obere Havel',cat:'raub',arten:['Hecht','Barsch','Aal','Schleie'],
@@ -480,7 +486,7 @@ const SPOTS_MV=[
    karte:'Angelkarte Obere Havel (Meisterbereich Mirow, Tel. 039833 20423)',
    note:'Reines Bootsrevier: Wald bis ans Wasser, laut Luftbild keine freien Uferzugänge. Wasser eher trüb, Wald teils überflutet – Mückenschutz einpacken. Schleusenpassage ab Mirow.',
    hotspots:[
-     {name:'Westbuchten',lat:53.2450,lng:12.8050,tipp:'Ruhige Ankerbuchten am Westufer – Hecht über und an den Krautfeldern, Spinnerbait/Chatterbait flach geführt. Lage ungefähr.'}
+     {name:'Westbuchten',saison:'Mai–Okt',lat:53.2450,lng:12.8050,tipp:'Ruhige Ankerbuchten am Westufer – Hecht über und an den Krautfeldern, Spinnerbait/Chatterbait flach geführt. Lage ungefähr.'}
    ],warn:false},
   {name:'Vilzsee',
     rig:'Mittlere Spinnrute, Stahlvorfach, flachlaufende Köder – Polbrille fürs Sichtangeln im klaren Wasser.',nr:'Obere Havel',cat:'raub',arten:['Hecht','Barsch','Schleie'],
@@ -511,7 +517,7 @@ const SPOTS_MV=[
    karte:'Angelkarte Obere Havel (Meisterbereich Mirow, Mühlenstr. 21)',
    note:'Schlossinsel und Bootsverkehr – Randbereiche und frühe Stunden wählen.',
    hotspots:[
-     {name:'Ufer: Stadtufer & Schlossinsel',lat:53.2720,lng:12.8150,tipp:'Bester Ufer-Spot der Kleinseenplatte (Luftbild): befestigtes Stadtufer mit vielen Stegen und der Schlossinsel-Brücke. Abends Barsch an den Stegen, nachts Aal – kurze Wege, kein Boot nötig.'}
+     {name:'Ufer: Stadtufer & Schlossinsel',saison:'Mai–Okt abends, Aal Jun–Aug',lat:53.2720,lng:12.8150,tipp:'Bester Ufer-Spot der Kleinseenplatte (Luftbild): befestigtes Stadtufer mit vielen Stegen und der Schlossinsel-Brücke. Abends Barsch an den Stegen, nachts Aal – kurze Wege, kein Boot nötig.'}
    ],warn:false},
   {name:'Drewensee',
     rig:'Allround-Raubfischcombo mit Stahlvorfach, Gummifische 10–14 cm für die Fahrrinnen-Kanten.',nr:'Obere Havel',cat:'raub',arten:['Hecht','Zander','Barsch'],
@@ -539,7 +545,7 @@ const SCHON_MV=[
 
 /* ============ Region: Rhein & Rheinhessen / Mainz (recherchiert 07/2026) ============ */
 const SPOTS_RLP=[
-  {name:'Rhein Mainz – Stadtstrecke',nr:'LFV RLP linksrheinisch',cat:'raub',
+  {name:'Rhein Mainz – Stadtstrecke',nr:'LFV RLP · ~Strom-km 498–500',cat:'raub',
    arten:['Zander','Barsch','Rapfen','Wels','Aal','Döbel','Brachse'],
    lat:50.0010,lng:8.2790,
    fisch:'Zander, Barsch, Rapfen, Wels, Aal, Barbe, Döbel, Brassen – Grundel ist Hauptfutter',
@@ -548,8 +554,8 @@ const SPOTS_RLP=[
    rig:'Jigrute 30–60 g (Strömung!), Jigköpfe 10–30 g in Grundeldekoren, großer Bleikopf-Vorrat – die Steinpackungen fordern Tribut',
    note:'Stadtufer stark frequentiert – die offensichtlichen Stellen sind überlaufen, Strecke machen zahlt sich aus. Wellenschlag der Schifffahrt: Ruten sichern!',
    hotspots:[
-     {name:'Theodor-Heuss-Brücke',lat:50.0060,lng:8.2745,tipp:'Der dokumentierte Zander-Klassiker der Stadt: um und hinter den Brückenpfeilern, beste Zeit Dämmerung und nachts. Viel Angeldruck – antizyklisch angeln (unter der Woche, sehr früh).'},
-     {name:'Rapfen-Spundwände',lat:49.9960,lng:8.2830,tipp:'Rapfen treiben Kleinfisch an den Spundwänden in die Ecke – Sommer ab ca. 16 Uhr Oberflächenrauben, flach laufender schlanker Wobbler oder Spöket.'}
+     {name:'Theodor-Heuss-Brücke',saison:'ganzjährig, top Okt–Dez',lat:50.0060,lng:8.2745,tipp:'Der dokumentierte Zander-Klassiker der Stadt: um und hinter den Brückenpfeilern, beste Zeit Dämmerung und nachts. Viel Angeldruck – antizyklisch angeln (unter der Woche, sehr früh).'},
+     {name:'Rapfen-Spundwände',saison:'Mai–Sep, ab ~16 Uhr',lat:49.9960,lng:8.2830,tipp:'Rapfen treiben Kleinfisch an den Spundwänden in die Ecke – Sommer ab ca. 16 Uhr Oberflächenrauben, flach laufender schlanker Wobbler oder Spöket.'}
    ],warn:false},
   {name:'Winterhafen Mainz',nr:'Beschilderung!',cat:'raub',
    arten:['Barsch','Hecht','Rapfen','Wels','Zander'],
@@ -559,7 +565,7 @@ const SPOTS_RLP=[
    karte:'Rheinischer Erlaubnisschein – Angeln nur in ausgeschilderten Bereichen!',
    rig:'Barschrute 5–21 g reicht im Hafen, Finesse-Montagen an den Wänden entlang',
    note:'Nur teilweise freigegeben und es gab wiederholt Ärger – Beschilderung genau prüfen, im Zweifel weiterziehen. Viele Schaulustige.',warn:true},
-  {name:'Industriehafen Mombach – Hafenausfahrt',nr:'nur Ausfahrtsbereich',cat:'raub',
+  {name:'Industriehafen Mombach – Hafenausfahrt',nr:'~Strom-km 503 · nur Ausfahrt',cat:'raub',
    arten:['Zander','Barsch','Aal','Brachse','Wels'],
    lat:50.0310,lng:8.2210,
    fisch:'Zander, Barsch, Aal, Brassen, Wels',
@@ -568,10 +574,10 @@ const SPOTS_RLP=[
    rig:'Zander-Jigrute, Gummis 10–12 cm V-Tail natur; abends Grundrute mit Tauwurm auf Aal',
    note:'Schild auf der Bauhaus-Seite markiert den Beginn des Angelverbots – dahinter ist Schluss. Stromab beginnt das NSG Mombacher Rheinufer (ganzjährig verboten).',
    hotspots:[
-     {name:'Hinter dem Bauhaus',lat:50.0305,lng:8.2200,tipp:'Zugänglicher Klassiker am erlaubten Ausfahrtsbereich – Ansitz und Raubfisch, entsprechend frequentiert.'},
-     {name:'Auspitze Ingelheimer Aue',lat:50.0370,lng:8.2340,tipp:'Die Spitze der Insel an der Hafenausfahrt – Strömungskante trifft Stillwasser, klassischer Zanderzug. Lage ungefähr.'}
+     {name:'Hinter dem Bauhaus',saison:'ganzjährig',lat:50.0305,lng:8.2200,tipp:'Zugänglicher Klassiker am erlaubten Ausfahrtsbereich – Ansitz und Raubfisch, entsprechend frequentiert.'},
+     {name:'Auspitze Ingelheimer Aue',saison:'Okt–Mär + Hochwasser',lat:50.0370,lng:8.2340,tipp:'Die Spitze der Insel an der Hafenausfahrt – Strömungskante trifft Stillwasser, klassischer Zanderzug. Lage ungefähr.'}
    ],warn:true},
-  {name:'Buhnen & Rampen Budenheim',nr:'LFV RLP',cat:'raub',
+  {name:'Buhnen & Rampen Budenheim',nr:'LFV RLP · ~Strom-km 506–508',cat:'raub',
    arten:['Zander','Barsch','Döbel','Aal','Brachse'],
    lat:50.0295,lng:8.1675,
    fisch:'Zander, Barsch, Barbe, Döbel, Aal, Brassen',
@@ -579,7 +585,7 @@ const SPOTS_RLP=[
    karte:'Rheinischer Erlaubnisschein',
    rig:'Jigköpfe 15–30 g je nach Strömung; fürs Posenangeln hinter den Rampen leichte Matchrute',
    note:'Zwei Rampen an der chemischen Fabrik plus eine kleine stromauf – die ruhigen Bereiche dahinter sind die Friedfisch-Geheimecken. Parkplatz am Kiosk Rheinblick.',warn:false},
-  {name:'Altrhein Heidenfahrt',nr:'LFV RLP – Teilsperrung',cat:'fried',
+  {name:'Altrhein Heidenfahrt',verif:'B',nr:'~Strom-km 511 · Teilsperrung',cat:'fried',
    arten:['Zander','Barsch','Hecht','Karpfen','Schleie','Brachse','Aal'],
    lat:50.0121,lng:8.1021,
    fisch:'Zander, Barsch, Hecht, Karpfen, Schleie, Brassen, Aal',
@@ -587,7 +593,7 @@ const SPOTS_RLP=[
    karte:'Rheinischer Erlaubnisschein – nur der hintere Bereich, vorderer Teil ist Schutzgebiet!',
    rig:'Feeder/Pose fürs Stillwasser, Spinnrute für den Ausgang zum Strom',
    note:'Beliebt und teils saisonal gesperrt (Berichte über Sperrung bis 31.08. kursieren) – Beschilderung maßgeblich. Badestrand nebenan = Sommer-Trubel.',warn:true},
-  {name:'Hafen & Buhnen Oppenheim',nr:'LFV RLP',cat:'raub',
+  {name:'Hafen & Buhnen Oppenheim',nr:'LFV RLP · ~Strom-km 480',cat:'raub',
    arten:['Zander','Barsch','Wels','Aal','Brachse'],
    lat:49.8594,lng:8.3575,
    fisch:'Zander, Barsch, Wels, Aal, Brassen, Barbe',
@@ -595,7 +601,7 @@ const SPOTS_RLP=[
    karte:'Rheinischer Erlaubnisschein',
    rig:'Rhein-Standard: Jigrute 30–60 g, Grundelfarben; Welsrute lohnt als zweite Rute',
    note:'Gut kombinierbar: Hafeneinfahrt bei Hochwasser, Buhnen bei Normalpegel. Marina-Bereich respektieren.',warn:false},
-  {name:'Mainspitze & Maaraue',nr:'HESSEN-Schein!',cat:'raub',
+  {name:'Mainspitze & Maaraue',nr:'Mainmündung km 496,6 · HESSEN!',cat:'raub',
    arten:['Zander','Barsch','Wels','Rapfen','Aal'],
    lat:49.9937,lng:8.2940,
    fisch:'Zander, Barsch, Wels, Rapfen, Aal',
@@ -603,7 +609,7 @@ const SPOTS_RLP=[
    karte:'Hessischer Rheinschein – seit 2025 NUR online: <a href="https://www.hejfish.com" target="_blank" rel="noopener">hejfish.com</a> (HLG)',
    rig:'Jigrute + nachts Wobbler; vor der Maarauespitze liegt ein Steinwall unter Wasser (Boot: ankern, Hängergefahr)',
    note:'Grenze RLP/Hessen: Fußgängerbrücke zur Maaraue. Die Maarauespitze selbst ist Polizeigelände und unzugänglich – dort raubt es sichtbar, erreichbar ist der Bereich davor.',warn:true},
-  {name:'Ginsheimer Altrhein & Mündung',nr:'HESSEN-Schein!',cat:'raub',
+  {name:'Ginsheimer Altrhein & Mündung',nr:'~km 487–493 · HESSEN!',cat:'raub',
    arten:['Zander','Wels','Barsch','Hecht','Karpfen'],
    lat:49.9440,lng:8.3524,
    fisch:'Zander, Wels, Barsch, Hecht, Karpfen',
@@ -612,9 +618,10 @@ const SPOTS_RLP=[
    rig:'Wels-tauglich: 0,50er FC oder Stahl an der Mündung, Abrissmontage mit Tauwurm/Tintenfisch',
    note:'Anfahrt über Trebur/Steindamm oder Fähre Ginsheim. Teils flach und verkrautet.',
    hotspots:[
-     {name:'Treburer Buhnenfeld (km 487–493)',lat:49.9550,lng:8.3250,tipp:'6 km Buhnenfeld auf der Nonnenaue – Fahrrad mitnehmen und Kilometer machen, die hinteren Buhnen sehen kaum Angler. Lage ungefähr, hessischer Schein nötig.'}
+     {name:'Treburer Buhnenfeld (km 487–493)',saison:'Jun–Okt bei Normalpegel',lat:49.9550,lng:8.3250,tipp:'6 km Buhnenfeld auf der Nonnenaue – Fahrrad mitnehmen und Kilometer machen, die hinteren Buhnen sehen kaum Angler. Lage ungefähr, hessischer Schein nötig.'}
    ],warn:true},
   {name:'Eicher See',nr:'Anglervereinigung Worms',cat:'raub',
+   schonzeitInfo:'Vereinsbestimmungen der AVW gelten zusätzlich zur FischGDV – Karte genau lesen.',
    arten:['Zander','Hecht','Wels','Barsch','Karpfen','Schleie','Aal','Brachse'],
    lat:49.7646,lng:8.4290,
    fisch:'Zander, Hecht, Wels, Barsch, Karpfen, Schleie, Aal, Brassen, Giebel',
@@ -634,11 +641,11 @@ const SPOTS_RLP=[
    lat:50.0125,lng:8.2633,
    fisch:'—',methode:'—',karte:'Angeln im Zollhafen ist verboten',
    note:'Trotz verlockender Optik: komplett gesperrt. Kontrollen im Neubaugebiet sind häufig.',warn:true},
-  {name:'Schiersteiner Hafen',nr:'VERBOTEN',cat:'sperr',arten:[],
+  {name:'Schiersteiner Hafen',verif:'B',nr:'VERBOTEN',cat:'sperr',arten:[],
    lat:50.0410,lng:8.1960,
    fisch:'—',methode:'—',karte:'Seit 2005 komplett gesperrt',
    note:'Verbot der Stadt Wiesbaden wegen Schadstoffbelastung – Gesundheitsgefahr, gilt bis zur Mündung in den Rhein. Lage ungefähr.',warn:true},
-  {name:'NSG Mombacher Rheinufer',nr:'VERBOTEN',cat:'sperr',arten:[],
+  {name:'NSG Mombacher Rheinufer',verif:'B',nr:'VERBOTEN',cat:'sperr',arten:[],
    lat:50.0240,lng:8.2380,
    fisch:'—',methode:'—',karte:'Naturschutzgebiet – Angeln ganzjährig verboten',
    note:'Liegt zwischen Stadtstrecke und Industriehafen, inkl. der Buhnen und Strände dahinter. Strom-km im Erlaubnisschein beachten. Lage ungefähr.',warn:true}
@@ -655,12 +662,13 @@ const SCHON_RLP=[
 
 /* ============ Regionsdefinitionen (eingebetteter Fallback zur JSON-Datenbank) ============ */
 const REGION_RLP={id:'mainz',name:'Rhein & Rheinhessen (Mainz)',
+  pegel:{warnAb:400,text:'Buhnen überspült – auf Hafenausfahrten ausweichen!'},
   fusszeile:'Erlaubnis: <a href="https://lfv-rhl-rhh.de/fischerei-erlaubnisscheine/rhein/" target="_blank" rel="noopener">LFV Rhl.-Rhh.</a> (links) · <a href="https://www.hejfish.com" target="_blank" rel="noopener">hejfish</a> (Hessen-Seite)',
   spots:SPOTS_RLP,schon:SCHON_RLP,
   banner:[
     {von:[2,1],bis:[3,31],text:'<b>Hecht geschont</b> (01.02.–15.04.).'},
     {von:[4,1],bis:[4,14],text:'<b>Hecht &amp; Zander geschont</b> – Hecht bis 15.04., Zander bis 31.05.'},
-    {von:[4,15],bis:[5,31],text:'<b>Frühjahrsschonzeit:</b> Kunstköder (außer Fliege) verboten – Zander geschont bis 31.05.'}
+    {von:[4,15],bis:[5,31],text:'<b>Frühjahrsschonzeit:</b> Kunstköder (außer Fliege) verboten – gewässerabhängig (§18 FischGDV), Erlaubnisschein prüfen. Zander geschont bis 31.05.'}
   ],
   regeln:[
     {titel:'Erlaubnisscheine am Rhein',punkte:['Linksrheinisch (Mainzer Ufer): rheinischer Erlaubnisschein ~31 €/Jahr – online-Infos &amp; Ausgabestellen: <a href="https://lfv-rhl-rhh.de/fischerei-erlaubnisscheine/rhein/" target="_blank" rel="noopener">lfv-rhl-rhh.de</a>, klassisch im Angelladen (z.B. Bode Heidesheim)','Ufer und handgerudertes Boot erlaubt (Bootsplakette sichtbar anbringen), Köderfischsenke vom Ufer zulässig','Rechtsrheinische Seite, Mainspitze &amp; Ginsheim: hessischer Rheinschein – seit 2025 nur noch online über <a href="https://www.hejfish.com" target="_blank" rel="noopener">hejfish.com</a> (HLG)','Main km 0–2,89: Erlaubnis nur mit Vereinsmitgliedschaft im hessischen Verband']},
@@ -673,7 +681,7 @@ const REGIONS_EMBEDDED=[
   fusszeile:'Gastkarten: <a href="https://angeln-sachsen.de/avs/gastangler/gastkarten" target="_blank" rel="noopener">AVS Südsachsen</a>',
   spots:SPOTS_SN,schon:SCHON_SN,
   banner:[
-    {von:[2,1],bis:[4,30],text:'<b>Raubfisch-Sperrfrist aktiv:</b> 01.02.–30.04. Kunstköderverbot in LVSA-Gewässern, Hecht geschont.'},
+    {von:[2,1],bis:[4,30],text:'<b>Raubfisch-Sperrfrist aktiv:</b> 01.02.–30.04. Kunstköderverbot in LVSA-Gewässern (gilt NICHT am privaten Angelteich Gränitz), Hecht geschont.'},
     {von:[5,1],bis:[5,31],text:'<b>Zander geschont bis 31.05.</b> – Hecht &amp; Barsch sind offen.'}
   ],
   regeln:[
@@ -760,11 +768,22 @@ function sunTimes(lat,lng,date){
   return {rise:toDate(Jt-H), set:toDate(Jt+H)};
 }
 const hhmm=d=>d.toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'});
+function mondPhase(d){
+  const syn=29.53058867, ref=Date.UTC(2000,0,6,18,14);
+  let age=((d-ref)/864e5)%syn; if(age<0)age+=syn;
+  return ['🌑','🌒','🌓','🌔','🌕','🌖','🌗','🌘'][Math.round(age/syn*8)%8];
+}
+function masseAus(mm){
+  const f=String(mm).match(/(\d+)\s*[–-]\s*(\d+)\s*cm/);
+  if(f) return {min:+f[1],max:+f[2]};
+  const m=String(mm).match(/(\d+)\s*cm/);
+  return {min:m?+m[1]:null,max:null};
+}
 
 /* ============ Header: Sonne & Banner ============ */
 const st=sunTimes(50.80,13.33,NOW);
 if(st) document.getElementById('sunline').textContent=
-  '☀ '+hhmm(st.rise)+' – '+hhmm(st.set)+' Uhr · beste Beißzeit: Dämmerung ±1,5 h';
+  '☀ '+hhmm(st.rise)+' – '+hhmm(st.set)+' Uhr · '+mondPhase(NOW)+' · beste Beißzeit: Dämmerung ±1,5 h';
 
 const banner=document.getElementById('banner');
 function inWindow(von,bis){
@@ -818,7 +837,9 @@ function popupHtml(s){
     <div class="pop-row"><b>Erlaubnis</b>${s.karte}</div>
     ${!s.line&&(s.cat==='raub'||s.cat==='fried')?'<div class="pop-row" data-wind="1"></div>':''}
     <div class="pop-note${s.warn?' pop-warn':''}">${s.note}</div>
+    ${s.schonzeitInfo?'<div class="pop-row"><b>Schonzeit-Besonderheit</b>'+s.schonzeitInfo+'</div>':''}
     ${s.hotspots&&s.hotspots.length?'<div class="pop-row" style="margin-top:8px"><b>Hotspots (kleine Punkte auf der Karte)</b>'+s.hotspots.map(h=>h.name).join(' · ')+'</div>':''}
+    <div class="verif">${s.verif==='B'?'⚠ Datenlage teils unbelegt – vor Ort verifizieren':'✓ Kerndaten belegt (Ortsdaten/Primärquellen)'}</div>
     <div class="pop-actions">
       <a class="pop-btn nav" href="${mapsLink(s)}" target="_blank" rel="noopener">Route</a>
       <button class="pop-btn log" onclick="prefillFang('${s.name.replace(/'/g,"\\'")}')">Fang loggen</button>
@@ -867,6 +888,7 @@ function hotPopup(parent,h){
   return `<span class="pop-cat" style="background:${CATS[parent.cat].color}">Hotspot</span>
     <div class="pop-title">${h.name}</div>
     <div class="pop-dist">gehört zu ${parent.name}</div>
+    ${h.saison?'<div class="pop-row"><b>Beste Zeit</b>'+h.saison+'</div>':''}
     <div class="pop-note">${h.tipp}</div>`;
 }
 function buildMarkers(){
@@ -1093,15 +1115,39 @@ async function loadWeather(){
     loadPegel(ctr,el);
   }catch(e){ el.textContent=''; wxKey=''; }
 }
+let PEGEL=null;
 async function loadPegel(ctr,el){
   try{
-    const st=await (await fetch('https://www.pegelonline.wsv.de/webservices/rest-api/v2/stations.json?latitude='
-      +ctr.lat.toFixed(3)+'&longitude='+ctr.lng.toFixed(3)+'&radius=30')).json();
+    const base='https://www.pegelonline.wsv.de/webservices/rest-api/v2/stations';
+    const st=await (await fetch(base+'.json?latitude='+ctr.lat.toFixed(3)+'&longitude='+ctr.lng.toFixed(3)+'&radius=30')).json();
     if(!Array.isArray(st)||!st.length) return;
     const s0=st[0];
-    const m=await (await fetch('https://www.pegelonline.wsv.de/webservices/rest-api/v2/stations/'+s0.uuid+'/W/currentmeasurement.json')).json();
-    if(m&&typeof m.value!=='undefined')
-      el.textContent+=' · 🌊 '+s0.shortname.charAt(0)+s0.shortname.slice(1).toLowerCase()+': '+m.value+' cm';
+    const m=await (await fetch(base+'/'+s0.uuid+'/W/currentmeasurement.json')).json();
+    if(!m||typeof m.value==='undefined') return;
+    PEGEL={value:m.value,station:s0.shortname};
+    let txt=' · 🌊 '+s0.shortname.charAt(0)+s0.shortname.slice(1).toLowerCase()+': '+m.value+' cm';
+    /* Trend über 24 h */
+    try{
+      const hist=await (await fetch(base+'/'+s0.uuid+'/W/measurements.json?start=P1D')).json();
+      if(Array.isArray(hist)&&hist.length>1){
+        const d=Math.round(m.value-hist[0].value);
+        PEGEL.trend=d;
+        if(Math.abs(d)>=5) txt+=' ('+(d>0?'+':'')+d+' cm/24h)';
+        if(d>=25) txt+=' – steigt &amp; trübt: Räuber ans Ufer gedrückt!';
+      }
+    }catch(e){}
+    /* Wassertemperatur, wenn die Station sie liefert */
+    try{
+      const wt=await (await fetch(base+'/'+s0.uuid+'/WT/currentmeasurement.json')).json();
+      if(wt&&typeof wt.value!=='undefined'){
+        PEGEL.wt=wt.value;
+        if(WX) WX.wt=wt.value;
+        txt+=' · Wasser '+Math.round(wt.value)+'°C'+(wt.value>=25?' ⚠ Hitzestress – C&R vermeiden, Drill kurz halten!':'');
+      }
+    }catch(e){}
+    /* Regionsschwelle (z.B. Rhein: Buhnen ab ~400 cm überspült) */
+    if(REGION&&REGION.pegel&&m.value>=REGION.pegel.warnAb) txt+=' · ⚠ '+REGION.pegel.text;
+    el.innerHTML+=txt;
   }catch(e){}
 }
 
@@ -1138,11 +1184,17 @@ function kbHtml(){
   const seName={fruehjahr:'Frühjahr',sommer:'Sommer',herbst:'Herbst',winter:'Winter'}[se];
   const fische=fishSel?[fishSel==='Forelle'?'Forelle':fishSel].filter(f=>KB[f]):['Hecht','Zander','Barsch'];
   let h='<p style="color:var(--muted);margin-bottom:10px">Saison: <b>'+seName+'</b>'
-    +(WX?' · '+Math.round(WX.temp)+'°C · '+Math.round(WX.press)+' hPa':'')+'</p>';
+    +(WX?' · Luft '+Math.round(WX.temp)+'°C · '+Math.round(WX.press)+' hPa':'')
+    +(WX&&WX.wt!=null?' · Wasser '+Math.round(WX.wt)+'°C':'')+'</p>';
   fische.forEach(f=>{ if(KB[f]) h+='<p style="margin-bottom:9px"><b>'+f+':</b> '+KB[f][se]+'</p>'; });
   if(WX){
     if(WX.trendVal<=-1.5) h+='<p style="margin-bottom:9px"><b>Druck fällt ('+WX.trendVal.toFixed(1)+' hPa/3h):</b> Fresslaune – aktiver und schneller führen, jetzt ans Wasser!</p>';
     else if(WX.trendVal>=1.5) h+='<p style="margin-bottom:9px"><b>Druck steigt:</b> nach der Front oft zäh – Köder verkleinern, langsamer führen, Tiefe suchen.</p>';
+  }
+  if(WX&&WX.wt!=null){
+    if(WX.wt>=25) h+='<p style="margin-bottom:9px"><b>⚠ Wasser '+Math.round(WX.wt)+'°C:</b> Hitzestress – Entnahme statt C&amp;R, kurze Drills, tiefe/strömungsreiche Bereiche.</p>';
+    else if(WX.wt<10) h+='<p style="margin-bottom:9px"><b>Kaltes Wasser ('+Math.round(WX.wt)+'°C):</b> Stoffwechsel runter – alles halb so schnell führen, Pausen verdoppeln.</p>';
+    else if(WX.wt>=18&&WX.wt<23) h+='<p style="margin-bottom:9px"><b>Wasser '+Math.round(WX.wt)+'°C:</b> optimales Aktivitätsfenster für Zander &amp; Barsch.</p>';
   }
   h+='<p style="color:var(--muted)">Wasser trüb: Schockfarben (firetiger, chartreuse) und laute Köder · Wasser klar: Naturdekore, leiser, dünnere Vorfächer.</p>';
   return h;
@@ -1236,8 +1288,9 @@ function fbRender(){
   list.innerHTML='';
   [...fbMem].reverse().forEach(e=>{
     const d=document.createElement('div'); d.className='fb-entry';
+    const cx=e.ctx?[e.ctx.zeit,e.ctx.mond,e.ctx.druck?e.ctx.druck+' hPa'+(e.ctx.trend<=-1.5?'⇘':e.ctx.trend>=1.5?'⇗':''):null,e.ctx.wind,e.ctx.pegel?'Pegel '+e.ctx.pegel:null,e.ctx.wt!=null?'W '+e.ctx.wt+'°C':null].filter(Boolean).join(' · '):'';
     d.innerHTML=`<div class="info"><div class="fish">${esc(e.fisch)} ${e.laenge?'· '+esc(e.laenge)+' cm':''}</div>
-      <div class="sub">${esc(e.spot)} · ${esc(e.datum)}${e.koeder?' · '+esc(e.koeder):''}</div></div>
+      <div class="sub">${esc(e.spot)} · ${esc(e.datum)}${e.koeder?' · '+esc(e.koeder):''}${cx?'<br>'+esc(cx):''}</div></div>
       <button class="fb-del" aria-label="Eintrag löschen" data-id="${esc(e.id)}">✕</button>`;
     d.querySelector('.fb-del').onclick=async ev=>{
       await fbReady;
@@ -1247,19 +1300,59 @@ function fbRender(){
     list.appendChild(d);
   });
 }
+function checkFang(){
+  const el=document.getElementById('fbCheck');
+  if(!REGION){el.innerHTML='';return;}
+  const fisch=document.getElementById('fbFisch').value;
+  const len=parseInt(document.getElementById('fbLaenge').value,10);
+  const sc=SCHON.find(x=>x.fisch===fisch);
+  let msgs=[],bad=false;
+  if(sc){
+    if(inSchonzeit(sc)){bad=true;msgs.push('⛔ '+fisch+' ist aktuell geschont ('+fmtMD(sc.von)+'–'+fmtMD(sc.bis)+') – zurücksetzen!');}
+    const m=masseAus(sc.mm);
+    if(!isNaN(len)){
+      if(m.min&&len<m.min){bad=true;msgs.push('⛔ Untermaßig: '+len+' cm < '+m.min+' cm – zurücksetzen!');}
+      else if(m.max&&len>m.max){bad=true;msgs.push('⛔ Über dem Entnahmefenster: '+len+' cm > '+m.max+' cm – zurücksetzen!');}
+      else if(m.min){msgs.push('✓ Maß in Ordnung ('+(m.max?m.min+'–'+m.max:'ab '+m.min)+' cm).');}
+    }
+  }
+  const heute=new Date().toLocaleDateString('de-DE');
+  if(REGION.id==='mecklenburg'&&['Hecht','Zander','Aal','Karpfen'].includes(fisch)){
+    const n=fbMem.filter(e=>e.datum===heute&&['Hecht','Zander','Aal','Karpfen'].includes(e.fisch)).length;
+    if(n>=3){bad=true;msgs.push('⛔ Tageslimit erreicht: '+n+'/3 aus Hecht/Zander/Aal/Karpfen entnommen.');}
+    else msgs.push('Limit-Zähler heute: '+n+'/3 (Hecht/Zander/Aal/Karpfen gesamt).');
+  }
+  if(REGION.id==='erzgebirge'&&fisch==='Barsch'){
+    const n=fbMem.filter(e=>e.datum===heute&&e.fisch==='Barsch').length;
+    if(n>=10){bad=true;msgs.push('⛔ Barsch-Tageslimit erreicht ('+n+'/10).');}
+    else msgs.push('Barsch-Zähler heute: '+n+'/10.');
+  }
+  el.innerHTML=msgs.length?'<div class="fbcheck '+(bad?'bad':'ok')+'">'+msgs.map(esc).join('<br>')+'</div>':'';
+}
+document.getElementById('fbFisch').onchange=checkFang;
+document.getElementById('fbLaenge').oninput=checkFang;
+
 document.getElementById('fbSave').onclick=async ()=>{
   await fbReady; /* verhindert, dass fbLoad einen frischen Eintrag überschreibt */
   const fisch=document.getElementById('fbFisch').value;
   const laenge=document.getElementById('fbLaenge').value;
+  const jetzt=new Date();
   fbMem.push({
     id:Date.now(), fisch, laenge,
     spot:fbSpotSel.value,
     koeder:document.getElementById('fbKoeder').value.trim(),
-    datum:new Date().toLocaleDateString('de-DE')
+    datum:jetzt.toLocaleDateString('de-DE'),
+    ctx:{
+      zeit:hhmm(jetzt), mond:mondPhase(jetzt),
+      druck:WX?Math.round(WX.press):null, trend:WX?Math.round(WX.trendVal*10)/10:null,
+      wind:WX?Math.round(WX.wind)+' '+WX.dir:null,
+      pegel:PEGEL?PEGEL.value:null, wt:PEGEL&&PEGEL.wt!=null?Math.round(PEGEL.wt):null
+    }
   });
   document.getElementById('fbLaenge').value='';
   document.getElementById('fbKoeder').value='';
   await fbPersist();
+  checkFang();
 };
 function prefillFang(spotName){
   document.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-selected','false'));

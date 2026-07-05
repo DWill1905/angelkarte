@@ -1,11 +1,15 @@
 {
  "id": "mainz",
  "name": "Rhein & Rheinhessen (Mainz)",
+ "pegel": {
+  "warnAb": 400,
+  "text": "Buhnen überspült – auf Hafenausfahrten ausweichen!"
+ },
  "fusszeile": "Erlaubnis: <a href=\"https://lfv-rhl-rhh.de/fischerei-erlaubnisscheine/rhein/\" target=\"_blank\" rel=\"noopener\">LFV Rhl.-Rhh.</a> (links) · <a href=\"https://www.hejfish.com\" target=\"_blank\" rel=\"noopener\">hejfish</a> (Hessen-Seite)",
  "spots": [
   {
    "name": "Rhein Mainz – Stadtstrecke",
-   "nr": "LFV RLP linksrheinisch",
+   "nr": "LFV RLP · ~Strom-km 498–500",
    "cat": "raub",
    "arten": [
     "Zander",
@@ -26,12 +30,14 @@
    "hotspots": [
     {
      "name": "Theodor-Heuss-Brücke",
+     "saison": "ganzjährig, top Okt–Dez",
      "lat": 50.006,
      "lng": 8.2745,
      "tipp": "Der dokumentierte Zander-Klassiker der Stadt: um und hinter den Brückenpfeilern, beste Zeit Dämmerung und nachts. Viel Angeldruck – antizyklisch angeln (unter der Woche, sehr früh)."
     },
     {
      "name": "Rapfen-Spundwände",
+     "saison": "Mai–Sep, ab ~16 Uhr",
      "lat": 49.996,
      "lng": 8.283,
      "tipp": "Rapfen treiben Kleinfisch an den Spundwänden in die Ecke – Sommer ab ca. 16 Uhr Oberflächenrauben, flach laufender schlanker Wobbler oder Spöket."
@@ -61,7 +67,7 @@
   },
   {
    "name": "Industriehafen Mombach – Hafenausfahrt",
-   "nr": "nur Ausfahrtsbereich",
+   "nr": "~Strom-km 503 · nur Ausfahrt",
    "cat": "raub",
    "arten": [
     "Zander",
@@ -80,12 +86,14 @@
    "hotspots": [
     {
      "name": "Hinter dem Bauhaus",
+     "saison": "ganzjährig",
      "lat": 50.0305,
      "lng": 8.22,
      "tipp": "Zugänglicher Klassiker am erlaubten Ausfahrtsbereich – Ansitz und Raubfisch, entsprechend frequentiert."
     },
     {
      "name": "Auspitze Ingelheimer Aue",
+     "saison": "Okt–Mär + Hochwasser",
      "lat": 50.037,
      "lng": 8.234,
      "tipp": "Die Spitze der Insel an der Hafenausfahrt – Strömungskante trifft Stillwasser, klassischer Zanderzug. Lage ungefähr."
@@ -95,7 +103,7 @@
   },
   {
    "name": "Buhnen & Rampen Budenheim",
-   "nr": "LFV RLP",
+   "nr": "LFV RLP · ~Strom-km 506–508",
    "cat": "raub",
    "arten": [
     "Zander",
@@ -115,7 +123,8 @@
   },
   {
    "name": "Altrhein Heidenfahrt",
-   "nr": "LFV RLP – Teilsperrung",
+   "verif": "B",
+   "nr": "~Strom-km 511 · Teilsperrung",
    "cat": "fried",
    "arten": [
     "Zander",
@@ -137,7 +146,7 @@
   },
   {
    "name": "Hafen & Buhnen Oppenheim",
-   "nr": "LFV RLP",
+   "nr": "LFV RLP · ~Strom-km 480",
    "cat": "raub",
    "arten": [
     "Zander",
@@ -157,7 +166,7 @@
   },
   {
    "name": "Mainspitze & Maaraue",
-   "nr": "HESSEN-Schein!",
+   "nr": "Mainmündung km 496,6 · HESSEN!",
    "cat": "raub",
    "arten": [
     "Zander",
@@ -177,7 +186,7 @@
   },
   {
    "name": "Ginsheimer Altrhein & Mündung",
-   "nr": "HESSEN-Schein!",
+   "nr": "~km 487–493 · HESSEN!",
    "cat": "raub",
    "arten": [
     "Zander",
@@ -196,6 +205,7 @@
    "hotspots": [
     {
      "name": "Treburer Buhnenfeld (km 487–493)",
+     "saison": "Jun–Okt bei Normalpegel",
      "lat": 49.955,
      "lng": 8.325,
      "tipp": "6 km Buhnenfeld auf der Nonnenaue – Fahrrad mitnehmen und Kilometer machen, die hinteren Buhnen sehen kaum Angler. Lage ungefähr, hessischer Schein nötig."
@@ -207,6 +217,7 @@
    "name": "Eicher See",
    "nr": "Anglervereinigung Worms",
    "cat": "raub",
+   "schonzeitInfo": "Vereinsbestimmungen der AVW gelten zusätzlich zur FischGDV – Karte genau lesen.",
    "arten": [
     "Zander",
     "Hecht",
@@ -262,6 +273,7 @@
   },
   {
    "name": "Schiersteiner Hafen",
+   "verif": "B",
    "nr": "VERBOTEN",
    "cat": "sperr",
    "arten": [],
@@ -275,6 +287,7 @@
   },
   {
    "name": "NSG Mombacher Rheinufer",
+   "verif": "B",
    "nr": "VERBOTEN",
    "cat": "sperr",
    "arten": [],
@@ -381,7 +394,7 @@
     5,
     31
    ],
-   "text": "<b>Frühjahrsschonzeit:</b> Kunstköder (außer Fliege) verboten – Zander geschont bis 31.05."
+   "text": "<b>Frühjahrsschonzeit:</b> Kunstköder (außer Fliege) verboten – gewässerabhängig (§18 FischGDV), Erlaubnisschein prüfen. Zander geschont bis 31.05."
   }
  ],
  "regeln": [
