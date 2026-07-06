@@ -188,7 +188,7 @@
 
 <header>
   <div class="eyebrow">Revierwasserlaufanstalt · Osterzgebirge</div>
-  <h1>Angelrevier Großhartmannsdorf <span class="tilde">~</span></h1>
+  <h1 id="appTitle">Angelrevier <span class="tilde">~</span></h1>
   <div class="sun" id="sunline"></div>
   <div class="sun" id="wxline" aria-live="polite"></div>
   <select id="regionSel" aria-label="Region wählen" style="margin-top:6px;max-width:100%"></select>
@@ -676,7 +676,7 @@ const SCHON_RLP=[
 ];
 
 /* ============ Regionsdefinitionen (eingebetteter Fallback zur JSON-Datenbank) ============ */
-const REGION_RLP={id:'mainz',name:'Rhein & Rheinhessen (Mainz)',nachtangeln:'frei',
+const REGION_RLP={id:'mainz',name:'Rhein & Rheinhessen (Mainz)',nachtangeln:'frei',kurz:'Rhein & Rheinhessen',
   koederfisch:['Grundel ist am Rhein der dominante Beifang und ideal als toter Köderfisch – vor Ort fangen, gebietsfremd aber ohnehin schon überall.','Köderfischsenke vom Ufer laut rheinischem Erlaubnisschein erlaubt.','Lebender Köderfisch verboten (Tierschutzgesetz).','Zander/Wels stehen auf Grundelfetzen &amp; -filet – am Grund an der Strömungskante anbieten.'],
   schonQuelle:'Quelle: FischGDV RP (abgeglichen 07/2026; Hecht bis 31.05., Zander 15.03.–15.05.). Verein/Erlaubnisschein kann strenger sein.',
   pegel:{warnAb:400,text:'Buhnen überspült – auf Hafenausfahrten ausweichen!'},
@@ -695,7 +695,7 @@ const REGION_RLP={id:'mainz',name:'Rhein & Rheinhessen (Mainz)',nachtangeln:'fre
   ],
   hinweis:'Angaben ohne Gewähr, recherchiert 07/2026 (FischGDV RP, LFV RLP, Anglerforen). Maßgeblich: Erlaubnisschein mit Strom-km-Angaben und Beschilderung. Mindestmaße RLP vor Entnahme gegenprüfen.'};
 const REGIONS_EMBEDDED=[
- {id:'erzgebirge',name:'Erzgebirge / Freiberg (Sachsen)',nachtangeln:'lvsa',
+ {id:'erzgebirge',name:'Erzgebirge / Freiberg (Sachsen)',nachtangeln:'lvsa',kurz:'Erzgebirge',
   koederfisch:['Lebender Köderfisch ist in ganz Deutschland verboten (Tierschutzgesetz) – nur tote Köderfische verwenden.','Köderfische nur aus demselben Gewässer entnehmen (keine Verschleppung/Faunenverfälschung).','In Trinkwassertalsperren: Maden &amp; Fleisch als Köder verboten – Köderfisch dort tabu.','Fangbegrenzung Köderfische laut Erlaubnisschein beachten.'],
   schonQuelle:'Quelle: SächsFischVO 2022 + LVSA-Gewässerordnung (Verbandsregeln).',
   fusszeile:'Gastkarten: <a href="https://angeln-sachsen.de/avs/gastangler/gastkarten" target="_blank" rel="noopener">AVS Südsachsen</a>',
@@ -712,7 +712,7 @@ const REGIONS_EMBEDDED=[
   ],
   hinweis:'Angaben ohne Gewähr, nach SächsFischVO 2022 und LVSA-Gewässerordnung 2024. Maßgeblich: Erlaubnisschein, Gewässerverzeichnis, Beschilderung. Äsche vielerorts ganzjährig geschont – vor Ort prüfen. Gastkarten: angeln-sachsen.de'},
  REGION_RLP,
- {id:'mecklenburg',name:'Mecklenburgische Kleinseenplatte (MV)',nachtangeln:'frei',
+ {id:'mecklenburg',name:'Mecklenburgische Kleinseenplatte (MV)',nachtangeln:'frei',kurz:'Kleinseenplatte',
   koederfisch:['Lebender Köderfisch verboten (Tierschutzgesetz).','Köderfische nur aus dem befischten Gewässer (Seenverbund Obere Havel).','Barsch &amp; kleine Plötze sind top Hecht-/Zanderköder – als Fischfetzen oder ganzer toter Köfi am System.','Kein Anfüttern in Schongebieten/Nationalpark-Zonen.'],
   schonQuelle:'⚠ KARTENREGELN der Seenfischerei Obere Havel – teils strenger als MV-Landesrecht und NUR auf deren Gewässern gültig!',
   fusszeile:'Angelkarten: <a href="https://fischerei-wesenberg.de" target="_blank" rel="noopener">Seenfischerei Obere Havel</a> + Fischereiabgabe MV',
@@ -760,6 +760,7 @@ async function loadRegion(r){
   if(myToken!==loadToken) return; /* zwischenzeitlich weitergeschaltet */
   SPOTS=r.spots.concat(mine.map(mySpotObj));
   document.getElementById('footRegion').innerHTML=r.fusszeile||'';
+  document.getElementById('appTitle').innerHTML='Angelrevier '+(r.kurz||r.name)+' <span class="tilde">~</span>';
   buildMarkers(); buildChips(); buildBanner(); buildSchonUI(); buildRegeln(); buildFbOptions();
   if(typeof checkFang==='function') checkFang(); /* Maßcheck an neue Region anpassen */
   if(typeof sunLine==='function') sunLine();
@@ -861,7 +862,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
   maxZoom:18, attribution:'&copy; OpenStreetMap'
 }).addTo(map);
 L.control.scale({imperial:false}).addTo(map);
-map.setView([51.2,12.5],6); /* Startansicht bis Region geladen */
+map.setView([51.0,10.0],6); /* neutrale Startansicht (Deutschland), bis Region lädt */
 
 function pinIcon(cat){
   const c=CATS[cat].color;
@@ -1239,7 +1240,7 @@ const KB={
   sommer:'Morgens/abends groß &amp; flach über Kraut: Jerkbaits, Spinnerbaits, 16–20-cm-Gummis. Mittags an die tiefen Kanten wechseln.',
   herbst:'XXL-Zeit: 20 cm+ Gummis und Swimbaits, langsam an tiefen Kanten – jetzt beißen die Großen.',
   winter:'Sehr langsam und tief: großer Gummifisch am schweren Kopf, lange Absinkphasen und Pausen.'},
- Zander:{fruehjahr:'Direkt nach der Schonzeit (Sachsen ab 01.06., MV ab 16.06.): Kanten 3–6 m, Gummi 10–12 cm, Faulenzen.',
+ Zander:{fruehjahr:'Direkt nach Ende der Schonzeit (regional verschieden – siehe Schonzeit-Hinweis oben): Kanten 3–6 m, Gummi 10–12 cm, Faulenzen.',
   sommer:'Tagsüber tief an den Kanten jiggen (Gummi 10–12 cm), nachts flach ans Ufer – flach laufender Wobbler.',
   herbst:'Fressphase: größere Gummis 12–15 cm, härtere Jigs an den tiefsten Kanten, auch tagsüber Chancen.',
   winter:'Zentimeterarbeit am Grund: kleiner Gummi 8–10 cm, minimale Sprünge, sehr lange Pausen.'},
