@@ -1,6 +1,7 @@
 {
  "id": "mecklenburg",
  "name": "Mecklenburgische Kleinseenplatte (MV)",
+ "schonQuelle": "⚠ KARTENREGELN der Seenfischerei Obere Havel – teils strenger als MV-Landesrecht und NUR auf deren Gewässern gültig!",
  "fusszeile": "Angelkarten: <a href=\"https://fischerei-wesenberg.de\" target=\"_blank\" rel=\"noopener\">Seenfischerei Obere Havel</a> + Fischereiabgabe MV",
  "spots": [
   {
@@ -239,7 +240,7 @@
    "fisch": "Aal",
    "von": null,
    "bis": null,
-   "mm": "50 cm"
+   "mm": "50 cm (EU-Aalschutz: Änderungen möglich)"
   },
   {
    "fisch": "Schleie",

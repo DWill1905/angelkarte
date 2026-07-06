@@ -1,6 +1,7 @@
 {
  "id": "erzgebirge",
  "name": "Erzgebirge / Freiberg (Sachsen)",
+ "schonQuelle": "Quelle: SächsFischVO 2022 + LVSA-Gewässerordnung (Verbandsregeln).",
  "fusszeile": "Gastkarten: <a href=\"https://angeln-sachsen.de/avs/gastangler/gastkarten\" target=\"_blank\" rel=\"noopener\">AVS Südsachsen</a>",
  "spots": [
   {

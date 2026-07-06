@@ -538,7 +538,7 @@ const SCHON_MV=[
   {fisch:'Zander',von:[3,15],bis:[6,15],mm:'Entnahmefenster 55–75 cm'},
   {fisch:'Barsch',von:null,bis:null,mm:'Entnahmefenster 25–40 cm'},
   {fisch:'Karpfen',von:null,bis:null,mm:'50 cm'},
-  {fisch:'Aal',von:null,bis:null,mm:'50 cm'},
+  {fisch:'Aal',von:null,bis:null,mm:'50 cm (EU-Aalschutz: Änderungen möglich)'},
   {fisch:'Schleie',von:null,bis:null,mm:'25 cm'},
   {fisch:'Wels',von:null,bis:null,mm:'90 cm'}
 ];
@@ -651,24 +651,28 @@ const SPOTS_RLP=[
    note:'Liegt zwischen Stadtstrecke und Industriehafen, inkl. der Buhnen und Strände dahinter. Strom-km im Erlaubnisschein beachten. Lage ungefähr.',warn:true}
 ];
 const SCHON_RLP=[
-  {fisch:'Hecht',von:[2,1],bis:[4,15],mm:'50 cm'},
-  {fisch:'Zander',von:[4,1],bis:[5,31],mm:'45 cm'},
+  {fisch:'Hecht',von:[2,1],bis:[5,31],mm:'50 cm'},
+  {fisch:'Zander',von:[3,15],bis:[5,15],mm:'45 cm'},
   {fisch:'Barsch',von:null,bis:null,mm:'– (kein gesetzl. Maß)'},
-  {fisch:'Aal',von:null,bis:null,mm:'50 cm'},
+  {fisch:'Aal',von:null,bis:null,mm:'50 cm (EU-Aalschutz: Änderungen möglich)'},
   {fisch:'Barbe',von:[5,1],bis:[6,15],mm:'35 cm'},
+  {fisch:'Karpfen',von:null,bis:null,mm:'35 cm'},
+  {fisch:'Schleie',von:null,bis:null,mm:'25 cm'},
   {fisch:'Wels',von:null,bis:null,mm:'–'},
-  {fisch:'Rapfen',von:null,bis:null,mm:'– (regional prüfen)'}
+  {fisch:'Rapfen',von:null,bis:null,mm:'– (RLP: keine Schonzeit/kein Maß, Vereinsregeln prüfen)'}
 ];
 
 /* ============ Regionsdefinitionen (eingebetteter Fallback zur JSON-Datenbank) ============ */
 const REGION_RLP={id:'mainz',name:'Rhein & Rheinhessen (Mainz)',
+  schonQuelle:'Quelle: FischGDV RP (abgeglichen 07/2026; Hecht bis 31.05., Zander 15.03.–15.05.). Verein/Erlaubnisschein kann strenger sein.',
   pegel:{warnAb:400,text:'Buhnen überspült – auf Hafenausfahrten ausweichen!'},
   fusszeile:'Erlaubnis: <a href="https://lfv-rhl-rhh.de/fischerei-erlaubnisscheine/rhein/" target="_blank" rel="noopener">LFV Rhl.-Rhh.</a> (links) · <a href="https://www.hejfish.com" target="_blank" rel="noopener">hejfish</a> (Hessen-Seite)',
   spots:SPOTS_RLP,schon:SCHON_RLP,
   banner:[
-    {von:[2,1],bis:[3,31],text:'<b>Hecht geschont</b> (01.02.–15.04.).'},
-    {von:[4,1],bis:[4,14],text:'<b>Hecht &amp; Zander geschont</b> – Hecht bis 15.04., Zander bis 31.05.'},
-    {von:[4,15],bis:[5,31],text:'<b>Frühjahrsschonzeit:</b> Kunstköder (außer Fliege) verboten – gewässerabhängig (§18 FischGDV), Erlaubnisschein prüfen. Zander geschont bis 31.05.'}
+    {von:[2,1],bis:[3,14],text:'<b>Hecht geschont</b> (01.02.–31.05.).'},
+    {von:[3,15],bis:[4,14],text:'<b>Hecht &amp; Zander geschont</b> – Zander bis 15.05., Hecht bis 31.05.'},
+    {von:[4,15],bis:[5,15],text:'<b>Frühjahrsschonzeit:</b> Kunstköderverbot (außer Fliege, §18-Gewässer) – Hecht &amp; Zander geschont.'},
+    {von:[5,16],bis:[5,31],text:'<b>Bis 31.05.:</b> Hecht geschont, Kunstköderverbot (§18-Gewässer). Zander offen – nur Naturköder/Fliege.'}
   ],
   regeln:[
     {titel:'Erlaubnisscheine am Rhein',punkte:['Linksrheinisch (Mainzer Ufer): rheinischer Erlaubnisschein ~31 €/Jahr – online-Infos &amp; Ausgabestellen: <a href="https://lfv-rhl-rhh.de/fischerei-erlaubnisscheine/rhein/" target="_blank" rel="noopener">lfv-rhl-rhh.de</a>, klassisch im Angelladen (z.B. Bode Heidesheim)','Ufer und handgerudertes Boot erlaubt (Bootsplakette sichtbar anbringen), Köderfischsenke vom Ufer zulässig','Rechtsrheinische Seite, Mainspitze &amp; Ginsheim: hessischer Rheinschein – seit 2025 nur noch online über <a href="https://www.hejfish.com" target="_blank" rel="noopener">hejfish.com</a> (HLG)','Main km 0–2,89: Erlaubnis nur mit Vereinsmitgliedschaft im hessischen Verband']},
@@ -678,6 +682,7 @@ const REGION_RLP={id:'mainz',name:'Rhein & Rheinhessen (Mainz)',
   hinweis:'Angaben ohne Gewähr, recherchiert 07/2026 (FischGDV RP, LFV RLP, Anglerforen). Maßgeblich: Erlaubnisschein mit Strom-km-Angaben und Beschilderung. Mindestmaße RLP vor Entnahme gegenprüfen.'};
 const REGIONS_EMBEDDED=[
  {id:'erzgebirge',name:'Erzgebirge / Freiberg (Sachsen)',
+  schonQuelle:'Quelle: SächsFischVO 2022 + LVSA-Gewässerordnung (Verbandsregeln).',
   fusszeile:'Gastkarten: <a href="https://angeln-sachsen.de/avs/gastangler/gastkarten" target="_blank" rel="noopener">AVS Südsachsen</a>',
   spots:SPOTS_SN,schon:SCHON_SN,
   banner:[
@@ -693,6 +698,7 @@ const REGIONS_EMBEDDED=[
   hinweis:'Angaben ohne Gewähr, nach SächsFischVO 2022 und LVSA-Gewässerordnung 2024. Maßgeblich: Erlaubnisschein, Gewässerverzeichnis, Beschilderung. Äsche vielerorts ganzjährig geschont – vor Ort prüfen. Gastkarten: angeln-sachsen.de'},
  REGION_RLP,
  {id:'mecklenburg',name:'Mecklenburgische Kleinseenplatte (MV)',
+  schonQuelle:'⚠ KARTENREGELN der Seenfischerei Obere Havel – teils strenger als MV-Landesrecht und NUR auf deren Gewässern gültig!',
   fusszeile:'Angelkarten: <a href="https://fischerei-wesenberg.de" target="_blank" rel="noopener">Seenfischerei Obere Havel</a> + Fischereiabgabe MV',
   spots:SPOTS_MV,schon:SCHON_MV,
   banner:[
@@ -1243,6 +1249,8 @@ function buildSchonUI(){
       `<div class="rule-row"><div><div class="rule-fish">${s.fisch}</div>
        <div class="rule-mm">Maß: ${s.mm}</div></div>${badge}</div>`);
   });
+  if(REGION.schonQuelle)
+    schonEl.insertAdjacentHTML('beforeend','<p class="fineprint" style="margin-top:10px">'+REGION.schonQuelle+'</p>');
 }
 function buildRegeln(){
   const el=document.getElementById('regionRegeln');

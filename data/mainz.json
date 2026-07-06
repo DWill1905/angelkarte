@@ -1,6 +1,7 @@
 {
  "id": "mainz",
  "name": "Rhein & Rheinhessen (Mainz)",
+ "schonQuelle": "Quelle: FischGDV RP (abgeglichen 07/2026; Hecht bis 31.05., Zander 15.03.–15.05.). Verein/Erlaubnisschein kann strenger sein.",
  "pegel": {
   "warnAb": 400,
   "text": "Buhnen überspült – auf Hafenausfahrten ausweichen!"
@@ -308,20 +309,20 @@
     1
    ],
    "bis": [
-    4,
-    15
+    5,
+    31
    ],
    "mm": "50 cm"
   },
   {
    "fisch": "Zander",
    "von": [
-    4,
-    1
+    3,
+    15
    ],
    "bis": [
     5,
-    31
+    15
    ],
    "mm": "45 cm"
   },
@@ -335,7 +336,7 @@
    "fisch": "Aal",
    "von": null,
    "bis": null,
-   "mm": "50 cm"
+   "mm": "50 cm (EU-Aalschutz: Änderungen möglich)"
   },
   {
    "fisch": "Barbe",
@@ -350,6 +351,18 @@
    "mm": "35 cm"
   },
   {
+   "fisch": "Karpfen",
+   "von": null,
+   "bis": null,
+   "mm": "35 cm"
+  },
+  {
+   "fisch": "Schleie",
+   "von": null,
+   "bis": null,
+   "mm": "25 cm"
+  },
+  {
    "fisch": "Wels",
    "von": null,
    "bis": null,
@@ -359,7 +372,7 @@
    "fisch": "Rapfen",
    "von": null,
    "bis": null,
-   "mm": "– (regional prüfen)"
+   "mm": "– (RLP: keine Schonzeit/kein Maß, Vereinsregeln prüfen)"
   }
  ],
  "banner": [
@@ -370,20 +383,20 @@
    ],
    "bis": [
     3,
-    31
+    14
    ],
-   "text": "<b>Hecht geschont</b> (01.02.–15.04.)."
+   "text": "<b>Hecht geschont</b> (01.02.–31.05.)."
   },
   {
    "von": [
-    4,
-    1
+    3,
+    15
    ],
    "bis": [
     4,
     14
    ],
-   "text": "<b>Hecht &amp; Zander geschont</b> – Hecht bis 15.04., Zander bis 31.05."
+   "text": "<b>Hecht &amp; Zander geschont</b> – Zander bis 15.05., Hecht bis 31.05."
   },
   {
    "von": [
@@ -392,9 +405,20 @@
    ],
    "bis": [
     5,
+    15
+   ],
+   "text": "<b>Frühjahrsschonzeit:</b> Kunstköderverbot (außer Fliege, §18-Gewässer) – Hecht &amp; Zander geschont."
+  },
+  {
+   "von": [
+    5,
+    16
+   ],
+   "bis": [
+    5,
     31
    ],
-   "text": "<b>Frühjahrsschonzeit:</b> Kunstköder (außer Fliege) verboten – gewässerabhängig (§18 FischGDV), Erlaubnisschein prüfen. Zander geschont bis 31.05."
+   "text": "<b>Bis 31.05.:</b> Hecht geschont, Kunstköderverbot (§18-Gewässer). Zander offen – nur Naturköder/Fliege."
   }
  ],
  "regeln": [
