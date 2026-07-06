@@ -258,6 +258,28 @@
   </div>
 </div>
 
+<div class="mydlg-wrap" id="toolsDlg" hidden>
+  <div class="mydlg">
+    <h3>🧰 Werkzeuge</h3>
+    <div class="mydlg-btns" style="flex-direction:column;gap:8px">
+      <button class="fbtool" id="tCol">🎯 Köderberater</button>
+      <button class="fbtool" id="tBite">🎣 Beißzeiten heute</button>
+      <button class="fbtool" id="tPack">🎒 Packliste</button>
+      <button class="fbtool" id="tKnot">🪢 Knoten</button>
+      <button class="fbtool" id="tLead">⚖️ Bleigewicht-Berater</button>
+    </div>
+    <div class="mydlg-btns"><button id="toolsClose">Schließen</button></div>
+  </div>
+</div>
+
+<div class="mydlg-wrap" id="leadDlg" hidden>
+  <div class="mydlg">
+    <h3>⚖️ Bleigewicht-Berater</h3>
+    <div id="leadBody" style="font-size:12.5px;line-height:1.6;max-height:60dvh;overflow-y:auto"></div>
+    <div class="mydlg-btns"><button id="leadClose">Schließen</button></div>
+  </div>
+</div>
+
 <div class="mydlg-wrap" id="knotDlg" hidden>
   <div class="mydlg">
     <h3>🪢 Knoten-Kurzreferenz</h3>
@@ -1063,22 +1085,10 @@ const allChip=fishChip('Alle',null); allChip.classList.add('on');
 allChip.onclick=()=>{ fishSel=null; syncFishChips(); applyFilters(); };
 fishEl.appendChild(allChip);
 FISH.forEach(f=>fishEl.appendChild(fishChip(f.id,f.id)));
-const kbBtn=document.createElement('button');
-kbBtn.className='chip'; kbBtn.id='kbBtn'; kbBtn.textContent='🎯 Köderberater';
-kbBtn.onclick=openKb;
-fishEl.appendChild(kbBtn);
-const biteBtn=document.createElement('button');
-biteBtn.className='chip'; biteBtn.id='biteBtn'; biteBtn.textContent='🎣 Beißzeiten heute';
-biteBtn.onclick=openBite;
-fishEl.appendChild(biteBtn);
-const packBtn=document.createElement('button');
-packBtn.className='chip'; packBtn.id='packBtn'; packBtn.textContent='🎒 Packliste';
-packBtn.onclick=openPack;
-fishEl.appendChild(packBtn);
-const knotBtn=document.createElement('button');
-knotBtn.className='chip'; knotBtn.id='knotBtn'; knotBtn.textContent='🪢 Knoten';
-knotBtn.onclick=openKnot;
-fishEl.appendChild(knotBtn);
+const toolsBtn=document.createElement('button');
+toolsBtn.className='chip'; toolsBtn.id='toolsBtn'; toolsBtn.textContent='🧰 Werkzeuge';
+toolsBtn.onclick=openTools;
+fishEl.appendChild(toolsBtn);
 
 /* Standort */
 let userPos=null, userMarker=null;
@@ -1422,6 +1432,45 @@ const KNOTS=[
     'Ende zurück durch die Schlaufe führen (gleiche Seite wie Eintritt)',
     'Beide Hauptschnüre halten, anfeuchten, Wicklungen straffziehen']}
 ];
+const toolsDlg=document.getElementById('toolsDlg');
+function openTools(){ toolsDlg.hidden=false; }
+document.getElementById('toolsClose').onclick=()=>{toolsDlg.hidden=true;};
+toolsDlg.addEventListener('click',e=>{if(e.target===toolsDlg)toolsDlg.hidden=true;});
+document.getElementById('tCol').onclick=()=>{toolsDlg.hidden=true;openKb();};
+document.getElementById('tBite').onclick=()=>{toolsDlg.hidden=true;openBite();};
+document.getElementById('tPack').onclick=()=>{toolsDlg.hidden=true;openPack();};
+document.getElementById('tKnot').onclick=()=>{toolsDlg.hidden=true;openKnot();};
+document.getElementById('tLead').onclick=()=>{toolsDlg.hidden=true;openLead();};
+
+/* Bleigewicht-Berater: Strömung (Pegeltrend + Gewässertyp) + Tiefe */
+const leadDlg=document.getElementById('leadDlg');
+function openLead(){
+  const stroemung=REGION&&/rhein|mainz/i.test(REGION.id); /* Fließgewässer? */
+  let h='<p style="color:var(--muted);margin-bottom:10px">Für '+(REGION?esc(REGION.kurz||REGION.name):'—')+'</p>';
+  if(stroemung){
+    const hoch=PEGEL&&REGION.pegel&&PEGEL.value>=REGION.pegel.warnAb;
+    const steigend=PEGEL&&PEGEL.trend>=15;
+    h+='<div class="card"><h3 style="font-size:13px">Rhein / Fließgewässer</h3><ul style="margin-left:16px">'
+      +'<li><b>Normalpegel, Buhnenfeld:</b> Jigkopf 10–21 g – so leicht wie möglich, dass es noch tickt</li>'
+      +'<li><b>Hauptstrom / tiefe Rinne:</b> 21–40 g, damit der Köder Grundkontakt hält</li>'
+      +(hoch?'<li style="color:#f0b6a8"><b>⚠ Hochwasser aktuell ('+PEGEL.value+' cm):</b> 40–60 g nötig oder auf Hafenausfahrt ausweichen</li>':'')
+      +(steigend?'<li style="color:#e8c98c"><b>Pegel steigt stark:</b> Strömung nimmt zu – 10 g mehr einplanen als sonst</li>':'')
+      +'<li><b>Faustregel:</b> leichtester Kopf, mit dem du in 5–8 s Grundkontakt bekommst</li></ul></div>';
+  } else {
+    h+='<div class="card"><h3 style="font-size:13px">Stillgewässer / See</h3><ul style="margin-left:16px">'
+      +'<li><b>Flachwasser 0–3 m:</b> 3–7 g, langsames Absinken für misstrauische Fische</li>'
+      +'<li><b>Mittlere Tiefe 3–6 m:</b> 7–14 g</li>'
+      +'<li><b>Tiefe Kanten / >6 m (z.B. Woblitz-Kuhle, Eicher See):</b> 14–21 g für schnellen, kontrollierten Abstieg</li>'
+      +'<li><b>Wind/Drift vom Boot:</b> 3–5 g schwerer, sonst verliert man den Grundkontakt</li>'
+      +'<li><b>Vertikal vom Boot:</b> so schwer, dass die Schnur senkrecht bleibt</li></ul></div>';
+  }
+  h+='<p style="color:var(--muted);font-size:11px">Grundkontakt ist König: Der Köder soll den Boden touchieren, aber nicht durchpflügen. Lieber 3 g zu leicht als 10 g zu schwer.</p>';
+  document.getElementById('leadBody').innerHTML=h;
+  leadDlg.hidden=false;
+}
+document.getElementById('leadClose').onclick=()=>{leadDlg.hidden=true;};
+leadDlg.addEventListener('click',e=>{if(e.target===leadDlg)leadDlg.hidden=true;});
+
 const knotDlg=document.getElementById('knotDlg');
 function openKnot(){
   let h='';
