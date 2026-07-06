@@ -1277,6 +1277,15 @@ function buildRegeln(){
 /* ============ Fangbuch ============ */
 const fbSpotSel=document.getElementById('fbSpot');
 function buildFbOptions(){
+  /* Fischauswahl an Region anpassen: Schonzeit-Arten + generische Zusätze */
+  const fischSel=document.getElementById('fbFisch');
+  if(fischSel){
+    const prev=fischSel.value;
+    const arten=[...new Set(SCHON.map(x=>x.fisch))];
+    ['Regenbogenforelle','Döbel','Rotauge','Brachse','Sonstige'].forEach(a=>{if(!arten.includes(a))arten.push(a);});
+    fischSel.innerHTML=arten.map(a=>'<option>'+a+'</option>').join('');
+    if(arten.includes(prev)) fischSel.value=prev;
+  }
   fbSpotSel.innerHTML='';
   SPOTS.filter(s=>s.cat!=='sperr'&&s.cat!=='info').forEach(s=>{
     const o=document.createElement('option'); o.textContent=s.name; fbSpotSel.appendChild(o);
@@ -1327,6 +1336,9 @@ function checkFang(){
   const len=parseInt(document.getElementById('fbLaenge').value,10);
   const sc=SCHON.find(x=>x.fisch===fisch);
   let msgs=[],bad=false;
+  if(!sc){
+    msgs.push('ℹ Für „'+fisch+'“ liegen in dieser Region keine Schonzeit-/Maßdaten vor – bitte Erlaubnisschein prüfen. KEINE Freigabe!');
+  }
   if(sc){
     if(inSchonzeit(sc)){bad=true;msgs.push('⛔ '+fisch+' ist aktuell geschont ('+fmtMD(sc.von)+'–'+fmtMD(sc.bis)+') – zurücksetzen!');}
     const m=masseAus(sc.mm);
