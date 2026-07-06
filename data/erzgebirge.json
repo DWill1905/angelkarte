@@ -3,6 +3,14 @@
  "name": "Erzgebirge / Freiberg (Sachsen)",
  "nachtangeln": "lvsa",
  "kurz": "Erzgebirge",
+ "packliste": [
+  "Erlaubnisschein + Personalausweis",
+  "Fangbuch (vor Angelbeginn ausfüllen!)",
+  "Maßband &amp; Hakenlöser",
+  "TWT: KEINE Maden/Fleisch – nur erlaubte Köder",
+  "Salmo-Strecke: Wathose + Einzelhaken + Sprengringzange",
+  "Kescher, Kopflampe (Nachtangeln 1h nach SU)"
+ ],
  "koederfisch": [
   "Lebender Köderfisch ist in ganz Deutschland verboten (Tierschutzgesetz) – nur tote Köderfische verwenden.",
   "Köderfische nur aus demselben Gewässer entnehmen (keine Verschleppung/Faunenverfälschung).",

@@ -258,6 +258,14 @@
   </div>
 </div>
 
+<div class="mydlg-wrap" id="packDlg" hidden>
+  <div class="mydlg">
+    <h3>🎒 Packliste</h3>
+    <div id="packBody" style="font-size:13px;line-height:1.7;max-height:60dvh;overflow-y:auto"></div>
+    <div class="mydlg-btns"><button id="packReset" class="ghost">Alle abhaken zurücksetzen</button><button id="packClose">Schließen</button></div>
+  </div>
+</div>
+
 <div class="mydlg-wrap" id="biteDlg" hidden>
   <div class="mydlg">
     <h3>🎣 Beißzeiten heute</h3>
@@ -685,7 +693,7 @@ const SCHON_RLP=[
 ];
 
 /* ============ Regionsdefinitionen (eingebetteter Fallback zur JSON-Datenbank) ============ */
-const REGION_RLP={id:'mainz',name:'Rhein & Rheinhessen (Mainz)',nachtangeln:'frei',kurz:'Rhein & Rheinhessen',
+const REGION_RLP={id:'mainz',name:'Rhein & Rheinhessen (Mainz)',nachtangeln:'frei',kurz:'Rhein & Rheinhessen',packliste:['Rheinischer Erlaubnisschein (Strom-km prüfen!)','Schwere Jigrute 30–60 g + Bleikopf-Vorrat (Steinpackung!)','Grundel-Dekore, Stahl-/FC-Vorfach','Wathose/Gummistiefel für Buhnen','Pegel checken – bei >400 cm Buhnen weg','Stirnlampe, Kescher, Abhakmatte'],
   koederfisch:['Grundel ist am Rhein der dominante Beifang und ideal als toter Köderfisch – vor Ort fangen, gebietsfremd aber ohnehin schon überall.','Köderfischsenke vom Ufer laut rheinischem Erlaubnisschein erlaubt.','Lebender Köderfisch verboten (Tierschutzgesetz).','Zander/Wels stehen auf Grundelfetzen &amp; -filet – am Grund an der Strömungskante anbieten.'],
   schonQuelle:'Quelle: FischGDV RP (abgeglichen 07/2026; Hecht bis 31.05., Zander 15.03.–15.05.). Verein/Erlaubnisschein kann strenger sein.',
   pegel:{warnAb:400,text:'Buhnen überspült – auf Hafenausfahrten ausweichen!'},
@@ -704,7 +712,7 @@ const REGION_RLP={id:'mainz',name:'Rhein & Rheinhessen (Mainz)',nachtangeln:'fre
   ],
   hinweis:'Angaben ohne Gewähr, recherchiert 07/2026 (FischGDV RP, LFV RLP, Anglerforen). Maßgeblich: Erlaubnisschein mit Strom-km-Angaben und Beschilderung. Mindestmaße RLP vor Entnahme gegenprüfen.'};
 const REGIONS_EMBEDDED=[
- {id:'erzgebirge',name:'Erzgebirge / Freiberg (Sachsen)',nachtangeln:'lvsa',kurz:'Erzgebirge',
+ {id:'erzgebirge',name:'Erzgebirge / Freiberg (Sachsen)',nachtangeln:'lvsa',kurz:'Erzgebirge',packliste:['Erlaubnisschein + Personalausweis','Fangbuch (vor Angelbeginn ausfüllen!)','Maßband &amp; Hakenlöser','TWT: KEINE Maden/Fleisch – nur erlaubte Köder','Salmo-Strecke: Wathose + Einzelhaken + Sprengringzange','Kescher, Kopflampe (Nachtangeln 1h nach SU)'],
   koederfisch:['Lebender Köderfisch ist in ganz Deutschland verboten (Tierschutzgesetz) – nur tote Köderfische verwenden.','Köderfische nur aus demselben Gewässer entnehmen (keine Verschleppung/Faunenverfälschung).','In Trinkwassertalsperren: Maden &amp; Fleisch als Köder verboten – Köderfisch dort tabu.','Fangbegrenzung Köderfische laut Erlaubnisschein beachten.'],
   schonQuelle:'Quelle: SächsFischVO 2022 + LVSA-Gewässerordnung (Verbandsregeln).',
   fusszeile:'Gastkarten: <a href="https://angeln-sachsen.de/avs/gastangler/gastkarten" target="_blank" rel="noopener">AVS Südsachsen</a>',
@@ -721,7 +729,7 @@ const REGIONS_EMBEDDED=[
   ],
   hinweis:'Angaben ohne Gewähr, nach SächsFischVO 2022 und LVSA-Gewässerordnung 2024. Maßgeblich: Erlaubnisschein, Gewässerverzeichnis, Beschilderung. Äsche vielerorts ganzjährig geschont – vor Ort prüfen. Gastkarten: angeln-sachsen.de'},
  REGION_RLP,
- {id:'mecklenburg',name:'Mecklenburgische Kleinseenplatte (MV)',nachtangeln:'frei',kurz:'Kleinseenplatte',
+ {id:'mecklenburg',name:'Mecklenburgische Kleinseenplatte (MV)',nachtangeln:'frei',kurz:'Kleinseenplatte',packliste:['Fischereischein + Fischereiabgabe MV (10€) + ggf. Touristenschein','Boot/Anker – Schleppen verboten, Ufer meist Schilf!','Echolot (Scharkanten weit draußen)','Stahl-/Titanvorfach (hohe Hechtdichte)','Mückenschutz (Wald überflutet)','Kescher, Kopflampe, Regenjacke'],
   koederfisch:['Lebender Köderfisch verboten (Tierschutzgesetz).','Köderfische nur aus dem befischten Gewässer (Seenverbund Obere Havel).','Barsch &amp; kleine Plötze sind top Hecht-/Zanderköder – als Fischfetzen oder ganzer toter Köfi am System.','Kein Anfüttern in Schongebieten/Nationalpark-Zonen.'],
   schonQuelle:'⚠ KARTENREGELN der Seenfischerei Obere Havel – teils strenger als MV-Landesrecht und NUR auf deren Gewässern gültig!',
   fusszeile:'Angelkarten: <a href="https://fischerei-wesenberg.de" target="_blank" rel="noopener">Seenfischerei Obere Havel</a> + Fischereiabgabe MV',
@@ -1055,6 +1063,10 @@ const biteBtn=document.createElement('button');
 biteBtn.className='chip'; biteBtn.id='biteBtn'; biteBtn.textContent='🎣 Beißzeiten heute';
 biteBtn.onclick=openBite;
 fishEl.appendChild(biteBtn);
+const packBtn=document.createElement('button');
+packBtn.className='chip'; packBtn.id='packBtn'; packBtn.textContent='🎒 Packliste';
+packBtn.onclick=openPack;
+fishEl.appendChild(packBtn);
 
 /* Standort */
 let userPos=null, userMarker=null;
@@ -1371,6 +1383,29 @@ function kbHtml(){
   h+='<p style="color:var(--muted)">Wasser trüb: Schockfarben (firetiger, chartreuse) und laute Köder · Wasser klar: Naturdekore, leiser, dünnere Vorfächer.</p>';
   return h;
 }
+const packDlg=document.getElementById('packDlg');
+async function packState(){ try{return JSON.parse((await store.get('pack:'+REGION.id)).value)||{};}catch(e){return {};} }
+async function openPack(){
+  if(!REGION){return;}
+  const items=REGION.packliste||[];
+  const checked=await packState();
+  let h='<p style="color:var(--muted);margin-bottom:10px">Für '+esc(REGION.kurz||REGION.name)+' – Haken bleiben gespeichert.</p>';
+  items.forEach((it,i)=>{
+    h+='<label class="fbentn" style="margin:5px 0"><input type="checkbox" data-pi="'+i+'"'+(checked[i]?' checked':'')+'> <span>'+it+'</span></label>';
+  });
+  document.getElementById('packBody').innerHTML=h;
+  document.getElementById('packBody').querySelectorAll('input[data-pi]').forEach(cb=>{
+    cb.onchange=async()=>{
+      const st=await packState(); st[cb.dataset.pi]=cb.checked;
+      try{await store.set('pack:'+REGION.id,JSON.stringify(st));}catch(e){}
+    };
+  });
+  packDlg.hidden=false;
+}
+document.getElementById('packClose').onclick=()=>{packDlg.hidden=true;};
+document.getElementById('packReset').onclick=async()=>{ try{await store.set('pack:'+REGION.id,'{}');}catch(e){} openPack(); };
+packDlg.addEventListener('click',e=>{if(e.target===packDlg)packDlg.hidden=true;});
+
 const biteDlg=document.getElementById('biteDlg');
 function openBite(){
   const c=regionCenter(), now=new Date();
