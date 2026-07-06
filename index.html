@@ -188,6 +188,7 @@
   <select id="regionSel" aria-label="Region wählen" style="margin-top:6px;max-width:100%"></select>
 </header>
 
+<div class="banner" id="swUpdate" style="background:#243a3f"></div>
 <div class="banner" id="banner"></div>
 
 <div class="tabs" role="tablist">
@@ -1433,9 +1434,9 @@ if('serviceWorker' in navigator&&location.protocol==='https:'){
       const nw=reg.installing;
       nw&&nw.addEventListener('statechange',()=>{
         if(nw.state==='installed'&&navigator.serviceWorker.controller){
-          const b=document.getElementById('banner');
-          b.innerHTML='🔄 Neue Version verfügbar – <button id="swReload" style="background:none;border:0;color:inherit;text-decoration:underline;cursor:pointer;font:inherit;padding:0">jetzt aktualisieren</button>';
-          b.classList.add('show');
+          const u=document.getElementById('swUpdate');
+          u.innerHTML='🔄 Neue Version verfügbar – <button id="swReload" style="background:none;border:0;color:inherit;text-decoration:underline;cursor:pointer;font:inherit;padding:0">jetzt aktualisieren</button>';
+          u.classList.add('show');
           document.getElementById('swReload').onclick=()=>location.reload();
         }
       });
