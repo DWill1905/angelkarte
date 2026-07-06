@@ -1,6 +1,7 @@
 {
  "id": "mainz",
  "name": "Rhein & Rheinhessen (Mainz)",
+ "nachtangeln": "frei",
  "schonQuelle": "Quelle: FischGDV RP (abgeglichen 07/2026; Hecht bis 31.05., Zander 15.03.–15.05.). Verein/Erlaubnisschein kann strenger sein.",
  "pegel": {
   "warnAb": 400,

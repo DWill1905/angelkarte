@@ -1,6 +1,7 @@
 {
  "id": "mecklenburg",
  "name": "Mecklenburgische Kleinseenplatte (MV)",
+ "nachtangeln": "frei",
  "schonQuelle": "⚠ KARTENREGELN der Seenfischerei Obere Havel – teils strenger als MV-Landesrecht und NUR auf deren Gewässern gültig!",
  "fusszeile": "Angelkarten: <a href=\"https://fischerei-wesenberg.de\" target=\"_blank\" rel=\"noopener\">Seenfischerei Obere Havel</a> + Fischereiabgabe MV",
  "spots": [

@@ -676,7 +676,7 @@ const SCHON_RLP=[
 ];
 
 /* ============ Regionsdefinitionen (eingebetteter Fallback zur JSON-Datenbank) ============ */
-const REGION_RLP={id:'mainz',name:'Rhein & Rheinhessen (Mainz)',
+const REGION_RLP={id:'mainz',name:'Rhein & Rheinhessen (Mainz)',nachtangeln:'frei',
   schonQuelle:'Quelle: FischGDV RP (abgeglichen 07/2026; Hecht bis 31.05., Zander 15.03.–15.05.). Verein/Erlaubnisschein kann strenger sein.',
   pegel:{warnAb:400,text:'Buhnen überspült – auf Hafenausfahrten ausweichen!'},
   fusszeile:'Erlaubnis: <a href="https://lfv-rhl-rhh.de/fischerei-erlaubnisscheine/rhein/" target="_blank" rel="noopener">LFV Rhl.-Rhh.</a> (links) · <a href="https://www.hejfish.com" target="_blank" rel="noopener">hejfish</a> (Hessen-Seite)',
@@ -694,7 +694,7 @@ const REGION_RLP={id:'mainz',name:'Rhein & Rheinhessen (Mainz)',
   ],
   hinweis:'Angaben ohne Gewähr, recherchiert 07/2026 (FischGDV RP, LFV RLP, Anglerforen). Maßgeblich: Erlaubnisschein mit Strom-km-Angaben und Beschilderung. Mindestmaße RLP vor Entnahme gegenprüfen.'};
 const REGIONS_EMBEDDED=[
- {id:'erzgebirge',name:'Erzgebirge / Freiberg (Sachsen)',
+ {id:'erzgebirge',name:'Erzgebirge / Freiberg (Sachsen)',nachtangeln:'lvsa',
   schonQuelle:'Quelle: SächsFischVO 2022 + LVSA-Gewässerordnung (Verbandsregeln).',
   fusszeile:'Gastkarten: <a href="https://angeln-sachsen.de/avs/gastangler/gastkarten" target="_blank" rel="noopener">AVS Südsachsen</a>',
   spots:SPOTS_SN,schon:SCHON_SN,
@@ -710,7 +710,7 @@ const REGIONS_EMBEDDED=[
   ],
   hinweis:'Angaben ohne Gewähr, nach SächsFischVO 2022 und LVSA-Gewässerordnung 2024. Maßgeblich: Erlaubnisschein, Gewässerverzeichnis, Beschilderung. Äsche vielerorts ganzjährig geschont – vor Ort prüfen. Gastkarten: angeln-sachsen.de'},
  REGION_RLP,
- {id:'mecklenburg',name:'Mecklenburgische Kleinseenplatte (MV)',
+ {id:'mecklenburg',name:'Mecklenburgische Kleinseenplatte (MV)',nachtangeln:'frei',
   schonQuelle:'⚠ KARTENREGELN der Seenfischerei Obere Havel – teils strenger als MV-Landesrecht und NUR auf deren Gewässern gültig!',
   fusszeile:'Angelkarten: <a href="https://fischerei-wesenberg.de" target="_blank" rel="noopener">Seenfischerei Obere Havel</a> + Fischereiabgabe MV',
   spots:SPOTS_MV,schon:SCHON_MV,
@@ -759,6 +759,7 @@ async function loadRegion(r){
   document.getElementById('footRegion').innerHTML=r.fusszeile||'';
   buildMarkers(); buildChips(); buildBanner(); buildSchonUI(); buildRegeln(); buildFbOptions();
   if(typeof checkFang==='function') checkFang(); /* Maßcheck an neue Region anpassen */
+  if(typeof sunLine==='function') sunLine();
   fishSel=null; syncFishChips(); applyFilters();
   const pts=SPOTS.map(sp=>[sp.lat,sp.lng]);
   if(pts.length) map.fitBounds(pts,{padding:[30,30]});
@@ -804,9 +805,28 @@ function masseAus(mm){
 }
 
 /* ============ Header: Sonne & Banner ============ */
-const st=sunTimes(50.80,13.33,NOW);
-if(st) document.getElementById('sunline').textContent=
-  '☀ '+hhmm(st.rise)+' – '+hhmm(st.set)+' Uhr · '+mondPhase(NOW)+' · beste Beißzeit: Dämmerung ±1,5 h';
+function regionCenter(){
+  const pts=(SPOTS||[]).filter(sp=>!sp.my);
+  if(userPos) return {lat:userPos[0],lng:userPos[1]};
+  if(pts.length) return {lat:pts.reduce((a,s)=>a+s.lat,0)/pts.length,lng:pts.reduce((a,s)=>a+s.lng,0)/pts.length};
+  return {lat:50.80,lng:13.33};
+}
+function sunLine(){
+  const c=regionCenter();
+  const st=sunTimes(c.lat,c.lng,new Date());
+  if(!st){ document.getElementById('sunline').textContent='🌙 '+mondPhase(new Date()); return; }
+  let txt='☀ '+hhmm(st.rise)+' – '+hhmm(st.set)+' Uhr · '+mondPhase(new Date())+' · Dämmerung ±1,5 h';
+  /* Nachtangel-Fenster nur wo Regel dokumentiert ist */
+  if(REGION&&REGION.nachtangeln==='lvsa'){
+    const a=new Date(st.set.getTime()+3600e3), b=new Date(st.rise.getTime()-3600e3);
+    txt+=' · 🌙 Nachtangeln erlaubt '+hhmm(a)+'–'+hhmm(b);
+  } else if(REGION&&REGION.nachtangeln==='frei'){
+    txt+=' · 🌙 Nachtangeln erlaubt';
+  } else if(REGION&&REGION.nachtangeln==='verboten'){
+    txt+=' · 🚫 kein Nachtangeln (TWT/Salmo)';
+  }
+  document.getElementById('sunline').textContent=txt;
+}
 
 const banner=document.getElementById('banner');
 function inWindow(von,bis){
@@ -995,6 +1015,7 @@ function locApply(p){
   map.setView(userPos,11);
   renderList();
   wxKey=''; loadWeather();
+  if(typeof sunLine==='function') sunLine();
 }
 function locFail(err){
   const code=err&&err.code;
