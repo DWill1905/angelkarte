@@ -257,6 +257,14 @@
   </div>
 </div>
 
+<div class="mydlg-wrap" id="biteDlg" hidden>
+  <div class="mydlg">
+    <h3>🎣 Beißzeiten heute</h3>
+    <div id="biteBody" style="font-size:13px;line-height:1.55;max-height:60dvh;overflow-y:auto"></div>
+    <div class="mydlg-btns"><button id="biteClose">Schließen</button></div>
+  </div>
+</div>
+
 <div class="mydlg-wrap" id="kbDlg" hidden>
   <div class="mydlg">
     <h3>🎯 Köderberater</h3>
@@ -801,6 +809,41 @@ function mondPhase(d){
   let age=((d-ref)/864e5)%syn; if(age<0)age+=syn;
   return ['🌑','🌒','🌓','🌔','🌕','🌖','🌗','🌘'][Math.round(age/syn*8)%8];
 }
+/* Vereinfachte Mondkulmination (Transit) & Gegen-Transit für Solunar-Fenster */
+function moonTimes(lat,lng,date){
+  const rad=Math.PI/180;
+  const d=(date-Date.UTC(2000,0,1,12))/864e5; /* Tage seit J2000 */
+  /* Mondlänge (vereinfachte Meeus-Näherung, für Transit-Zeitpunkt ausreichend) */
+  const L=(218.316+13.176396*d)%360;
+  const Mm=(134.963+13.064993*d)%360;
+  const lon=L+6.289*Math.sin(Mm*rad);
+  /* Rektaszension grob aus ekliptikaler Länge */
+  const ra=Math.atan2(Math.sin(lon*rad)*Math.cos(23.44*rad),Math.cos(lon*rad))/rad;
+  /* Lokale Sternzeit -> Transit, wenn Stundenwinkel 0 */
+  let gmst=(280.16+360.9856235*d)%360;
+  let transitDeg=(ra-gmst+lng); transitDeg=((transitDeg%360)+360)%360;
+  const transitH=transitDeg/15.0; /* Stunden UT */
+  const base=new Date(Date.UTC(date.getUTCFullYear(),date.getUTCMonth(),date.getUTCDate()));
+  const up=new Date(base.getTime()+transitH*3600e3);
+  const down=new Date(up.getTime()+ (12*3600e3+25*60e3)); /* Gegen-Transit ~12h25m später */
+  return {transit:up,antitransit:down};
+}
+function solunar(lat,lng,date){
+  const st=sunTimes(lat,lng,date), mt=moonTimes(lat,lng,date);
+  const win=[];
+  const add=(center,type,label)=>{
+    if(!center||isNaN(center)) return;
+    /* auf heutigen Tag normalisieren (±1 Tag Versatz möglich) */
+    let c=new Date(center);
+    while(c.getDate()!==date.getDate()&&Math.abs(c-date)>18*3600e3){ c=new Date(c.getTime()+(c<date?864e5:-864e5)); }
+    const span=type==='major'?60:45; /* Minuten je Seite */
+    win.push({from:new Date(c.getTime()-span*60e3),to:new Date(c.getTime()+span*60e3),type,label});
+  };
+  if(mt){ add(mt.transit,'major','Mond-Höchststand'); add(mt.antitransit,'major','Mond-Tiefststand'); }
+  if(st){ add(st.rise,'minor','Sonnenaufgang'); add(st.set,'minor','Sonnenuntergang'); }
+  win.sort((a,b)=>a.from-b.from);
+  return win;
+}
 function masseAus(mm){
   const f=String(mm).match(/(\d+)\s*[–-]\s*(\d+)\s*cm/);
   if(f) return {min:+f[1],max:+f[2]};
@@ -1007,6 +1050,10 @@ const kbBtn=document.createElement('button');
 kbBtn.className='chip'; kbBtn.id='kbBtn'; kbBtn.textContent='🎯 Köderberater';
 kbBtn.onclick=openKb;
 fishEl.appendChild(kbBtn);
+const biteBtn=document.createElement('button');
+biteBtn.className='chip'; biteBtn.id='biteBtn'; biteBtn.textContent='🎣 Beißzeiten heute';
+biteBtn.onclick=openBite;
+fishEl.appendChild(biteBtn);
 
 /* Standort */
 let userPos=null, userMarker=null;
@@ -1289,6 +1336,36 @@ function kbHtml(){
   h+='<p style="color:var(--muted)">Wasser trüb: Schockfarben (firetiger, chartreuse) und laute Köder · Wasser klar: Naturdekore, leiser, dünnere Vorfächer.</p>';
   return h;
 }
+const biteDlg=document.getElementById('biteDlg');
+function openBite(){
+  const c=regionCenter(), now=new Date();
+  const win=solunar(c.lat,c.lng,now);
+  const st=sunTimes(c.lat,c.lng,now);
+  let h='<p style="color:var(--muted);margin-bottom:10px">'+mondPhase(now)+' '
+    +(st?'· ☀ '+hhmm(st.rise)+'–'+hhmm(st.set):'')+' · für '+(REGION?esc(REGION.kurz||REGION.name):'aktuelle Region')+'</p>';
+  if(!win.length){ h+='<p>Für heute lassen sich keine Fenster berechnen (Polartag/-nacht?).</p>'; }
+  else {
+    h+='<p style="margin-bottom:10px">Beste Beißfenster – <b>Major</b> (Mond hoch/tief, ~2 h) sind stärker als <b>Minor</b> (Sonnenauf-/-untergang):</p>';
+    const nowMs=now.getTime();
+    win.forEach(wdw=>{
+      const aktiv=nowMs>=wdw.from&&nowMs<=wdw.to;
+      const vorbei=nowMs>wdw.to;
+      const farbe=wdw.type==='major'?'var(--forelle)':'var(--muted)';
+      h+='<div style="display:flex;align-items:center;gap:9px;margin:7px 0;'+(vorbei?'opacity:.45':'')+'">'
+        +'<span style="min-width:8px;width:8px;height:8px;border-radius:50%;background:'+farbe+';display:inline-block"></span>'
+        +'<b style="min-width:96px">'+hhmm(wdw.from)+'–'+hhmm(wdw.to)+'</b>'
+        +'<span>'+(wdw.type==='major'?'Major':'Minor')+' · '+wdw.label+'</span>'
+        +(aktiv?'<span style="margin-left:auto;color:var(--forelle);font-weight:700">● jetzt!</span>':'')
+        +'</div>';
+    });
+    h+='<p style="color:var(--muted);margin-top:10px;font-size:11px">Solunar-Theorie: Fische sind rund um Mond-Höchst-/Tiefstand am aktivsten. Näherungswerte – kein Ersatz für eigene Beobachtung. Druckabfall &amp; Dämmerung verstärken die Fenster.</p>';
+  }
+  document.getElementById('biteBody').innerHTML=h;
+  biteDlg.hidden=false;
+}
+document.getElementById('biteClose').onclick=()=>{biteDlg.hidden=true;};
+biteDlg.addEventListener('click',e=>{if(e.target===biteDlg)biteDlg.hidden=true;});
+
 const kbDlg=document.getElementById('kbDlg');
 function openKb(){document.getElementById('kbBody').innerHTML=kbHtml();kbDlg.hidden=false;}
 document.getElementById('kbClose').onclick=()=>{kbDlg.hidden=true;};
