@@ -836,11 +836,18 @@ function sunTimes(lat,lng,date){
   const L=(M+C+180+102.9372)%360;
   const Jt=Js+0.0053*Math.sin(M*rad)-0.0069*Math.sin(2*L*rad);
   const dec=Math.asin(Math.sin(L*rad)*Math.sin(23.4397*rad));
-  const cosH=(Math.sin(-0.833*rad)-Math.sin(lat*rad)*Math.sin(dec))/(Math.cos(lat*rad)*Math.cos(dec));
-  if(cosH<-1||cosH>1) return null;
-  const H=Math.acos(cosH)/rad/360;
   const toDate=j=>new Date((j-2440587.5)*864e5);
-  return {rise:toDate(Jt-H), set:toDate(Jt+H)};
+  const hourAngle=alt=>{
+    const cosH=(Math.sin(alt*rad)-Math.sin(lat*rad)*Math.sin(dec))/(Math.cos(lat*rad)*Math.cos(dec));
+    if(cosH<-1||cosH>1) return null;
+    return Math.acos(cosH)/rad/360;
+  };
+  const H=hourAngle(-0.833); if(H===null) return null;
+  const Hd=hourAngle(-6); /* bürgerliche Dämmerung */
+  return {
+    rise:toDate(Jt-H), set:toDate(Jt+H),
+    dawn:Hd!==null?toDate(Jt-Hd):null, dusk:Hd!==null?toDate(Jt+Hd):null
+  };
 }
 const hhmm=d=>d.toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'});
 function mondPhase(d){
@@ -880,6 +887,8 @@ function solunar(lat,lng,date){
   };
   if(mt){ add(mt.transit,'major','Mond-Höchststand'); add(mt.antitransit,'major','Mond-Tiefststand'); }
   if(st){ add(st.rise,'minor','Sonnenaufgang'); add(st.set,'minor','Sonnenuntergang'); }
+  if(st&&st.dusk) add(new Date(st.dusk.getTime()+20*60e3),'major','Blaue Stunde (Raubfisch-Prime)');
+  if(st&&st.dawn) add(new Date(st.dawn.getTime()-20*60e3),'minor','Morgendämmerung');
   win.sort((a,b)=>a.from-b.from);
   return win;
 }
@@ -901,7 +910,8 @@ function sunLine(){
   const c=regionCenter();
   const st=sunTimes(c.lat,c.lng,new Date());
   if(!st){ document.getElementById('sunline').textContent='🌙 '+mondPhase(new Date()); return; }
-  let txt='☀ '+hhmm(st.rise)+' – '+hhmm(st.set)+' Uhr · '+mondPhase(new Date())+' · Dämmerung ±1,5 h';
+  let txt='☀ '+hhmm(st.rise)+' – '+hhmm(st.set)+' Uhr · '+mondPhase(new Date());
+  if(st.dawn&&st.dusk) txt+=' · 🌆 blaue Stunde '+hhmm(st.dusk)+'–'+hhmm(new Date(st.dusk.getTime()+40*60e3));
   /* Nachtangel-Fenster nur wo Regel dokumentiert ist */
   if(REGION&&REGION.nachtangeln==='lvsa'){
     const a=new Date(st.set.getTime()+3600e3), b=new Date(st.rise.getTime()-3600e3);
