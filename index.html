@@ -677,6 +677,7 @@ const SCHON_RLP=[
 
 /* ============ Regionsdefinitionen (eingebetteter Fallback zur JSON-Datenbank) ============ */
 const REGION_RLP={id:'mainz',name:'Rhein & Rheinhessen (Mainz)',nachtangeln:'frei',
+  koederfisch:['Grundel ist am Rhein der dominante Beifang und ideal als toter Köderfisch – vor Ort fangen, gebietsfremd aber ohnehin schon überall.','Köderfischsenke vom Ufer laut rheinischem Erlaubnisschein erlaubt.','Lebender Köderfisch verboten (Tierschutzgesetz).','Zander/Wels stehen auf Grundelfetzen &amp; -filet – am Grund an der Strömungskante anbieten.'],
   schonQuelle:'Quelle: FischGDV RP (abgeglichen 07/2026; Hecht bis 31.05., Zander 15.03.–15.05.). Verein/Erlaubnisschein kann strenger sein.',
   pegel:{warnAb:400,text:'Buhnen überspült – auf Hafenausfahrten ausweichen!'},
   fusszeile:'Erlaubnis: <a href="https://lfv-rhl-rhh.de/fischerei-erlaubnisscheine/rhein/" target="_blank" rel="noopener">LFV Rhl.-Rhh.</a> (links) · <a href="https://www.hejfish.com" target="_blank" rel="noopener">hejfish</a> (Hessen-Seite)',
@@ -695,6 +696,7 @@ const REGION_RLP={id:'mainz',name:'Rhein & Rheinhessen (Mainz)',nachtangeln:'fre
   hinweis:'Angaben ohne Gewähr, recherchiert 07/2026 (FischGDV RP, LFV RLP, Anglerforen). Maßgeblich: Erlaubnisschein mit Strom-km-Angaben und Beschilderung. Mindestmaße RLP vor Entnahme gegenprüfen.'};
 const REGIONS_EMBEDDED=[
  {id:'erzgebirge',name:'Erzgebirge / Freiberg (Sachsen)',nachtangeln:'lvsa',
+  koederfisch:['Lebender Köderfisch ist in ganz Deutschland verboten (Tierschutzgesetz) – nur tote Köderfische verwenden.','Köderfische nur aus demselben Gewässer entnehmen (keine Verschleppung/Faunenverfälschung).','In Trinkwassertalsperren: Maden &amp; Fleisch als Köder verboten – Köderfisch dort tabu.','Fangbegrenzung Köderfische laut Erlaubnisschein beachten.'],
   schonQuelle:'Quelle: SächsFischVO 2022 + LVSA-Gewässerordnung (Verbandsregeln).',
   fusszeile:'Gastkarten: <a href="https://angeln-sachsen.de/avs/gastangler/gastkarten" target="_blank" rel="noopener">AVS Südsachsen</a>',
   spots:SPOTS_SN,schon:SCHON_SN,
@@ -711,6 +713,7 @@ const REGIONS_EMBEDDED=[
   hinweis:'Angaben ohne Gewähr, nach SächsFischVO 2022 und LVSA-Gewässerordnung 2024. Maßgeblich: Erlaubnisschein, Gewässerverzeichnis, Beschilderung. Äsche vielerorts ganzjährig geschont – vor Ort prüfen. Gastkarten: angeln-sachsen.de'},
  REGION_RLP,
  {id:'mecklenburg',name:'Mecklenburgische Kleinseenplatte (MV)',nachtangeln:'frei',
+  koederfisch:['Lebender Köderfisch verboten (Tierschutzgesetz).','Köderfische nur aus dem befischten Gewässer (Seenverbund Obere Havel).','Barsch &amp; kleine Plötze sind top Hecht-/Zanderköder – als Fischfetzen oder ganzer toter Köfi am System.','Kein Anfüttern in Schongebieten/Nationalpark-Zonen.'],
   schonQuelle:'⚠ KARTENREGELN der Seenfischerei Obere Havel – teils strenger als MV-Landesrecht und NUR auf deren Gewässern gültig!',
   fusszeile:'Angelkarten: <a href="https://fischerei-wesenberg.de" target="_blank" rel="noopener">Seenfischerei Obere Havel</a> + Fischereiabgabe MV',
   spots:SPOTS_MV,schon:SCHON_MV,
@@ -1325,6 +1328,10 @@ function buildRegeln(){
     el.insertAdjacentHTML('beforeend',
       `<div class="card"><h3>${card.titel}</h3><ul>${card.punkte.map(x=>'<li>'+x+'</li>').join('')}</ul></div>`);
   });
+  if(REGION.koederfisch&&REGION.koederfisch.length){
+    el.insertAdjacentHTML('beforeend',
+      `<div class="card"><h3>🐟 Köderfisch &amp; Naturköder</h3><ul>${REGION.koederfisch.map(x=>'<li>'+x+'</li>').join('')}</ul></div>`);
+  }
   document.getElementById('regionHinweis').innerHTML=REGION.hinweis||'';
 }
 

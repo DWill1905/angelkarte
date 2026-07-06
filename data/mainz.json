@@ -2,6 +2,12 @@
  "id": "mainz",
  "name": "Rhein & Rheinhessen (Mainz)",
  "nachtangeln": "frei",
+ "koederfisch": [
+  "Grundel ist am Rhein der dominante Beifang und ideal als toter Köderfisch – vor Ort fangen, gebietsfremd aber ohnehin schon überall.",
+  "Köderfischsenke vom Ufer laut rheinischem Erlaubnisschein erlaubt.",
+  "Lebender Köderfisch verboten (Tierschutzgesetz).",
+  "Zander/Wels stehen auf Grundelfetzen &amp; -filet – am Grund an der Strömungskante anbieten."
+ ],
  "schonQuelle": "Quelle: FischGDV RP (abgeglichen 07/2026; Hecht bis 31.05., Zander 15.03.–15.05.). Verein/Erlaubnisschein kann strenger sein.",
  "pegel": {
   "warnAb": 400,
