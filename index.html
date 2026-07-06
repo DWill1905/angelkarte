@@ -149,6 +149,8 @@
   .fbcheck.ok{background:#1f3d24;color:#a8dcae}
   .fbcheck.bad{background:#4a201a;color:#f0b6a8;font-weight:600}
   .verif{font-size:10px;color:#5b6b66;margin-top:7px;letter-spacing:.03em}
+  .fbentn{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--text);cursor:pointer}
+  .fbentn input{width:17px;height:17px;accent-color:var(--forelle)}
 
   .mydlg-wrap{position:fixed;inset:0;background:rgba(6,16,18,.72);z-index:1200;display:flex;align-items:center;justify-content:center;padding:20px}
   .mydlg-wrap[hidden]{display:none!important}
@@ -234,6 +236,7 @@
             <option>Karpfen</option><option>Schleie</option><option>Aal</option><option>Sonstige</option>
           </select></div>
         <div><label for="fbLaenge">Länge (cm)</label><input id="fbLaenge" type="number" inputmode="numeric" min="0" max="200" placeholder="z.B. 54"></div>
+        <div class="full"><label class="fbentn"><input type="checkbox" id="fbEntnommen"> Fisch entnommen (nicht zurückgesetzt)</label></div>
         <div class="full" id="fbCheck" aria-live="polite"></div>
         <div class="full"><label for="fbSpot">Gewässer</label><select id="fbSpot"></select></div>
         <div class="full"><label for="fbKoeder">Köder / Methode</label><input id="fbKoeder" type="text" placeholder="z.B. Gummifisch 12cm, motoroil"></div>
@@ -732,13 +735,16 @@ async function initRegions(){
   sel.onchange=async()=>{loadRegion(REGIONS.find(r=>r.id===sel.value));try{await store.set('region',sel.value);}catch(e){}};
   loadRegion(start);
 }
+let loadToken=0;
 async function loadRegion(r){
+  const myToken=++loadToken;
   if(REGION) SPOTS.forEach(sp=>{
     if(sp.marker&&map.hasLayer(sp.marker))map.removeLayer(sp.marker);
     (sp.hotMarkers||[]).forEach(m=>{if(map.hasLayer(m))map.removeLayer(m);});
   });
   REGION=r; SCHON=r.schon;
   const mine=await loadMySpots(r.id);
+  if(myToken!==loadToken) return; /* zwischenzeitlich weitergeschaltet */
   SPOTS=r.spots.concat(mine.map(mySpotObj));
   document.getElementById('footRegion').innerHTML=r.fusszeile||'';
   buildMarkers(); buildChips(); buildBanner(); buildSchonUI(); buildRegeln(); buildFbOptions();
@@ -793,7 +799,8 @@ if(st) document.getElementById('sunline').textContent=
 
 const banner=document.getElementById('banner');
 function inWindow(von,bis){
-  const md=(NOW.getMonth()+1)*100+NOW.getDate();
+  const n=new Date();
+  const md=(n.getMonth()+1)*100+n.getDate();
   const v=von[0]*100+von[1], b=bis[0]*100+bis[1];
   return v<=b?(md>=v&&md<=b):(md>=v||md<=b);
 }
@@ -1188,11 +1195,13 @@ const KB={
 function kbHtml(){
   const se=season();
   const seName={fruehjahr:'Frühjahr',sommer:'Sommer',herbst:'Herbst',winter:'Winter'}[se];
-  const fische=fishSel?[fishSel==='Forelle'?'Forelle':fishSel].filter(f=>KB[f]):['Hecht','Zander','Barsch'];
+  const fische=fishSel?[fishSel==='Forelle'?'Forelle':fishSel]:['Hecht','Zander','Barsch'];
+  const bekannt=fische.filter(f=>KB[f]), unbekannt=fische.filter(f=>!KB[f]);
   let h='<p style="color:var(--muted);margin-bottom:10px">Saison: <b>'+seName+'</b>'
     +(WX?' · Luft '+Math.round(WX.temp)+'°C · '+Math.round(WX.press)+' hPa':'')
     +(WX&&WX.wt!=null?' · Wasser '+Math.round(WX.wt)+'°C':'')+'</p>';
-  fische.forEach(f=>{ if(KB[f]) h+='<p style="margin-bottom:9px"><b>'+f+':</b> '+KB[f][se]+'</p>'; });
+  bekannt.forEach(f=>{ h+='<p style="margin-bottom:9px"><b>'+f+':</b> '+KB[f][se]+'</p>'; });
+  unbekannt.forEach(f=>{ h+='<p style="margin-bottom:9px;color:var(--muted)"><b>'+f+':</b> Friedfisch/Sonderart – kein Raubfisch-Köderprofil hinterlegt. Grundmontage mit Naturköder (Wurm, Mais, Made), an Struktur und in der Dämmerung.</p>'; });
   if(WX){
     if(WX.trendVal<=-1.5) h+='<p style="margin-bottom:9px"><b>Druck fällt ('+WX.trendVal.toFixed(1)+' hPa/3h):</b> Fresslaune – aktiver und schneller führen, jetzt ans Wasser!</p>';
     else if(WX.trendVal>=1.5) h+='<p style="margin-bottom:9px"><b>Druck steigt:</b> nach der Front oft zäh – Köder verkleinern, langsamer führen, Tiefe suchen.</p>';
@@ -1297,7 +1306,7 @@ function fbRender(){
   [...fbMem].reverse().forEach(e=>{
     const d=document.createElement('div'); d.className='fb-entry';
     const cx=e.ctx?[e.ctx.zeit,e.ctx.mond,e.ctx.druck?e.ctx.druck+' hPa'+(e.ctx.trend<=-1.5?'⇘':e.ctx.trend>=1.5?'⇗':''):null,e.ctx.wind,e.ctx.pegel?'Pegel '+e.ctx.pegel:null,e.ctx.wt!=null?'W '+e.ctx.wt+'°C':null].filter(Boolean).join(' · '):'';
-    d.innerHTML=`<div class="info"><div class="fish">${esc(e.fisch)} ${e.laenge?'· '+esc(e.laenge)+' cm':''}</div>
+    d.innerHTML=`<div class="info"><div class="fish">${esc(e.fisch)} ${e.laenge?'· '+esc(e.laenge)+' cm':''} ${e.entnommen?'<span title="entnommen">🪣</span>':'<span title="zurückgesetzt">↩</span>'}</div>
       <div class="sub">${esc(e.spot)} · ${esc(e.datum)}${e.koeder?' · '+esc(e.koeder):''}${cx?'<br>'+esc(cx):''}</div></div>
       <button class="fb-del" aria-label="Eintrag löschen" data-id="${esc(e.id)}">✕</button>`;
     d.querySelector('.fb-del').onclick=async ev=>{
@@ -1326,14 +1335,14 @@ function checkFang(){
   }
   const heute=new Date().toLocaleDateString('de-DE');
   if(REGION.id==='mecklenburg'&&['Hecht','Zander','Aal','Karpfen'].includes(fisch)){
-    const n=fbMem.filter(e=>e.datum===heute&&['Hecht','Zander','Aal','Karpfen'].includes(e.fisch)).length;
-    if(n>=3){bad=true;msgs.push('⛔ Tageslimit erreicht: '+n+'/3 aus Hecht/Zander/Aal/Karpfen entnommen.');}
-    else msgs.push('Limit-Zähler heute: '+n+'/3 (Hecht/Zander/Aal/Karpfen gesamt).');
+    const n=fbMem.filter(e=>e.datum===heute&&e.entnommen&&['Hecht','Zander','Aal','Karpfen'].includes(e.fisch)).length;
+    if(n>=3){bad=true;msgs.push('⛔ Tageslimit erreicht: '+n+'/3 entnommene Raubfische (Hecht/Zander/Aal/Karpfen).');}
+    else msgs.push('Entnahme-Zähler heute: '+n+'/3 (Hecht/Zander/Aal/Karpfen).');
   }
   if(REGION.id==='erzgebirge'&&fisch==='Barsch'){
-    const n=fbMem.filter(e=>e.datum===heute&&e.fisch==='Barsch').length;
-    if(n>=10){bad=true;msgs.push('⛔ Barsch-Tageslimit erreicht ('+n+'/10).');}
-    else msgs.push('Barsch-Zähler heute: '+n+'/10.');
+    const n=fbMem.filter(e=>e.datum===heute&&e.entnommen&&e.fisch==='Barsch').length;
+    if(n>=10){bad=true;msgs.push('⛔ Barsch-Tageslimit erreicht ('+n+'/10 entnommen).');}
+    else msgs.push('Barsch-Entnahme heute: '+n+'/10.');
   }
   el.innerHTML=msgs.length?'<div class="fbcheck '+(bad?'bad':'ok')+'">'+msgs.map(esc).join('<br>')+'</div>':'';
 }
@@ -1350,6 +1359,7 @@ document.getElementById('fbSave').onclick=async ()=>{
     spot:fbSpotSel.value,
     koeder:document.getElementById('fbKoeder').value.trim(),
     datum:jetzt.toLocaleDateString('de-DE'),
+    entnommen:document.getElementById('fbEntnommen').checked,
     ctx:{
       zeit:hhmm(jetzt), mond:mondPhase(jetzt),
       druck:WX?Math.round(WX.press):null, trend:WX?Math.round(WX.trendVal*10)/10:null,
@@ -1359,6 +1369,7 @@ document.getElementById('fbSave').onclick=async ()=>{
   });
   document.getElementById('fbLaenge').value='';
   document.getElementById('fbKoeder').value='';
+  document.getElementById('fbEntnommen').checked=false;
   await fbPersist();
   checkFang();
 };
@@ -1373,9 +1384,25 @@ window.prefillFang=prefillFang;
 const fbReady=fbLoad();
 initRegions();
 
+/* Wetter/Pegel frisch halten: bei Rückkehr in den Tab + alle 20 min */
+document.addEventListener('visibilitychange',()=>{ if(!document.hidden){wxKey='';loadWeather();} });
+setInterval(()=>{ if(!document.hidden){wxKey='';loadWeather();} },20*60*1000);
+
 /* Offline-Modus: Service Worker (nur auf eigener HTTPS-Domain, im Artifact still ignoriert) */
 if('serviceWorker' in navigator&&location.protocol==='https:'){
-  navigator.serviceWorker.register('sw.js').catch(()=>{});
+  navigator.serviceWorker.register('sw.js').then(reg=>{
+    reg.addEventListener('updatefound',()=>{
+      const nw=reg.installing;
+      nw&&nw.addEventListener('statechange',()=>{
+        if(nw.state==='installed'&&navigator.serviceWorker.controller){
+          const b=document.getElementById('banner');
+          b.innerHTML='🔄 Neue Version verfügbar – <button id="swReload" style="background:none;border:0;color:inherit;text-decoration:underline;cursor:pointer;font:inherit;padding:0">jetzt aktualisieren</button>';
+          b.classList.add('show');
+          document.getElementById('swReload').onclick=()=>location.reload();
+        }
+      });
+    });
+  }).catch(()=>{});
 }
 </script>
 </body>
