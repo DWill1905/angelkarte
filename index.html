@@ -1545,6 +1545,24 @@ function fbInsights(){
   const spots=topCount(fbMem.map(e=>e.spot));
   if(spots.length){ h+='<b style="display:block;margin-top:8px">Top-Spots</b>'+bars(spots,fbMem.length); }
   h+='</div>';
+  /* Persönliche Bestenliste: größter Fisch je Art */
+  const rekorde={};
+  fbMem.forEach(e=>{
+    const l=parseInt(e.laenge,10);
+    if(!isNaN(l)&&l>0&&(!rekorde[e.fisch]||l>rekorde[e.fisch].laenge))
+      rekorde[e.fisch]={laenge:l,datum:e.datum,spot:e.spot};
+  });
+  const rk=Object.entries(rekorde).sort((a,b)=>b[1].laenge-a[1].laenge);
+  if(rk.length){
+    h+='<div class="insight"><h4>🏆 Deine Bestenliste</h4>';
+    rk.forEach(([fisch,r],i)=>{
+      const medal=['🥇','🥈','🥉'][i]||'▪';
+      h+='<div class="bar" style="margin:5px 0"><span style="min-width:24px">'+medal+'</span>'
+        +'<b style="min-width:96px">'+esc(fisch)+'</b>'
+        +'<span>'+r.laenge+' cm'+(r.spot?' · '+esc(r.spot):'')+'</span></div>';
+    });
+    h+='</div>';
+  }
   el.innerHTML=h;
 }
 function fbTools(){
