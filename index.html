@@ -1347,17 +1347,26 @@ function openBite(){
   else {
     h+='<p style="margin-bottom:10px">Beste Beißfenster – <b>Major</b> (Mond hoch/tief, ~2 h) sind stärker als <b>Minor</b> (Sonnenauf-/-untergang):</p>';
     const nowMs=now.getTime();
+    const druckGut=WX&&WX.trendVal<=-1.0; /* fallender Druck verstärkt */
+    const druckSchlecht=WX&&WX.trendVal>=1.5; /* steigend dämpft */
     win.forEach(wdw=>{
       const aktiv=nowMs>=wdw.from&&nowMs<=wdw.to;
       const vorbei=nowMs>wdw.to;
-      const farbe=wdw.type==='major'?'var(--forelle)':'var(--muted)';
+      const top=wdw.type==='major'&&druckGut; /* Major + fallender Druck = Top */
+      const farbe=top?'#e8c93c':wdw.type==='major'?'var(--forelle)':'var(--muted)';
       h+='<div style="display:flex;align-items:center;gap:9px;margin:7px 0;'+(vorbei?'opacity:.45':'')+'">'
         +'<span style="min-width:8px;width:8px;height:8px;border-radius:50%;background:'+farbe+';display:inline-block"></span>'
         +'<b style="min-width:96px">'+hhmm(wdw.from)+'–'+hhmm(wdw.to)+'</b>'
-        +'<span>'+(wdw.type==='major'?'Major':'Minor')+' · '+wdw.label+'</span>'
+        +'<span>'+(top?'★ Top':(wdw.type==='major'?'Major':'Minor'))+' · '+wdw.label+'</span>'
         +(aktiv?'<span style="margin-left:auto;color:var(--forelle);font-weight:700">● jetzt!</span>':'')
         +'</div>';
     });
+    if(WX){
+      h+='<p style="margin-top:10px;padding:8px;border-radius:8px;background:var(--panel-2);font-size:12px">'
+        +(druckGut?'📉 <b>Luftdruck fällt ('+WX.trendVal.toFixed(1)+' hPa/3h)</b> – Major-Fenster sind heute als ★ Top markiert, beste Karten!'
+         :druckSchlecht?'📈 Luftdruck steigt – nach der Front oft zäh, Fenster eher schwächer als sonst.'
+         :'➡ Luftdruck stabil – Fenster gelten wie berechnet.')+'</p>';
+    }
     h+='<p style="color:var(--muted);margin-top:10px;font-size:11px">Solunar-Theorie: Fische sind rund um Mond-Höchst-/Tiefstand am aktivsten. Näherungswerte – kein Ersatz für eigene Beobachtung. Druckabfall &amp; Dämmerung verstärken die Fenster.</p>';
   }
   document.getElementById('biteBody').innerHTML=h;
