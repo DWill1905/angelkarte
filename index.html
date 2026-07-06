@@ -758,6 +758,7 @@ async function loadRegion(r){
   SPOTS=r.spots.concat(mine.map(mySpotObj));
   document.getElementById('footRegion').innerHTML=r.fusszeile||'';
   buildMarkers(); buildChips(); buildBanner(); buildSchonUI(); buildRegeln(); buildFbOptions();
+  if(typeof checkFang==='function') checkFang(); /* Maßcheck an neue Region anpassen */
   fishSel=null; syncFishChips(); applyFilters();
   const pts=SPOTS.map(sp=>[sp.lat,sp.lng]);
   if(pts.length) map.fitBounds(pts,{padding:[30,30]});
