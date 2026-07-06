@@ -259,6 +259,7 @@
 <div class="mydlg-wrap" id="myDlg" hidden>
   <div class="mydlg">
     <h3>Eigenen Spot speichern</h3>
+    <p style="font-size:11px;color:var(--muted);margin:-4px 0 8px">Tipp: Lange auf die Karte drücken (Handy) oder Rechtsklick (Desktop), um hier einen Spot zu setzen.</p>
     <label for="myName">Name</label>
     <input id="myName" type="text" placeholder="z.B. Kante vor der Schilfspitze" maxlength="60">
     <label for="myTipp" style="margin-top:8px">Notiz / Taktik</label>
@@ -1066,6 +1067,8 @@ const myDlg=document.getElementById('myDlg');
 async function loadMySpots(rid){
   try{const r=await store.get('myspots:'+rid);return JSON.parse(r.value)||[];}catch(e){return[];}
 }
+let uidLast=0;
+function uid(){ const t=Date.now(); uidLast=Math.max(t,uidLast+1); return uidLast; }
 function mySpotObj(m){
   return {name:esc(m.name),nr:'Eigener Spot',cat:'eigen',arten:[],lat:m.lat,lng:m.lng,
     fisch:'–',methode:'–',karte:'Eigener Spot (nur auf diesem Gerät gespeichert)',
@@ -1075,7 +1078,7 @@ function openMyDlg(){document.getElementById('myName').value='';document.getElem
 function closeMyDlg(){myDlg.hidden=true;myPending=null;}
 async function saveMySpot(){
   if(!myPending||!REGION) return closeMyDlg();
-  const m={id:Date.now(),
+  const m={id:uid(),
     name:document.getElementById('myName').value.trim()||'Eigener Spot',
     tipp:document.getElementById('myTipp').value.trim(),
     lat:myPending[0],lng:myPending[1]};
@@ -1097,6 +1100,26 @@ document.getElementById('mySave').onclick=saveMySpot;
 document.getElementById('myCancel').onclick=closeMyDlg;
 myDlg.addEventListener('click',e=>{if(e.target===myDlg)closeMyDlg();});
 map.on('contextmenu',e=>{ if(!REGION)return; myPending=[e.latlng.lat,e.latlng.lng]; openMyDlg(); });
+/* iOS/Touch: contextmenu feuert bei Long-Press nicht zuverlässig -> eigener Halte-Timer */
+let lpTimer=null,lpStart=null,lpMoved=false;
+map.on('touchstart mousedown',e=>{}); /* Leaflet leitet an eigene Events weiter, wir nutzen den Container */
+const mapC=map.getContainer();
+mapC.addEventListener('touchstart',ev=>{
+  if(ev.touches.length!==1||!REGION) return;
+  lpMoved=false; lpStart=ev.touches[0];
+  lpTimer=setTimeout(()=>{
+    if(lpMoved) return;
+    const pt=map.mouseEventToLatLng(lpStart);
+    myPending=[pt.lat,pt.lng]; openMyDlg();
+    if(navigator.vibrate) navigator.vibrate(30);
+  },600);
+},{passive:true});
+mapC.addEventListener('touchmove',ev=>{
+  if(!lpStart) return;
+  const t=ev.touches[0];
+  if(Math.abs(t.clientX-lpStart.clientX)>12||Math.abs(t.clientY-lpStart.clientY)>12){ lpMoved=true; clearTimeout(lpTimer); }
+},{passive:true});
+mapC.addEventListener('touchend',()=>clearTimeout(lpTimer),{passive:true});
 
 /* ============ Wetter & Pegel (Open-Meteo + PEGELONLINE, keylos) ============ */
 let wxKey='';
@@ -1370,7 +1393,7 @@ document.getElementById('fbSave').onclick=async ()=>{
   const laenge=document.getElementById('fbLaenge').value;
   const jetzt=new Date();
   fbMem.push({
-    id:Date.now(), fisch, laenge,
+    id:uid(), fisch, laenge,
     spot:fbSpotSel.value,
     koeder:document.getElementById('fbKoeder').value.trim(),
     datum:jetzt.toLocaleDateString('de-DE'),
