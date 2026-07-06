@@ -1065,6 +1065,10 @@ function renderList(){
     vis.sort((a,b)=>a._d-b._d);
   }
   countEl.textContent='('+vis.length+')';
+  if(!vis.length){
+    listEl.innerHTML='<div class="fb-empty" style="padding:20px">Keine Gewässer sichtbar – die Filter oben blenden gerade alles aus. Tippe Kategorie- oder Zielfisch-Chips an, um sie wieder einzublenden.</div>';
+    return;
+  }
   vis.forEach(s=>{
     const c=CATS[s.cat], b=document.createElement('button');
     b.className='spot-item';
