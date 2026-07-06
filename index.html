@@ -1260,7 +1260,11 @@ function kbHtml(){
   let h='<p style="color:var(--muted);margin-bottom:10px">Saison: <b>'+seName+'</b>'
     +(WX?' · Luft '+Math.round(WX.temp)+'°C · '+Math.round(WX.press)+' hPa':'')
     +(WX&&WX.wt!=null?' · Wasser '+Math.round(WX.wt)+'°C':'')+'</p>';
-  bekannt.forEach(f=>{ h+='<p style="margin-bottom:9px"><b>'+f+':</b> '+KB[f][se]+'</p>'; });
+  bekannt.forEach(f=>{
+    const sc=SCHON.find(x=>x.fisch===f||(f==='Forelle'&&/forelle/i.test(x.fisch)));
+    const zu=sc&&inSchonzeit(sc);
+    h+='<p style="margin-bottom:9px"><b>'+f+':</b> '+(zu?'<span style="color:#f0b6a8">⛔ aktuell geschont ('+fmtMD(sc.von)+'–'+fmtMD(sc.bis)+') – nicht gezielt beangeln!</span> ':'')+KB[f][se]+'</p>';
+  });
   unbekannt.forEach(f=>{ h+='<p style="margin-bottom:9px;color:var(--muted)"><b>'+f+':</b> Friedfisch/Sonderart – kein Raubfisch-Köderprofil hinterlegt. Grundmontage mit Naturköder (Wurm, Mais, Made), an Struktur und in der Dämmerung.</p>'; });
   if(WX){
     if(WX.trendVal<=-1.5) h+='<p style="margin-bottom:9px"><b>Druck fällt ('+WX.trendVal.toFixed(1)+' hPa/3h):</b> Fresslaune – aktiver und schneller führen, jetzt ans Wasser!</p>';
@@ -1271,6 +1275,8 @@ function kbHtml(){
     else if(WX.wt<10) h+='<p style="margin-bottom:9px"><b>Kaltes Wasser ('+Math.round(WX.wt)+'°C):</b> Stoffwechsel runter – alles halb so schnell führen, Pausen verdoppeln.</p>';
     else if(WX.wt>=18&&WX.wt<23) h+='<p style="margin-bottom:9px"><b>Wasser '+Math.round(WX.wt)+'°C:</b> optimales Aktivitätsfenster für Zander &amp; Barsch.</p>';
   }
+  const mn=new Date().getMonth()+1;
+  if(mn>=4&&mn<=6) h+='<p style="margin-bottom:9px;color:#e8c98c"><b>Laichzeit-Rücksicht:</b> Flachbuchten und Schilfkanten sind jetzt Kinderstube – dort behutsam, Laichfische zurücksetzen, viele Arten sind ohnehin geschont.</p>';
   h+='<p style="color:var(--muted)">Wasser trüb: Schockfarben (firetiger, chartreuse) und laute Köder · Wasser klar: Naturdekore, leiser, dünnere Vorfächer.</p>';
   return h;
 }
