@@ -194,6 +194,7 @@
   <select id="regionSel" aria-label="Region wählen" style="margin-top:6px;max-width:100%"></select>
 </header>
 
+<div class="banner" id="stormWarn" style="background:#5a1e18;color:#ffd7cf;font-weight:600"></div>
 <div class="banner" id="swUpdate" style="background:#243a3f"></div>
 <div class="banner" id="banner"></div>
 
@@ -1224,7 +1225,8 @@ async function loadWeather(){
   const el=document.getElementById('wxline');
   try{
     const u='https://api.open-meteo.com/v1/forecast?latitude='+ctr.lat.toFixed(3)+'&longitude='+ctr.lng.toFixed(3)
-      +'&current=temperature_2m,wind_speed_10m,wind_direction_10m,surface_pressure&hourly=surface_pressure&past_days=1&forecast_days=1&timezone=auto';
+      +'&current=temperature_2m,wind_speed_10m,wind_direction_10m,surface_pressure,weather_code'
+      +'&hourly=surface_pressure,weather_code,wind_gusts_10m&past_days=1&forecast_days=1&timezone=auto';
     const d=await (await fetch(u)).json();
     const c=d.current;
     let trend='', trendVal=0;
@@ -1236,12 +1238,45 @@ async function loadWeather(){
     const dirs=['N','NO','O','SO','S','SW','W','NW'];
     const dir=dirs[Math.round((c.wind_direction_10m||0)/45)%8];
     WX={temp:c.temperature_2m,wind:c.wind_speed_10m,dirDeg:c.wind_direction_10m||0,dir,press:c.surface_pressure,trendVal};
+    /* Gewitter-/Sturmwarnung: WMO-Codes 95/96/99 = Gewitter, Böen > 60 km/h */
+    checkStorm(d,c);
     el.textContent='🌡 '+Math.round(c.temperature_2m)+'°C · 💨 '+Math.round(c.wind_speed_10m)+' km/h '+dir
       +' · '+Math.round(c.surface_pressure)+' hPa'+trend;
     loadPegel(ctr,el);
   }catch(e){ el.textContent=''; wxKey=''; }
 }
 let PEGEL=null;
+function checkStorm(d,c){
+  const warn=document.getElementById('stormWarn');
+  if(!warn) return;
+  const now=new Date(); const nowH=now.toISOString().slice(0,13);
+  let msg='';
+  const codeNow=c.weather_code;
+  if([95,96,99].includes(codeNow)){ msg='⛈ GEWITTER JETZT – sofort raus aus dem Wasser, Rute ablegen, Schutz suchen!'; }
+  else if(d.hourly&&d.hourly.weather_code&&d.hourly.time){
+    const i=d.hourly.time.findIndex(t=>t.slice(0,13)>=nowH);
+    if(i>=0){
+      for(let k=i;k<Math.min(i+4,d.hourly.weather_code.length);k++){
+        if([95,96,99].includes(d.hourly.weather_code[k])){
+          const wann=d.hourly.time[k].slice(11,16);
+          msg='⛈ Gewitter ab ca. '+wann+' erwartet – Angeltrip entsprechend planen, Kohlefaserrute ist ein Blitzableiter!';
+          break;
+        }
+      }
+      /* Sturmböen */
+      if(!msg&&d.hourly.wind_gusts_10m){
+        for(let k=i;k<Math.min(i+4,d.hourly.wind_gusts_10m.length);k++){
+          if(d.hourly.wind_gusts_10m[k]>=60){
+            msg='💨 Sturmböen bis '+Math.round(d.hourly.wind_gusts_10m[k])+' km/h ab '+d.hourly.time[k].slice(11,16)+' – besonders auf dem Boot Vorsicht!';
+            break;
+          }
+        }
+      }
+    }
+  }
+  if(msg){ warn.textContent=msg; warn.classList.add('show'); }
+  else { warn.classList.remove('show'); warn.textContent=''; }
+}
 async function loadPegel(ctr,el){
   try{
     const base='https://www.pegelonline.wsv.de/webservices/rest-api/v2/stations';
