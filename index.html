@@ -1137,8 +1137,11 @@ async function loadPegel(ctr,el){
     const s0=st[0];
     const m=await (await fetch(base+'/'+s0.uuid+'/W/currentmeasurement.json')).json();
     if(!m||typeof m.value==='undefined') return;
-    PEGEL={value:m.value,station:s0.shortname};
-    let txt=' · 🌊 '+s0.shortname.charAt(0)+s0.shortname.slice(1).toLowerCase()+': '+m.value+' cm';
+    const dist=(s0.latitude&&s0.longitude)?haversine(ctr.lat,ctr.lng,s0.latitude,s0.longitude):null;
+    PEGEL={value:m.value,station:s0.shortname,dist};
+    const stName=s0.shortname.charAt(0)+s0.shortname.slice(1).toLowerCase();
+    let txt=' · 🌊 '+stName+(dist!=null?' ('+dist.toFixed(0)+' km)':'')+': '+m.value+' cm';
+    if(dist!=null&&dist>20) txt+=' – Station weit entfernt, nur grober Anhalt';
     /* Trend über 24 h */
     try{
       const hist=await (await fetch(base+'/'+s0.uuid+'/W/measurements.json?start=P1D')).json();
