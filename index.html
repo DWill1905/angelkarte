@@ -151,6 +151,12 @@
   .verif{font-size:10px;color:#5b6b66;margin-top:7px;letter-spacing:.03em}
   .fbentn{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--text);cursor:pointer}
   .fbentn input{width:17px;height:17px;accent-color:var(--forelle)}
+  .fbtool{flex:1;border:1px solid var(--line);background:var(--panel-2);color:var(--text);border-radius:8px;padding:9px;font-size:12.5px;cursor:pointer}
+  .insight{background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:12px;margin-top:10px;font-size:12.5px;line-height:1.6}
+  .insight h4{font-family:Georgia,serif;font-size:13.5px;margin-bottom:7px;color:#f2f7f4}
+  .insight .bar{display:flex;align-items:center;gap:8px;margin:3px 0}
+  .insight .bar span:first-child{min-width:92px;color:var(--muted)}
+  .insight .barfill{height:9px;background:var(--forelle);border-radius:5px;min-width:3px}
 
   .mydlg-wrap{position:fixed;inset:0;background:rgba(6,16,18,.72);z-index:1200;display:flex;align-items:center;justify-content:center;padding:20px}
   .mydlg-wrap[hidden]{display:none!important}
@@ -244,6 +250,8 @@
       </div>
       <button class="fb-save" id="fbSave">Fang speichern</button>
       <div class="fb-status" id="fbStatus"></div>
+    <div id="fbTools" style="display:flex;gap:8px;margin-top:8px"></div>
+    <div id="fbInsights"></div>
     </div>
     <div id="fbList"></div>
   </div>
@@ -1330,10 +1338,63 @@ async function fbPersist(){
   catch(e){ persistent=false; }
   fbRender();
 }
+function fbCsv(){
+  if(!fbMem.length) return;
+  const head=['Datum','Fisch','Laenge_cm','Spot','Koeder','Entnommen','Zeit','Mond','Druck_hPa','Drucktrend','Wind','Pegel_cm','Wassertemp_C'];
+  const rows=fbMem.map(e=>[e.datum,e.fisch,e.laenge||'',e.spot||'',e.koeder||'',e.entnommen?'ja':'nein',
+    e.ctx?e.ctx.zeit:'',e.ctx?e.ctx.mond:'',e.ctx?(e.ctx.druck||''):'',e.ctx?(e.ctx.trend||''):'',
+    e.ctx?(e.ctx.wind||''):'',e.ctx?(e.ctx.pegel||''):'',e.ctx&&e.ctx.wt!=null?e.ctx.wt:''
+  ].map(v=>{v=String(v);return /[";\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;}).join(';'));
+  const csv='\ufeff'+head.join(';')+'\n'+rows.join('\n');
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob); a.download='fangbuch.csv';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+function topCount(arr){
+  const m={}; arr.forEach(k=>{if(k)m[k]=(m[k]||0)+1;});
+  return Object.entries(m).sort((a,b)=>b[1]-a[1]);
+}
+function bars(entries,total){
+  return entries.slice(0,4).map(([k,n])=>
+    '<div class="bar"><span>'+esc(k)+'</span><span class="barfill" style="width:'+Math.round(n/total*90)+'px"></span><span>'+n+'</span></div>'
+  ).join('');
+}
+function fbInsights(){
+  const el=document.getElementById('fbInsights');
+  const withLen=fbMem.filter(e=>e.laenge);
+  if(fbMem.length<8){ el.innerHTML='<p class="fineprint" style="margin-top:10px">Muster-Auswertung erscheint ab 8 Fängen (aktuell '+fbMem.length+'). Je mehr Fänge, desto aussagekräftiger.</p>'; return; }
+  let h='<div class="insight"><h4>Deine Muster ('+fbMem.length+' Fänge)</h4>';
+  const koeder=topCount(fbMem.map(e=>e.koeder));
+  if(koeder.length){ h+='<b>Fängigste Köder</b>'+bars(koeder,fbMem.length); }
+  const zeiten=topCount(fbMem.map(e=>{ if(!e.ctx||!e.ctx.zeit)return null; const hh=+e.ctx.zeit.slice(0,2); return hh<6?'Nacht (0–6)':hh<10?'früh (6–10)':hh<16?'Tag (10–16)':hh<21?'Abend (16–21)':'Nacht (21–24)'; }).filter(Boolean));
+  if(zeiten.length){ h+='<b style="display:block;margin-top:8px">Beste Tageszeiten</b>'+bars(zeiten,fbMem.filter(e=>e.ctx&&e.ctx.zeit).length); }
+  const trends=fbMem.filter(e=>e.ctx&&typeof e.ctx.trend==='number');
+  if(trends.length>=5){
+    const fallend=trends.filter(e=>e.ctx.trend<=-1.5).length;
+    const pct=Math.round(fallend/trends.length*100);
+    h+='<b style="display:block;margin-top:8px">Luftdruck</b><div style="margin-top:3px">'+pct+'% deiner Fänge bei fallendem Druck'+(pct>=50?' – dein Beißtrigger bestätigt sich!':'.')+'</div>';
+  }
+  const spots=topCount(fbMem.map(e=>e.spot));
+  if(spots.length){ h+='<b style="display:block;margin-top:8px">Top-Spots</b>'+bars(spots,fbMem.length); }
+  h+='</div>';
+  el.innerHTML=h;
+}
+function fbTools(){
+  const t=document.getElementById('fbTools');
+  if(!t) return;
+  t.innerHTML='';
+  if(fbMem.length){
+    const b=document.createElement('button'); b.className='fbtool'; b.textContent='⬇ CSV-Export';
+    b.onclick=fbCsv; t.appendChild(b);
+  }
+}
 function fbRender(){
   const list=document.getElementById('fbList');
   document.getElementById('fbStatus').textContent=
     persistent?'Wird dauerhaft gespeichert':'Hinweis: Speicherung nur für diese Sitzung';
+  fbTools(); fbInsights();
   if(!fbMem.length){
     list.innerHTML='<div class="fb-empty">Noch keine Fänge eingetragen.<br>Petri Heil – der erste kommt bestimmt! 🐟</div>';
     return;
