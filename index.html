@@ -258,6 +258,14 @@
   </div>
 </div>
 
+<div class="mydlg-wrap" id="knotDlg" hidden>
+  <div class="mydlg">
+    <h3>🪢 Knoten-Kurzreferenz</h3>
+    <div id="knotBody" style="font-size:12.5px;line-height:1.6;max-height:62dvh;overflow-y:auto"></div>
+    <div class="mydlg-btns"><button id="knotClose">Schließen</button></div>
+  </div>
+</div>
+
 <div class="mydlg-wrap" id="packDlg" hidden>
   <div class="mydlg">
     <h3>🎒 Packliste</h3>
@@ -1067,6 +1075,10 @@ const packBtn=document.createElement('button');
 packBtn.className='chip'; packBtn.id='packBtn'; packBtn.textContent='🎒 Packliste';
 packBtn.onclick=openPack;
 fishEl.appendChild(packBtn);
+const knotBtn=document.createElement('button');
+knotBtn.className='chip'; knotBtn.id='knotBtn'; knotBtn.textContent='🪢 Knoten';
+knotBtn.onclick=openKnot;
+fishEl.appendChild(knotBtn);
 
 /* Standort */
 let userPos=null, userMarker=null;
@@ -1383,6 +1395,48 @@ function kbHtml(){
   h+='<p style="color:var(--muted)">Wasser trüb: Schockfarben (firetiger, chartreuse) und laute Köder · Wasser klar: Naturdekore, leiser, dünnere Vorfächer.</p>';
   return h;
 }
+const KNOTS=[
+  {name:'Palomar-Knoten',use:'Haken/Wirbel an geflochtener Schnur – der stärkste Allrounder',steps:[
+    'Schnur doppeln, als Schlaufe durch das Hakenöhr führen',
+    'Mit der Schlaufe einen einfachen Überhandknoten machen (Haken hängt lose)',
+    'Schlaufe über den kompletten Haken stülpen',
+    'An beiden Enden gleichmäßig festziehen, vorher anfeuchten, Rest kappen']},
+  {name:'Clinch-Knoten (verbessert)',use:'Haken/Wirbel an monofiler Schnur',steps:[
+    'Schnur durchs Öhr, 5–7 Mal um die Hauptschnur wickeln',
+    'Ende durch die erste Schlaufe am Öhr führen',
+    'Dann zurück durch die große Schlaufe, die dabei entsteht',
+    'Anfeuchten, festziehen, Rest kappen']},
+  {name:'No-Knot (Knotenlos)',use:'Direktmontage Vorfach an Fluorocarbon, für Zander/Hecht',steps:[
+    'FC-Ende ca. 6–8 Mal eng um sich selbst und den Haken-/Schnurschenkel wickeln (aufsteigend)',
+    'Ende von hinten durch das Hakenöhr fädeln',
+    'Wicklungen zusammenschieben, anfeuchten, straff ziehen',
+    'Sitzt bombenfest, kaum Tragkraftverlust']},
+  {name:'Schlaufenknoten (Rapala-Loop)',use:'Bewegliche Köderanbindung – Wobbler laufen freier',steps:[
+    'Überhandknoten in die Schnur (noch offen), Ende durchs Köderöhr',
+    'Ende zurück durch den offenen Überhandknoten',
+    '3–4 Mal um die Hauptschnur wickeln, zurück durch den Überhandknoten',
+    'Anfeuchten, langsam zuziehen – es bleibt eine feste Schlaufe']},
+  {name:'Albright (Verbindung)',use:'Zwei unterschiedlich dicke Schnüre verbinden (Geflecht↔FC-Vorfach)',steps:[
+    'Aus der dickeren Schnur eine Schlaufe bilden',
+    'Dünnere Schnur durch die Schlaufe, dann 10× um beide Schenkel der Schlaufe wickeln (Richtung Schlaufenende)',
+    'Ende zurück durch die Schlaufe führen (gleiche Seite wie Eintritt)',
+    'Beide Hauptschnüre halten, anfeuchten, Wicklungen straffziehen']}
+];
+const knotDlg=document.getElementById('knotDlg');
+function openKnot(){
+  let h='';
+  KNOTS.forEach(k=>{
+    h+='<div class="card" style="margin-bottom:10px"><h3 style="font-size:13.5px">'+k.name+'</h3>'
+      +'<p style="color:var(--muted);margin-bottom:6px">'+k.use+'</p><ol style="margin-left:16px">'
+      +k.steps.map(x=>'<li style="margin:3px 0">'+x+'</li>').join('')+'</ol></div>';
+  });
+  h+='<p style="color:var(--muted);font-size:11px">Knoten immer anfeuchten vor dem Zuziehen – trocken schneidet die Reibungshitze die Schnur an.</p>';
+  document.getElementById('knotBody').innerHTML=h;
+  knotDlg.hidden=false;
+}
+document.getElementById('knotClose').onclick=()=>{knotDlg.hidden=true;};
+knotDlg.addEventListener('click',e=>{if(e.target===knotDlg)knotDlg.hidden=true;});
+
 const packDlg=document.getElementById('packDlg');
 async function packState(){ try{return JSON.parse((await store.get('pack:'+REGION.id)).value)||{};}catch(e){return {};} }
 async function openPack(){
