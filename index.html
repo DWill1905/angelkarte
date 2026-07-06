@@ -1103,7 +1103,11 @@ handle.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleS
 var myPending=null;
 const myDlg=document.getElementById('myDlg');
 async function loadMySpots(rid){
-  try{const r=await store.get('myspots:'+rid);return JSON.parse(r.value)||[];}catch(e){return[];}
+  try{
+    const r=await store.get('myspots:'+rid);
+    const a=r&&r.value?JSON.parse(r.value):[];
+    return Array.isArray(a)?a.filter(m=>m&&typeof m.lat==='number'&&typeof m.lng==='number'):[];
+  }catch(e){return[];}
 }
 let uidLast=0;
 function uid(){ const t=Date.now(); uidLast=Math.max(t,uidLast+1); return uidLast; }
@@ -1368,7 +1372,8 @@ let fbMem=[]; let persistent=true;
 async function fbLoad(){
   try{
     const r=await store.get('fangbuch');
-    fbMem=r&&r.value?JSON.parse(r.value):[];
+    const parsed=r&&r.value?JSON.parse(r.value):[];
+    fbMem=Array.isArray(parsed)?parsed.filter(e=>e&&typeof e==='object'&&e.fisch):[];
   }catch(e){ fbMem=[]; }
   fbRender();
 }
