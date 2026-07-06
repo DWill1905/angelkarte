@@ -1418,7 +1418,8 @@ function checkFang(){
   const el=document.getElementById('fbCheck');
   if(!REGION){el.innerHTML='';return;}
   const fisch=document.getElementById('fbFisch').value;
-  const len=parseInt(document.getElementById('fbLaenge').value,10);
+  let len=parseInt(document.getElementById('fbLaenge').value,10);
+  if(!isNaN(len)&&(len<0||len>250)) len=NaN; /* unplausibel ignorieren */
   const sc=SCHON.find(x=>x.fisch===fisch);
   let msgs=[],bad=false;
   if(!sc){
@@ -1449,10 +1450,14 @@ function checkFang(){
 document.getElementById('fbFisch').onchange=checkFang;
 document.getElementById('fbLaenge').oninput=checkFang;
 
+let fbSaving=false;
 document.getElementById('fbSave').onclick=async ()=>{
+  if(fbSaving) return; fbSaving=true;
+  try{
   await fbReady; /* verhindert, dass fbLoad einen frischen Eintrag überschreibt */
   const fisch=document.getElementById('fbFisch').value;
-  const laenge=document.getElementById('fbLaenge').value;
+  let laenge=parseInt(document.getElementById('fbLaenge').value,10);
+  laenge=(isNaN(laenge)||laenge<0||laenge>250)?'':laenge;
   const jetzt=new Date();
   fbMem.push({
     id:uid(), fisch, laenge,
@@ -1472,6 +1477,7 @@ document.getElementById('fbSave').onclick=async ()=>{
   document.getElementById('fbEntnommen').checked=false;
   await fbPersist();
   checkFang();
+  }finally{ fbSaving=false; }
 };
 function prefillFang(spotName){
   document.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-selected','false'));
