@@ -1388,11 +1388,19 @@ const KB={
   winter:'Praktisch aussichtslos – Aal ruht.'}
 };
 function kbHtml(){
-  const se=season();
-  const seName={fruehjahr:'Frühjahr',sommer:'Sommer',herbst:'Herbst',winter:'Winter'}[se];
+  /* Wassertemperatur schlägt Kalender: kaltes Wasser im Mai = noch Frühjahrsverhalten */
+  let se=season();
+  if(WX&&WX.wt!=null){
+    const wt=WX.wt;
+    if(wt<6) se='winter';
+    else if(wt<12) se=(se==='herbst')?'herbst':'fruehjahr';
+    else if(wt>=20) se='sommer';
+  }
   const fische=fishSel?[fishSel==='Forelle'?'Forelle':fishSel]:['Hecht','Zander','Barsch'];
   const bekannt=fische.filter(f=>KB[f]), unbekannt=fische.filter(f=>!KB[f]);
-  let h='<p style="color:var(--muted);margin-bottom:10px">Saison: <b>'+seName+'</b>'
+  const seName={fruehjahr:'Frühjahr',sommer:'Sommer',herbst:'Herbst',winter:'Winter'}[se];
+  let h='<p style="color:var(--muted);margin-bottom:10px">Phase: <b>'+seName+'</b>'
+    +(WX&&WX.wt!=null?' (nach Wassertemp)':'')
     +(WX?' · Luft '+Math.round(WX.temp)+'°C · '+Math.round(WX.press)+' hPa':'')
     +(WX&&WX.wt!=null?' · Wasser '+Math.round(WX.wt)+'°C':'')+'</p>';
   bekannt.forEach(f=>{
