@@ -42,22 +42,23 @@ for (const n of names) {
   const code = extractConst(n);
   if (code) { try { sandbox[n] = eval('(' + code + ')'); } catch (e) {} }
 }
-/* REGION_RLP (Objekt) + REGIONS_EMBEDDED (Array mit Referenzen) separat, mit Kontext */
+/* Alle REGION_*-Objekte + REGIONS_EMBEDDED (Array mit Referenzen) separat, mit Kontext */
 let regions = null;
 try {
   const ctx = names.map(n => 'const ' + n + '=' + JSON.stringify(sandbox[n]) + ';').join('\n');
-  const rlpCode = (() => {
-    const m = /const REGION_RLP\s*=\s*\{/.exec(scriptBody);
-    if (!m) return 'null';
+  /* Jedes 'const REGION_XYZ = {...}' balanciert herausschneiden (zukunftssicher für neue Regionen) */
+  const regionNames = [...scriptBody.matchAll(/const (REGION_[A-Z]+)\s*=\s*\{/g)].map(m => m[1]);
+  const regionDefs = regionNames.map(rn => {
+    const m = new RegExp('const ' + rn + '\\s*=\\s*\\{').exec(scriptBody);
     let i = scriptBody.indexOf('{', m.index), depth = 0, end = -1;
     for (let k = i; k < scriptBody.length; k++) {
       if (scriptBody[k] === '{') depth++;
       else if (scriptBody[k] === '}') { depth--; if (depth === 0) { end = k; break; } }
     }
-    return scriptBody.slice(i, end + 1);
-  })();
+    return 'const ' + rn + '=' + scriptBody.slice(i, end + 1) + ';';
+  }).join('\n');
   const embCode = extractConst('REGIONS_EMBEDDED');
-  regions = eval('(function(){' + ctx + '\nconst REGION_RLP=' + rlpCode + ';\nreturn ' + embCode + ';})()');
+  regions = eval('(function(){' + ctx + '\n' + regionDefs + '\nreturn ' + embCode + ';})()');
 } catch (e) {
   console.error('Konnte REGIONS_EMBEDDED nicht evaluieren:', e.message);
   process.exit(2);
