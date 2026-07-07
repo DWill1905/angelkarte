@@ -314,6 +314,7 @@
   <div class="mydlg">
     <h3 data-ic="tools">Werkzeuge</h3>
     <div class="mydlg-btns" style="flex-direction:column;gap:8px">
+      <button class="fbtool" id="tScore" data-ic="target">Heute passt es?</button>
       <button class="fbtool" id="tCol" data-ic="target">Köderberater</button>
       <button class="fbtool" id="tBite" data-ic="fish">Beißzeiten heute</button>
       <button class="fbtool" id="tPack" data-ic="bag">Packliste</button>
@@ -353,6 +354,14 @@
     <h3 data-ic="fish">Beißzeiten heute</h3>
     <div id="biteBody" style="font-size:13px;line-height:1.55;max-height:60dvh;overflow-y:auto"></div>
     <div class="mydlg-btns"><button id="biteClose">Schließen</button></div>
+  </div>
+</div>
+
+<div class="mydlg-wrap" id="scoreDlg" hidden>
+  <div class="mydlg">
+    <h3 data-ic="target">Heute passt es?</h3>
+    <div id="scoreBody" style="font-size:13px;line-height:1.55;max-height:60dvh;overflow-y:auto"></div>
+    <div class="mydlg-btns"><button id="scoreClose">Schließen</button></div>
   </div>
 </div>
 
@@ -1611,6 +1620,7 @@ const toolsDlg=document.getElementById('toolsDlg');
 function openTools(){ toolsDlg.hidden=false; }
 document.getElementById('toolsClose').onclick=()=>{toolsDlg.hidden=true;};
 toolsDlg.addEventListener('click',e=>{if(e.target===toolsDlg)toolsDlg.hidden=true;});
+document.getElementById('tScore').onclick=()=>{toolsDlg.hidden=true;openScore();};
 document.getElementById('tCol').onclick=()=>{toolsDlg.hidden=true;openKb();};
 document.getElementById('tBite').onclick=()=>{toolsDlg.hidden=true;openBite();};
 document.getElementById('tPack').onclick=()=>{toolsDlg.hidden=true;openPack();};
@@ -1722,6 +1732,111 @@ function openBite(){
 }
 document.getElementById('biteClose').onclick=()=>{biteDlg.hidden=true;};
 biteDlg.addEventListener('click',e=>{if(e.target===biteDlg)biteDlg.hidden=true;});
+
+/* ===== "Heute passt es?"-Score – transparent, additiv, ehrlich bei fehlenden Daten ===== */
+function computeScore(){
+  const now=new Date();
+  const factors=[];
+
+  /* Faktor 1: Luftdruck-Trend (stärkster Prädiktor) */
+  if(WX && typeof WX.trendVal==='number'){
+    let pt,txt;
+    if(WX.trendVal<=-1.5){pt=2;txt='Fallender Druck ('+WX.trendVal.toFixed(1)+' hPa/3h) – Fresslaune';}
+    else if(WX.trendVal<1.0){pt=1;txt='Druck stabil ('+WX.trendVal.toFixed(1)+' hPa/3h) – neutral';}
+    else{pt=0;txt='Druck steigt ('+WX.trendVal.toFixed(1)+' hPa/3h) – nach Front oft zäh';}
+    factors.push({name:'Luftdruck',pts:pt,max:2,txt});
+  } else factors.push({name:'Luftdruck',pts:null,max:2,txt:'Keine Wetterdaten geladen'});
+
+  /* Faktor 2: Beißfenster jetzt (solunar) */
+  const c=regionCenter();
+  const wins=c?solunar(c.lat,c.lng,now):[];
+  if(wins.length){
+    const inWin=wins.find(w=>now>=w.from&&now<=w.to);
+    let pt,txt;
+    if(inWin&&inWin.type==='major'){pt=2;txt='Major-Beißfenster läuft gerade ('+inWin.label+')';}
+    else if(inWin){pt=1;txt='Minor-Beißfenster läuft ('+inWin.label+')';}
+    else{
+      const next=wins.filter(w=>w.from>now).sort((a,b)=>a.from-b.from)[0];
+      if(next&&(next.from-now)<=90*60e3){pt=1;txt='Beißfenster in '+Math.round((next.from-now)/60e3)+' min ('+next.label+')';}
+      else{pt=0;txt=next?'Nächstes Fenster erst '+hhmm(next.from)+' Uhr':'Kein Fenster in Reichweite';}
+    }
+    factors.push({name:'Beißfenster',pts:pt,max:2,txt});
+  } else factors.push({name:'Beißfenster',pts:null,max:2,txt:'Sonnen-/Monddaten nicht verfügbar'});
+
+  /* Faktor 3: Wassertemperatur */
+  const wt=(WX&&WX.wt!=null)?WX.wt:(PEGEL&&PEGEL.wt!=null?PEGEL.wt:null);
+  if(wt!=null){
+    let pt,txt;
+    if(wt>=12&&wt<=20){pt=2;txt='Wasser '+Math.round(wt)+'°C – optimales Raubfischfenster';}
+    else if((wt>=8&&wt<12)||(wt>20&&wt<25)){pt=1;txt='Wasser '+Math.round(wt)+'°C – brauchbar';}
+    else if(wt>=25){pt=0;txt='Wasser '+Math.round(wt)+'°C – Hitzestress, träge';}
+    else{pt=0;txt='Wasser '+Math.round(wt)+'°C – Kälte-Lethargie';}
+    factors.push({name:'Wassertemp.',pts:pt,max:2,txt});
+  } else factors.push({name:'Wassertemp.',pts:null,max:2,txt:'Keine Wassertemperatur verfügbar'});
+
+  /* Faktor 4: Pegel (Fluss) oder Wind (See) */
+  const istFluss=PEGEL&&PEGEL.value!=null;
+  if(istFluss){
+    const hoch=REGION.pegel&&PEGEL.value>=REGION.pegel.warnAb;
+    const starkSteigend=PEGEL.trend!=null&&PEGEL.trend>=25;
+    let pt,txt;
+    if(hoch){pt=0;txt='Hochwasser ('+PEGEL.value+' cm) – schwer befischbar';}
+    else if(starkSteigend){pt=1;txt='Pegel steigt stark (+'+PEGEL.trend+' cm/24h) – Fische umorientiert';}
+    else{pt=2;txt='Pegel moderat ('+PEGEL.value+' cm) – gut befischbar';}
+    factors.push({name:'Pegel',pts:pt,max:2,txt});
+  } else if(WX&&typeof WX.wind==='number'){
+    let pt,txt;
+    if(WX.wind>=5&&WX.wind<=20){pt=2;txt='Wind '+Math.round(WX.wind)+' km/h – Wellen bringen Aktivität';}
+    else if(WX.wind<5){pt=1;txt='Wenig Wind ('+Math.round(WX.wind)+' km/h) – Wasser ruhig';}
+    else{pt=1;txt='Kräftiger Wind ('+Math.round(WX.wind)+' km/h) – schwer zu werfen';}
+    factors.push({name:'Wind/See',pts:pt,max:2,txt});
+  } else factors.push({name:'Pegel/Wind',pts:null,max:2,txt:'Keine Pegel-/Winddaten'});
+
+  /* Summe nur über bekannte Faktoren */
+  const known=factors.filter(f=>f.pts!=null);
+  const sum=known.reduce((a,f)=>a+f.pts,0);
+  const maxSum=known.reduce((a,f)=>a+f.max,0);
+  const pct=maxSum>0?Math.round(sum/maxSum*100):null;
+  return {factors,sum,maxSum,pct,knownCount:known.length};
+}
+
+function scoreAmpel(pct){
+  if(pct==null) return {label:'Zu wenig Daten',color:'var(--muted)',emoji:'○'};
+  if(pct>=75) return {label:'Top',color:'var(--ok)',emoji:'●'};
+  if(pct>=55) return {label:'Gut',color:'var(--dusk)',emoji:'●'};
+  if(pct>=35) return {label:'Mäßig',color:'var(--amber)',emoji:'●'};
+  return {label:'Schwierig',color:'var(--warn)',emoji:'●'};
+}
+
+const scoreDlg=document.getElementById('scoreDlg');
+function openScore(){
+  const r=computeScore();
+  const a=scoreAmpel(r.pct);
+  let h='';
+  /* Kopf: große Ampel */
+  h+='<div style="text-align:center;padding:8px 0 14px">';
+  h+='<div style="font-size:34px;font-weight:900;color:'+a.color+';line-height:1;font-family:\'Lato\',sans-serif">'+(r.pct!=null?r.pct+'%':'–')+'</div>';
+  h+='<div style="font-size:16px;font-weight:700;color:'+a.color+';margin-top:3px">'+a.emoji+' '+a.label+'</div>';
+  if(r.knownCount<4) h+='<div style="font-size:11px;color:var(--muted);margin-top:4px">'+r.knownCount+' von 4 Faktoren mit Daten – lade Wetter/Pegel für ein volles Bild</div>';
+  h+='</div>';
+  /* Faktoren */
+  h+='<div style="display:flex;flex-direction:column;gap:8px">';
+  r.factors.forEach(f=>{
+    const known=f.pts!=null;
+    const col=!known?'var(--muted)':f.pts===2?'var(--ok)':f.pts===1?'var(--amber)':'var(--warn)';
+    h+='<div style="display:flex;gap:10px;align-items:flex-start">';
+    h+='<span style="min-width:9px;width:9px;height:9px;border-radius:50%;background:'+col+';margin-top:4px"></span>';
+    h+='<div style="flex:1"><b style="font-size:12.5px">'+esc(f.name)+'</b>'+(known?' <span style="font-family:\'Space Mono\',monospace;color:var(--muted);font-size:11px">'+f.pts+'/'+f.max+'</span>':'')+'<br><span style="font-size:12px;color:var(--muted)">'+esc(f.txt)+'</span></div>';
+    h+='</div>';
+  });
+  h+='</div>';
+  h+='<p class="fineprint" style="margin-top:14px">Anhaltspunkt aus Druck-Trend, Beißfenster, Wassertemperatur und Pegel/Wind – kein Ersatz für Wasserkontakt. Faktoren ohne Daten zählen nicht mit.</p>';
+  document.getElementById('scoreBody').innerHTML=h;
+  scoreDlg.hidden=false;
+}
+document.getElementById('scoreClose').onclick=()=>{scoreDlg.hidden=true;};
+scoreDlg.addEventListener('click',e=>{if(e.target===scoreDlg)scoreDlg.hidden=true;});
+
 
 const kbDlg=document.getElementById('kbDlg');
 function openKb(){document.getElementById('kbBody').innerHTML=kbHtml();kbDlg.hidden=false;}
