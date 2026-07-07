@@ -214,6 +214,44 @@
    "warn": true
   },
   {
+   "name": "Buhnen Gimbsheim–Ibersheim",
+   "verif": "B",
+   "nr": "LFV RLP · km ~453–460",
+   "cat": "raub",
+   "arten": [
+    "Zander",
+    "Barsch",
+    "Wels",
+    "Aal",
+    "Barbe",
+    "Brachse",
+    "Karpfen"
+   ],
+   "lat": 49.725,
+   "lng": 8.434,
+   "fisch": "Zander (kapital, 3–7 Pfd berichtet), Barsch, Wels, Aal, Barbe, Brassen, Karpfen",
+   "methode": "Langes Buhnenfeld gegenüber AKW Biblis: Zander mit totem Köderfisch am Grund an der Buhnenkante (schlägt hier oft Gummi), Feeder auf Brassen/Barbe im ruhigen Buhnenbecken, nachts Aal/Wels an der Steinschüttung",
+   "karte": "Rheinischer Erlaubnisschein (LFV Rhl.-Rhh.) – Ausgabestellen im Raum Worms/Eich",
+   "note": "⚠ NICHT verwechseln mit dem Eich/Gimbsheimer Altrhein – die ~300 ha Schilffläche ist NSG (Angeln dort verboten)! Gemeint sind die RHEIN-Buhnen östlich der B9. Zugang über Leinpfad/Krippenweg. Bei Buhnenkopf-Strudeln Vorsicht. Pegel Worms/Mainz prüfen: bei Hochwasser Buhnen überspült, dann vom Ufer vor der Steinschüttung.",
+   "hotspots": [
+    {
+     "name": "Ibersheim gegenüber AKW Biblis",
+     "saison": "Okt–Mär + warme Winternächte",
+     "lat": 49.705,
+     "lng": 8.446,
+     "tipp": "Gegenüber/unterhalb des Kraftwerks berichten Ortsangler durchschnittlich 7-Pfd-Zander – toter Köderfisch am Grund. Oberhalb feiner mit Gummi an die Buhnenkante. Lage ungefähr (km ~455)."
+    },
+    {
+     "name": "Buhne an der Natorampe (Gimbsheim)",
+     "saison": "Mai–Okt",
+     "lat": 49.738,
+     "lng": 8.429,
+     "tipp": "Große Buhne, Futterkorb bringt Massen an Brassen und kleinere Barben; gute Barsche. Achtung Hänger (Totholz). Von Oppenheim aus die ersten, vom Eicher See aus die letzten Buhnen. Lage ungefähr."
+    }
+   ],
+   "warn": true
+  },
+  {
    "name": "Mainspitze & Maaraue",
    "nr": "Mainmündung km 496,6 · HESSEN!",
    "cat": "raub",
