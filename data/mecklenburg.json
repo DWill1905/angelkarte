@@ -273,6 +273,38 @@
    "warn": false
   },
   {
+   "name": "Großer Priepertsee",
+   "verif": "B",
+   "rig": "Zander-Jigrute 15–50 g für die tiefen Kanten (26 m!), Pilker gehen hier laut Ortsanglern gut; Stahlvorfach auf Hecht. Boot nötig.",
+   "nr": "Obere Havel · Meisterbereich Ahrensberg",
+   "cat": "raub",
+   "arten": [
+    "Zander",
+    "Hecht",
+    "Barsch",
+    "Aal",
+    "Schleie",
+    "Wels",
+    "Karpfen"
+   ],
+   "lat": 53.256,
+   "lng": 13.018,
+   "fisch": "Zander (sehr gut), Hecht, Barsch, Aal, Schleie, Wels, Karpfen, Weißfisch",
+   "methode": "104 ha, Ø ~8–10 m, nördlich von Priepert steil bis 26 m: als Zandergewässer bekannt. Havel-Einlauf (wird schnell tief) und die Steilkanten jiggen, Unterwasserberg am Nordende suchen",
+   "karte": "Angelkarte Obere Havel (Fischereihof Ahrensberg Tel. 039832 20230) – Tageskarte ~12€, gilt für alle Verbund-Seen",
+   "note": "Reges Wasserwander-/Hausbootrevier (Obere-Havel-Wasserstraße) – Dämmerung nutzen. ⚠ Wasserskistrecke auf dem See: markierten Bereich meiden. Kaum Uferstellen, Boot empfohlen. Schleppen verboten, Nachtangeln erlaubt.",
+   "hotspots": [
+    {
+     "name": "Havel-Einlauf (Nord, Richtung Wangnitzsee)",
+     "saison": "ganzjährig, Zander top",
+     "lat": 53.264,
+     "lng": 13.017,
+     "tipp": "Ortsangler-Tipp: gleich am Haveleinlauf wird es schnell tief – klassischer Zanderzug, auch beidseitig Richtung Wangnitzsee. Tiefste Stelle (26 m) liegt nördlich von Priepert. Lage ungefähr."
+    }
+   ],
+   "warn": false
+  },
+  {
    "name": "Fischereihof Wesenberg",
    "nr": "Kartenausgabe",
    "cat": "info",
