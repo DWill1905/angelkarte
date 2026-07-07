@@ -202,6 +202,38 @@
    "warn": false
   },
   {
+   "name": "Rätzsee (bei Mirow/Canow)",
+   "verif": "B",
+   "rig": "Vom Ufer an den erreichbaren Buchten: Spinnrute mit Stahlvorfach auf Hecht, DropShot auf Barsch; nur E-Motor auf dem Boot erlaubt.",
+   "nr": "Obere Havel · Meisterbereich Canow/Mirow",
+   "cat": "raub",
+   "arten": [
+    "Hecht",
+    "Zander",
+    "Barsch",
+    "Aal",
+    "Schleie",
+    "Karpfen",
+    "Wels"
+   ],
+   "lat": 53.287,
+   "lng": 12.859,
+   "fisch": "Hecht, Zander, Barsch, Aal, Schleie, Karpfen, Wels, Weißfisch (Artenangaben teils user-generated)",
+   "methode": "290-ha-Waldsee bis 20 m tief, sehr facettenreich mit Buchten/Kanälen/Halbinseln: Hecht an den Schilfkanten der Buchten, Zander an den tiefen Löchern und Steilkanten",
+   "karte": "Angelkarte Obere Havel (Meisterbereich Canow Tel. 039828 20476 oder Mirow 039833 20423) – gilt für alle Seen des Verbunds",
+   "note": "Einer der wenigen Seen mit mehreren Uferzugängen: rund um den See führen Wege, das Ufer ist an einigen Stellen gut erreichbar (Nord: Zirtow, Süd: Fleether Mühle). Nur E-Motor erlaubt. Nachtangeln erlaubt. Riesiger Waldkomplex – Mückenschutz.",
+   "hotspots": [
+    {
+     "name": "Übergang zum Zirtowsee (Nordufer)",
+     "saison": "Mai–Okt",
+     "lat": 53.301,
+     "lng": 12.863,
+     "tipp": "Enge Verbindung zum Zirtowsee am Nordufer – Engstellen und Kanäle sind klassische Hecht- und Barschzüge. Vom Ufer bei Zirtow erreichbar. Lage ungefähr."
+    }
+   ],
+   "warn": false
+  },
+  {
    "name": "Fischereihof Wesenberg",
    "nr": "Kartenausgabe",
    "cat": "info",
