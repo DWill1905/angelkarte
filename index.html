@@ -1748,11 +1748,33 @@ function fbRender(){
     const cx=e.ctx?[e.ctx.zeit,e.ctx.mond,e.ctx.druck?e.ctx.druck+' hPa'+(e.ctx.trend<=-1.5?'⇘':e.ctx.trend>=1.5?'⇗':''):null,e.ctx.wind,e.ctx.pegel?'Pegel '+e.ctx.pegel:null,e.ctx.wt!=null?'W '+e.ctx.wt+'°C':null].filter(Boolean).join(' · '):'';
     d.innerHTML=`<div class="info"><div class="fish">${esc(e.fisch)} ${e.laenge?'· '+esc(e.laenge)+' cm':''} ${e.entnommen?'<span title="entnommen">🪣</span>':'<span title="zurückgesetzt">↩</span>'}</div>
       <div class="sub">${esc(e.spot)} · ${esc(e.datum)}${e.koeder?' · '+esc(e.koeder):''}${cx?'<br>'+esc(cx):''}</div></div>
+      <button class="fb-edit" aria-label="Eintrag bearbeiten" data-id="${esc(e.id)}" style="background:none;border:0;color:var(--muted);font-size:15px;cursor:pointer;padding:4px">✎</button>
       <button class="fb-del" aria-label="Eintrag löschen" data-id="${esc(e.id)}">✕</button>`;
     d.querySelector('.fb-del').onclick=async ev=>{
       await fbReady;
       fbMem=fbMem.filter(x=>x.id!==Number(ev.currentTarget.dataset.id));
       await fbPersist();
+    };
+    d.querySelector('.fb-edit').onclick=async ev=>{
+      await fbReady;
+      const entry=fbMem.find(x=>x.id===Number(ev.currentTarget.dataset.id));
+      if(!entry) return;
+      /* Werte ins Formular laden */
+      document.getElementById('fbFisch').value=entry.fisch;
+      document.getElementById('fbLaenge').value=entry.laenge||'';
+      document.getElementById('fbKoeder').value=entry.koeder||'';
+      document.getElementById('fbEntnommen').checked=!!entry.entnommen;
+      const spSel=document.getElementById('fbSpot');
+      if([...spSel.options].some(o=>o.textContent===entry.spot)) spSel.value=entry.spot;
+      /* alten Eintrag entfernen – Speichern legt ihn aktualisiert neu an */
+      fbMem=fbMem.filter(x=>x.id!==entry.id);
+      await fbPersist();
+      checkFang();
+      document.querySelector('[data-view="fangbuch"]').click();
+      const lf=document.getElementById('fbLaenge');
+      if(lf.scrollIntoView) lf.scrollIntoView({behavior:'smooth',block:'center'});
+      const st=document.getElementById('fbStatus');
+      if(st){ st.textContent='✎ Eintrag geladen – anpassen und erneut speichern'; }
     };
     list.appendChild(d);
   });
