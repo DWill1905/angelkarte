@@ -17,7 +17,7 @@
   "Lebender Köderfisch verboten (Tierschutzgesetz).",
   "Zander/Wels stehen auf Grundelfetzen &amp; -filet – am Grund an der Strömungskante anbieten."
  ],
- "schonQuelle": "Quelle: FischGDV RP (abgeglichen 07/2026; Hecht bis 31.05., Zander 15.03.–15.05.). Verein/Erlaubnisschein kann strenger sein.",
+ "schonQuelle": "Quelle: Landesfischereiordnung RLP / FischGDV RP (abgeglichen 07/2026: Hecht 01.02.–15.04., Zander 01.04.–31.05., Barbe 01.05.–15.06., Aal-Maß 40 cm). Am Rhein gelten die artspezifischen Schonzeiten; die allg. Frühjahrsschonzeit 15.04.–31.05. gilt NICHT für Rhein/Mosel/Lahn. Verein/Erlaubnisschein kann strenger sein.",
  "pegel": {
   "warnAb": 400,
   "text": "Buhnen überspült – auf Hafenausfahrten ausweichen!"
@@ -407,20 +407,20 @@
     1
    ],
    "bis": [
-    5,
-    31
+    4,
+    15
    ],
    "mm": "50 cm"
   },
   {
    "fisch": "Zander",
    "von": [
-    3,
-    15
+    4,
+    1
    ],
    "bis": [
     5,
-    15
+    31
    ],
    "mm": "45 cm"
   },
@@ -434,7 +434,7 @@
    "fisch": "Aal",
    "von": null,
    "bis": null,
-   "mm": "50 cm (EU-Aalschutz: Änderungen möglich)"
+   "mm": "40 cm (EU-Aalschutz: Fangfenster/Sperrzeiten möglich)"
   },
   {
    "fisch": "Barbe",

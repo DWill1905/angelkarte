@@ -606,7 +606,7 @@ const SCHON_SN = [
   {fisch:'Hecht', von:[2,1], bis:[4,30], mm:'50 cm'},
   {fisch:'Zander', von:[2,1], bis:[5,31], mm:'50 cm'},
   {fisch:'Bachforelle', von:[10,1], bis:[4,30], mm:'28 cm'},
-  {fisch:'Regenbogenforelle', von:[10,1], bis:[4,30], mm:'– (Schonzeit nur Fließgewässer)'},
+  {fisch:'Regenbogenforelle', von:[10,1], bis:[4,30], mm:'25 cm (nur Fließgewässer)'},
   {fisch:'Karpfen', von:null, bis:null, mm:'40 cm'},
   {fisch:'Aal', von:null, bis:null, mm:'50 cm'},
   {fisch:'Barsch', von:null, bis:null, mm:'– (LVSA: max. 10/Tag)'}
@@ -718,7 +718,7 @@ const SCHON_MV=[
   {fisch:'Zander',von:[3,15],bis:[6,15],mm:'Entnahmefenster 55–75 cm'},
   {fisch:'Barsch',von:null,bis:null,mm:'Entnahmefenster 25–40 cm'},
   {fisch:'Karpfen',von:null,bis:null,mm:'50 cm'},
-  {fisch:'Aal',von:null,bis:null,mm:'50 cm (EU-Aalschutz: Änderungen möglich)'},
+  {fisch:'Aal',von:null,bis:null,mm:'40 cm (EU-Aalschutz: Fangfenster/Sperrzeiten möglich)'},
   {fisch:'Schleie',von:null,bis:null,mm:'25 cm'},
   {fisch:'Wels',von:null,bis:null,mm:'90 cm'}
 ];
@@ -853,10 +853,10 @@ const SPOTS_RLP=[
    note:'Liegt zwischen Stadtstrecke und Industriehafen, inkl. der Buhnen und Strände dahinter. Strom-km im Erlaubnisschein beachten. Lage ungefähr.',warn:true}
 ];
 const SCHON_RLP=[
-  {fisch:'Hecht',von:[2,1],bis:[5,31],mm:'50 cm'},
-  {fisch:'Zander',von:[3,15],bis:[5,15],mm:'45 cm'},
+  {fisch:'Hecht',von:[2,1],bis:[4,15],mm:'50 cm'},
+  {fisch:'Zander',von:[4,1],bis:[5,31],mm:'45 cm'},
   {fisch:'Barsch',von:null,bis:null,mm:'– (kein gesetzl. Maß)'},
-  {fisch:'Aal',von:null,bis:null,mm:'50 cm (EU-Aalschutz: Änderungen möglich)'},
+  {fisch:'Aal',von:null,bis:null,mm:'40 cm (EU-Aalschutz: Fangfenster/Sperrzeiten möglich)'},
   {fisch:'Barbe',von:[5,1],bis:[6,15],mm:'35 cm'},
   {fisch:'Karpfen',von:null,bis:null,mm:'35 cm'},
   {fisch:'Schleie',von:null,bis:null,mm:'25 cm'},
@@ -867,7 +867,7 @@ const SCHON_RLP=[
 /* ============ Regionsdefinitionen (eingebetteter Fallback zur JSON-Datenbank) ============ */
 const REGION_RLP={id:'mainz',name:'Rhein & Rheinhessen (Mainz)',nachtangeln:'frei',kurz:'Rhein & Rheinhessen',packliste:['Rheinischer Erlaubnisschein (Strom-km prüfen!)','Schwere Jigrute 30–60 g + Bleikopf-Vorrat (Steinpackung!)','Grundel-Dekore, Stahl-/FC-Vorfach','Wathose/Gummistiefel für Buhnen','Pegel checken – bei >400 cm Buhnen weg','Stirnlampe, Kescher, Abhakmatte'],
   koederfisch:['Grundel ist am Rhein der dominante Beifang und ideal als toter Köderfisch – vor Ort fangen, gebietsfremd aber ohnehin schon überall.','Köderfischsenke vom Ufer laut rheinischem Erlaubnisschein erlaubt.','Lebender Köderfisch verboten (Tierschutzgesetz).','Zander/Wels stehen auf Grundelfetzen &amp; -filet – am Grund an der Strömungskante anbieten.'],
-  schonQuelle:'Quelle: FischGDV RP (abgeglichen 07/2026; Hecht bis 31.05., Zander 15.03.–15.05.). Verein/Erlaubnisschein kann strenger sein.',
+  schonQuelle:'Quelle: Landesfischereiordnung RLP / FischGDV RP (abgeglichen 07/2026: Hecht 01.02.–15.04., Zander 01.04.–31.05., Barbe 01.05.–15.06., Aal-Maß 40 cm). Am Rhein gelten die artspezifischen Schonzeiten; die allg. Frühjahrsschonzeit 15.04.–31.05. gilt NICHT für Rhein/Mosel/Lahn. Verein/Erlaubnisschein kann strenger sein.',
   pegel:{warnAb:400,text:'Buhnen überspült – auf Hafenausfahrten ausweichen!'},
   fusszeile:'Erlaubnis: <a href="https://lfv-rhl-rhh.de/fischerei-erlaubnisscheine/rhein/" target="_blank" rel="noopener">LFV Rhl.-Rhh.</a> (links) · <a href="https://www.hejfish.com" target="_blank" rel="noopener">hejfish</a> (Hessen-Seite)',
   spots:SPOTS_RLP,schon:SCHON_RLP,
