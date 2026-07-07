@@ -318,6 +318,8 @@
     <p style="font-size:11px;color:var(--muted);margin:-4px 0 8px">Tipp: Lange auf die Karte drücken (Handy) oder Rechtsklick (Desktop), um hier einen Spot zu setzen.</p>
     <label for="myName">Name</label>
     <input id="myName" type="text" placeholder="z.B. Kante vor der Schilfspitze" maxlength="60">
+    <label for="myTiefe" style="margin-top:8px">Tiefe (m, optional – Echolot)</label>
+    <input id="myTiefe" type="number" inputmode="decimal" step="0.1" min="0" max="80" placeholder="z.B. 4.5">
     <label for="myTipp" style="margin-top:8px">Notiz / Taktik</label>
     <input id="myTipp" type="text" placeholder="z.B. Zander 18 Uhr, Gummifisch motoroil 12 cm" maxlength="160">
     <div class="mydlg-btns">
@@ -1205,17 +1207,18 @@ async function loadMySpots(rid){
 let uidLast=0;
 function uid(){ const t=Date.now(); uidLast=Math.max(t,uidLast+1); return uidLast; }
 function mySpotObj(m){
-  return {name:esc(m.name),nr:'Eigener Spot',cat:'eigen',arten:[],lat:m.lat,lng:m.lng,
-    fisch:'–',methode:'–',karte:'Eigener Spot (nur auf diesem Gerät gespeichert)',
-    note:esc(m.tipp||'Keine Notiz.'),warn:false,my:true,myId:m.id};
+  return {name:esc(m.name),nr:m.tiefe?('Tiefe '+m.tiefe+' m'):'Eigener Spot',cat:'eigen',arten:[],lat:m.lat,lng:m.lng,
+    fisch:m.tiefe?(m.tiefe+' m tief'):'–',methode:'–',karte:'Eigener Spot (nur auf diesem Gerät gespeichert)',
+    note:esc(m.tipp||'Keine Notiz.')+(m.tiefe?' · 📏 '+m.tiefe+' m':''),warn:false,my:true,myId:m.id};
 }
-function openMyDlg(){document.getElementById('myName').value='';document.getElementById('myTipp').value='';myDlg.hidden=false;document.getElementById('myName').focus();}
+function openMyDlg(){document.getElementById('myName').value='';document.getElementById('myTipp').value='';document.getElementById('myTiefe').value='';myDlg.hidden=false;document.getElementById('myName').focus();}
 function closeMyDlg(){myDlg.hidden=true;myPending=null;}
 async function saveMySpot(){
   if(!myPending||!REGION) return closeMyDlg();
   const m={id:uid(),
     name:document.getElementById('myName').value.trim()||'Eigener Spot',
     tipp:document.getElementById('myTipp').value.trim(),
+    tiefe:(()=>{const t=parseFloat(document.getElementById('myTiefe').value);return(!isNaN(t)&&t>0&&t<=80)?t:null;})(),
     lat:myPending[0],lng:myPending[1]};
   const list=await loadMySpots(REGION.id); list.push(m);
   try{await store.set('myspots:'+REGION.id,JSON.stringify(list));}catch(e){}
