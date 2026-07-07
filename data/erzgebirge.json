@@ -86,6 +86,30 @@
    "warn": true
   },
   {
+   "name": "Talsperre Rauschenbach",
+   "verif": "B",
+   "rig": "H-Spinnrute 20–60 g für weite Würfe an die Abbruchkanten; TWT-Köderregeln beachten. Uferangeln, kein Boot.",
+   "arten": [
+    "Barsch",
+    "Hecht",
+    "Zander",
+    "Karpfen",
+    "Schleie",
+    "Regenbogenforelle",
+    "Aal",
+    "Brachse"
+   ],
+   "nr": "AVS (Gew.-Nr. vor Ort prüfen)",
+   "cat": "raub",
+   "lat": 50.6965,
+   "lng": 13.5057,
+   "fisch": "Barsch, Hecht, Zander, Karpfen, Schleie, Regenbogenforelle, Brasse, Aal, Weißfisch",
+   "methode": "Trinkwassertalsperre mit flach begehbaren Ufern (fast rundum beangelbar): im Frühjahr Hecht im Flachwasser, sonst Abbruchkanten in Wurfweite auf Zander/Barsch suchen, Grund auf Karpfen/Schleie",
+   "karte": "AVS-Gastkarte + TWT-Belehrung; LVSA-Jahresvollzahler ohne Zusatzerlaubnis. Gewässernummer vor Ort/Verzeichnis prüfen.",
+   "note": "TWT nahe der tschechischen Grenze (Flöha + Wernsbach gestaut, ~94 ha). Angeln erlaubt AUSSER ~150 m direkt an der Staumauer und der tschechischen Seite. Kein Boot, kein Baden. Flach abfallende, gut begehbare Ufer – eine der zugänglicheren Talsperren der Region. Aktuelle TWT-Bestimmungen beim AVS prüfen.",
+   "warn": false
+  },
+  {
    "name": "Talsperre Lichtenberg (Hauptsperre)",
    "arten": [
     "Hecht",
