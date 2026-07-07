@@ -182,6 +182,38 @@
    "warn": false
   },
   {
+   "name": "Rhein Nackenheim & Mühlarm",
+   "verif": "B",
+   "nr": "LFV RLP · km 485–490",
+   "cat": "raub",
+   "arten": [
+    "Zander",
+    "Barsch",
+    "Rapfen",
+    "Wels",
+    "Hecht",
+    "Aal",
+    "Brachse"
+   ],
+   "lat": 49.9558,
+   "lng": 8.336,
+   "fisch": "Zander, Barsch, Rapfen, Wels, Hecht, Aal, Brassen (Artenangaben teils user-generated)",
+   "methode": "Buhnen im Hauptstrom auf Zander/Rapfen; der strömungsberuhigte Mühlarm zwischen Ufer und Inseln als Schlechtwetter-/Hochwasser-Alternative",
+   "karte": "Rheinischer Erlaubnisschein (LFV Rhl.-Rhh.) – Ausgabestelle u.a. Angelsport Reika, Hauptstr. 55, Eich (Tel. 06246 904605)",
+   "rig": "Rhein-Standard: Jigrute 30–60 g mit Grundeldekoren; im Mühlarm reicht leichteres Gerät und Posen-/Grundmontage",
+   "note": "⚠ WICHTIG: Die Rheininseln Kisselwörth & Sändchen sind Naturschutzgebiet mit WECHSELNDEN Handangel-Sperren – auf Kisselwörth 16.07.–29.02. verboten, auf Sändchen Anfang März–15.07. verboten. Der Mühlarm (Ufer neben B9) und das befestigte Hauptstromufer sind alle 100–200 m an Treppen/Bootsrampen zugänglich. Zufahrt/Parken über Rheinstraße Nackenheim.",
+   "hotspots": [
+    {
+     "name": "Mühlarm bei der B9",
+     "saison": "ganzjährig, top bei Hochwasser",
+     "lat": 49.9585,
+     "lng": 8.3345,
+     "tipp": "Strömungsberuhigter Nebenarm zwischen Ufer und den Inseln – ideal wenn der Hauptstrom bei Hochwasser unfischbar wird. Viele Bootsstege, Friedfisch und Zander. Inselseite wegen NSG-Sperren meiden!"
+    }
+   ],
+   "warn": true
+  },
+  {
    "name": "Mainspitze & Maaraue",
    "nr": "Mainmündung km 496,6 · HESSEN!",
    "cat": "raub",
