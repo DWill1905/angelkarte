@@ -149,6 +149,18 @@
   .fbcheck.ok{background:#1f3d24;color:#a8dcae}
   .fbcheck.bad{background:#4a201a;color:#f0b6a8;font-weight:600}
   .verif{font-size:10px;color:#5b6b66;margin-top:7px;letter-spacing:.03em}
+  .calrow{display:flex;align-items:center;gap:8px;margin:4px 0;font-size:11px}
+  .calrow .cfish{min-width:74px;color:var(--text)}
+  .calbar{flex:1;display:flex;height:14px;border-radius:4px;overflow:hidden;border:1px solid var(--line)}
+  .calbar .m{flex:1;border-right:1px solid rgba(0,0,0,.25)}
+  .calbar .m:last-child{border-right:0}
+  .calbar .m.zu{background:#5a2620}
+  .calbar .m.auf{background:#28502e}
+  .calbar .m.now{outline:2px solid var(--forelle);outline-offset:-2px;z-index:1}
+  .callegend{display:flex;gap:14px;font-size:10px;color:var(--muted);margin-top:6px}
+  .callegend span:before{content:'';display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+  .callegend .lz:before{background:#5a2620}
+  .callegend .lo:before{background:#28502e}
   .fbentn{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--text);cursor:pointer}
   .fbentn input{width:17px;height:17px;accent-color:var(--forelle)}
   .fbtool{flex:1;border:1px solid var(--line);background:var(--panel-2);color:var(--text);border-radius:8px;padding:9px;font-size:12.5px;cursor:pointer}
@@ -225,6 +237,11 @@
     <div class="card">
       <h3>Schonzeiten &amp; Maße – <span id="regionName"></span></h3>
       <div id="schonzeiten"></div>
+    </div>
+    <div class="card">
+      <h3>📅 Schonzeit-Kalender</h3>
+      <div id="schonKalender"></div>
+      <div class="callegend"><span class="lz">geschont</span><span class="lo">offen</span></div>
     </div>
     <div id="regionRegeln"></div>
     <p class="fineprint" id="regionHinweis"></p>
@@ -1615,6 +1632,30 @@ function buildSchonUI(){
   });
   if(REGION.schonQuelle)
     schonEl.insertAdjacentHTML('beforeend','<p class="fineprint" style="margin-top:10px">'+REGION.schonQuelle+'</p>');
+  buildKalender();
+}
+function buildKalender(){
+  const el=document.getElementById('schonKalender'); if(!el) return;
+  const nowM=new Date().getMonth()+1;
+  const mLabels=['J','F','M','A','M','J','J','A','S','O','N','D'];
+  let h='<div class="calrow"><span class="cfish"></span><div style="flex:1;display:flex;font-size:9px;color:var(--muted)">'
+    +mLabels.map(m=>'<span style="flex:1;text-align:center">'+m+'</span>').join('')+'</div></div>';
+  SCHON.forEach(sc=>{
+    let cells='';
+    for(let m=1;m<=12;m++){
+      let zu=false;
+      if(sc.von){
+        const md1=m*100+1, md28=m*100+28;
+        const v=sc.von[0]*100+sc.von[1], b=sc.bis[0]*100+sc.bis[1];
+        /* Monat gilt als geschont, wenn Monatsmitte im Fenster liegt */
+        const mid=m*100+15;
+        zu=(v<=b)?(mid>=v&&mid<=b):(mid>=v||mid<=b);
+      }
+      cells+='<div class="m '+(zu?'zu':'auf')+(m===nowM?' now':'')+'"></div>';
+    }
+    h+='<div class="calrow"><span class="cfish">'+esc(sc.fisch)+'</span><div class="calbar">'+cells+'</div></div>';
+  });
+  el.innerHTML=h;
 }
 function buildRegeln(){
   const el=document.getElementById('regionRegeln');
