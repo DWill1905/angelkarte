@@ -15,6 +15,21 @@ if (!TOKEN || !message || !files.length) {
   process.exit(1);
 }
 
+/* Pre-Deploy-Wächter: Datenintegrität prüfen, sobald index.html oder Daten betroffen sind.
+   Blockiert den Deploy bei stillen Datenfehlern (Schonzeiten/Maße/Spots). */
+const touchesData = files.some(f => /index\.html$|data\//.test(f));
+if (touchesData) {
+  const { execFileSync } = require('child_process');
+  try {
+    const out = execFileSync('node', [path.join(__dirname, 'validate-data.js')], { encoding: 'utf8' });
+    process.stdout.write(out);
+  } catch (e) {
+    if (e.stdout) process.stdout.write(e.stdout);
+    console.error('\n✖ Deploy abgebrochen: Datenintegritäts-Check fehlgeschlagen. Bitte Fehler oben beheben.');
+    process.exit(1);
+  }
+}
+
 const api = async (method, url, body) => {
   const r = await fetch('https://api.github.com' + url, {
     method,
