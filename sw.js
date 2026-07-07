@@ -1,7 +1,7 @@
 /* Angelkarte Service Worker – Offline-Modus
    Shell + Daten: stale-while-revalidate · OSM-Tiles: cache-first (max. 600)
    API-Aufrufe (Wetter, Pegel, Anthropic): immer Netz */
-const CACHE='angelkarte-shell-v3';
+const CACHE='angelkarte-shell-v4';
 const TILES='angelkarte-tiles-v1';
 const SHELL=[
   './','index.html','manifest.json',
@@ -55,7 +55,8 @@ self.addEventListener('fetch',e=>{
   }
 
   /* Shell, Daten, CDN: stale-while-revalidate */
-  if(u.origin===self.location.origin||u.hostname==='cdnjs.cloudflare.com'){
+  if(u.origin===self.location.origin||u.hostname==='cdnjs.cloudflare.com'
+     ||u.hostname==='fonts.googleapis.com'||u.hostname==='fonts.gstatic.com'){
     e.respondWith((async()=>{
       const c=await caches.open(CACHE);
       const hit=await c.match(e.request);

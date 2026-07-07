@@ -22,6 +22,7 @@
  "spots": [
   {
    "name": "Talsperre Saidenbach",
+   "zugang": "ufer",
    "rig": "H-Spinnrute 20–60 g, Geflecht + FC-Vorfach. Erlaubte Köder: Kunstköder, Wurm, Mais/Teig – KEINE Maden, kein Fleisch, kein Anfüttern (TWT!).",
    "arten": [
     "Barsch",
@@ -66,6 +67,7 @@
   },
   {
    "name": "Vorsperre Dittersbach",
+   "zugang": "ufer",
    "verif": "B",
    "rig": "Spinnrute mittel, Stahl- oder dickes FC-Vorfach (Hecht). TWT-Köderregeln wie Saidenbach.",
    "arten": [
@@ -87,6 +89,7 @@
   },
   {
    "name": "Talsperre Rauschenbach",
+   "zugang": "ufer",
    "verif": "B",
    "rig": "H-Spinnrute 20–60 g für weite Würfe an die Abbruchkanten; TWT-Köderregeln beachten. Uferangeln, kein Boot.",
    "arten": [
@@ -127,6 +130,7 @@
   },
   {
    "name": "Freiberger Mulde – gelbe Salmonidenstrecke",
+   "zugang": "ufer",
    "rig": "UL/L-Rute bis 10 g, Watkescher, Einzelhaken-Umbau: Drillinge vorab tauschen (Sprengringzange mitnehmen!).",
    "nr": "C01-02",
    "cat": "salmo",
@@ -199,6 +203,7 @@
   },
   {
    "name": "Freiberger Mulde – allgemeine Strecke",
+   "zugang": "ufer",
    "rig": "Leichte Spinnrute bis 10 g oder Fliegenrute #4–5, Wathose mit Filz-/Spikesohle für die Gumpen.",
    "nr": "C01-201",
    "cat": "fluss",
@@ -255,6 +260,7 @@
   },
   {
    "name": "Flöha – grüne Salmonidenstrecke (Lengefeld)",
+   "zugang": "ufer",
    "rig": "UL-Spinnrute oder Fliegenrute, nur 1 Rute und 1 Einzelhaken pro Köder – rutschfeste Watsohlen für die Felspassagen.",
    "nr": "C02-07",
    "cat": "salmo",
@@ -295,6 +301,7 @@
   },
   {
    "name": "Flöha – allgemeine Strecke (Borstendorf)",
+   "zugang": "ufer",
    "rig": "Allround-Spinnrute 5–20 g plus leichte Posenrute – laut Fangstatistik ist die Pose hier am erfolgreichsten.",
    "nr": "AVS",
    "cat": "fluss",
@@ -374,6 +381,7 @@
   },
   {
    "name": "Mühlteich (Brand-Erbisdorf)",
+   "zugang": "ufer",
    "verif": "B",
    "rig": "Grundrute mit Freilaufrolle (Karpfen), zweite Rute fein auf Schleie – abends Tauwurm am Grund für Aal.",
    "arten": [
@@ -394,6 +402,7 @@
   },
   {
    "name": "Schlüsselteich (Freiberg)",
+   "zugang": "ufer",
    "rig": "Feederrute mittel, Method-Körbe, 10er–12er Haken – stadtnah reicht leichtes Gepäck.",
    "arten": [
     "Karpfen",
@@ -414,6 +423,7 @@
   },
   {
    "name": "Richter’s Angelteich (Gränitz)",
+   "zugang": "ufer",
    "schonzeitInfo": "Privatgewässer: LVSA-Sperrfrist &amp; Salmonidenregeln gelten hier NICHT – Betreiberregeln maßgeblich.",
    "rig": "Leichte Forellenrute 5–20 g, 0,20er Mono, Sbirolino oder Pose – Teig, Spoons, Bienenmade.",
    "nr": "privat",
@@ -431,6 +441,7 @@
   },
   {
    "name": "Erzengler Teich",
+   "zugang": "ufer",
    "verif": "B",
    "nr": "RWA – AVS-Nr. prüfen",
    "cat": "fried",
@@ -450,6 +461,7 @@
   },
   {
    "name": "Berthelsdorfer Hüttenteich",
+   "zugang": "ufer",
    "verif": "B",
    "nr": "RWA – AVS-Nr. prüfen",
    "cat": "fried",

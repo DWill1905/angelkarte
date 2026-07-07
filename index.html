@@ -4,31 +4,60 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Angelkarte</title>
-<meta name="theme-color" content="#0f2b30">
+<meta name="theme-color" content="#3d7180">
 <link rel="manifest" href="manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ink:#0d1f22; --panel:#0f2b30; --panel-2:#12343b; --paper:#e9efe9;
-    --line:#2a4d54; --text:#dce8e4; --muted:#8fb0ac;
-    --raub:#e4572e; --salmo:#4cb8d4; --fried:#8fb069; --forelle:#e8b93c; --sperr:#8a93a0;
-    --warn:#c94f3d; --ok:#6fae6f;
+    /* Bathymetrie-Palette, hell: luftiges Petrol-Türkis, blau bleibt Leitfarbe */
+    --abyss:#234f5b; --ink:#234f5b;
+    --panel:#2c5966; --panel-2:#356a78;
+    --shelf:#316572; --shoal:#4a828f;
+    --paper:#f5f9f8;
+    --line:#4a828f; --text:#f0f7f7; --muted:#bcd6dd;
+    --dusk:#a6d4e8;   /* blaue Stunde – hell, freundlich */
+    --amber:#f0bc5c;  /* Sonne/Solunar – warm */
+    /* Kategorie-/Status-Farben */
+    --raub:#ee8368; --salmo:#7fd4ec; --fried:#a2d18f; --forelle:#f0bc5c; --sperr:#9aa8b0;
+    --warn:#ec6a6a; --ok:#92e0a6;
+    --forelle:#f0bc5c;
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html,body{height:100%}
   body{
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-    background:var(--ink);color:var(--text);
+    font-family:"Lato","Segoe UI",Calibri,-apple-system,sans-serif;
+    /* Tiefengradient, hell: luftiges Flachwasser oben, sanft tiefer nach unten */
+    background:linear-gradient(180deg,#3d7180 0%,#316572 45%,#2a5966 100%);
+    background-attachment:fixed;
+    color:var(--text);
     display:grid;grid-template-rows:auto auto auto 1fr auto auto;
     height:100vh;height:100dvh;overflow:hidden;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
   }
-  header{background:var(--panel);border-bottom:1px solid var(--line);padding:10px 14px 8px}
-  .eyebrow{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
-  h1{font-family:Georgia,'Times New Roman',serif;font-size:19px;font-weight:700;color:#f2f7f4}
-  h1 .tilde{color:var(--salmo);font-weight:400}
-  .sun{font-size:11px;color:var(--muted);margin-top:3px}
+  header{
+    position:relative;background:linear-gradient(180deg,#437684,#3a6b78);
+    border-bottom:1px solid var(--shoal);padding:11px 14px 9px;overflow:hidden;
+  }
+  /* Signature: Bathymetrie-Höhenlinien als feine Textur im Header */
+  header:before{
+    content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;
+    background-image:
+      radial-gradient(120% 140% at 82% -10%,transparent 38%,rgba(180,220,235,.14) 38.4%,transparent 39.2%),
+      radial-gradient(120% 140% at 82% -10%,transparent 46%,rgba(180,220,235,.12) 46.4%,transparent 47.2%),
+      radial-gradient(120% 140% at 82% -10%,transparent 54%,rgba(180,220,235,.10) 54.4%,transparent 55.2%),
+      radial-gradient(120% 140% at 82% -10%,transparent 62%,rgba(180,220,235,.08) 62.4%,transparent 63.2%),
+      radial-gradient(120% 140% at 82% -10%,transparent 70%,rgba(180,220,235,.06) 70.4%,transparent 71.2%);
+  }
+  header>*{position:relative;z-index:1}
+  .eyebrow{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--dusk);margin-bottom:3px;font-weight:600;opacity:.85}
+  h1{font-family:"Lato","Segoe UI",Calibri,sans-serif;font-size:22px;font-weight:900;color:#f6fbfa;letter-spacing:-.005em;line-height:1.1}
+  h1 .tilde{color:var(--dusk);font-weight:500}
+  .sun{font-family:"Space Mono",ui-monospace,monospace;font-size:10.5px;color:var(--muted);margin-top:4px;letter-spacing:-.02em}
 
   .banner{
     background:#3a1f1a;border-bottom:1px solid #5c2e24;color:#f0c4b8;
@@ -37,14 +66,14 @@
   .banner.show{display:block}
   .banner b{color:#ffd9cf}
 
-  .tabs{display:flex;background:var(--panel);border-bottom:1px solid var(--line)}
+  .tabs{display:flex;background:rgba(44,89,102,.9);border-bottom:1px solid var(--shoal);backdrop-filter:blur(8px)}
   .tab{
     flex:1;background:none;border:0;color:var(--muted);font-size:12px;font-weight:700;
     letter-spacing:.08em;text-transform:uppercase;padding:10px 4px;cursor:pointer;
     border-bottom:2px solid transparent;
   }
-  .tab[aria-selected="true"]{color:#f2f7f4;border-bottom-color:var(--salmo)}
-  .tab:focus-visible{outline:2px solid var(--salmo);outline-offset:-2px}
+  .tab[aria-selected="true"]{color:#f4faf9;border-bottom-color:var(--dusk)}
+  .tab:focus-visible{outline:2px solid var(--dusk);outline-offset:-2px}
 
   .view{display:none;min-height:0;overflow:hidden;grid-row:4;position:relative;flex-direction:column}
   .view.active{display:flex}
@@ -53,30 +82,30 @@
   .chips{display:flex;gap:6px;overflow-x:auto;padding:8px 14px;background:var(--panel);
     border-bottom:1px solid var(--line);scrollbar-width:none;flex-shrink:0}
   .chips::-webkit-scrollbar{display:none}
-  .chip{display:flex;align-items:center;gap:6px;white-space:nowrap;font-size:12px;font-weight:600;
-    color:var(--text);background:var(--panel-2);border:1px solid var(--line);border-radius:999px;
-    padding:7px 12px;cursor:pointer;user-select:none;min-height:32px}
+  .chip{display:flex;align-items:center;gap:6px;white-space:nowrap;font-size:12px;font-weight:500;
+    color:var(--text);background:rgba(22,50,60,.6);border:1px solid var(--shoal);border-radius:10px;
+    padding:7px 12px;cursor:pointer;user-select:none;min-height:32px;transition:background .15s,border-color .15s}
   .chip .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
   .chip.off{opacity:.38}
   .chip:focus-visible{outline:2px solid var(--salmo);outline-offset:2px}
   .chips.sub{background:var(--ink);padding-top:6px;padding-bottom:6px}
   .chips.sub .chip{background:transparent;border-color:var(--line);color:var(--muted);min-height:28px;padding:5px 11px}
-  .chips.sub .chip.on{background:var(--salmo);border-color:var(--salmo);color:#082226;opacity:1}
-  #map{flex:1;min-height:0;background:#0d1f22;z-index:0}
+  .chips.sub .chip.on{background:var(--dusk);border-color:var(--dusk);color:#0d3540;opacity:1;font-weight:600;box-shadow:0 0 0 3px rgba(110,168,196,.15)}
+  #map{flex:1;min-height:0;background:#2a5966;z-index:0}
   .leaflet-container{font:inherit}
 
   .locbtn{
     position:absolute;right:10px;bottom:calc(46px + 28px);z-index:500;
-    background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:8px;
-    padding:9px 12px;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.4);
+    background:rgba(44,89,102,.92);color:#0f2b33;border:1px solid var(--shoal);border-radius:10px;
+    padding:9px 12px;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.5);backdrop-filter:blur(6px);
   }
 
-  .sheet{background:var(--panel);border-top:1px solid var(--line);max-height:36dvh;
+  .sheet{background:linear-gradient(180deg,var(--shelf),var(--panel));border-top:1px solid var(--shoal);max-height:36dvh;
     display:flex;flex-direction:column;transition:max-height .25s ease;flex-shrink:0}
   .sheet.collapsed{max-height:46px}
   .sheet-handle{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;
     cursor:pointer;flex-shrink:0;user-select:none}
-  .sheet-handle h2{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:700}
+  .sheet-handle h2{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--dusk);font-weight:600}
   .sheet-handle .arrow{color:var(--muted);font-size:12px;transition:transform .25s}
   .sheet.collapsed .arrow{transform:rotate(180deg)}
   .spot-list{overflow-y:auto;padding:0 8px 10px}
@@ -85,7 +114,7 @@
   .spot-item:hover,.spot-item:focus-visible{background:var(--panel-2);outline:none}
   .spot-item .dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
   .spot-item .name{font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .spot-item .meta{font-size:11px;color:var(--muted);white-space:nowrap}
+  .spot-item .meta{font-family:"Space Mono",monospace;font-size:10.5px;color:var(--muted);white-space:nowrap}
 
   /* Popup */
   .leaflet-popup-content-wrapper{background:var(--paper);color:var(--ink);border-radius:10px;
@@ -94,9 +123,9 @@
   .leaflet-popup-tip{background:var(--paper)}
   .pop-cat{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
     color:#fff;border-radius:4px;padding:2px 7px;margin-bottom:5px;margin-right:4px}
-  .pop-nr{font-size:10px;color:#5b6b66;letter-spacing:.05em}
-  .pop-title{font-family:Georgia,serif;font-size:16px;font-weight:700;margin-bottom:2px}
-  .pop-dist{font-size:11px;color:#5b6b66;margin-bottom:8px}
+  .pop-nr{font-family:"Space Mono",monospace;font-size:10px;color:#4a5b5f;letter-spacing:0}
+  .pop-title{font-family:"Lato","Segoe UI",Calibri,sans-serif;font-size:17px;font-weight:700;margin-bottom:2px;letter-spacing:-.01em}
+  .pop-dist{font-family:"Space Mono",monospace;font-size:10.5px;color:#4a5b5f;margin-bottom:8px}
   .pop-row{font-size:12.5px;margin-bottom:6px}
   .pop-row b{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#5b6b66;margin-bottom:1px}
   .pop-note{font-size:11.5px;background:#dfe7df;border-left:3px solid var(--forelle);
@@ -105,13 +134,13 @@
   .pop-actions{display:flex;gap:6px;margin-top:10px}
   .pop-btn{flex:1;text-align:center;font-size:12px;font-weight:700;text-decoration:none;
     border-radius:7px;padding:8px 6px;border:0;cursor:pointer}
-  .pop-btn.nav{background:#0f2b30;color:#e9efe9}
-  .pop-btn.log{background:#e8b93c;color:#3a2f10}
+  .pop-btn.nav{background:#16323c;color:#e4eef0}
+  .pop-btn.log{background:#e8a33d;color:#2a2008}
 
   /* ===== Regeln ===== */
   .scrollpane{overflow-y:auto;padding:14px;flex:1}
-  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:13px 14px;margin-bottom:12px}
-  .card h3{font-family:Georgia,serif;font-size:15px;margin-bottom:8px;color:#f2f7f4}
+  .card{background:var(--shelf);border:1px solid var(--shoal);border-radius:12px;padding:14px 15px;margin-bottom:12px}
+  .card h3{font-family:"Lato","Segoe UI",Calibri,sans-serif;font-weight:700;font-size:16px;margin-bottom:9px;color:#f4faf9;letter-spacing:-.01em}
   .rule-row{display:flex;align-items:center;justify-content:space-between;gap:10px;
     padding:8px 0;border-bottom:1px solid var(--line);font-size:13px}
   .rule-row:last-child{border-bottom:0}
@@ -128,27 +157,33 @@
 
   /* ===== Fangbuch ===== */
   .fb-form{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:13px;margin-bottom:12px}
-  .fb-form h3{font-family:Georgia,serif;font-size:15px;margin-bottom:10px;color:#f2f7f4}
+  .fb-form h3{font-family:"Lato","Segoe UI",Calibri,sans-serif;font-weight:700;font-size:16px;margin-bottom:10px;color:#f4faf9}
   .fb-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
   .fb-grid .full{grid-column:1/-1}
   label{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
   input,select{width:100%;background:var(--panel-2);border:1px solid var(--line);border-radius:7px;
     color:var(--text);font-size:14px;padding:9px 10px}
   input:focus,select:focus{outline:2px solid var(--salmo);outline-offset:-1px}
-  .fb-save{width:100%;margin-top:10px;background:var(--forelle);color:#3a2f10;border:0;border-radius:8px;
-    padding:11px;font-size:14px;font-weight:700;cursor:pointer}
+  .fb-save{width:100%;margin-top:10px;background:linear-gradient(180deg,#eaad48,#e8a33d);color:#2a2008;border:0;border-radius:10px;
+    padding:12px;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(232,163,61,.25)}
   .fb-entry{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);
     border-radius:10px;padding:10px 12px;margin-bottom:8px;font-size:13px}
   .fb-entry .info{flex:1;min-width:0}
   .fb-entry .fish{font-weight:700}
   .fb-entry .sub{font-size:11px;color:var(--muted)}
-  .fb-del{background:none;border:0;color:var(--muted);font-size:16px;cursor:pointer;padding:6px}
+  .fb-del{background:none;border:0;color:var(--muted);cursor:pointer;padding:6px;display:inline-flex;align-items:center}
+  .fb-del .ic,.fb-edit .ic{width:16px;height:16px}
   .fb-empty{text-align:center;color:var(--muted);font-size:13px;padding:24px 10px;line-height:1.5}
   .fb-status{font-size:11px;color:var(--muted);text-align:center;margin-top:8px}
   .fbcheck{border-radius:8px;padding:9px 11px;font-size:12.5px;line-height:1.5;margin-top:2px}
-  .fbcheck.ok{background:#1f3d24;color:#a8dcae}
-  .fbcheck.bad{background:#4a201a;color:#f0b6a8;font-weight:600}
+  .fbcheck.ok{background:rgba(124,201,143,.14);color:#a8dcae;border:1px solid rgba(124,201,143,.25)}
+  .fbcheck.bad{background:rgba(214,69,69,.16);color:#f0b6a8;font-weight:600;border:1px solid rgba(214,69,69,.3)}
   .verif{font-size:10px;color:#5b6b66;margin-top:7px;letter-spacing:.03em}
+  .ic{width:1.05em;height:1.05em;display:inline-block;vertical-align:-.15em;flex-shrink:0}
+  .chip .ic,.fbtool .ic{width:1.15em;height:1.15em;vertical-align:-.18em;margin-right:2px}
+  .mydlg h3 .ic{width:1em;height:1em;vertical-align:-.1em;margin-right:5px;color:var(--dusk)}
+  .sun .ic{width:13px;height:13px;vertical-align:-.15em;color:var(--dusk)}
+  #wxline .ic{width:13px;height:13px;vertical-align:-.15em;color:var(--dusk)}
   .calrow{display:flex;align-items:center;gap:8px;margin:4px 0;font-size:11px}
   .calrow .cfish{min-width:74px;color:var(--text)}
   .calbar{flex:1;display:flex;height:14px;border-radius:4px;overflow:hidden;border:1px solid var(--line)}
@@ -165,7 +200,7 @@
   .fbentn input{width:17px;height:17px;accent-color:var(--forelle)}
   .fbtool{flex:1;border:1px solid var(--line);background:var(--panel-2);color:var(--text);border-radius:8px;padding:9px;font-size:12.5px;cursor:pointer}
   .insight{background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:12px;margin-top:10px;font-size:12.5px;line-height:1.6}
-  .insight h4{font-family:Georgia,serif;font-size:13.5px;margin-bottom:7px;color:#f2f7f4}
+  .insight h4{font-family:"Lato","Segoe UI",Calibri,sans-serif;font-weight:700;font-size:14px;margin-bottom:7px;color:#f4faf9}
   .insight .bar{display:flex;align-items:center;gap:8px;margin:3px 0}
   .insight .bar span:first-child{min-width:92px;color:var(--muted)}
   .insight .barfill{height:9px;background:var(--forelle);border-radius:5px;min-width:3px}
@@ -173,13 +208,13 @@
   .mydlg-wrap{position:fixed;inset:0;background:rgba(6,16,18,.72);z-index:1200;display:flex;align-items:center;justify-content:center;padding:20px}
   .mydlg-wrap[hidden]{display:none!important}
   .mydlg{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;width:100%;max-width:380px}
-  .mydlg h3{font-family:Georgia,serif;font-size:16px;margin-bottom:10px;color:#f2f7f4}
+  .mydlg h3{font-family:"Lato","Segoe UI",Calibri,sans-serif;font-weight:700;font-size:17px;margin-bottom:10px;color:#f4faf9}
   .mydlg-btns{display:flex;gap:8px;margin-top:14px}
   .mydlg-btns button{flex:1;border:0;border-radius:8px;padding:11px;font-size:14px;font-weight:700;cursor:pointer;background:var(--forelle);color:#3a2f10}
   .mydlg-btns .ghost{background:var(--panel-2);color:var(--text);border:1px solid var(--line)}
-  footer{grid-row:6;background:var(--panel);border-top:1px solid var(--line);
+  footer{grid-row:6;background:rgba(42,89,102,.85);border-top:1px solid var(--shoal);
     padding:6px 14px calc(6px + env(safe-area-inset-bottom));font-size:10px;color:var(--muted)}
-  footer a{color:var(--salmo)}
+  footer a{color:var(--dusk)}
 
   @media(min-width:820px){
     .view.active{flex-direction:row;flex-wrap:wrap}
@@ -203,11 +238,11 @@
   <h1 id="appTitle">Angelrevier <span class="tilde">~</span></h1>
   <div class="sun" id="sunline"></div>
   <div class="sun" id="wxline" aria-live="polite"></div>
-  <select id="regionSel" aria-label="Region wählen" style="margin-top:6px;max-width:100%"></select>
+  <select id="regionSel" aria-label="Region wählen" style="margin-top:8px;max-width:100%;font-family:'Space Mono',monospace;font-size:12px;background:rgba(35,79,91,.45);border:1px solid var(--shoal);color:var(--text);border-radius:8px;padding:7px 10px"></select>
 </header>
 
-<div class="banner" id="stormWarn" style="background:#5a1e18;color:#ffd7cf;font-weight:600"></div>
-<div class="banner" id="swUpdate" style="background:#243a3f"></div>
+<div class="banner" id="stormWarn" style="background:linear-gradient(90deg,#4a1614,#5a1e18);color:#ffd7cf;font-weight:600"></div>
+<div class="banner" id="swUpdate" style="background:#16323c"></div>
 <div class="banner" id="banner"></div>
 
 <div class="tabs" role="tablist">
@@ -221,7 +256,7 @@
   <div class="chips" id="chips" role="group" aria-label="Kategorien filtern"></div>
   <div class="chips sub" id="fishChips" role="group" aria-label="Nach Zielfisch filtern"></div>
   <div id="map"></div>
-  <button class="locbtn" id="locbtn" title="Meinen Standort anzeigen">📍 Standort</button>
+  <button class="locbtn" id="locbtn" title="Meinen Standort anzeigen" data-ic="pin">Standort</button>
   <div class="sheet collapsed" id="sheet">
     <div class="sheet-handle" id="sheetHandle" role="button" tabindex="0" aria-label="Spotliste ein-/ausklappen">
       <h2>Spots <span id="spotCount"></span></h2>
@@ -239,7 +274,7 @@
       <div id="schonzeiten"></div>
     </div>
     <div class="card">
-      <h3>📅 Schonzeit-Kalender</h3>
+      <h3 data-ic="calendar">Schonzeit-Kalender</h3>
       <div id="schonKalender"></div>
       <div class="callegend"><span class="lz">geschont</span><span class="lo">offen</span></div>
     </div>
@@ -277,13 +312,13 @@
 
 <div class="mydlg-wrap" id="toolsDlg" hidden>
   <div class="mydlg">
-    <h3>🧰 Werkzeuge</h3>
+    <h3 data-ic="tools">Werkzeuge</h3>
     <div class="mydlg-btns" style="flex-direction:column;gap:8px">
-      <button class="fbtool" id="tCol">🎯 Köderberater</button>
-      <button class="fbtool" id="tBite">🎣 Beißzeiten heute</button>
-      <button class="fbtool" id="tPack">🎒 Packliste</button>
-      <button class="fbtool" id="tKnot">🪢 Knoten</button>
-      <button class="fbtool" id="tLead">⚖️ Bleigewicht-Berater</button>
+      <button class="fbtool" id="tCol" data-ic="target">Köderberater</button>
+      <button class="fbtool" id="tBite" data-ic="fish">Beißzeiten heute</button>
+      <button class="fbtool" id="tPack" data-ic="bag">Packliste</button>
+      <button class="fbtool" id="tKnot" data-ic="knot">Knoten</button>
+      <button class="fbtool" id="tLead" data-ic="weight">Bleigewicht-Berater</button>
     </div>
     <div class="mydlg-btns"><button id="toolsClose">Schließen</button></div>
   </div>
@@ -291,7 +326,7 @@
 
 <div class="mydlg-wrap" id="leadDlg" hidden>
   <div class="mydlg">
-    <h3>⚖️ Bleigewicht-Berater</h3>
+    <h3 data-ic="weight">Bleigewicht-Berater</h3>
     <div id="leadBody" style="font-size:12.5px;line-height:1.6;max-height:60dvh;overflow-y:auto"></div>
     <div class="mydlg-btns"><button id="leadClose">Schließen</button></div>
   </div>
@@ -299,7 +334,7 @@
 
 <div class="mydlg-wrap" id="knotDlg" hidden>
   <div class="mydlg">
-    <h3>🪢 Knoten-Kurzreferenz</h3>
+    <h3 data-ic="knot">Knoten-Kurzreferenz</h3>
     <div id="knotBody" style="font-size:12.5px;line-height:1.6;max-height:62dvh;overflow-y:auto"></div>
     <div class="mydlg-btns"><button id="knotClose">Schließen</button></div>
   </div>
@@ -307,7 +342,7 @@
 
 <div class="mydlg-wrap" id="packDlg" hidden>
   <div class="mydlg">
-    <h3>🎒 Packliste</h3>
+    <h3 data-ic="bag">Packliste</h3>
     <div id="packBody" style="font-size:13px;line-height:1.7;max-height:60dvh;overflow-y:auto"></div>
     <div class="mydlg-btns"><button id="packReset" class="ghost">Alle abhaken zurücksetzen</button><button id="packClose">Schließen</button></div>
   </div>
@@ -315,7 +350,7 @@
 
 <div class="mydlg-wrap" id="biteDlg" hidden>
   <div class="mydlg">
-    <h3>🎣 Beißzeiten heute</h3>
+    <h3 data-ic="fish">Beißzeiten heute</h3>
     <div id="biteBody" style="font-size:13px;line-height:1.55;max-height:60dvh;overflow-y:auto"></div>
     <div class="mydlg-btns"><button id="biteClose">Schließen</button></div>
   </div>
@@ -323,7 +358,7 @@
 
 <div class="mydlg-wrap" id="kbDlg" hidden>
   <div class="mydlg">
-    <h3>🎯 Köderberater</h3>
+    <h3 data-ic="target">Köderberater</h3>
     <div id="kbBody" style="font-size:13px;line-height:1.55;max-height:55dvh;overflow-y:auto"></div>
     <div class="mydlg-btns"><button id="kbClose">Schließen</button></div>
   </div>
@@ -359,11 +394,36 @@ const store = (typeof window.storage!=='undefined' && window.storage) ? window.s
 
 function esc(x){const d=document.createElement('div');d.textContent=String(x==null?'':x);return d.innerHTML;}
 
+/* ===== Icon-Set (Lucide-Stil, inline SVG, currentColor) ===== */
+const ICONS={
+  tools:'<path d="M14.7 6.3a4 4 0 0 1-5.4 5.4L4 17v3h3l5.3-5.3a4 4 0 0 0 5.4-5.4l-2.1 2.1-2.5-.5-.5-2.5z"/>',
+  fish:'<path d="M6.5 12c3-4 8-6 14-6-1 2-1 4 0 6-6 0-11-2-14-6z" transform="translate(0 6)"/><path d="M6.5 12c-1.5 1-3 1-4 0 .8-1 .8-2 0-3 1.5-1 3-.5 4 0" transform="translate(0 6)"/><circle cx="16" cy="11" r=".8" fill="currentColor"/>',
+  bag:'<path d="M6 8h12l-1 12H7L6 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/>',
+  knot:'<path d="M8 8c4 0 4 8 8 8M16 8c-4 0-4 8-8 8"/>',
+  weight:'<path d="M7 8h10l2 11H5L7 8z"/><circle cx="12" cy="6" r="2"/>',
+  target:'<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r=".8" fill="currentColor"/>',
+  sun:'<circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M18.4 5.6L17 7M7 17l-1.4 1.4"/>',
+  moon:'<path d="M18 14a7 7 0 0 1-9-9 7 7 0 1 0 9 9z"/>',
+  wind:'<path d="M3 9h11a2.5 2.5 0 1 0-2.5-2.5M3 14h15a2.5 2.5 0 1 1-2.5 2.5M3 12h8"/>',
+  waves:'<path d="M2 8c2-2 4-2 6 0s4 2 6 0 4-2 6 0M2 13c2-2 4-2 6 0s4 2 6 0 4-2 6 0M2 18c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/>',
+  pin:'<path d="M12 21s7-6.3 7-11a7 7 0 1 0-14 0c0 4.7 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/>',
+  calendar:'<rect x="4" y="5" width="16" height="16" rx="2"/><path d="M4 9h16M8 3v4M16 3v4"/>',
+  trophy:'<path d="M8 4h8v5a4 4 0 0 1-8 0V4z"/><path d="M8 6H5v1a3 3 0 0 0 3 3M16 6h3v1a3 3 0 0 1-3 3M10 15h4M9 20h6M12 15v5"/>',
+  ruler:'<path d="M4 14l10-10 6 6L10 20z"/><path d="M8 8l2 2M11 5l2 2M6 11l2 2"/>',
+  bolt:'<path d="M13 2L5 14h6l-1 8 8-12h-6l1-8z"/>',
+  x:'<path d="M6 6l12 12M18 6L6 18"/>',
+  edit:'<path d="M14 4l6 6M4 20l1-4L16 5l3 3L8 19l-4 1z"/>'
+};
+function ICON(name,cls){
+  return '<svg class="ic'+(cls?' '+cls:'')+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(ICONS[name]||'')+'</svg>';
+}
+
+
 const CATS = {
   eigen:{label:'Eigene Spots',color:'#c9699e'},
   info:{label:'Service/Kartenausgabe',color:'#b58cc9'},
   raub:{label:'Raubfisch',color:'#e4572e'},
-  salmo:{label:'Salmoniden',color:'#4cb8d4'},
+  salmo:{label:'Salmoniden',color:'#5cc0dc'},
   fried:{label:'Friedfisch',color:'#8fb069'},
   fluss:{label:'Fluss allgemein',color:'#7d9bc9'},
   forelle:{label:'Forellenteich',color:'#e8b93c'},
@@ -372,7 +432,7 @@ const CATS = {
 
 const SPOTS_SN = [
   {
-    name:'Talsperre Saidenbach',
+    name:'Talsperre Saidenbach',zugang:'ufer',
     rig:'H-Spinnrute 20–60 g, Geflecht + FC-Vorfach. Erlaubte Köder: Kunstköder, Wurm, Mais/Teig – KEINE Maden, kein Fleisch, kein Anfüttern (TWT!).',
     arten:['Barsch','Hecht','Karpfen','Schleie','Brachse','Zander'], nr:'C02-102', cat:'raub', lat:50.7358, lng:13.2342,
     fisch:'Barsch, Hecht, Karpfen, Schleie, Brasse, Weißfisch (Zander selten)',
@@ -387,7 +447,7 @@ const SPOTS_SN = [
     warn:false
   },
   {
-    name:'Vorsperre Dittersbach',verif:'B',
+    name:'Vorsperre Dittersbach',zugang:'ufer',verif:'B',
     rig:'Spinnrute mittel, Stahl- oder dickes FC-Vorfach (Hecht). TWT-Köderregeln wie Saidenbach.',
     arten:['Barsch','Hecht','Karpfen','Schleie','Regenbogenforelle'], nr:'C01-104', cat:'raub', lat:50.8009, lng:13.4798,
     fisch:'Barsch, Hecht, Karpfen, Schleie, Regenbogenforelle, Weißfisch',
@@ -397,7 +457,7 @@ const SPOTS_SN = [
     warn:true
   },
   {
-    name:'Talsperre Rauschenbach',verif:'B',
+    name:'Talsperre Rauschenbach',zugang:'ufer',verif:'B',
     rig:'H-Spinnrute 20–60 g für weite Würfe an die Abbruchkanten; TWT-Köderregeln beachten. Uferangeln, kein Boot.',
     arten:['Barsch','Hecht','Zander','Karpfen','Schleie','Regenbogenforelle','Aal','Brachse'], nr:'AVS (Gew.-Nr. vor Ort prüfen)', cat:'raub', lat:50.6965, lng:13.5057,
     fisch:'Barsch, Hecht, Zander, Karpfen, Schleie, Regenbogenforelle, Brasse, Aal, Weißfisch',
@@ -416,7 +476,7 @@ const SPOTS_SN = [
     warn:true
   },
   {
-    name:'Freiberger Mulde – gelbe Salmonidenstrecke',
+    name:'Freiberger Mulde – gelbe Salmonidenstrecke',zugang:'ufer',
     rig:'UL/L-Rute bis 10 g, Watkescher, Einzelhaken-Umbau: Drillinge vorab tauschen (Sprengringzange mitnehmen!).', nr:'C01-02', cat:'salmo',
     arten:['Bachforelle','Regenbogenforelle','Äsche','Döbel','Barsch'],
     lat:50.828, lng:13.418, farbe:'gelb',
@@ -429,7 +489,7 @@ const SPOTS_SN = [
     warn:true
   },
   {
-    name:'Freiberger Mulde – allgemeine Strecke',
+    name:'Freiberger Mulde – allgemeine Strecke',zugang:'ufer',
     rig:'Leichte Spinnrute bis 10 g oder Fliegenrute #4–5, Wathose mit Filz-/Spikesohle für die Gumpen.', nr:'C01-201', cat:'fluss',
     arten:['Bachforelle','Regenbogenforelle','Äsche','Döbel','Barsch'],
     lat:50.975, lng:13.325, farbe:'allg',
@@ -442,7 +502,7 @@ const SPOTS_SN = [
     warn:false
   },
   {
-    name:'Flöha – grüne Salmonidenstrecke (Lengefeld)',
+    name:'Flöha – grüne Salmonidenstrecke (Lengefeld)',zugang:'ufer',
     rig:'UL-Spinnrute oder Fliegenrute, nur 1 Rute und 1 Einzelhaken pro Köder – rutschfeste Watsohlen für die Felspassagen.', nr:'C02-07', cat:'salmo',
     arten:['Bachforelle','Regenbogenforelle','Äsche','Döbel','Barsch'],
     lat:50.731, lng:13.170, farbe:'gruen',
@@ -455,7 +515,7 @@ const SPOTS_SN = [
     warn:false
   },
   {
-    name:'Flöha – allgemeine Strecke (Borstendorf)',
+    name:'Flöha – allgemeine Strecke (Borstendorf)',zugang:'ufer',
     rig:'Allround-Spinnrute 5–20 g plus leichte Posenrute – laut Fangstatistik ist die Pose hier am erfolgreichsten.', nr:'AVS', cat:'fluss',
     arten:['Bachforelle','Regenbogenforelle','Döbel','Barsch','Hecht','Aal','Karpfen'],
     lat:50.766, lng:13.128, farbe:'allg',
@@ -479,7 +539,7 @@ const SPOTS_SN = [
     warn:true
   },
   {
-    name:'Mühlteich (Brand-Erbisdorf)',verif:'B',
+    name:'Mühlteich (Brand-Erbisdorf)',zugang:'ufer',verif:'B',
     rig:'Grundrute mit Freilaufrolle (Karpfen), zweite Rute fein auf Schleie – abends Tauwurm am Grund für Aal.',
     arten:['Karpfen','Schleie','Aal','Barsch'], nr:'AVS', cat:'fried', lat:50.7999, lng:13.2761,
     fisch:'Karpfen, Graskarpfen, Schleie, Aal, Barsch',
@@ -489,7 +549,7 @@ const SPOTS_SN = [
     warn:false
   },
   {
-    name:'Schlüsselteich (Freiberg)',
+    name:'Schlüsselteich (Freiberg)',zugang:'ufer',
     rig:'Feederrute mittel, Method-Körbe, 10er–12er Haken – stadtnah reicht leichtes Gepäck.',
     arten:['Karpfen','Brachse','Schleie','Aal','Barsch'], nr:'AVS', cat:'fried', lat:50.9226, lng:13.3427,
     fisch:'Karpfen, Brachse, Schleie, Aal, Barsch',
@@ -499,7 +559,7 @@ const SPOTS_SN = [
     warn:false
   },
     {
-    name:'Richter’s Angelteich (Gränitz)',
+    name:'Richter’s Angelteich (Gränitz)',zugang:'ufer',
     schonzeitInfo:'Privatgewässer: LVSA-Sperrfrist &amp; Salmonidenregeln gelten hier NICHT – Betreiberregeln maßgeblich.',
     rig:'Leichte Forellenrute 5–20 g, 0,20er Mono, Sbirolino oder Pose – Teig, Spoons, Bienenmade.', nr:'privat', cat:'forelle',
     arten:['Regenbogenforelle'], lat:50.7946, lng:13.2894,
@@ -510,7 +570,7 @@ const SPOTS_SN = [
     warn:false
   },
   {
-    name:'Erzengler Teich',verif:'B', nr:'RWA – AVS-Nr. prüfen', cat:'fried',
+    name:'Erzengler Teich',zugang:'ufer',verif:'B', nr:'RWA – AVS-Nr. prüfen', cat:'fried',
     arten:['Karpfen','Schleie','Barsch'],
     lat:50.8524, lng:13.3419,
     fisch:'Karpfen, Schleie, Barsch (Bestand vor Ort prüfen)',
@@ -521,7 +581,7 @@ const SPOTS_SN = [
     warn:false
   },
   {
-    name:'Berthelsdorfer Hüttenteich',verif:'B', nr:'RWA – AVS-Nr. prüfen', cat:'fried',
+    name:'Berthelsdorfer Hüttenteich',zugang:'ufer',verif:'B', nr:'RWA – AVS-Nr. prüfen', cat:'fried',
     arten:['Karpfen','Schleie','Barsch'],
     lat:50.8761, lng:13.3591,
     fisch:'Karpfen, Schleie, Barsch (Bestand vor Ort prüfen)',
@@ -554,7 +614,7 @@ const SCHON_SN = [
 
 /* ============ Region: Mecklenburgische Kleinseenplatte (recherchiert 07/2026) ============ */
 const SPOTS_MV=[
-  {name:'Woblitzsee',
+  {name:'Woblitzsee',zugang:'ufer',
     rig:'Stahl- oder Titanvorfach Pflichtprogramm (Hechtdichte!), H-Rute 40–80 g fürs Zanderjiggen, Echolot fürs Boot.',nr:'Obere Havel',cat:'raub',arten:['Hecht','Zander','Barsch','Aal','Karpfen','Schleie','Brachse'],
    lat:53.3001,lng:13.0102,
    fisch:'Hecht, Zander, Barsch, Aal, Karpfen, Schleie, Brachse (14 gemeldete Arten)',
@@ -567,7 +627,7 @@ const SPOTS_MV=[
      {name:'Kammerkanal-Mündung',saison:'Jun–Aug, nachts',lat:53.3090,lng:13.0280,tipp:'Kanal Richtung Zierker See – bekannt für seinen Welsbestand. Abends raubende Barsche entlang der Stege. Lage ungefähr.'},
      {name:'Ufer: Stadtufer/Havel-Auslauf Wesenberg',saison:'Mai–Okt, abends',lat:53.2890,lng:13.0010,tipp:'Zweiter schilffreier Uferzugang (Luftbild): Stadtufer und Hafenumfeld Wesenberg. Aal-Strecke am Abend, Barsch an den Stegen. Achtung: 100 m Mindestabstand zur Schleuse!'}
    ],warn:false},
-  {name:'Zotzensee',
+  {name:'Zotzensee',zugang:'boot',
     rig:'Hechtcombo 30–80 g, Stahlvorfach, Weedless-Montagen fürs Kraut – Boot ist Pflicht.',nr:'Obere Havel',cat:'raub',arten:['Hecht','Barsch','Aal','Schleie'],
    lat:53.2437,lng:12.8125,
    fisch:'Hecht, Barsch, Aal, Schleie',
@@ -577,28 +637,28 @@ const SPOTS_MV=[
    hotspots:[
      {name:'Westbuchten',saison:'Mai–Okt',lat:53.2450,lng:12.8050,tipp:'Ruhige Ankerbuchten am Westufer – Hecht über und an den Krautfeldern, Spinnerbait/Chatterbait flach geführt. Lage ungefähr.'}
    ],warn:false},
-  {name:'Vilzsee',
+  {name:'Vilzsee',zugang:'boot',
     rig:'Mittlere Spinnrute, Stahlvorfach, flachlaufende Köder – Polbrille fürs Sichtangeln im klaren Wasser.',nr:'Obere Havel',cat:'raub',arten:['Hecht','Barsch','Schleie'],
    lat:53.2099,lng:12.8336,
    fisch:'Hecht, Barsch, Schleie',
    methode:'Flach, Seerosenfelder: flachlaufende Wobbler und Spinnerbaits an den Kanten VOR den Feldern (Felder selbst tabu)',
    karte:'Angelkarte Obere Havel (Meisterbereich Mirow)',
    note:'Klares, flaches Wasser – Sichtangeln möglich, Raubvogel-Revier.',warn:false},
-  {name:'Großer Labussee',
+  {name:'Großer Labussee',zugang:'boot',
     rig:'Zander-Jigrute 15–50 g, FC 0,40+ oder dünner Stahl, DropShot-Setup für die Barschtrupps.',nr:'Obere Havel',cat:'raub',arten:['Hecht','Zander','Barsch','Aal'],
    lat:53.3067,lng:12.9504,
    fisch:'Hecht, Zander, Barsch, Aal',
    methode:'Tieferes Havelbecken: Zander an Kanten und Löchern jiggen, Barschtrupps mit DropShot suchen',
    karte:'Angelkarte Obere Havel (Meisterbereich Wesenberg)',
    note:'Ruhiger als der Woblitzsee, Übergang zum Useriner See (Nationalpark!).',warn:false},
-  {name:'Useriner See',
+  {name:'Useriner See',zugang:'boot',
     rig:'Wie Woblitzsee: Stahlvorfach, Jigrute – dazu Driftsack/Anker (Schleppen verboten).',nr:'Obere Havel / Müritz-NP',cat:'raub',arten:['Hecht','Zander','Barsch'],
    lat:53.3431,lng:12.9680,
    fisch:'Hecht, Zander, Barsch',
    methode:'Vom verankerten Boot an den Fahrwasser-Kanten; bei Wind schnell kabbelig (5,2 km lang)',
    karte:'Angelkarte Obere Havel – Nationalpark-Regeln beachten',
    note:'Liegt im Müritz-Nationalpark: Schutzzonen und Befahrensregeln beachten, Uferbereiche teils gesperrt.',warn:true},
-  {name:'Mirower See',
+  {name:'Mirower See',zugang:'ufer',
     rig:'Vom Ufer: Spinnrute 10–40 g mit Stahlvorfach an den Stegen, nachts Grundrute mit Tauwurm auf Aal.',nr:'Obere Havel',cat:'raub',arten:['Hecht','Zander','Barsch','Aal'],
    lat:53.2826,lng:12.8074,
    fisch:'Hecht, Zander, Barsch, Aal',
@@ -608,14 +668,14 @@ const SPOTS_MV=[
    hotspots:[
      {name:'Ufer: Stadtufer & Schlossinsel',saison:'Mai–Okt abends, Aal Jun–Aug',lat:53.2720,lng:12.8150,tipp:'Bester Ufer-Spot der Kleinseenplatte (Luftbild): befestigtes Stadtufer mit vielen Stegen und der Schlossinsel-Brücke. Abends Barsch an den Stegen, nachts Aal – kurze Wege, kein Boot nötig.'}
    ],warn:false},
-  {name:'Drewensee',
+  {name:'Drewensee',zugang:'boot',
     rig:'Allround-Raubfischcombo mit Stahlvorfach, Gummifische 10–14 cm für die Fahrrinnen-Kanten.',nr:'Obere Havel',cat:'raub',arten:['Hecht','Zander','Barsch'],
    lat:53.2600,lng:13.0330,
    fisch:'Hecht, Zander, Barsch',
    methode:'Klassisches Ansitz- und Spinnrevier am Havelkanal Ahrensberg',
    karte:'Angelkarte Obere Havel (Meisterbereich Ahrensberg, Tel. 039832 20230)',
    note:'Ruhiges Revier zwischen Wesenberg und Ahrensberg.',warn:false},
-  {name:'Rätzsee (bei Mirow/Canow)',verif:'B',
+  {name:'Rätzsee (bei Mirow/Canow)',zugang:'ufer',verif:'B',
     rig:'Vom Ufer an den erreichbaren Buchten: Spinnrute mit Stahlvorfach auf Hecht, DropShot auf Barsch; nur E-Motor auf dem Boot erlaubt.',nr:'Obere Havel · Meisterbereich Canow/Mirow',cat:'raub',arten:['Hecht','Zander','Barsch','Aal','Schleie','Karpfen','Wels'],
    lat:53.2870,lng:12.8590,
    fisch:'Hecht, Zander, Barsch, Aal, Schleie, Karpfen, Wels, Weißfisch (Artenangaben teils user-generated)',
@@ -625,7 +685,7 @@ const SPOTS_MV=[
    hotspots:[
      {name:'Übergang zum Zirtowsee (Nordufer)',saison:'Mai–Okt',lat:53.3010,lng:12.8630,tipp:'Enge Verbindung zum Zirtowsee am Nordufer – Engstellen und Kanäle sind klassische Hecht- und Barschzüge. Vom Ufer bei Zirtow erreichbar. Lage ungefähr.'}
    ],warn:false},
-  {name:'Klenzsee (bei Canow)',verif:'B',
+  {name:'Klenzsee (bei Canow)',zugang:'boot',verif:'B',
     rig:'Kräftige Spinn-/Baitcastrute für schwere Hechtköder + Stahlvorfach; Welsrute mit großem Köfi/Tauwurmbündel fürs Welsloch. Nur vom Boot sinnvoll.',nr:'Obere Havel · Meisterbereich Canow',cat:'raub',arten:['Hecht','Zander','Barsch','Wels','Aal','Karpfen','Schleie'],
    lat:53.2760,lng:12.8990,
    fisch:'Hecht, Zander, Barsch, Wels, Aal, Karpfen, Schleie, Weißfisch',
@@ -636,7 +696,7 @@ const SPOTS_MV=[
      {name:'Zanderberg am Ostufer',saison:'Mai–Okt, Dämmerung/Nacht',lat:53.2730,lng:12.9030,tipp:'Gegenüber dem Kanal aus dem Gobenowsee, bei der Pappel-Gruppe am Ufer: ein sandiger Unterwasserberg nur Rutenlängen vom Schilf. Zander treiben abends/nachts ihre Beute den Hang hinauf. Lage ungefähr.'},
      {name:'Welsloch (hinter der ersten Kurve)',saison:'Sommernächte + Winter',lat:53.2790,lng:12.8960,tipp:'In der Bucht steigt der Grund von 13 auf 3 m an; direkt hinter der ersten scharfen Kurve am rechten Ufer liegt ein 9-m-Loch mitten in der flachen Zone – bester Wels- und Winterzander-Platz. Großer Köderfisch oder Tauwurmbündel am Grund. Lage ungefähr.'}
    ],warn:false},
-  {name:'Großer Priepertsee',verif:'B',
+  {name:'Großer Priepertsee',zugang:'boot',verif:'B',
     rig:'Zander-Jigrute 15–50 g für die tiefen Kanten (26 m!), Pilker gehen hier laut Ortsanglern gut; Stahlvorfach auf Hecht. Boot nötig.',nr:'Obere Havel · Meisterbereich Ahrensberg',cat:'raub',arten:['Zander','Hecht','Barsch','Aal','Schleie','Wels','Karpfen'],
    lat:53.2560,lng:13.0180,
    fisch:'Zander (sehr gut), Hecht, Barsch, Aal, Schleie, Wels, Karpfen, Weißfisch',
@@ -665,7 +725,7 @@ const SCHON_MV=[
 
 /* ============ Region: Rhein & Rheinhessen / Mainz (recherchiert 07/2026) ============ */
 const SPOTS_RLP=[
-  {name:'Rhein Mainz – Stadtstrecke',nr:'LFV RLP · ~Strom-km 498–500',cat:'raub',
+  {name:'Rhein Mainz – Stadtstrecke',zugang:'ufer',nr:'LFV RLP · ~Strom-km 498–500',cat:'raub',
    arten:['Zander','Barsch','Rapfen','Wels','Aal','Döbel','Brachse'],
    lat:50.0010,lng:8.2790,
    fisch:'Zander, Barsch, Rapfen, Wels, Aal, Barbe, Döbel, Brassen – Grundel ist Hauptfutter',
@@ -677,7 +737,7 @@ const SPOTS_RLP=[
      {name:'Theodor-Heuss-Brücke',saison:'ganzjährig, top Okt–Dez',lat:50.0060,lng:8.2745,tipp:'Der dokumentierte Zander-Klassiker der Stadt: um und hinter den Brückenpfeilern, beste Zeit Dämmerung und nachts. Viel Angeldruck – antizyklisch angeln (unter der Woche, sehr früh).'},
      {name:'Rapfen-Spundwände',saison:'Mai–Sep, ab ~16 Uhr',lat:49.9960,lng:8.2830,tipp:'Rapfen treiben Kleinfisch an den Spundwänden in die Ecke – Sommer ab ca. 16 Uhr Oberflächenrauben, flach laufender schlanker Wobbler oder Spöket.'}
    ],warn:false},
-  {name:'Winterhafen Mainz',nr:'Beschilderung!',cat:'raub',
+  {name:'Winterhafen Mainz',zugang:'ufer',nr:'Beschilderung!',cat:'raub',
    arten:['Barsch','Hecht','Rapfen','Wels','Zander'],
    lat:49.9926,lng:8.2854,
    fisch:'Barsch, Hecht, Rapfen, Wels, Zander, Rotauge (Fangmeldungen)',
@@ -685,7 +745,7 @@ const SPOTS_RLP=[
    karte:'Rheinischer Erlaubnisschein – Angeln nur in ausgeschilderten Bereichen!',
    rig:'Barschrute 5–21 g reicht im Hafen, Finesse-Montagen an den Wänden entlang',
    note:'Nur teilweise freigegeben und es gab wiederholt Ärger – Beschilderung genau prüfen, im Zweifel weiterziehen. Viele Schaulustige.',warn:true},
-  {name:'Industriehafen Mombach – Hafenausfahrt',nr:'~Strom-km 503 · nur Ausfahrt',cat:'raub',
+  {name:'Industriehafen Mombach – Hafenausfahrt',zugang:'ufer',nr:'~Strom-km 503 · nur Ausfahrt',cat:'raub',
    arten:['Zander','Barsch','Aal','Brachse','Wels'],
    lat:50.0310,lng:8.2210,
    fisch:'Zander, Barsch, Aal, Brassen, Wels',
@@ -697,7 +757,7 @@ const SPOTS_RLP=[
      {name:'Hinter dem Bauhaus',saison:'ganzjährig',lat:50.0305,lng:8.2200,tipp:'Zugänglicher Klassiker am erlaubten Ausfahrtsbereich – Ansitz und Raubfisch, entsprechend frequentiert.'},
      {name:'Auspitze Ingelheimer Aue',saison:'Okt–Mär + Hochwasser',lat:50.0370,lng:8.2340,tipp:'Die Spitze der Insel an der Hafenausfahrt – Strömungskante trifft Stillwasser, klassischer Zanderzug. Lage ungefähr.'}
    ],warn:true},
-  {name:'Buhnen & Rampen Budenheim',nr:'LFV RLP · ~Strom-km 506–508',cat:'raub',
+  {name:'Buhnen & Rampen Budenheim',zugang:'ufer',nr:'LFV RLP · ~Strom-km 506–508',cat:'raub',
    arten:['Zander','Barsch','Döbel','Aal','Brachse'],
    lat:50.0295,lng:8.1675,
    fisch:'Zander, Barsch, Barbe, Döbel, Aal, Brassen',
@@ -705,7 +765,7 @@ const SPOTS_RLP=[
    karte:'Rheinischer Erlaubnisschein',
    rig:'Jigköpfe 15–30 g je nach Strömung; fürs Posenangeln hinter den Rampen leichte Matchrute',
    note:'Zwei Rampen an der chemischen Fabrik plus eine kleine stromauf – die ruhigen Bereiche dahinter sind die Friedfisch-Geheimecken. Parkplatz am Kiosk Rheinblick.',warn:false},
-  {name:'Altrhein Heidenfahrt',verif:'B',nr:'~Strom-km 511 · Teilsperrung',cat:'fried',
+  {name:'Altrhein Heidenfahrt',zugang:'ufer',verif:'B',nr:'~Strom-km 511 · Teilsperrung',cat:'fried',
    arten:['Zander','Barsch','Hecht','Karpfen','Schleie','Brachse','Aal'],
    lat:50.0121,lng:8.1021,
    fisch:'Zander, Barsch, Hecht, Karpfen, Schleie, Brassen, Aal',
@@ -713,7 +773,7 @@ const SPOTS_RLP=[
    karte:'Rheinischer Erlaubnisschein – nur der hintere Bereich, vorderer Teil ist Schutzgebiet!',
    rig:'Feeder/Pose fürs Stillwasser, Spinnrute für den Ausgang zum Strom',
    note:'Beliebt und teils saisonal gesperrt (Berichte über Sperrung bis 31.08. kursieren) – Beschilderung maßgeblich. Badestrand nebenan = Sommer-Trubel.',warn:true},
-  {name:'Hafen & Buhnen Oppenheim',nr:'LFV RLP · ~Strom-km 480',cat:'raub',
+  {name:'Hafen & Buhnen Oppenheim',zugang:'ufer',nr:'LFV RLP · ~Strom-km 480',cat:'raub',
    arten:['Zander','Barsch','Wels','Aal','Brachse'],
    lat:49.8594,lng:8.3575,
    fisch:'Zander, Barsch, Wels, Aal, Brassen, Barbe',
@@ -721,7 +781,7 @@ const SPOTS_RLP=[
    karte:'Rheinischer Erlaubnisschein',
    rig:'Rhein-Standard: Jigrute 30–60 g, Grundelfarben; Welsrute lohnt als zweite Rute',
    note:'Gut kombinierbar: Hafeneinfahrt bei Hochwasser, Buhnen bei Normalpegel. Marina-Bereich respektieren.',warn:false},
-  {name:'Rhein Nackenheim & Mühlarm',verif:'B',nr:'LFV RLP · km 485–490',cat:'raub',
+  {name:'Rhein Nackenheim & Mühlarm',zugang:'ufer',verif:'B',nr:'LFV RLP · km 485–490',cat:'raub',
    arten:['Zander','Barsch','Rapfen','Wels','Hecht','Aal','Brachse'],
    lat:49.9558,lng:8.3360,
    fisch:'Zander, Barsch, Rapfen, Wels, Hecht, Aal, Brassen (Artenangaben teils user-generated)',
@@ -732,7 +792,7 @@ const SPOTS_RLP=[
    hotspots:[
      {name:'Mühlarm bei der B9',saison:'ganzjährig, top bei Hochwasser',lat:49.9585,lng:8.3345,tipp:'Strömungsberuhigter Nebenarm zwischen Ufer und den Inseln – ideal wenn der Hauptstrom bei Hochwasser unfischbar wird. Viele Bootsstege, Friedfisch und Zander. Inselseite wegen NSG-Sperren meiden!'}
    ],warn:true},
-  {name:'Buhnen Gimbsheim–Ibersheim',verif:'B',nr:'LFV RLP · km ~453–460',cat:'raub',
+  {name:'Buhnen Gimbsheim–Ibersheim',zugang:'ufer',verif:'B',nr:'LFV RLP · km ~453–460',cat:'raub',
    arten:['Zander','Barsch','Wels','Aal','Barbe','Brachse','Karpfen'],
    lat:49.7250,lng:8.4340,
    fisch:'Zander (kapital, 3–7 Pfd berichtet), Barsch, Wels, Aal, Barbe, Brassen, Karpfen',
@@ -743,7 +803,7 @@ const SPOTS_RLP=[
      {name:'Ibersheim gegenüber AKW Biblis',saison:'Okt–Mär + warme Winternächte',lat:49.7050,lng:8.4460,tipp:'Gegenüber/unterhalb des Kraftwerks berichten Ortsangler durchschnittlich 7-Pfd-Zander – toter Köderfisch am Grund. Oberhalb feiner mit Gummi an die Buhnenkante. Lage ungefähr (km ~455).'},
      {name:'Buhne an der Natorampe (Gimbsheim)',saison:'Mai–Okt',lat:49.7380,lng:8.4290,tipp:'Große Buhne, Futterkorb bringt Massen an Brassen und kleinere Barben; gute Barsche. Achtung Hänger (Totholz). Von Oppenheim aus die ersten, vom Eicher See aus die letzten Buhnen. Lage ungefähr.'}
    ],warn:true},
-  {name:'Mainspitze & Maaraue',nr:'Mainmündung km 496,6 · HESSEN!',cat:'raub',
+  {name:'Mainspitze & Maaraue',zugang:'ufer',nr:'Mainmündung km 496,6 · HESSEN!',cat:'raub',
    arten:['Zander','Barsch','Wels','Rapfen','Aal'],
    lat:49.9937,lng:8.2940,
    fisch:'Zander, Barsch, Wels, Rapfen, Aal',
@@ -751,7 +811,7 @@ const SPOTS_RLP=[
    karte:'Hessischer Rheinschein – seit 2025 NUR online: <a href="https://www.hejfish.com" target="_blank" rel="noopener">hejfish.com</a> (HLG)',
    rig:'Jigrute + nachts Wobbler; vor der Maarauespitze liegt ein Steinwall unter Wasser (Boot: ankern, Hängergefahr)',
    note:'Grenze RLP/Hessen: Fußgängerbrücke zur Maaraue. Die Maarauespitze selbst ist Polizeigelände und unzugänglich – dort raubt es sichtbar, erreichbar ist der Bereich davor.',warn:true},
-  {name:'Ginsheimer Altrhein & Mündung',nr:'~km 487–493 · HESSEN!',cat:'raub',
+  {name:'Ginsheimer Altrhein & Mündung',zugang:'ufer',nr:'~km 487–493 · HESSEN!',cat:'raub',
    arten:['Zander','Wels','Barsch','Hecht','Karpfen'],
    lat:49.9440,lng:8.3524,
    fisch:'Zander, Wels, Barsch, Hecht, Karpfen',
@@ -762,7 +822,7 @@ const SPOTS_RLP=[
    hotspots:[
      {name:'Treburer Buhnenfeld (km 487–493)',saison:'Jun–Okt bei Normalpegel',lat:49.9550,lng:8.3250,tipp:'6 km Buhnenfeld auf der Nonnenaue – Fahrrad mitnehmen und Kilometer machen, die hinteren Buhnen sehen kaum Angler. Lage ungefähr, hessischer Schein nötig.'}
    ],warn:true},
-  {name:'Eicher See',nr:'Anglervereinigung Worms',cat:'raub',
+  {name:'Eicher See',zugang:'ufer',nr:'Anglervereinigung Worms',cat:'raub',
    schonzeitInfo:'Vereinsbestimmungen der AVW gelten zusätzlich zur FischGDV – Karte genau lesen.',
    arten:['Zander','Hecht','Wels','Barsch','Karpfen','Schleie','Aal','Brachse'],
    lat:49.7646,lng:8.4290,
@@ -771,7 +831,7 @@ const SPOTS_RLP=[
    karte:'Gastkarten FREI erhältlich (kein Verein nötig): Sportgeschäft Volltreffer, Hauptstr. 17, Eich (Tel. 06246 8589040, Mo–Fr 10–13 &amp; 15–18, Sa 10–14) oder Angelsport Engert, Worms (Tel. 06241 593036) – Bewirtschafter: <a href="https://www.avw1924.de/gew%C3%A4sserkarten" target="_blank" rel="noopener">Anglervereinigung Worms 1924</a>',
    rig:'Tiefwasser-Setup: Jigköpfe bis 30 g, Vertikal-tauglich vom Boot; Welsrute mit 0,60er FC als Nachtoption',
    note:'Das Raubfisch-Stillgewässer Rheinhessens (~30 Autominuten): direkte Rheinverbindung, dadurch Wels- und Zanderbestand. An der Marina (Familie Luy) ist ein Angelkahn für 4 Personen mietbar – bei 15 m Tiefe die beste Option. Sommer: Badebetrieb, Randzeiten nutzen.',warn:false},
-  {name:'Altrheinsee Eich',nr:'Ortsgemeinde Eich',cat:'fried',
+  {name:'Altrheinsee Eich',zugang:'ufer',nr:'Ortsgemeinde Eich',cat:'fried',
    arten:['Karpfen','Schleie','Hecht','Barsch','Aal','Brachse'],
    lat:49.7596,lng:8.4036,
    fisch:'Karpfen, Schleie, Hecht, Barsch, Aal, Brassen',
@@ -991,19 +1051,19 @@ function regionCenter(){
 function sunLine(){
   const c=regionCenter();
   const st=sunTimes(c.lat,c.lng,new Date());
-  if(!st){ document.getElementById('sunline').textContent='🌙 '+mondPhase(new Date()); return; }
-  let txt='☀ '+hhmm(st.rise)+' – '+hhmm(st.set)+' Uhr · '+mondPhase(new Date());
-  if(st.dawn&&st.dusk) txt+=' · 🌆 blaue Stunde '+hhmm(st.dusk)+'–'+hhmm(new Date(st.dusk.getTime()+40*60e3));
+  if(!st){ document.getElementById('sunline').innerHTML=ICON('moon')+' '+esc(mondPhase(new Date())); return; }
+  let txt=ICON('sun')+' '+hhmm(st.rise)+' – '+hhmm(st.set)+' Uhr · '+esc(mondPhase(new Date()));
+  if(st.dawn&&st.dusk) txt+=' · '+ICON('waves')+' blaue Stunde '+hhmm(st.dusk)+'–'+hhmm(new Date(st.dusk.getTime()+40*60e3));
   /* Nachtangel-Fenster nur wo Regel dokumentiert ist */
   if(REGION&&REGION.nachtangeln==='lvsa'){
     const a=new Date(st.set.getTime()+3600e3), b=new Date(st.rise.getTime()-3600e3);
-    txt+=' · 🌙 Nachtangeln erlaubt '+hhmm(a)+'–'+hhmm(b);
+    txt+=' · '+ICON('moon')+' Nachtangeln erlaubt '+hhmm(a)+'–'+hhmm(b);
   } else if(REGION&&REGION.nachtangeln==='frei'){
-    txt+=' · 🌙 Nachtangeln erlaubt';
+    txt+=' · '+ICON('moon')+' Nachtangeln erlaubt';
   } else if(REGION&&REGION.nachtangeln==='verboten'){
-    txt+=' · 🚫 kein Nachtangeln (TWT/Salmo)';
+    txt+=' · '+ICON('x')+' kein Nachtangeln (TWT/Salmo)';
   }
-  document.getElementById('sunline').textContent=txt;
+  document.getElementById('sunline').innerHTML=txt;
 }
 
 const banner=document.getElementById('banner');
@@ -1057,6 +1117,7 @@ function popupHtml(s){
     <div class="pop-row"><b>Methode &amp; Köder</b>${s.methode}</div>
     ${s.rig?'<div class="pop-row"><b>Gerät &amp; Rig</b>'+s.rig+'</div>':''}
     <div class="pop-row"><b>Erlaubnis</b>${s.karte}</div>
+    ${s.zugang?'<div class="pop-row"><b>Zugang</b>'+(s.zugang==='boot'?'Überwiegend Bootssee – vom Ufer kaum möglich':'Vom Ufer beangelbar')+'</div>':''}
     ${!s.line&&(s.cat==='raub'||s.cat==='fried')?'<div class="pop-row" data-wind="1"></div>':''}
     <div class="pop-note${s.warn?' pop-warn':''}">${s.note}</div>
     ${s.schonzeitInfo?'<div class="pop-row"><b>Schonzeit-Besonderheit</b>'+s.schonzeitInfo+'</div>':''}
@@ -1084,10 +1145,13 @@ const FISH=[
   {id:'Brachse',match:['Brachse']}
 ];
 let fishSel=null;
+let uferOnly=false; /* Filter: nur vom Ufer beangelbare Gewässer */
 const active=Object.fromEntries(Object.keys(CATS).map(k=>[k,true]));
 
 function spotVisible(s){
   if(!active[s.cat]) return false;
+  /* Ufer-Filter: reine Bootsseen ausblenden (Sperr-/Info-Spots & eigene Spots bleiben sichtbar) */
+  if(uferOnly && s.zugang==='boot') return false;
   if(!fishSel) return true;
   const f=FISH.find(x=>x.id===fishSel);
   return s.arten.some(a=>f.match.includes(a));
@@ -1177,8 +1241,18 @@ const allChip=fishChip('Alle',null); allChip.classList.add('on');
 allChip.onclick=()=>{ fishSel=null; syncFishChips(); applyFilters(); };
 fishEl.appendChild(allChip);
 FISH.forEach(f=>fishEl.appendChild(fishChip(f.id,f.id)));
+const uferBtn=document.createElement('button');
+uferBtn.className='chip'; uferBtn.id='uferBtn'; uferBtn.innerHTML=ICON('pin')+' Nur Ufer';
+uferBtn.setAttribute('aria-pressed','false');
+uferBtn.onclick=()=>{
+  uferOnly=!uferOnly;
+  uferBtn.classList.toggle('on',uferOnly);
+  uferBtn.setAttribute('aria-pressed',String(uferOnly));
+  applyFilters();
+};
+fishEl.appendChild(uferBtn);
 const toolsBtn=document.createElement('button');
-toolsBtn.className='chip'; toolsBtn.id='toolsBtn'; toolsBtn.textContent='🧰 Werkzeuge';
+toolsBtn.className='chip'; toolsBtn.id='toolsBtn'; toolsBtn.innerHTML=ICON('tools')+' Werkzeuge';
 toolsBtn.onclick=openTools;
 fishEl.appendChild(toolsBtn);
 
@@ -1188,7 +1262,7 @@ const locBtn=document.getElementById('locbtn');
 function locApply(p){
   userPos=[p.coords.latitude,p.coords.longitude];
   if(userMarker) userMarker.remove();
-  userMarker=L.circleMarker(userPos,{radius:7,color:'#fff',fillColor:'#4cb8d4',fillOpacity:.95,weight:2})
+  userMarker=L.circleMarker(userPos,{radius:7,color:'#fff',fillColor:'#6ea8c4',fillOpacity:.95,weight:2})
     .addTo(map).bindTooltip('Du');
   map.setView(userPos,11);
   renderList();
@@ -1367,7 +1441,7 @@ async function loadWeather(){
     WX={temp:c.temperature_2m,wind:c.wind_speed_10m,dirDeg:c.wind_direction_10m||0,dir,press:c.surface_pressure,trendVal};
     /* Gewitter-/Sturmwarnung: WMO-Codes 95/96/99 = Gewitter, Böen > 60 km/h */
     checkStorm(d,c);
-    el.textContent='🌡 '+Math.round(c.temperature_2m)+'°C · 💨 '+Math.round(c.wind_speed_10m)+' km/h '+dir
+    el.innerHTML=ICON('sun')+' '+Math.round(c.temperature_2m)+'°C · '+ICON('wind')+' '+Math.round(c.wind_speed_10m)+' km/h '+esc(dir)
       +' · '+Math.round(c.surface_pressure)+' hPa'+trend;
     loadPegel(ctr,el);
   }catch(e){ el.textContent=''; wxKey=''; }
@@ -1415,7 +1489,7 @@ async function loadPegel(ctr,el){
     const dist=(s0.latitude&&s0.longitude)?haversine(ctr.lat,ctr.lng,s0.latitude,s0.longitude):null;
     PEGEL={value:m.value,station:s0.shortname,dist};
     const stName=s0.shortname.charAt(0)+s0.shortname.slice(1).toLowerCase();
-    let txt=' · 🌊 '+stName+(dist!=null?' ('+dist.toFixed(0)+' km)':'')+': '+m.value+' cm';
+    let txt=' · '+ICON('waves')+' '+esc(stName)+(dist!=null?' ('+dist.toFixed(0)+' km)':'')+': '+m.value+' cm';
     if(dist!=null&&dist>20) txt+=' – Station weit entfernt, nur grober Anhalt';
     /* Trend über 24 h */
     try{
@@ -1627,7 +1701,7 @@ function openBite(){
       const aktiv=nowMs>=wdw.from&&nowMs<=wdw.to;
       const vorbei=nowMs>wdw.to;
       const top=wdw.type==='major'&&druckGut; /* Major + fallender Druck = Top */
-      const farbe=top?'#e8c93c':wdw.type==='major'?'var(--forelle)':'var(--muted)';
+      const farbe=top?'#f0c14b':wdw.type==='major'?'var(--amber)':'var(--dusk)';
       h+='<div style="display:flex;align-items:center;gap:9px;margin:7px 0;'+(vorbei?'opacity:.45':'')+'">'
         +'<span style="min-width:8px;width:8px;height:8px;border-radius:50%;background:'+farbe+';display:inline-block"></span>'
         +'<b style="min-width:96px">'+hhmm(wdw.from)+'–'+hhmm(wdw.to)+'</b>'
@@ -1817,7 +1891,7 @@ function fbInsights(){
   });
   const rk=Object.entries(rekorde).sort((a,b)=>b[1].laenge-a[1].laenge);
   if(rk.length){
-    h+='<div class="insight"><h4>🏆 Deine Bestenliste</h4>';
+    h+='<div class="insight"><h4>'+ICON('trophy')+' Deine Bestenliste</h4>';
     rk.forEach(([fisch,r],i)=>{
       const medal=['🥇','🥈','🥉'][i]||'▪';
       h+='<div class="bar" style="margin:5px 0"><span style="min-width:24px">'+medal+'</span>'
@@ -1852,8 +1926,8 @@ function fbRender(){
     const cx=e.ctx?[e.ctx.zeit,e.ctx.mond,e.ctx.druck?e.ctx.druck+' hPa'+(e.ctx.trend<=-1.5?'⇘':e.ctx.trend>=1.5?'⇗':''):null,e.ctx.wind,e.ctx.pegel?'Pegel '+e.ctx.pegel:null,e.ctx.wt!=null?'W '+e.ctx.wt+'°C':null].filter(Boolean).join(' · '):'';
     d.innerHTML=`<div class="info"><div class="fish">${esc(e.fisch)} ${e.laenge?'· '+esc(e.laenge)+' cm':''} ${e.entnommen?'<span title="entnommen">🪣</span>':'<span title="zurückgesetzt">↩</span>'}</div>
       <div class="sub">${esc(e.spot)} · ${esc(e.datum)}${e.koeder?' · '+esc(e.koeder):''}${cx?'<br>'+esc(cx):''}</div></div>
-      <button class="fb-edit" aria-label="Eintrag bearbeiten" data-id="${esc(e.id)}" style="background:none;border:0;color:var(--muted);font-size:15px;cursor:pointer;padding:4px">✎</button>
-      <button class="fb-del" aria-label="Eintrag löschen" data-id="${esc(e.id)}">✕</button>`;
+      <button class="fb-edit" aria-label="Eintrag bearbeiten" data-id="${esc(e.id)}" style="background:none;border:0;color:var(--muted);cursor:pointer;padding:4px">${ICON('edit')}</button>
+      <button class="fb-del" aria-label="Eintrag löschen" data-id="${esc(e.id)}">${ICON('x')}</button>`;
     d.querySelector('.fb-del').onclick=async ev=>{
       await fbReady;
       fbMem=fbMem.filter(x=>x.id!==Number(ev.currentTarget.dataset.id));
@@ -1956,6 +2030,10 @@ function prefillFang(spotName){
   [...fbSpotSel.options].forEach(o=>{if(o.textContent===spotName)fbSpotSel.value=spotName;});
 }
 window.prefillFang=prefillFang;
+/* data-ic Platzhalter mit SVG-Icons füllen */
+document.querySelectorAll('[data-ic]').forEach(el=>{
+  el.insertAdjacentHTML('afterbegin', ICON(el.dataset.ic)+' ');
+});
 const fbReady=fbLoad();
 initRegions();
 

@@ -108,6 +108,7 @@ for (const r of regions) {
     }
     if (!sp.cat) E(t + ': cat fehlt');
     if (!Array.isArray(sp.arten)) E(t + ': arten kein Array');
+    if (sp.zugang && !['ufer','boot'].includes(sp.zugang)) E(t + ': zugang ungültig ("' + sp.zugang + '")');
     (sp.hotspots || []).forEach(h => {
       if (typeof h.lat !== 'number' || typeof h.lng !== 'number') E(t + ' Hotspot „' + (h.name || '?') + '“: lat/lng ungültig');
     });

@@ -26,6 +26,7 @@
  "spots": [
   {
    "name": "Rhein Mainz – Stadtstrecke",
+   "zugang": "ufer",
    "nr": "LFV RLP · ~Strom-km 498–500",
    "cat": "raub",
    "arten": [
@@ -64,6 +65,7 @@
   },
   {
    "name": "Winterhafen Mainz",
+   "zugang": "ufer",
    "nr": "Beschilderung!",
    "cat": "raub",
    "arten": [
@@ -84,6 +86,7 @@
   },
   {
    "name": "Industriehafen Mombach – Hafenausfahrt",
+   "zugang": "ufer",
    "nr": "~Strom-km 503 · nur Ausfahrt",
    "cat": "raub",
    "arten": [
@@ -120,6 +123,7 @@
   },
   {
    "name": "Buhnen & Rampen Budenheim",
+   "zugang": "ufer",
    "nr": "LFV RLP · ~Strom-km 506–508",
    "cat": "raub",
    "arten": [
@@ -140,6 +144,7 @@
   },
   {
    "name": "Altrhein Heidenfahrt",
+   "zugang": "ufer",
    "verif": "B",
    "nr": "~Strom-km 511 · Teilsperrung",
    "cat": "fried",
@@ -163,6 +168,7 @@
   },
   {
    "name": "Hafen & Buhnen Oppenheim",
+   "zugang": "ufer",
    "nr": "LFV RLP · ~Strom-km 480",
    "cat": "raub",
    "arten": [
@@ -183,6 +189,7 @@
   },
   {
    "name": "Rhein Nackenheim & Mühlarm",
+   "zugang": "ufer",
    "verif": "B",
    "nr": "LFV RLP · km 485–490",
    "cat": "raub",
@@ -215,6 +222,7 @@
   },
   {
    "name": "Buhnen Gimbsheim–Ibersheim",
+   "zugang": "ufer",
    "verif": "B",
    "nr": "LFV RLP · km ~453–460",
    "cat": "raub",
@@ -253,6 +261,7 @@
   },
   {
    "name": "Mainspitze & Maaraue",
+   "zugang": "ufer",
    "nr": "Mainmündung km 496,6 · HESSEN!",
    "cat": "raub",
    "arten": [
@@ -273,6 +282,7 @@
   },
   {
    "name": "Ginsheimer Altrhein & Mündung",
+   "zugang": "ufer",
    "nr": "~km 487–493 · HESSEN!",
    "cat": "raub",
    "arten": [
@@ -302,6 +312,7 @@
   },
   {
    "name": "Eicher See",
+   "zugang": "ufer",
    "nr": "Anglervereinigung Worms",
    "cat": "raub",
    "schonzeitInfo": "Vereinsbestimmungen der AVW gelten zusätzlich zur FischGDV – Karte genau lesen.",
@@ -326,6 +337,7 @@
   },
   {
    "name": "Altrheinsee Eich",
+   "zugang": "ufer",
    "nr": "Ortsgemeinde Eich",
    "cat": "fried",
    "arten": [

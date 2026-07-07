@@ -22,6 +22,7 @@
  "spots": [
   {
    "name": "Woblitzsee",
+   "zugang": "ufer",
    "rig": "Stahl- oder Titanvorfach Pflichtprogramm (Hechtdichte!), H-Rute 40–80 g fürs Zanderjiggen, Echolot fürs Boot.",
    "nr": "Obere Havel",
    "cat": "raub",
@@ -74,6 +75,7 @@
   },
   {
    "name": "Zotzensee",
+   "zugang": "boot",
    "rig": "Hechtcombo 30–80 g, Stahlvorfach, Weedless-Montagen fürs Kraut – Boot ist Pflicht.",
    "nr": "Obere Havel",
    "cat": "raub",
@@ -102,6 +104,7 @@
   },
   {
    "name": "Vilzsee",
+   "zugang": "boot",
    "rig": "Mittlere Spinnrute, Stahlvorfach, flachlaufende Köder – Polbrille fürs Sichtangeln im klaren Wasser.",
    "nr": "Obere Havel",
    "cat": "raub",
@@ -120,6 +123,7 @@
   },
   {
    "name": "Großer Labussee",
+   "zugang": "boot",
    "rig": "Zander-Jigrute 15–50 g, FC 0,40+ oder dünner Stahl, DropShot-Setup für die Barschtrupps.",
    "nr": "Obere Havel",
    "cat": "raub",
@@ -139,6 +143,7 @@
   },
   {
    "name": "Useriner See",
+   "zugang": "boot",
    "rig": "Wie Woblitzsee: Stahlvorfach, Jigrute – dazu Driftsack/Anker (Schleppen verboten).",
    "nr": "Obere Havel / Müritz-NP",
    "cat": "raub",
@@ -157,6 +162,7 @@
   },
   {
    "name": "Mirower See",
+   "zugang": "ufer",
    "rig": "Vom Ufer: Spinnrute 10–40 g mit Stahlvorfach an den Stegen, nachts Grundrute mit Tauwurm auf Aal.",
    "nr": "Obere Havel",
    "cat": "raub",
@@ -185,6 +191,7 @@
   },
   {
    "name": "Drewensee",
+   "zugang": "boot",
    "rig": "Allround-Raubfischcombo mit Stahlvorfach, Gummifische 10–14 cm für die Fahrrinnen-Kanten.",
    "nr": "Obere Havel",
    "cat": "raub",
@@ -203,6 +210,7 @@
   },
   {
    "name": "Rätzsee (bei Mirow/Canow)",
+   "zugang": "ufer",
    "verif": "B",
    "rig": "Vom Ufer an den erreichbaren Buchten: Spinnrute mit Stahlvorfach auf Hecht, DropShot auf Barsch; nur E-Motor auf dem Boot erlaubt.",
    "nr": "Obere Havel · Meisterbereich Canow/Mirow",
@@ -235,6 +243,7 @@
   },
   {
    "name": "Klenzsee (bei Canow)",
+   "zugang": "boot",
    "verif": "B",
    "rig": "Kräftige Spinn-/Baitcastrute für schwere Hechtköder + Stahlvorfach; Welsrute mit großem Köfi/Tauwurmbündel fürs Welsloch. Nur vom Boot sinnvoll.",
    "nr": "Obere Havel · Meisterbereich Canow",
@@ -274,6 +283,7 @@
   },
   {
    "name": "Großer Priepertsee",
+   "zugang": "boot",
    "verif": "B",
    "rig": "Zander-Jigrute 15–50 g für die tiefen Kanten (26 m!), Pilker gehen hier laut Ortsanglern gut; Stahlvorfach auf Hecht. Boot nötig.",
    "nr": "Obere Havel · Meisterbereich Ahrensberg",
