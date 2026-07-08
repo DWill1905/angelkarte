@@ -60,6 +60,7 @@ gebraucht (nicht fuers Deployment).
 node tools/gen-data.mjs         # data/*.json aus js/data.js regenerieren
 node tools/check-data.mjs       # pruefen ob data/*.json bit-genau zu js/data.js passen
 node tools/validate-data.mjs    # Datenintegritaet (Schonzeiten, Masse, Koordinaten, zugang, verif)
+node tools/check-imports.mjs    # fehlende moduluebergreifende Importe finden (Live-Crash-Schutz)
 node tools/build-test-bundle.mjs# Test-Bundle fuer den jsdom-Harness bauen
 ```
 

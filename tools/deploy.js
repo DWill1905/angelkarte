@@ -19,6 +19,19 @@ if (!TOKEN || !message || !files.length) {
    Blockiert den Deploy bei stillen Datenfehlern (Schonzeiten/Maße/Spots). */
 const touchesRegionData = files.some(f => /js\/data\.js$|data\/[a-z]+\.json$/.test(f));
 const touchesData = files.some(f => /index\.html$|data\/|js\/data\.js$/.test(f));
+const touchesCode = files.some(f => /js\/.+\.js$/.test(f));
+if (touchesCode) {
+  const { execFileSync } = require('child_process');
+  try {
+    const out = execFileSync('node', [path.join(__dirname, 'check-imports.mjs')], { encoding: 'utf8' });
+    process.stdout.write(out);
+  } catch (e) {
+    if (e.stdout) process.stdout.write(e.stdout);
+    if (e.stderr) process.stderr.write(e.stderr);
+    console.error('\n✖ Deploy abgebrochen: fehlende modulübergreifende Importe (Live-Crash-Gefahr).');
+    process.exit(1);
+  }
+}
 if (touchesData) {
   const { execFileSync } = require('child_process');
   /* Regionsdaten angefasst? Dann Manifest + JSONs regenerieren, damit sie nie veralten,
