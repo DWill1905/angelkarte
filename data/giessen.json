@@ -44,6 +44,12 @@
    "fisch": "Hecht, Barbe, Döbel, Barsch, Aal, Karpfen, Äsche, Bachforelle, Weißfische",
    "methode": "Von der Gleibach-Einmündung bei Launsbach (unterhalb A480) bis zum Wehr der Stadtwerke. Lange Spinnrute 20–40 g in der Strömung, DropShot fürs Abklopfen kleiner Hotspots vom Ufer. Salmoniden an den Wehren und am Gleibach-Einlauf.",
    "karte": "IG-Lahn-Tageskarte ~10 € (Angel-Shop Lollar, Fishermen's Place Heuchelheim, Reinig Gießen). Gastangeln der Stadtstrecke teils nur mit Vereinsmitglied Fischwaidclub Gießen",
+   "kartenLinks": [
+    {
+     "label": "Fishermen's Place – Karten",
+     "url": "https://www.fishermensplace.de/produkte/angelkarten/"
+    }
+   ],
    "note": "Angelstellen stadtnah durch Wohn-/Gewerbebauten und Privatgrundstücke eingeschränkt. Beste Zugänge: großes Wehr bei der Kanustation und die drei Brücken. Vom Ufer, Fliegenfischen mit Wathose erlaubt.",
    "hotspots": [
     {
@@ -81,6 +87,16 @@
    "fisch": "Zander, Hecht, Karpfen, Barsch, gute Aale",
    "methode": "15 ha, bis 10 m tief, direkt an der Lahn. Guter Mischbestand. Vom 01.11.–31.01. nur Kunstköder oder toter Köderfisch auf Raubfisch. Ufer besonders gut zugänglich (nach 10–15 min Fußweg ruhige Plätze). Bootsangeln erlaubt.",
    "karte": "Fischerei-Erlaubnisschein VSA Gießen (vsa-giessen.de) + staatlicher Fischereischein",
+   "kartenLinks": [
+    {
+     "label": "VSA Gießen – Gastkarten",
+     "url": "https://www.vsa-giessen.de/gastkarten/"
+    },
+    {
+     "label": "hejfish (online)",
+     "url": "https://www.hejfish.com"
+    }
+   ],
    "note": "⚠ FKK-Bereich 01.05.–31.10., 10–20 Uhr Angelverbot; Angeln von den Inseln verboten; Laichschongebiet ganzjährig gesperrt (Schilder beachten). Uferbefahren durch Schranken verhindert – zu Fuß erschlossen. Eisangeln verboten. ⚠ Nicht mit dem benachbarten Wasserski-See verwechseln – gemeint ist der Angel-/FKK-See (Lahnpark).",
    "hotspots": [
     {
@@ -114,6 +130,12 @@
    "fisch": "Hecht, Zander, Wels, Barsch (große Schwärme), große Karpfen, Aal, Schleie, Brassen",
    "methode": "29 ha Kiessee, bis 11,4 m tief (Ø 4 m), direkt an der Lahn. Gutes Hecht-/Zander-/Wels- und Karpfengewässer. Bootsangeln ganztägig + Nachtangeln erlaubt (E-Motor/Ruder). 3 Ruten. Fische ab 7,5 kg schonend zurücksetzen (Altbestandsschutz).",
    "karte": "Tageskarte ~15 € (Fishermen's Place Heuchelheim / Betreiber Dutenhofener See)",
+   "kartenLinks": [
+    {
+     "label": "Fishermen's Place – Karten",
+     "url": "https://www.fishermensplace.de/produkte/angelkarten/"
+    }
+   ],
    "note": "⚠ Intensiv genutztes Freizeitgewässer (Baden, Segeln, Surfen, Campingplatz) – Wochenende/Sommer sehr unruhig, Dämmerung/Nacht nutzen. Westteil Vogelschutzgebiet (gesperrt). Bei Segelregatten Bootsangeln komplett untersagt. Vom Ufer stark verkrautet – Boot klar im Vorteil.",
    "hotspots": [
     {
@@ -154,6 +176,12 @@
    "fisch": "Hecht, Barsch, Wels, Döbel, Bachforelle, Äsche, Barbe, Aal, Schleie",
    "methode": "Gaststrecke vom Auslauf der Naunheimer Schleuse bis zur Dill-Mündung (beidseitig, ~km 13). Spannendes Spinnrevier auf Barsch und Hecht. Hecht/Zander nur mit Stahl-/Kevlar-/Titanvorfach. Angelzeit 1 h vor bis 1 h nach Sonnenuntergang.",
    "karte": "ASV-Wetzlar-Tageskarte (asv-wetzlar.de, Ausgabestellen vor Ort)",
+   "kartenLinks": [
+    {
+     "label": "ASV Wetzlar",
+     "url": "https://www.asv-wetzlar.de"
+    }
+   ],
    "note": "⚠ Großer Teil der Gaststrecke im Landschaftsschutzgebiet – Feld-/Wiesenwege nicht befahren, kein Feuer/Zelten. Bootsangeln, Nachtangeln und Senken verboten. Nur Uferangeln.",
    "hotspots": [
     {
@@ -192,6 +220,12 @@
    "fisch": "Zander, Hecht, Barsch, Aal, Karpfen, Schleie, Weißfische",
    "methode": "9,6 ha Baggersee, Ø 2,35 m, max. 4,3 m (nur eine kleine Fläche im NO-Teil). Flacher, eutropher Kiessee in einer Lahnschleife – als Zandergewässer bekannt, aber auch stark friedfischgeprägt. Viele Uferplätze. Twitchen/Spinnen auf Zander/Hecht, Feeder auf Karpfen/Schleie.",
    "karte": "AC-Wißmar-Tageskarte ~10 € (ac-wissmar.de / Angelladen „Zum Kormoran\" am See). 2 Ruten, nur 1 auf Raubfisch, kein lebender Köderfisch, kein Nachtangeln",
+   "kartenLinks": [
+    {
+     "label": "AC Wißmar – Gastkarten",
+     "url": "https://www.ac-wissmar.de/gastkarten/"
+    }
+   ],
    "note": "⚠ Datenlage zum Bestand uneinheitlich: manche Quellen loben kapitale Zander, andere sehen ihn eher friedfischlastig – flacher, eutropher See mit Sauerstoffabfall ab ~1,5 m im Sommer. Campingplatz umschließt großen Uferteil. In den Sommerferien 20–8 Uhr nur für Mitglieder. Anfüttern verboten.",
    "hotspots": [
     {
@@ -225,6 +259,12 @@
    "fisch": "Zander, Hecht, Barsch, Wels, Aal, Karpfen, Schleie, Döbel, Weißfische",
    "methode": "Baggersee-Gruppe aus drei Becken östlich von Launsbach; Hauptsee ~6,5 ha, bis ~5,4 m. Guter Raubfischbestand (Zander, Hecht, Wels). Landzunge am Damm zum Nachbarsee als Struktur. Westufer Parkplatz/Liegewiese, übrige Ufer von Gehölz gesäumt.",
    "karte": "Bewirtschafter AV Silbersee Launsbach e.V. (av-silbersee-launsbach.de). ⚠ Gastkartenvergabe laut mehreren Quellen unklar – vor Anfahrt direkt beim Verein erfragen",
+   "kartenLinks": [
+    {
+     "label": "AV Silbersee Launsbach",
+     "url": "https://www.av-silbersee-launsbach.de"
+    }
+   ],
    "note": "⚠ Beleglage schwächer (verif C): Fischbestand gut dokumentiert, aber Gastkarten-Regelung nicht gesichert. NSG/Vogelschutz + FKK-Bereich am See, A480 direkt nördlich (Lärm). Sommer starker Badebetrieb – Saisonrand/Herbst deutlich ruhiger. Grenzen vor Ort beschildert.",
    "hotspots": [
     {

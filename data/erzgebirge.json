@@ -84,6 +84,12 @@
    "fisch": "Barsch, Hecht, Karpfen, Schleie, Regenbogenforelle, Weißfisch",
    "methode": "Spinnfischen vom Ufer, Pose/Grund auf Karpfen & Schleie (TWT-Köderregeln!)",
    "karte": "AVS-Erlaubnisschein + TWT-Belehrung",
+   "kartenLinks": [
+    {
+     "label": "AVS Sachsen – Gastkarten",
+     "url": "https://angeln-sachsen.de/avs/gastangler/gastkarten"
+    }
+   ],
    "note": "6 ha Vorsperre der TS Lichtenberg. Wegen der laufenden Hauptsperren-Sanierung vorab beim AVS prüfen, ob die Vorsperre beangelbar ist.",
    "warn": true
   },
@@ -109,6 +115,12 @@
    "fisch": "Barsch, Hecht, Zander, Karpfen, Schleie, Regenbogenforelle, Brasse, Aal, Weißfisch",
    "methode": "Trinkwassertalsperre mit flach begehbaren Ufern (fast rundum beangelbar): im Frühjahr Hecht im Flachwasser, sonst Abbruchkanten in Wurfweite auf Zander/Barsch suchen, Grund auf Karpfen/Schleie",
    "karte": "AVS-Gastkarte + TWT-Belehrung; LVSA-Jahresvollzahler ohne Zusatzerlaubnis. Gewässernummer vor Ort/Verzeichnis prüfen.",
+   "kartenLinks": [
+    {
+     "label": "AVS Sachsen – Gastkarten",
+     "url": "https://angeln-sachsen.de/avs/gastangler/gastkarten"
+    }
+   ],
    "note": "TWT nahe der tschechischen Grenze (Flöha + Wernsbach gestaut, ~94 ha). Angeln erlaubt AUSSER ~150 m direkt an der Staumauer und der tschechischen Seite. Kein Boot, kein Baden. Flach abfallende, gut begehbare Ufer – eine der zugänglicheren Talsperren der Region. Aktuelle TWT-Bestimmungen beim AVS prüfen.",
    "warn": false
   },

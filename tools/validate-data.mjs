@@ -56,6 +56,13 @@ for (const r of regions) {
     if (!Array.isArray(sp.arten)) E(t + ': arten kein Array');
     if (sp.zugang && !['ufer','boot'].includes(sp.zugang)) E(t + ': zugang ungültig ("' + sp.zugang + '")');
     if (sp.verif && !['A','B','C'].includes(sp.verif)) E(t + ': verif ungültig ("' + sp.verif + '")');
+    if (sp.kartenLinks) {
+      if (!Array.isArray(sp.kartenLinks)) E(t + ': kartenLinks kein Array');
+      else sp.kartenLinks.forEach((l, i) => {
+        if (!l || !l.label || !l.url) E(t + ': kartenLinks[' + i + '] label/url fehlt');
+        else if (!/^https:\/\//.test(l.url)) E(t + ': kartenLinks[' + i + '] url nicht https (' + l.url + ')');
+      });
+    }
     (sp.hotspots || []).forEach(h => {
       if (typeof h.lat !== 'number' || typeof h.lng !== 'number') E(t + ' Hotspot „' + (h.name || '?') + '“: lat/lng ungültig');
     });

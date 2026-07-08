@@ -5,7 +5,7 @@ import { CATS } from './data.js';
 import { prefillFang } from './fangbuch.js';
 import { openTools } from './tools.js';
 import { sunLine } from './ui.js';
-import { ICON } from './util.js';
+import { ICON, esc } from './util.js';
 import { loadWeather } from './weather.js';
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
   maxZoom:18, attribution:'&copy; OpenStreetMap'
@@ -31,6 +31,7 @@ export function popupHtml(s){
     <div class="pop-row"><b>Methode &amp; Köder</b>${s.methode}</div>
     ${s.rig?'<div class="pop-row"><b>Gerät &amp; Rig</b>'+s.rig+'</div>':''}
     <div class="pop-row"><b>Erlaubnis</b>${s.karte}</div>
+    ${s.kartenLinks&&s.kartenLinks.length?'<div class="pop-links">'+s.kartenLinks.map(l=>'<a class="pop-link" href="'+l.url+'" target="_blank" rel="noopener">'+ICON('pin')+esc(l.label)+'</a>').join('')+'</div>':''}
     ${s.zugang?'<div class="pop-row"><b>Zugang</b>'+(s.zugang==='boot'?'Überwiegend Bootssee – vom Ufer kaum möglich':'Vom Ufer beangelbar')+'</div>':''}
     ${!s.line&&(s.cat==='raub'||s.cat==='fried')?'<div class="pop-row" data-wind="1"></div>':''}
     <div class="pop-note${s.warn?' pop-warn':''}">${s.note}</div>

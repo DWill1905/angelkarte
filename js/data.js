@@ -33,7 +33,8 @@ export const SPOTS_SN = [
     fisch:'Barsch, Hecht, Karpfen, Schleie, Regenbogenforelle, Weißfisch',
     methode:'Spinnfischen vom Ufer, Pose/Grund auf Karpfen & Schleie (TWT-Köderregeln!)',
     karte:'AVS-Erlaubnisschein + TWT-Belehrung',
-    note:'6 ha Vorsperre der TS Lichtenberg. Wegen der laufenden Hauptsperren-Sanierung vorab beim AVS prüfen, ob die Vorsperre beangelbar ist.',
+    kartenLinks:[{label:'AVS Sachsen – Gastkarten',url:'https://angeln-sachsen.de/avs/gastangler/gastkarten'}],
+   note:'6 ha Vorsperre der TS Lichtenberg. Wegen der laufenden Hauptsperren-Sanierung vorab beim AVS prüfen, ob die Vorsperre beangelbar ist.',
     warn:true
   },
   {
@@ -43,7 +44,8 @@ export const SPOTS_SN = [
     fisch:'Barsch, Hecht, Zander, Karpfen, Schleie, Regenbogenforelle, Brasse, Aal, Weißfisch',
     methode:'Trinkwassertalsperre mit flach begehbaren Ufern (fast rundum beangelbar): im Frühjahr Hecht im Flachwasser, sonst Abbruchkanten in Wurfweite auf Zander/Barsch suchen, Grund auf Karpfen/Schleie',
     karte:'AVS-Gastkarte + TWT-Belehrung; LVSA-Jahresvollzahler ohne Zusatzerlaubnis. Gewässernummer vor Ort/Verzeichnis prüfen.',
-    note:'TWT nahe der tschechischen Grenze (Flöha + Wernsbach gestaut, ~94 ha). Angeln erlaubt AUSSER ~150 m direkt an der Staumauer und der tschechischen Seite. Kein Boot, kein Baden. Flach abfallende, gut begehbare Ufer – eine der zugänglicheren Talsperren der Region. Aktuelle TWT-Bestimmungen beim AVS prüfen.',
+    kartenLinks:[{label:'AVS Sachsen – Gastkarten',url:'https://angeln-sachsen.de/avs/gastangler/gastkarten'}],
+   note:'TWT nahe der tschechischen Grenze (Flöha + Wernsbach gestaut, ~94 ha). Angeln erlaubt AUSSER ~150 m direkt an der Staumauer und der tschechischen Seite. Kein Boot, kein Baden. Flach abfallende, gut begehbare Ufer – eine der zugänglicheren Talsperren der Region. Aktuelle TWT-Bestimmungen beim AVS prüfen.',
     warn:false
   },
   {
@@ -200,6 +202,7 @@ export const SPOTS_MV=[
    fisch:'Hecht, Zander, Barsch, Aal, Karpfen, Schleie, Brachse (14 gemeldete Arten)',
    methode:'Vom verankerten Boot: Gummifisch an den Havel-Rinnen auf Zander, große Köder an Schilfkanten auf Hecht. Schleppen verboten!',
    karte:'Angelkarte Seenfischerei Obere Havel – online (fischerei-wesenberg.de) oder Fischereihof Wesenberg',
+   kartenLinks:[{label:'Fischereihof Wesenberg',url:'https://fischerei-wesenberg.de'}],
    note:'Ø nur 1,6 m tief, Max. 7 m! Havel durchfließt den See, im Sommer viel Hausboot-Verkehr. Uferangeln laut Luftbild fast nur an Buhne (Campingpark) und Stadtufer Wesenberg möglich – sonst durchgehender Schilfgürtel, Scharkante weit dahinter: Boot + Echolot.',
    hotspots:[
      {name:'Havel-Einlauf & 7-m-Kuhle',saison:'Jun–Sep + Winter (tiefste Stelle)',lat:53.3070,lng:13.0040,tipp:'DIE Stelle: tiefste Kuhle des Sees (7 m) direkt vor der Havel-Einmündung am Campingpark Havelberge. Zander tagsüber an der 5–7-m-Kante. UFER-TIPP: Die gepflasterte Buhne ist einer von nur zwei schilffreien Uferzugängen am See – abends Aal, Barsch.'},
@@ -213,6 +216,7 @@ export const SPOTS_MV=[
    fisch:'Hecht, Barsch, Aal, Schleie',
    methode:'Flacher, krautiger Hechtsee: Spinnerbait/Jerkbait über Kraut, Westbuchten mit Ankerplätzen',
    karte:'Angelkarte Obere Havel (Meisterbereich Mirow, Tel. 039833 20423)',
+   kartenLinks:[{label:'Fischereihof Wesenberg',url:'https://fischerei-wesenberg.de'}],
    note:'Reines Bootsrevier: Wald bis ans Wasser, laut Luftbild keine freien Uferzugänge. Wasser eher trüb, Wald teils überflutet – Mückenschutz einpacken. Schleusenpassage ab Mirow.',
    hotspots:[
      {name:'Westbuchten',saison:'Mai–Okt',lat:53.2450,lng:12.8050,tipp:'Ruhige Ankerbuchten am Westufer – Hecht über und an den Krautfeldern, Spinnerbait/Chatterbait flach geführt. Lage ungefähr.'}
@@ -223,6 +227,7 @@ export const SPOTS_MV=[
    fisch:'Hecht, Barsch, Schleie',
    methode:'Flach, Seerosenfelder: flachlaufende Wobbler und Spinnerbaits an den Kanten VOR den Feldern (Felder selbst tabu)',
    karte:'Angelkarte Obere Havel (Meisterbereich Mirow)',
+   kartenLinks:[{label:'Fischereihof Wesenberg',url:'https://fischerei-wesenberg.de'}],
    note:'Klares, flaches Wasser – Sichtangeln möglich, Raubvogel-Revier.',warn:false},
   {name:'Großer Labussee',zugang:'boot',
     rig:'Zander-Jigrute 15–50 g, FC 0,40+ oder dünner Stahl, DropShot-Setup für die Barschtrupps.',nr:'Obere Havel',cat:'raub',arten:['Hecht','Zander','Barsch','Aal'],
@@ -230,6 +235,7 @@ export const SPOTS_MV=[
    fisch:'Hecht, Zander, Barsch, Aal',
    methode:'Tieferes Havelbecken: Zander an Kanten und Löchern jiggen, Barschtrupps mit DropShot suchen',
    karte:'Angelkarte Obere Havel (Meisterbereich Wesenberg)',
+   kartenLinks:[{label:'Fischereihof Wesenberg',url:'https://fischerei-wesenberg.de'}],
    note:'Ruhiger als der Woblitzsee, Übergang zum Useriner See (Nationalpark!).',warn:false},
   {name:'Useriner See',zugang:'boot',
     rig:'Wie Woblitzsee: Stahlvorfach, Jigrute – dazu Driftsack/Anker (Schleppen verboten).',nr:'Obere Havel / Müritz-NP',cat:'raub',arten:['Hecht','Zander','Barsch'],
@@ -237,6 +243,7 @@ export const SPOTS_MV=[
    fisch:'Hecht, Zander, Barsch',
    methode:'Vom verankerten Boot an den Fahrwasser-Kanten; bei Wind schnell kabbelig (5,2 km lang)',
    karte:'Angelkarte Obere Havel – Nationalpark-Regeln beachten',
+   kartenLinks:[{label:'Fischereihof Wesenberg',url:'https://fischerei-wesenberg.de'}],
    note:'Liegt im Müritz-Nationalpark: Schutzzonen und Befahrensregeln beachten, Uferbereiche teils gesperrt.',warn:true},
   {name:'Mirower See',zugang:'ufer',
     rig:'Vom Ufer: Spinnrute 10–40 g mit Stahlvorfach an den Stegen, nachts Grundrute mit Tauwurm auf Aal.',nr:'Obere Havel',cat:'raub',arten:['Hecht','Zander','Barsch','Aal'],
@@ -244,6 +251,7 @@ export const SPOTS_MV=[
    fisch:'Hecht, Zander, Barsch, Aal',
    methode:'Stadtnaher Allrounder: abends auf Zander an der Fahrrinne, Aal vom Ufer (Nachtangeln erlaubt)',
    karte:'Angelkarte Obere Havel (Meisterbereich Mirow, Mühlenstr. 21)',
+   kartenLinks:[{label:'Fischereihof Wesenberg',url:'https://fischerei-wesenberg.de'}],
    note:'Schlossinsel und Bootsverkehr – Randbereiche und frühe Stunden wählen.',
    hotspots:[
      {name:'Ufer: Stadtufer & Schlossinsel',saison:'Mai–Okt abends, Aal Jun–Aug',lat:53.2720,lng:12.8150,tipp:'Bester Ufer-Spot der Kleinseenplatte (Luftbild): befestigtes Stadtufer mit vielen Stegen und der Schlossinsel-Brücke. Abends Barsch an den Stegen, nachts Aal – kurze Wege, kein Boot nötig.'}
@@ -254,6 +262,7 @@ export const SPOTS_MV=[
    fisch:'Hecht, Zander, Barsch',
    methode:'Klassisches Ansitz- und Spinnrevier am Havelkanal Ahrensberg',
    karte:'Angelkarte Obere Havel (Meisterbereich Ahrensberg, Tel. 039832 20230)',
+   kartenLinks:[{label:'Fischereihof Wesenberg',url:'https://fischerei-wesenberg.de'}],
    note:'Ruhiges Revier zwischen Wesenberg und Ahrensberg.',warn:false},
   {name:'Rätzsee (bei Mirow/Canow)',zugang:'ufer',verif:'B',
     rig:'Vom Ufer an den erreichbaren Buchten: Spinnrute mit Stahlvorfach auf Hecht, DropShot auf Barsch; nur E-Motor auf dem Boot erlaubt.',nr:'Obere Havel · Meisterbereich Canow/Mirow',cat:'raub',arten:['Hecht','Zander','Barsch','Aal','Schleie','Karpfen','Wels'],
@@ -261,6 +270,7 @@ export const SPOTS_MV=[
    fisch:'Hecht, Zander, Barsch, Aal, Schleie, Karpfen, Wels, Weißfisch (Artenangaben teils user-generated)',
    methode:'290-ha-Waldsee bis 20 m tief, sehr facettenreich mit Buchten/Kanälen/Halbinseln: Hecht an den Schilfkanten der Buchten, Zander an den tiefen Löchern und Steilkanten',
    karte:'Angelkarte Obere Havel (Meisterbereich Canow Tel. 039828 20476 oder Mirow 039833 20423) – gilt für alle Seen des Verbunds',
+   kartenLinks:[{label:'Fischereihof Wesenberg',url:'https://fischerei-wesenberg.de'}],
    note:'Einer der wenigen Seen mit mehreren Uferzugängen: rund um den See führen Wege, das Ufer ist an einigen Stellen gut erreichbar (Nord: Zirtow, Süd: Fleether Mühle). Nur E-Motor erlaubt. Nachtangeln erlaubt. Riesiger Waldkomplex – Mückenschutz.',
    hotspots:[
      {name:'Übergang zum Zirtowsee (Nordufer)',saison:'Mai–Okt',lat:53.3010,lng:12.8630,tipp:'Enge Verbindung zum Zirtowsee am Nordufer – Engstellen und Kanäle sind klassische Hecht- und Barschzüge. Vom Ufer bei Zirtow erreichbar. Lage ungefähr.'}
@@ -271,6 +281,7 @@ export const SPOTS_MV=[
    fisch:'Hecht, Zander, Barsch, Wels, Aal, Karpfen, Schleie, Weißfisch',
    methode:'73-ha-See bis 20 m tief, mit Gobenowsee per Kanal verbunden: Hecht an Seerosen/Schilfspitzen (Mai top), Zander an den Steilkanten und tiefen Löchern, Wels im „Welsloch". Kaum Uferstellen – Boot nötig, Schleppen verboten.',
    karte:'Angelkarte Obere Havel (Fischereihof Canow Tel. 039828 20476) – Tageskarte ~12€, gilt für alle Verbund-Seen',
+   kartenLinks:[{label:'Fischereihof Wesenberg',url:'https://fischerei-wesenberg.de'}],
    note:'Reines Bootsrevier (dichter Schilf-/Seerosengürtel, kaum Uferzugang). Nur E-Motor-/Ruderboot, Schlepp- und Driftangeln verboten. Nachtangeln erlaubt, 2 Ruten, max. 3 Edelfische/Tag.',
    hotspots:[
      {name:'Zanderberg am Ostufer',saison:'Mai–Okt, Dämmerung/Nacht',lat:53.2730,lng:12.9030,tipp:'Gegenüber dem Kanal aus dem Gobenowsee, bei der Pappel-Gruppe am Ufer: ein sandiger Unterwasserberg nur Rutenlängen vom Schilf. Zander treiben abends/nachts ihre Beute den Hang hinauf. Lage ungefähr.'},
@@ -282,6 +293,7 @@ export const SPOTS_MV=[
    fisch:'Zander (sehr gut), Hecht, Barsch, Aal, Schleie, Wels, Karpfen, Weißfisch',
    methode:'104 ha, Ø ~8–10 m, nördlich von Priepert steil bis 26 m: als Zandergewässer bekannt. Havel-Einlauf (wird schnell tief) und die Steilkanten jiggen, Unterwasserberg am Nordende suchen',
    karte:'Angelkarte Obere Havel (Fischereihof Ahrensberg Tel. 039832 20230) – Tageskarte ~12€, gilt für alle Verbund-Seen',
+   kartenLinks:[{label:'Fischereihof Wesenberg',url:'https://fischerei-wesenberg.de'}],
    note:'Reges Wasserwander-/Hausbootrevier (Obere-Havel-Wasserstraße) – Dämmerung nutzen. ⚠ Wasserskistrecke auf dem See: markierten Bereich meiden. Kaum Uferstellen, Boot empfohlen. Schleppen verboten, Nachtangeln erlaubt.',
    hotspots:[
      {name:'Havel-Einlauf (Nord, Richtung Wangnitzsee)',saison:'ganzjährig, Zander top',lat:53.2640,lng:13.0170,tipp:'Ortsangler-Tipp: gleich am Haveleinlauf wird es schnell tief – klassischer Zanderzug, auch beidseitig Richtung Wangnitzsee. Tiefste Stelle (26 m) liegt nördlich von Priepert. Lage ungefähr.'}
@@ -312,6 +324,7 @@ export const SPOTS_RLP=[
    methode:'Nachts flach laufende Wobbler an der Steinpackung (schlägt am Rhein oft den Gummi), tagsüber jiggen an Kanten',
    karte:'Rheinischer Erlaubnisschein (~31 €/Jahr): <a href="https://lfv-rhl-rhh.de/fischerei-erlaubnisscheine/rhein/" target="_blank" rel="noopener">LFV Rheinland-Rheinhessen</a> oder Angelladen (z.B. Bode Heidesheim)',
    rig:'Jigrute 30–60 g (Strömung!), Jigköpfe 10–30 g in Grundeldekoren, großer Bleikopf-Vorrat – die Steinpackungen fordern Tribut',
+   kartenLinks:[{label:'LFV RLP – Rheinkarte',url:'https://lfv-rhl-rhh.de/fischerei-erlaubnisscheine/rhein/'}],
    note:'Stadtufer stark frequentiert – die offensichtlichen Stellen sind überlaufen, Strecke machen zahlt sich aus. Wellenschlag der Schifffahrt: Ruten sichern!',
    hotspots:[
      {name:'Theodor-Heuss-Brücke',saison:'ganzjährig, top Okt–Dez',lat:50.0060,lng:8.2745,tipp:'Der dokumentierte Zander-Klassiker der Stadt: um und hinter den Brückenpfeilern, beste Zeit Dämmerung und nachts. Viel Angeldruck – antizyklisch angeln (unter der Woche, sehr früh).'},
@@ -324,6 +337,7 @@ export const SPOTS_RLP=[
    methode:'Spinnfischen an Spundwänden und Stegen, strömungsberuhigt – gut bei Hochwasser, wenn die Buhnen weg sind',
    karte:'Rheinischer Erlaubnisschein – Angeln nur in ausgeschilderten Bereichen!',
    rig:'Barschrute 5–21 g reicht im Hafen, Finesse-Montagen an den Wänden entlang',
+   kartenLinks:[{label:'LFV RLP – Rheinkarte',url:'https://lfv-rhl-rhh.de/fischerei-erlaubnisscheine/rhein/'}],
    note:'Nur teilweise freigegeben und es gab wiederholt Ärger – Beschilderung genau prüfen, im Zweifel weiterziehen. Viele Schaulustige.',warn:true},
   {name:'Industriehafen Mombach – Hafenausfahrt',zugang:'ufer',nr:'~Strom-km 503 · nur Ausfahrt',cat:'raub',
    arten:['Zander','Barsch','Aal','Brachse','Wels'],
@@ -332,6 +346,7 @@ export const SPOTS_RLP=[
    methode:'Jiggen in der Hafenausfahrt (Zander-Klassiker bei trübem Wasser/Hochwasser), Feederstrecke im Industriegebiet',
    karte:'Rheinischer Erlaubnisschein – Angeln NUR im Bereich der Hafenausfahrt',
    rig:'Zander-Jigrute, Gummis 10–12 cm V-Tail natur; abends Grundrute mit Tauwurm auf Aal',
+   kartenLinks:[{label:'LFV RLP – Rheinkarte',url:'https://lfv-rhl-rhh.de/fischerei-erlaubnisscheine/rhein/'}],
    note:'Schild auf der Bauhaus-Seite markiert den Beginn des Angelverbots – dahinter ist Schluss. Stromab beginnt das NSG Mombacher Rheinufer (ganzjährig verboten).',
    hotspots:[
      {name:'Hinter dem Bauhaus',saison:'ganzjährig',lat:50.0305,lng:8.2200,tipp:'Zugänglicher Klassiker am erlaubten Ausfahrtsbereich – Ansitz und Raubfisch, entsprechend frequentiert.'},
@@ -344,6 +359,7 @@ export const SPOTS_RLP=[
    methode:'Buhnenkessel systematisch abklopfen; nachts Wobbler flach über die Buhnenköpfe – strömungsberuhigte Taschen hinter den Rampen für die Pose',
    karte:'Rheinischer Erlaubnisschein',
    rig:'Jigköpfe 15–30 g je nach Strömung; fürs Posenangeln hinter den Rampen leichte Matchrute',
+   kartenLinks:[{label:'LFV RLP – Rheinkarte',url:'https://lfv-rhl-rhh.de/fischerei-erlaubnisscheine/rhein/'}],
    note:'Zwei Rampen an der chemischen Fabrik plus eine kleine stromauf – die ruhigen Bereiche dahinter sind die Friedfisch-Geheimecken. Parkplatz am Kiosk Rheinblick.',warn:false},
   {name:'Altrhein Heidenfahrt',zugang:'ufer',verif:'B',nr:'~Strom-km 511 · Teilsperrung',cat:'fried',
    arten:['Zander','Barsch','Hecht','Karpfen','Schleie','Brachse','Aal'],
@@ -352,6 +368,7 @@ export const SPOTS_RLP=[
    methode:'Strömungsberuhigt: Pose und Grund auf Friedfisch, am Altrhein-Ausgang Raubfisch',
    karte:'Rheinischer Erlaubnisschein – nur der hintere Bereich, vorderer Teil ist Schutzgebiet!',
    rig:'Feeder/Pose fürs Stillwasser, Spinnrute für den Ausgang zum Strom',
+   kartenLinks:[{label:'LFV RLP – Rheinkarte',url:'https://lfv-rhl-rhh.de/fischerei-erlaubnisscheine/rhein/'}],
    note:'Beliebt und teils saisonal gesperrt (Berichte über Sperrung bis 31.08. kursieren) – Beschilderung maßgeblich. Badestrand nebenan = Sommer-Trubel.',warn:true},
   {name:'Hafen & Buhnen Oppenheim',zugang:'ufer',nr:'LFV RLP · ~Strom-km 480',cat:'raub',
    arten:['Zander','Barsch','Wels','Aal','Brachse'],
@@ -360,6 +377,7 @@ export const SPOTS_RLP=[
    methode:'Hafeneinfahrt jiggen, Buhnenfeld stromauf/stromab ablaufen – weniger Druck als in Mainz',
    karte:'Rheinischer Erlaubnisschein',
    rig:'Rhein-Standard: Jigrute 30–60 g, Grundelfarben; Welsrute lohnt als zweite Rute',
+   kartenLinks:[{label:'LFV RLP – Rheinkarte',url:'https://lfv-rhl-rhh.de/fischerei-erlaubnisscheine/rhein/'}],
    note:'Gut kombinierbar: Hafeneinfahrt bei Hochwasser, Buhnen bei Normalpegel. Marina-Bereich respektieren.',warn:false},
   {name:'Rhein Nackenheim & Mühlarm',zugang:'ufer',verif:'B',nr:'LFV RLP · km 485–490',cat:'raub',
    arten:['Zander','Barsch','Rapfen','Wels','Hecht','Aal','Brachse'],
@@ -368,6 +386,7 @@ export const SPOTS_RLP=[
    methode:'Buhnen im Hauptstrom auf Zander/Rapfen; der strömungsberuhigte Mühlarm zwischen Ufer und Inseln als Schlechtwetter-/Hochwasser-Alternative',
    karte:'Rheinischer Erlaubnisschein (LFV Rhl.-Rhh.) – Ausgabestelle u.a. Angelsport Reika, Hauptstr. 55, Eich (Tel. 06246 904605)',
    rig:'Rhein-Standard: Jigrute 30–60 g mit Grundeldekoren; im Mühlarm reicht leichteres Gerät und Posen-/Grundmontage',
+   kartenLinks:[{label:'LFV RLP – Rheinkarte',url:'https://lfv-rhl-rhh.de/fischerei-erlaubnisscheine/rhein/'}],
    note:'⚠ WICHTIG: Die Rheininseln Kisselwörth & Sändchen sind Naturschutzgebiet mit WECHSELNDEN Handangel-Sperren – auf Kisselwörth 16.07.–29.02. verboten, auf Sändchen Anfang März–15.07. verboten. Der Mühlarm (Ufer neben B9) und das befestigte Hauptstromufer sind alle 100–200 m an Treppen/Bootsrampen zugänglich. Zufahrt/Parken über Rheinstraße Nackenheim.',
    hotspots:[
      {name:'Mühlarm bei der B9',saison:'ganzjährig, top bei Hochwasser',lat:49.9585,lng:8.3345,tipp:'Strömungsberuhigter Nebenarm zwischen Ufer und den Inseln – ideal wenn der Hauptstrom bei Hochwasser unfischbar wird. Viele Bootsstege, Friedfisch und Zander. Inselseite wegen NSG-Sperren meiden!'}
@@ -378,6 +397,7 @@ export const SPOTS_RLP=[
    fisch:'Zander (kapital, 3–7 Pfd berichtet), Barsch, Wels, Aal, Barbe, Brassen, Karpfen',
    methode:'Langes Buhnenfeld gegenüber AKW Biblis: Zander mit totem Köderfisch am Grund an der Buhnenkante (schlägt hier oft Gummi), Feeder auf Brassen/Barbe im ruhigen Buhnenbecken, nachts Aal/Wels an der Steinschüttung',
    karte:'Rheinischer Erlaubnisschein (LFV Rhl.-Rhh.) – Ausgabestellen im Raum Worms/Eich',
+   kartenLinks:[{label:'LFV RLP – Rheinkarte',url:'https://lfv-rhl-rhh.de/fischerei-erlaubnisscheine/rhein/'}],
    note:'⚠ NICHT verwechseln mit dem Eich/Gimbsheimer Altrhein – die ~300 ha Schilffläche ist NSG (Angeln dort verboten)! Gemeint sind die RHEIN-Buhnen östlich der B9. Zugang über Leinpfad/Krippenweg. Bei Buhnenkopf-Strudeln Vorsicht. Pegel Worms/Mainz prüfen: bei Hochwasser Buhnen überspült, dann vom Ufer vor der Steinschüttung.',
    hotspots:[
      {name:'Ibersheim gegenüber AKW Biblis',saison:'Okt–Mär + warme Winternächte',lat:49.7050,lng:8.4460,tipp:'Gegenüber/unterhalb des Kraftwerks berichten Ortsangler durchschnittlich 7-Pfd-Zander – toter Köderfisch am Grund. Oberhalb feiner mit Gummi an die Buhnenkante. Lage ungefähr (km ~455).'},
@@ -390,6 +410,7 @@ export const SPOTS_RLP=[
    methode:'Die Mündung des Mains in den Rhein: Strömungskanten, Kehrwasser – Zander-Dauerbrenner laut Lokalmatadoren',
    karte:'Hessischer Rheinschein – seit 2025 NUR online: <a href="https://www.hejfish.com" target="_blank" rel="noopener">hejfish.com</a> (HLG)',
    rig:'Jigrute + nachts Wobbler; vor der Maarauespitze liegt ein Steinwall unter Wasser (Boot: ankern, Hängergefahr)',
+   kartenLinks:[{label:'hejfish (Hessen, online)',url:'https://www.hejfish.com'}],
    note:'Grenze RLP/Hessen: Fußgängerbrücke zur Maaraue. Die Maarauespitze selbst ist Polizeigelände und unzugänglich – dort raubt es sichtbar, erreichbar ist der Bereich davor.',warn:true},
   {name:'Ginsheimer Altrhein & Mündung',zugang:'ufer',nr:'~km 487–493 · HESSEN!',cat:'raub',
    arten:['Zander','Wels','Barsch','Hecht','Karpfen'],
@@ -398,6 +419,7 @@ export const SPOTS_RLP=[
    methode:'Der Altrhein für Ansitz, die Mündung in den Strom als dokumentierter Zander- und Wels-Hotspot',
    karte:'Hessischer Rheinschein – online über <a href="https://www.hejfish.com" target="_blank" rel="noopener">hejfish.com</a>',
    rig:'Wels-tauglich: 0,50er FC oder Stahl an der Mündung, Abrissmontage mit Tauwurm/Tintenfisch',
+   kartenLinks:[{label:'hejfish (Hessen, online)',url:'https://www.hejfish.com'}],
    note:'Anfahrt über Trebur/Steindamm oder Fähre Ginsheim. Teils flach und verkrautet.',
    hotspots:[
      {name:'Treburer Buhnenfeld (km 487–493)',saison:'Jun–Okt bei Normalpegel',lat:49.9550,lng:8.3250,tipp:'6 km Buhnenfeld auf der Nonnenaue – Fahrrad mitnehmen und Kilometer machen, die hinteren Buhnen sehen kaum Angler. Lage ungefähr, hessischer Schein nötig.'}
@@ -410,6 +432,7 @@ export const SPOTS_RLP=[
    methode:'58-ha-Baggersee bis 15 m tief: Zander an den Scharkanten tief jiggen, Wels nachts, Hecht an den Flachzonen der Wochenendhaus-Seite',
    karte:'Gastkarten FREI erhältlich (kein Verein nötig): Sportgeschäft Volltreffer, Hauptstr. 17, Eich (Tel. 06246 8589040, Mo–Fr 10–13 &amp; 15–18, Sa 10–14) oder Angelsport Engert, Worms (Tel. 06241 593036) – Bewirtschafter: <a href="https://www.avw1924.de/gew%C3%A4sserkarten" target="_blank" rel="noopener">Anglervereinigung Worms 1924</a>',
    rig:'Tiefwasser-Setup: Jigköpfe bis 30 g, Vertikal-tauglich vom Boot; Welsrute mit 0,60er FC als Nachtoption',
+   kartenLinks:[{label:'Anglervereinigung Worms',url:'https://www.avw1924.de/gew%C3%A4sserkarten'}],
    note:'Das Raubfisch-Stillgewässer Rheinhessens (~30 Autominuten): direkte Rheinverbindung, dadurch Wels- und Zanderbestand. An der Marina (Familie Luy) ist ein Angelkahn für 4 Personen mietbar – bei 15 m Tiefe die beste Option. Sommer: Badebetrieb, Randzeiten nutzen.',warn:false},
   {name:'Altrheinsee Eich',zugang:'ufer',nr:'Ortsgemeinde Eich',cat:'fried',
    arten:['Karpfen','Schleie','Hecht','Barsch','Aal','Brachse'],
@@ -426,6 +449,7 @@ export const SPOTS_RLP=[
    fisch:'Zander, Hecht, Wels, Barsch, Rapfen, Karpfen, Schleie, Aal, Weißfische',
    methode:'Baggersee im rheinhessischen Hügelland bei Wallertheim (bei Wörrstadt). Guter Raubfischbestand mit Zander, Hecht und Wels. Der stärkste Binnenland-Standort abseits des Rheins – Spinnfischen an den Kanten, Ansitz auf Karpfen/Schleie.',
    karte:'Erlaubnisschein AV Wörrstadt/Wallertheim 1978 e.V. (angelverein-woerrstadt-wallertheim.de). Gastkartenmodalitäten beim Verein erfragen',
+   kartenLinks:[{label:'AV Wörrstadt/Wallertheim',url:'https://www.angelverein-woerrstadt-wallertheim.de'}],
    note:'⚠ Datenlage zur Größe/Tiefe uneinheitlich (verif C): eine Quelle nennt ~67 ha/15 m, andere führen es als kleineren Teich – vor Anfahrt Größe und Gastkartenausgabe beim Verein klären. Koordinate = Vereinsgelände Wallertheim. Vereinsspezifische Entnahmefenster möglich (in RLP bei Vereinsseen üblich).',
    hotspots:[],warn:true,zugang:'ufer'},
 
@@ -444,6 +468,7 @@ export const SPOTS_RLP=[
    fisch:'Döbel, Barsch, Hecht, Aal, Rapfen, Karpfen, Brassen, Weißfische',
    methode:'Der zentrale Fluss Rheinhessens mündet bei Frei-Weinheim/Ingelheim in den Rhein. Der Mündungsbereich ist eine Strömungskante mit Mischbestand – kleine Spinnköder auf Döbel/Barsch/Rapfen, Grund auf Aal.',
    karte:'Pfälzer Rheinkarte (LFV RLP) für den Rheinabschnitt; die Selz selbst über den örtlichen Verein. ⚠ NSG „Fulder Aue–Ilmen Aue" und „Sandaue" = Angelverbot!',
+   kartenLinks:[{label:'LFV RLP – Rheinkarte',url:'https://lfv-rhl-rhh.de/fischerei-erlaubnisscheine/rhein/'}],
    note:'⚠ Rund um die Mündung liegen Naturschutzgebiete mit Angelverbot (Fulder Aue–Ilmen Aue, Sandaue) – Beschilderung genau beachten. Die kleine Selz führt bei Trockenheit wenig Wasser.',
    hotspots:[],warn:true,zugang:'ufer'},
 
@@ -490,6 +515,7 @@ export const SPOTS_HE=[
    fisch:'Hecht, Barbe, Döbel, Barsch, Aal, Karpfen, Äsche, Bachforelle, Weißfische',
    methode:'Von der Gleibach-Einmündung bei Launsbach (unterhalb A480) bis zum Wehr der Stadtwerke. Lange Spinnrute 20–40 g in der Strömung, DropShot fürs Abklopfen kleiner Hotspots vom Ufer. Salmoniden an den Wehren und am Gleibach-Einlauf.',
    karte:'IG-Lahn-Tageskarte ~10 € (Angel-Shop Lollar, Fishermen\'s Place Heuchelheim, Reinig Gießen). Gastangeln der Stadtstrecke teils nur mit Vereinsmitglied Fischwaidclub Gießen',
+   kartenLinks:[{label:'Fishermen\'s Place – Karten',url:'https://www.fishermensplace.de/produkte/angelkarten/'}],
    note:'Angelstellen stadtnah durch Wohn-/Gewerbebauten und Privatgrundstücke eingeschränkt. Beste Zugänge: großes Wehr bei der Kanustation und die drei Brücken. Vom Ufer, Fliegenfischen mit Wathose erlaubt.',
    hotspots:[
      {name:'Stadtwerke-Wehr (Streckenende)',saison:'ganzjährig, Salmoniden im Frühjahr',lat:50.58385,lng:8.66391,tipp:'Sauerstoffreiches Wehrwasser am Ende der Gießener Stadtstrecke: Barben und Döbel im Strömungskehr, im Frühjahr Äsche und Bachforelle. Vom Ufer gut zugänglich.'},
@@ -502,6 +528,7 @@ export const SPOTS_HE=[
    fisch:'Zander, Hecht, Karpfen, Barsch, gute Aale',
    methode:'15 ha, bis 10 m tief, direkt an der Lahn. Guter Mischbestand. Vom 01.11.–31.01. nur Kunstköder oder toter Köderfisch auf Raubfisch. Ufer besonders gut zugänglich (nach 10–15 min Fußweg ruhige Plätze). Bootsangeln erlaubt.',
    karte:'Fischerei-Erlaubnisschein VSA Gießen (vsa-giessen.de) + staatlicher Fischereischein',
+   kartenLinks:[{label:'VSA Gießen – Gastkarten',url:'https://www.vsa-giessen.de/gastkarten/'},{label:'hejfish (online)',url:'https://www.hejfish.com'}],
    note:'⚠ FKK-Bereich 01.05.–31.10., 10–20 Uhr Angelverbot; Angeln von den Inseln verboten; Laichschongebiet ganzjährig gesperrt (Schilder beachten). Uferbefahren durch Schranken verhindert – zu Fuß erschlossen. Eisangeln verboten. ⚠ Nicht mit dem benachbarten Wasserski-See verwechseln – gemeint ist der Angel-/FKK-See (Lahnpark).',
    hotspots:[
      {name:'Steilufer Nordseite',saison:'Okt–Mär, Zander',lat:50.5698,lng:8.6232,tipp:'An der tiefen Kante (bis 10 m) mit Gummi/totem Köfi auf Zander; im Winter nur Kunstköder/Köderfisch erlaubt.'}
@@ -514,6 +541,7 @@ export const SPOTS_HE=[
    fisch:'Hecht, Zander, Wels, Barsch (große Schwärme), große Karpfen, Aal, Schleie, Brassen',
    methode:'29 ha Kiessee, bis 11,4 m tief (Ø 4 m), direkt an der Lahn. Gutes Hecht-/Zander-/Wels- und Karpfengewässer. Bootsangeln ganztägig + Nachtangeln erlaubt (E-Motor/Ruder). 3 Ruten. Fische ab 7,5 kg schonend zurücksetzen (Altbestandsschutz).',
    karte:'Tageskarte ~15 € (Fishermen\'s Place Heuchelheim / Betreiber Dutenhofener See)',
+   kartenLinks:[{label:'Fishermen\'s Place – Karten',url:'https://www.fishermensplace.de/produkte/angelkarten/'}],
    note:'⚠ Intensiv genutztes Freizeitgewässer (Baden, Segeln, Surfen, Campingplatz) – Wochenende/Sommer sehr unruhig, Dämmerung/Nacht nutzen. Westteil Vogelschutzgebiet (gesperrt). Bei Segelregatten Bootsangeln komplett untersagt. Vom Ufer stark verkrautet – Boot klar im Vorteil.',
    hotspots:[
      {name:'Tiefes Loch (11,4 m) Seemitte',saison:'Hochsommer + Winter',lat:50.5670,lng:8.6111,tipp:'Tiefste Stelle für Sommer-/Winterzander und Wels – nur vom Boot. Vom Hessischen Landesamt auf 11,4 m vermessen.'},
@@ -526,6 +554,7 @@ export const SPOTS_HE=[
    fisch:'Hecht, Barsch, Wels, Döbel, Bachforelle, Äsche, Barbe, Aal, Schleie',
    methode:'Gaststrecke vom Auslauf der Naunheimer Schleuse bis zur Dill-Mündung (beidseitig, ~km 13). Spannendes Spinnrevier auf Barsch und Hecht. Hecht/Zander nur mit Stahl-/Kevlar-/Titanvorfach. Angelzeit 1 h vor bis 1 h nach Sonnenuntergang.',
    karte:'ASV-Wetzlar-Tageskarte (asv-wetzlar.de, Ausgabestellen vor Ort)',
+   kartenLinks:[{label:'ASV Wetzlar',url:'https://www.asv-wetzlar.de'}],
    note:'⚠ Großer Teil der Gaststrecke im Landschaftsschutzgebiet – Feld-/Wiesenwege nicht befahren, kein Feuer/Zelten. Bootsangeln, Nachtangeln und Senken verboten. Nur Uferangeln.',
    hotspots:[
      {name:'Dillmündung (Dillspitze)',saison:'ganzjährig',lat:50.5604,lng:8.5029,tipp:'Mündungsbereich der Dill in die Lahn – Strömungskante zieht Barsch, Hecht und Döbel. Streckenende km 13.'},
@@ -538,6 +567,7 @@ export const SPOTS_HE=[
    fisch:'Zander, Hecht, Barsch, Aal, Karpfen, Schleie, Weißfische',
    methode:'9,6 ha Baggersee, Ø 2,35 m, max. 4,3 m (nur eine kleine Fläche im NO-Teil). Flacher, eutropher Kiessee in einer Lahnschleife – als Zandergewässer bekannt, aber auch stark friedfischgeprägt. Viele Uferplätze. Twitchen/Spinnen auf Zander/Hecht, Feeder auf Karpfen/Schleie.',
    karte:'AC-Wißmar-Tageskarte ~10 € (ac-wissmar.de / Angelladen „Zum Kormoran" am See). 2 Ruten, nur 1 auf Raubfisch, kein lebender Köderfisch, kein Nachtangeln',
+   kartenLinks:[{label:'AC Wißmar – Gastkarten',url:'https://www.ac-wissmar.de/gastkarten/'}],
    note:'⚠ Datenlage zum Bestand uneinheitlich: manche Quellen loben kapitale Zander, andere sehen ihn eher friedfischlastig – flacher, eutropher See mit Sauerstoffabfall ab ~1,5 m im Sommer. Campingplatz umschließt großen Uferteil. In den Sommerferien 20–8 Uhr nur für Mitglieder. Anfüttern verboten.',
    hotspots:[
      {name:'Tiefe Ecke Nordost',saison:'Sommer, Zander',lat:50.6430,lng:8.6935,tipp:'Die einzige tiefere Zone (bis 4,3 m) liegt im nordöstlichen Seeteil – im flachen See der beste Sauerstoff-/Rückzugsbereich für Zander. Lage grob (Struktur mit Echolot verifizieren).'}
@@ -549,6 +579,7 @@ export const SPOTS_HE=[
    fisch:'Zander, Hecht, Barsch, Wels, Aal, Karpfen, Schleie, Döbel, Weißfische',
    methode:'Baggersee-Gruppe aus drei Becken östlich von Launsbach; Hauptsee ~6,5 ha, bis ~5,4 m. Guter Raubfischbestand (Zander, Hecht, Wels). Landzunge am Damm zum Nachbarsee als Struktur. Westufer Parkplatz/Liegewiese, übrige Ufer von Gehölz gesäumt.',
    karte:'Bewirtschafter AV Silbersee Launsbach e.V. (av-silbersee-launsbach.de). ⚠ Gastkartenvergabe laut mehreren Quellen unklar – vor Anfahrt direkt beim Verein erfragen',
+   kartenLinks:[{label:'AV Silbersee Launsbach',url:'https://www.av-silbersee-launsbach.de'}],
    note:'⚠ Beleglage schwächer (verif C): Fischbestand gut dokumentiert, aber Gastkarten-Regelung nicht gesichert. NSG/Vogelschutz + FKK-Bereich am See, A480 direkt nördlich (Lärm). Sommer starker Badebetrieb – Saisonrand/Herbst deutlich ruhiger. Grenzen vor Ort beschildert.',
    hotspots:[
      {name:'Landzunge am Trenndamm',saison:'Frühjahr/Herbst',lat:50.6165,lng:8.6760,tipp:'Am Damm zum nördlichen Nachbarsee bildet eine Landzunge einen 90°-Winkel – Kanten und Übergänge sind klassische Raubfisch-Standplätze. Lage grob.'}

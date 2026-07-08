@@ -40,6 +40,12 @@
    "fisch": "Hecht, Zander, Barsch, Aal, Karpfen, Schleie, Brachse (14 gemeldete Arten)",
    "methode": "Vom verankerten Boot: Gummifisch an den Havel-Rinnen auf Zander, große Köder an Schilfkanten auf Hecht. Schleppen verboten!",
    "karte": "Angelkarte Seenfischerei Obere Havel – online (fischerei-wesenberg.de) oder Fischereihof Wesenberg",
+   "kartenLinks": [
+    {
+     "label": "Fischereihof Wesenberg",
+     "url": "https://fischerei-wesenberg.de"
+    }
+   ],
    "note": "Ø nur 1,6 m tief, Max. 7 m! Havel durchfließt den See, im Sommer viel Hausboot-Verkehr. Uferangeln laut Luftbild fast nur an Buhne (Campingpark) und Stadtufer Wesenberg möglich – sonst durchgehender Schilfgürtel, Scharkante weit dahinter: Boot + Echolot.",
    "hotspots": [
     {
@@ -90,6 +96,12 @@
    "fisch": "Hecht, Barsch, Aal, Schleie",
    "methode": "Flacher, krautiger Hechtsee: Spinnerbait/Jerkbait über Kraut, Westbuchten mit Ankerplätzen",
    "karte": "Angelkarte Obere Havel (Meisterbereich Mirow, Tel. 039833 20423)",
+   "kartenLinks": [
+    {
+     "label": "Fischereihof Wesenberg",
+     "url": "https://fischerei-wesenberg.de"
+    }
+   ],
    "note": "Reines Bootsrevier: Wald bis ans Wasser, laut Luftbild keine freien Uferzugänge. Wasser eher trüb, Wald teils überflutet – Mückenschutz einpacken. Schleusenpassage ab Mirow.",
    "hotspots": [
     {
@@ -118,6 +130,12 @@
    "fisch": "Hecht, Barsch, Schleie",
    "methode": "Flach, Seerosenfelder: flachlaufende Wobbler und Spinnerbaits an den Kanten VOR den Feldern (Felder selbst tabu)",
    "karte": "Angelkarte Obere Havel (Meisterbereich Mirow)",
+   "kartenLinks": [
+    {
+     "label": "Fischereihof Wesenberg",
+     "url": "https://fischerei-wesenberg.de"
+    }
+   ],
    "note": "Klares, flaches Wasser – Sichtangeln möglich, Raubvogel-Revier.",
    "warn": false
   },
@@ -138,6 +156,12 @@
    "fisch": "Hecht, Zander, Barsch, Aal",
    "methode": "Tieferes Havelbecken: Zander an Kanten und Löchern jiggen, Barschtrupps mit DropShot suchen",
    "karte": "Angelkarte Obere Havel (Meisterbereich Wesenberg)",
+   "kartenLinks": [
+    {
+     "label": "Fischereihof Wesenberg",
+     "url": "https://fischerei-wesenberg.de"
+    }
+   ],
    "note": "Ruhiger als der Woblitzsee, Übergang zum Useriner See (Nationalpark!).",
    "warn": false
   },
@@ -157,6 +181,12 @@
    "fisch": "Hecht, Zander, Barsch",
    "methode": "Vom verankerten Boot an den Fahrwasser-Kanten; bei Wind schnell kabbelig (5,2 km lang)",
    "karte": "Angelkarte Obere Havel – Nationalpark-Regeln beachten",
+   "kartenLinks": [
+    {
+     "label": "Fischereihof Wesenberg",
+     "url": "https://fischerei-wesenberg.de"
+    }
+   ],
    "note": "Liegt im Müritz-Nationalpark: Schutzzonen und Befahrensregeln beachten, Uferbereiche teils gesperrt.",
    "warn": true
   },
@@ -177,6 +207,12 @@
    "fisch": "Hecht, Zander, Barsch, Aal",
    "methode": "Stadtnaher Allrounder: abends auf Zander an der Fahrrinne, Aal vom Ufer (Nachtangeln erlaubt)",
    "karte": "Angelkarte Obere Havel (Meisterbereich Mirow, Mühlenstr. 21)",
+   "kartenLinks": [
+    {
+     "label": "Fischereihof Wesenberg",
+     "url": "https://fischerei-wesenberg.de"
+    }
+   ],
    "note": "Schlossinsel und Bootsverkehr – Randbereiche und frühe Stunden wählen.",
    "hotspots": [
     {
@@ -205,6 +241,12 @@
    "fisch": "Hecht, Zander, Barsch",
    "methode": "Klassisches Ansitz- und Spinnrevier am Havelkanal Ahrensberg",
    "karte": "Angelkarte Obere Havel (Meisterbereich Ahrensberg, Tel. 039832 20230)",
+   "kartenLinks": [
+    {
+     "label": "Fischereihof Wesenberg",
+     "url": "https://fischerei-wesenberg.de"
+    }
+   ],
    "note": "Ruhiges Revier zwischen Wesenberg und Ahrensberg.",
    "warn": false
   },
@@ -229,6 +271,12 @@
    "fisch": "Hecht, Zander, Barsch, Aal, Schleie, Karpfen, Wels, Weißfisch (Artenangaben teils user-generated)",
    "methode": "290-ha-Waldsee bis 20 m tief, sehr facettenreich mit Buchten/Kanälen/Halbinseln: Hecht an den Schilfkanten der Buchten, Zander an den tiefen Löchern und Steilkanten",
    "karte": "Angelkarte Obere Havel (Meisterbereich Canow Tel. 039828 20476 oder Mirow 039833 20423) – gilt für alle Seen des Verbunds",
+   "kartenLinks": [
+    {
+     "label": "Fischereihof Wesenberg",
+     "url": "https://fischerei-wesenberg.de"
+    }
+   ],
    "note": "Einer der wenigen Seen mit mehreren Uferzugängen: rund um den See führen Wege, das Ufer ist an einigen Stellen gut erreichbar (Nord: Zirtow, Süd: Fleether Mühle). Nur E-Motor erlaubt. Nachtangeln erlaubt. Riesiger Waldkomplex – Mückenschutz.",
    "hotspots": [
     {
@@ -262,6 +310,12 @@
    "fisch": "Hecht, Zander, Barsch, Wels, Aal, Karpfen, Schleie, Weißfisch",
    "methode": "73-ha-See bis 20 m tief, mit Gobenowsee per Kanal verbunden: Hecht an Seerosen/Schilfspitzen (Mai top), Zander an den Steilkanten und tiefen Löchern, Wels im „Welsloch\". Kaum Uferstellen – Boot nötig, Schleppen verboten.",
    "karte": "Angelkarte Obere Havel (Fischereihof Canow Tel. 039828 20476) – Tageskarte ~12€, gilt für alle Verbund-Seen",
+   "kartenLinks": [
+    {
+     "label": "Fischereihof Wesenberg",
+     "url": "https://fischerei-wesenberg.de"
+    }
+   ],
    "note": "Reines Bootsrevier (dichter Schilf-/Seerosengürtel, kaum Uferzugang). Nur E-Motor-/Ruderboot, Schlepp- und Driftangeln verboten. Nachtangeln erlaubt, 2 Ruten, max. 3 Edelfische/Tag.",
    "hotspots": [
     {
@@ -302,6 +356,12 @@
    "fisch": "Zander (sehr gut), Hecht, Barsch, Aal, Schleie, Wels, Karpfen, Weißfisch",
    "methode": "104 ha, Ø ~8–10 m, nördlich von Priepert steil bis 26 m: als Zandergewässer bekannt. Havel-Einlauf (wird schnell tief) und die Steilkanten jiggen, Unterwasserberg am Nordende suchen",
    "karte": "Angelkarte Obere Havel (Fischereihof Ahrensberg Tel. 039832 20230) – Tageskarte ~12€, gilt für alle Verbund-Seen",
+   "kartenLinks": [
+    {
+     "label": "Fischereihof Wesenberg",
+     "url": "https://fischerei-wesenberg.de"
+    }
+   ],
    "note": "Reges Wasserwander-/Hausbootrevier (Obere-Havel-Wasserstraße) – Dämmerung nutzen. ⚠ Wasserskistrecke auf dem See: markierten Bereich meiden. Kaum Uferstellen, Boot empfohlen. Schleppen verboten, Nachtangeln erlaubt.",
    "hotspots": [
     {
@@ -369,7 +429,7 @@
    "fisch": "Aal",
    "von": null,
    "bis": null,
-   "mm": "50 cm (EU-Aalschutz: Änderungen möglich)"
+   "mm": "40 cm (EU-Aalschutz: Fangfenster/Sperrzeiten möglich)"
   },
   {
    "fisch": "Schleie",
