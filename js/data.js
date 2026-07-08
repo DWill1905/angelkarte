@@ -635,6 +635,106 @@ export const REGION_RLP={id:'mainz',name:'Rhein & Rheinhessen (Mainz)',nachtange
     {titel:'Rhein-Praxis',punkte:['Pegel über ~4 m: Buhnen überspült – dann auf Hafenausfahrten ausweichen (Pegelanzeige oben in der App nutzen!)','Grundel ist Hauptfutter: Ködergrößen 9–12 cm in Grundeldekoren, Naturköder am Grund = Grundel-Lotterie','Nachts schlägt der flach geführte Wobbler an kurzen Buhnen oft den Gummifisch','Frühjahrsschonzeit 15.04.–31.05.: Kunstköder verboten (außer Fliege) – de facto Spinnstart am 1. Juni','Schifffahrt: Wellenschlag reißt Ruten ins Wasser – sichern!']}
   ],
   hinweis:'Angaben ohne Gewähr, recherchiert 07/2026 (FischGDV RP, LFV RLP, Anglerforen). Maßgeblich: Erlaubnisschein mit Strom-km-Angaben und Beschilderung. Mindestmaße RLP vor Entnahme gegenprüfen.'};
+/* ===== Region Elbe / Magdeburg (Sachsen-Anhalt) – recherchiert 07/2026 ===== */
+export const SPOTS_EL=[
+  {name:'Buhnenfeld Herrenkrug',verif:'B',nr:'Magdeburger Anglerverein · Elbe rechtes Ufer',cat:'raub',
+   arten:['Zander','Hecht','Wels','Rapfen','Barsch','Karpfen','Aal','Brasse'],
+   lat:52.1535,lng:11.6720,
+   fisch:'Zander, Hecht, Wels, Rapfen, Barsch, Karpfen, Aal, Brasse',
+   methode:'Klassisches Magdeburger Buhnenfeld am Herrenkrug – der Elb-Zanderhotspot schlechthin. Vom Buhnenkopf die Strömungskante mit Gummifisch (Kopyto 10–12 cm, Bleikopf 10–20 g) beangeln; Kehrströmung und Prallhang sind die Standplätze. In trübem Sommerwasser beißt Zander sogar mittags.',
+   karte:'Tageskarte 15 € / Woche 40 € (Thommis Angelshop Magdeburg). DAV-Sachsen-Anhalt-Mitglieder + DAV-Gastmarke frei. Nacht- und Bootsangeln erlaubt',
+   note:'⚠ Vom 15.02.–30.04. Kunstköder & tote Köderfische verboten (Raubfischschonung). Buhnenkopf-Angeln ideal bei Pegel 1,20–1,80 m (Magdeburg-Strombrücke). Steinpackungen = Hängergefahr, Stahlvorfach + Gummi-Vorrat. Berufsschifffahrt hat Vorrang, Ruten gegen Wellenschlag sichern.',
+   kartenLinks:[{label:'Magdeburger Anglerverein',url:'https://www.magdeburger-anglerverein.de'},{label:'hejfish (online)',url:'https://www.hejfish.com'}],
+   hotspots:[
+     {name:'Buhnenkopf-Strömungskante',saison:'Juni–Winter, Zander',lat:52.1540,lng:11.6710,tipp:'Am Buhnenkopf bildet die Strömungskante Verwirbelungen an der Oberfläche – dort steht der Zander. Gummi 20 m flussab an der Kante führen.'}
+   ],warn:true,zugang:'ufer'},
+
+  {name:'Elbe Magdeburg-Prester',verif:'B',nr:'Magdeburger Anglerverein · oberhalb Abzweig Alte Elbe',cat:'raub',
+   arten:['Zander','Hecht','Wels','Rapfen','Barsch','Aal'],
+   lat:52.1034,lng:11.6748,
+   fisch:'Zander, Hecht, Wels, Rapfen, Barsch, Aal',
+   methode:'Sehr fischträchtige Buhnen oberhalb des Abzweigs der Alten Elbe. Tagsüber Spinnfischen mit Gummi an den Buhnenköpfen, zur Dämmerung Ansitz mit totem Köderfisch (Grundel) auf Zander – erste oder letzte Buhne im Feld als Hotspot.',
+   karte:'Tageskarte 15 € (Thommis Angelshop / DAV Sachsen-Anhalt). Nacht- und Bootsangeln erlaubt',
+   note:'⚠ 15.02.–30.04. Kunstköder-/Köderfischverbot. Krabbenplage im Sommer (Wollhandkrabbe) nervt Aal-/Ansitzangler – Köder alle 15 min prüfen, genug Köderfisch mitnehmen. Max. 3 Raubfische/Tag.',
+   kartenLinks:[{label:'Magdeburger Anglerverein',url:'https://www.magdeburger-anglerverein.de'},{label:'hejfish (online)',url:'https://www.hejfish.com'}],
+   hotspots:[
+     {name:'Erste/letzte Buhne am Alte-Elbe-Abzweig',saison:'Dämmerung, Zander',lat:52.1050,lng:11.6770,tipp:'Die Rand-Buhnen eines Feldes und die Altarm-Mündung sind Top-Ansitzplätze mit Köderfisch. Lage grob – Buhnenreihe abgehen.'}
+   ],warn:true,zugang:'ufer'},
+
+  {name:'Rothenseer Abstiegskanal',verif:'B',nr:'Magdeburger Anglerverein · Kanal',cat:'raub',
+   arten:['Zander','Barsch','Hecht','Weißfisch'],
+   lat:52.2057,lng:11.6875,
+   fisch:'Zander, Barsch, Hecht, Weißfisch',
+   methode:'Kanal am Wasserstraßenkreuz – ganzjährig für kapitale Zander gut, auch im Winter. Ruhigeres Wasser als der Hauptstrom, gut mit Gummi und Dropshot an den Kanten und Kanalwänden zu beangeln.',
+   karte:'Tageskarte 15 € (Thommis Angelshop / DAV Sachsen-Anhalt). Angeln nicht überall in Kanälen/Häfen gestattet – Beschilderung beachten',
+   note:'⚠ In Kanälen und Häfen ist das Angeln nicht überall erlaubt – auf Verbotsschilder achten. Winter kann sich lohnen (Zander beißt). 15.02.–30.04. Kunstköderverbot.',
+   kartenLinks:[{label:'Magdeburger Anglerverein',url:'https://www.magdeburger-anglerverein.de'},{label:'hejfish (online)',url:'https://www.hejfish.com'}],
+   hotspots:[],warn:true,zugang:'ufer'},
+
+  {name:'Industriehafen Magdeburg',verif:'B',nr:'Magdeburger Anglerverein · Hafenbecken',cat:'raub',
+   arten:['Zander','Barsch','Hecht','Weißfisch'],
+   lat:52.1648,lng:11.6688,
+   fisch:'Zander, Barsch, Hecht, Weißfisch',
+   methode:'Hafenbecken mit Zander, Barsch und Hecht. Bei Hochwasser im Hauptstrom eine der besten Alternativen – an den Hafenausfahrten stauen sich dann die Fische. Gummiköder erste Wahl.',
+   karte:'Tageskarte 15 € (Thommis Angelshop / DAV Sachsen-Anhalt). Nur ausgeschilderte Bereiche – nicht überall im Hafen erlaubt',
+   note:'⚠ Angeln nicht im ganzen Hafen erlaubt – Beschilderung strikt beachten. Hafenausfahrt = Hochwasser-Hotspot. 15.02.–30.04. Kunstköderverbot.',
+   kartenLinks:[{label:'Magdeburger Anglerverein',url:'https://www.magdeburger-anglerverein.de'},{label:'hejfish (online)',url:'https://www.hejfish.com'}],
+   hotspots:[],warn:true,zugang:'ufer'},
+
+  {name:'Zollelbe Magdeburg',verif:'B',nr:'Magdeburger Anglerverein · Nebenarm',cat:'raub',
+   arten:['Barsch','Zander','Hecht','Weißfisch'],
+   lat:52.1305,lng:11.6496,
+   fisch:'Barsch (im Herbst massenhaft), Zander, Hecht, Weißfisch',
+   methode:'Strömungsberuhigter Nebenarm mitten in der Stadt, gut zu Fuß/mit Rad erreichbar. Im Herbst treten Barsche in großen Mengen auf – kleine Spinner und Gummiköder. Gute Alternative bei starker Strömung im Hauptstrom.',
+   karte:'Tageskarte 15 € (Thommis Angelshop / DAV Sachsen-Anhalt)',
+   note:'⚠ Stadtgewässer, teils Baustellen am Ufer. Bootsangeln zwischen km 324,0 (Buckauer Fähre) und km 327,4 (Zollelbe-Mündung) NICHT erlaubt. Herbst = Barschzeit.',
+   kartenLinks:[{label:'Magdeburger Anglerverein',url:'https://www.magdeburger-anglerverein.de'},{label:'hejfish (online)',url:'https://www.hejfish.com'}],
+   hotspots:[],warn:true,zugang:'ufer'},
+
+  {name:'Buhnenfelder Rothensee–Rogätz',verif:'B',nr:'Elbe · zusammenhängende Buhnenfelder nördl. Magdeburg',cat:'raub',
+   arten:['Zander','Hecht','Barsch','Aal','Rapfen','Wels','Brasse'],
+   lat:52.2600,lng:11.7150,
+   fisch:'Zander, Hecht, Barsch, Aal, Rapfen, Wels, dicke Brassen/Alande',
+   methode:'Lange, zusammenhängende Buhnenfelder von Magdeburg-Rothensee bis Rogätz – „der ideale Angelplatz auf alles, was Flossen trägt". Strecke machen, aber jede Buhne gründlich abfischen (Strömungskante, Kehrströmung, Buhnenkopf, Prallhang). Zander an der Kante, Hecht am Prallhang, Rapfen am Kopf.',
+   karte:'Tageskarte 15 € (Thommis Angelshop / DAV Sachsen-Anhalt). Ufer zu Fuß über Feld-/Wanderwege (FFOG beachten)',
+   note:'⚠ Ufer oft nur über Feld-/Fuß-/Wanderwege erreichbar (Feld- und Forstordnungsgesetz). Nicht an den Buhnen „vorbeiangeln" – zwei bis drei Würfe pro Position reichen nicht. 15.02.–30.04. Kunstköderverbot. Koordinate = Streckenmitte.',
+   kartenLinks:[{label:'Magdeburger Anglerverein',url:'https://www.magdeburger-anglerverein.de'},{label:'hejfish (online)',url:'https://www.hejfish.com'}],
+   hotspots:[
+     {name:'Rogätz (Streckenende)',saison:'ganzjährig',lat:52.3177,lng:11.7617,tipp:'Nördliches Streckenende bei Rogätz – weniger Angeldruck als stadtnah. Außenkurven mit ausgespülten Buhnen sind top.'}
+   ],warn:true,zugang:'ufer'}
+];
+
+/* Schonzeiten Sachsen-Anhalt (Magdeburger Anglerverein / DAV LSA) – Fangbegrenzung max. 3 der gelisteten Arten/Tag */
+export const SCHON_EL=[
+  {fisch:'Zander', von:[2,15], bis:[5,31], mm:'50 cm, max 3/Tag'},
+  {fisch:'Hecht', von:[2,15], bis:[4,30], mm:'50 cm, max 3/Tag'},
+  {fisch:'Barbe', von:[4,1], bis:[6,30], mm:'45 cm, max 2/Tag'},
+  {fisch:'Aal', von:null, bis:null, mm:'50 cm'},
+  {fisch:'Wels', von:null, bis:null, mm:'– (kein Maß), max 1/Tag'},
+  {fisch:'Karpfen', von:null, bis:null, mm:'40 cm, max 3/Tag'},
+  {fisch:'Rapfen', von:null, bis:null, mm:'40 cm, max 2/Tag'},
+  {fisch:'Quappe', von:null, bis:null, mm:'30 cm, max 3/Tag'},
+  {fisch:'Barsch', von:null, bis:null, mm:'– (kein gesetzl. Maß)'}
+];
+
+export const REGION_EL={id:'elbe',name:'Elbe / Magdeburg (Sachsen-Anhalt)',nachtangeln:'frei',kurz:'Elbe (Magdeburg)',packliste:['Fischereischein + Erlaubnis (DAV Sachsen-Anhalt / Magdeburger AV)','Jigrute 15–40 g + Bleiköpfe 10–20 g','Gummifische 10–12 cm in Grün/Gelb/Weiß (Trübwasser!)','Stahl-/Titanvorfach + reichlich Jighaken (Hänger!)','Wathose/Gummistiefel für die Buhnen','Pegel Magdeburg-Strombrücke checken (ideal 1,20–1,80 m)','Kopflampe, Kescher, Abhakmatte'],
+  koederfisch:['Grundel & Gründling sind an der Elbe häufiger Beifang – als toter Köderfisch auf Zander/Wels/Aal top.','Lebender Köderfisch verboten (Tierschutzgesetz).','Wollhandkrabben plündern im Sommer Grundmontagen – Köder häufig kontrollieren.','Vom 15.02.–30.04. sind tote Köderfische UND Kunstköder verboten (Raubfischschonung).'],
+  schonQuelle:'Quelle: Erlaubnisbestimmungen Magdeburger Anglerverein e.V. / DAV Landesanglerverband Sachsen-Anhalt (Stand lt. BLINKER-Gewässersteckbrief). Zander 15.02.–31.05./50, Hecht 15.02.–30.04./50, Barbe 01.04.–30.06./45, Aal-Maß 50. Max. 3 der gelisteten Arten pro Tag. ⚠ NUR für die Sachsen-Anhalt-Strecke – die Elbe fließt durch Sachsen, Niedersachsen, Brandenburg & Hamburg mit je eigenen Regeln!',
+  pegel:{warnAb:350,text:'Buhnen überspült – auf Hafenausfahrten/Zollelbe ausweichen!'},
+  fusszeile:'Erlaubnis: <a href="https://www.magdeburger-anglerverein.de" target="_blank" rel="noopener">Magdeburger Anglerverein</a> · <a href="https://www.hejfish.com" target="_blank" rel="noopener">hejfish</a>. Nur Sachsen-Anhalt-Strecke!',
+  spots:SPOTS_EL,schon:SCHON_EL,
+  banner:[
+    {von:[2,15],bis:[4,30],text:'<b>Raubfisch-Schonzeit:</b> 15.02.–30.04. Kunstköder &amp; tote Köderfische verboten – Hecht &amp; Zander geschont.'},
+    {von:[5,1],bis:[5,31],text:'<b>Zander noch geschont</b> bis 31.05. (Hecht ab 01.05. wieder frei).'},
+    {von:[4,1],bis:[6,30],text:'<b>Barbe geschont</b> (01.04.–30.06.).'}
+  ],
+  regeln:[
+    {titel:'Erlaubnis & Fangbegrenzung (Sachsen-Anhalt)',punkte:['Tageskarte ~15 €, Woche ~40 € – u.a. Thommis Angelshop Magdeburg oder online','DAV-Sachsen-Anhalt-Mitglieder und DAV-Gäste mit Sachsen-Anhalt-Marke brauchen keine Zusatzkarte','Max. 3 Fische der Arten Hecht/Zander/Karpfen/Quappe pro Tag gesamt','Nacht- und Bootsangeln erlaubt (Boot-Ausnahme km 324,0–327,4)','Seit 2013: in Sachsen-Anhalt Angeln auch ohne Fischereischein möglich – aber Erlaubnisschein nötig']},
+    {titel:'Raubfisch-Schonzeit 15.02.–30.04.',punkte:['In diesem Zeitraum KEINE Kunstköder und KEINE toten Köderfische erlaubt (Laichschonung)','Zander zusätzlich bis 31.05. geschont, Mindestmaß 50 cm','Hecht bis 30.04. geschont, Mindestmaß 50 cm','De facto startet die Gummifisch-Saison auf Zander erst am 1. Juni']},
+    {titel:'Elbe-Praxis',punkte:['Buhnenkopf-Angeln ideal bei Pegel 1,20–1,80 m (Magdeburg-Strombrücke) – Pegelanzeige oben nutzen','Trübes Sommerwasser: grelle Gummis (gelb/weiß/grün); klarer bei Niedrigwasser: dunkle Farben','Bei Hochwasser an die Hafenausfahrten ausweichen – dort staut sich der Zander','Steinpackungen & Totholz = viele Hänger: Jighaken-Vorrat und Stahlvorfach mitnehmen','Berufsschifffahrt hat Vorrang – Wellenschlag reißt Ruten ins Wasser, gut sichern']}
+  ],
+  hinweis:'Angaben ohne Gewähr, recherchiert 07/2026 (BLINKER-Gewässersteckbrief Magdeburg, Magdeburger AV, hejfish, Anglerforen). Diese Regeln gelten NUR für die Sachsen-Anhalt-/Magdeburg-Strecke. Maßgeblich sind der jeweilige Erlaubnisschein (Strom-km!) und die Beschilderung vor Ort.'};
+
 export const REGIONS_EMBEDDED=[
  {id:'erzgebirge',name:'Erzgebirge / Freiberg (Sachsen)',nachtangeln:'lvsa',kurz:'Erzgebirge',packliste:['Erlaubnisschein + Personalausweis','Fangbuch (vor Angelbeginn ausfüllen!)','Maßband &amp; Hakenlöser','TWT: KEINE Maden/Fleisch – nur erlaubte Köder','Salmo-Strecke: Wathose + Einzelhaken + Sprengringzange','Kescher, Kopflampe (Nachtangeln 1h nach SU)'],
   koederfisch:['Lebender Köderfisch ist in ganz Deutschland verboten (Tierschutzgesetz) – nur tote Köderfische verwenden.','Köderfische nur aus demselben Gewässer entnehmen (keine Verschleppung/Faunenverfälschung).','In Trinkwassertalsperren: Maden &amp; Fleisch als Köder verboten – Köderfisch dort tabu.','Fangbegrenzung Köderfische laut Erlaubnisschein beachten.'],
@@ -654,6 +754,7 @@ export const REGIONS_EMBEDDED=[
   hinweis:'Angaben ohne Gewähr, nach SächsFischVO 2022 und LVSA-Gewässerordnung 2024. Maßgeblich: Erlaubnisschein, Gewässerverzeichnis, Beschilderung. Äsche vielerorts ganzjährig geschont – vor Ort prüfen. Gastkarten: angeln-sachsen.de'},
  REGION_RLP,
  REGION_HE,
+ REGION_EL,
  {id:'mecklenburg',name:'Mecklenburgische Kleinseenplatte (MV)',nachtangeln:'frei',kurz:'Kleinseenplatte',packliste:['Fischereischein + Fischereiabgabe MV (10€) + ggf. Touristenschein','Boot/Anker – Schleppen verboten, Ufer meist Schilf!','Echolot (Scharkanten weit draußen)','Stahl-/Titanvorfach (hohe Hechtdichte)','Mückenschutz (Wald überflutet)','Kescher, Kopflampe, Regenjacke'],
   koederfisch:['Lebender Köderfisch verboten (Tierschutzgesetz).','Köderfische nur aus dem befischten Gewässer (Seenverbund Obere Havel).','Barsch &amp; kleine Plötze sind top Hecht-/Zanderköder – als Fischfetzen oder ganzer toter Köfi am System.','Kein Anfüttern in Schongebieten/Nationalpark-Zonen.'],
   schonQuelle:'⚠ KARTENREGELN der Seenfischerei Obere Havel – teils strenger als MV-Landesrecht und NUR auf deren Gewässern gültig!',
