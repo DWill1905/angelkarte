@@ -17,11 +17,11 @@ if (!TOKEN || !message || !files.length) {
 
 /* Pre-Deploy-Wächter: Datenintegrität prüfen, sobald index.html oder Daten betroffen sind.
    Blockiert den Deploy bei stillen Datenfehlern (Schonzeiten/Maße/Spots). */
-const touchesData = files.some(f => /index\.html$|data\//.test(f));
+const touchesData = files.some(f => /index\.html$|data\/|js\/data\.js$/.test(f));
 if (touchesData) {
   const { execFileSync } = require('child_process');
   try {
-    const out = execFileSync('node', [path.join(__dirname, 'validate-data.js')], { encoding: 'utf8' });
+    const out = execFileSync('node', [path.join(__dirname, 'validate-data.mjs')], { encoding: 'utf8' });
     process.stdout.write(out);
   } catch (e) {
     if (e.stdout) process.stdout.write(e.stdout);
