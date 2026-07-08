@@ -181,6 +181,7 @@ export function locApply(p){
     .addTo(state.map).bindTooltip('Du');
   state.map.setView(state.userPos,11);
   renderList();
+  if(sheet) sheet.classList.remove('collapsed'); /* Spotliste zeigen, damit nächste Spots sichtbar */
   state.wxKey=''; loadWeather();
   if(typeof sunLine==='function') sunLine();
 }
@@ -220,6 +221,7 @@ locBtn.onclick=()=>{
 
 /* Spotliste */
 export const listEl=document.getElementById('spotList'), countEl=document.getElementById('spotCount');
+export const sortEl=document.getElementById('spotSort');
 export const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
 export function renderList(){
   listEl.innerHTML='';
@@ -229,14 +231,15 @@ export function renderList(){
     vis.sort((a,b)=>a._d-b._d);
   }
   countEl.textContent='('+vis.length+')';
+  if(sortEl) sortEl.textContent = state.userPos ? '  · nach Entfernung' : '';
   if(!vis.length){
     listEl.innerHTML='<div class="fb-empty" style="padding:20px">Keine Gewässer sichtbar – die Filter oben blenden gerade alles aus. Tippe Kategorie- oder Zielfisch-Chips an, um sie wieder einzublenden.</div>';
     return;
   }
-  vis.forEach(s=>{
+  vis.forEach((s,idx)=>{
     const c=CATS[s.cat], b=document.createElement('button');
-    b.className='spot-item';
-    const meta=state.userPos?s._d.toFixed(1)+' km':s.fisch.split(',')[0];
+    b.className='spot-item'+(state.userPos&&idx===0?' nearest':'');
+    const meta=state.userPos?s._d.toFixed(1)+' km'+(idx===0?' ★':''):s.fisch.split(',')[0];
     b.innerHTML=`<span class="dot" style="background:${c.color}"></span>
       <span class="name">${s.name}</span><span class="meta">${meta}</span>`;
     b.onclick=()=>{
