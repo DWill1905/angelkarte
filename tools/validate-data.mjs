@@ -67,6 +67,34 @@ for (const r of regions) {
   if (!Array.isArray(r.packliste) || !r.packliste.length) W(tag + ': packliste fehlt/leer');
 }
 
+import fs from 'fs';
+/* Manifest-Konsistenz: REGIONS_EMBEDDED <-> data/*.json <-> data/regionen.json */
+{
+  const dataDir = path.join(root, 'data');
+  const ids = regions.map(r => r.id);
+  // a) jede Region braucht eine Datei
+  ids.forEach(id => {
+    if (!fs.existsSync(path.join(dataDir, id + '.json'))) E('[data] Datei fehlt: data/' + id + '.json (Region „' + id + '" nicht generiert – gen-data.mjs?)');
+  });
+  // b) Manifest muss existieren und exakt die Regionsdateien listen
+  const manifestPath = path.join(dataDir, 'regionen.json');
+  if (!fs.existsSync(manifestPath)) {
+    E('[data] data/regionen.json (Manifest) fehlt');
+  } else {
+    let manifest = [];
+    try { manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8')); } catch (e) { E('[data] regionen.json nicht parsebar'); }
+    const want = ids.map(id => id + '.json');
+    const missing = want.filter(f => !manifest.includes(f));
+    const orphan = manifest.filter(f => !want.includes(f));
+    if (missing.length) E('[data] Manifest listet Region(en) NICHT: ' + missing.join(', ') + ' – gen-data.mjs ausführen und regionen.json mitdeployen!');
+    if (orphan.length) E('[data] Manifest listet unbekannte Datei(en): ' + orphan.join(', '));
+  }
+  // c) verwaiste JSON-Dateien (Datei ohne Region in REGIONS_EMBEDDED)
+  fs.readdirSync(dataDir).filter(f => f.endsWith('.json') && f !== 'regionen.json').forEach(f => {
+    if (!ids.includes(f.replace('.json', ''))) E('[data] verwaiste Datei: data/' + f + ' (keine Region in REGIONS_EMBEDDED)');
+  });
+}
+
 console.log('Geprüft: ' + regions.length + ' Regionen, ' +
   regions.reduce((a, r) => a + (r.spots || []).length, 0) + ' Spots, ' +
   regions.reduce((a, r) => a + (r.schon || []).length, 0) + ' Schonzeit-Einträge.');

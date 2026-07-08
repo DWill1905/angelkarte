@@ -17,15 +17,32 @@ if (!TOKEN || !message || !files.length) {
 
 /* Pre-Deploy-Wächter: Datenintegrität prüfen, sobald index.html oder Daten betroffen sind.
    Blockiert den Deploy bei stillen Datenfehlern (Schonzeiten/Maße/Spots). */
+const touchesRegionData = files.some(f => /js\/data\.js$|data\/[a-z]+\.json$/.test(f));
 const touchesData = files.some(f => /index\.html$|data\/|js\/data\.js$/.test(f));
 if (touchesData) {
   const { execFileSync } = require('child_process');
+  /* Regionsdaten angefasst? Dann Manifest + JSONs regenerieren, damit sie nie veralten,
+     und data/regionen.json automatisch in den Deploy aufnehmen (der Bug, der Gießen
+     unsichtbar machte: Manifest wurde nicht mitdeployt). */
+  if (touchesRegionData) {
+    try {
+      execFileSync('node', [path.join(__dirname, 'gen-data.mjs')], { encoding: 'utf8' });
+    } catch (e) {
+      console.error('✖ gen-data.mjs fehlgeschlagen:', e.message); process.exit(1);
+    }
+    for (const auto of ['data/regionen.json']) {
+      if (!files.includes(auto)) { files.push(auto); console.log('Auto-mitgenommen:', auto, '(Manifest-Konsistenz)'); }
+    }
+  }
   try {
     const out = execFileSync('node', [path.join(__dirname, 'validate-data.mjs')], { encoding: 'utf8' });
     process.stdout.write(out);
+    /* Live-Ladepfad prüfen (Manifest -> Dateien), fängt genau den Gießen-Fehler */
+    const loadOut = execFileSync('node', [path.join(__dirname, 'test-load.mjs')], { encoding: 'utf8' });
+    process.stdout.write(loadOut);
   } catch (e) {
     if (e.stdout) process.stdout.write(e.stdout);
-    console.error('\n✖ Deploy abgebrochen: Datenintegritäts-Check fehlgeschlagen. Bitte Fehler oben beheben.');
+    console.error('\n✖ Deploy abgebrochen: Daten-/Ladecheck fehlgeschlagen. Bitte Fehler oben beheben.');
     process.exit(1);
   }
 }
