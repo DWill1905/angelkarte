@@ -84,3 +84,11 @@ export function masseAus(mm){
   const m=String(mm).match(/(\d+)\s*cm/);
   return {min:m?+m[1]:null,max:null};
 }
+
+export function daysUntilMD(md){
+  if(!md) return null;
+  const now=new Date(); now.setHours(0,0,0,0);
+  let t=new Date(now.getFullYear(),md[0]-1,md[1]);
+  if(t<now) t=new Date(now.getFullYear()+1,md[0]-1,md[1]);
+  return Math.round((t-now)/86400000);
+}

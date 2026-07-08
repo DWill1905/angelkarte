@@ -1,6 +1,6 @@
 /* Regeln-Tab & Schonzeit-Kalender */
 import { state } from './state.js';
-import { fmtMD, inSchonzeit } from './astro.js';
+import { fmtMD, inSchonzeit, daysUntilMD } from './astro.js';
 import { esc } from './util.js';
 export const schonEl=document.getElementById('schonzeiten');
 export function buildSchonUI(){
@@ -8,9 +8,10 @@ export function buildSchonUI(){
   schonEl.innerHTML='';
   state.SCHON.forEach(s=>{
     const zu=inSchonzeit(s);
+    const dTo=s.von ? (zu?daysUntilMD(s.bis):daysUntilMD(s.von)) : null;
     const badge=s.von
-      ? (zu?`<span class="badge closed">gesperrt bis ${fmtMD(s.bis)}</span>`
-           :`<span class="badge open">offen · Sperrzeit ${fmtMD(s.von)}–${fmtMD(s.bis)}</span>`)
+      ? (zu?`<span class="badge closed">gesperrt · noch ${dTo} Tag${dTo===1?'':'e'} (bis ${fmtMD(s.bis)})</span>`
+           :`<span class="badge open">offen${dTo!=null&&dTo<=60?` · Sperre in ${dTo} Tag${dTo===1?'':'en'}`:''} · Sperrzeit ${fmtMD(s.von)}–${fmtMD(s.bis)}</span>`)
       : `<span class="badge info">keine Schonzeit</span>`;
     schonEl.insertAdjacentHTML('beforeend',
       `<div class="rule-row"><div><div class="rule-fish">${s.fisch}</div>
