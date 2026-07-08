@@ -98,6 +98,7 @@ export function openTools(){ toolsDlg.hidden=false; }
 document.getElementById('toolsClose').onclick=()=>{toolsDlg.hidden=true;};
 toolsDlg.addEventListener('click',e=>{if(e.target===toolsDlg)toolsDlg.hidden=true;});
 document.getElementById('tScore').onclick=()=>{toolsDlg.hidden=true;openScore();};
+document.getElementById('tFore').onclick=()=>{toolsDlg.hidden=true;openForecast();};
 document.getElementById('tCol').onclick=()=>{toolsDlg.hidden=true;openKb();};
 document.getElementById('tBite').onclick=()=>{toolsDlg.hidden=true;openBite();};
 document.getElementById('tPack').onclick=()=>{toolsDlg.hidden=true;openPack();};
@@ -209,6 +210,74 @@ export function openBite(){
 }
 document.getElementById('biteClose').onclick=()=>{biteDlg.hidden=true;};
 biteDlg.addEventListener('click',e=>{if(e.target===biteDlg)biteDlg.hidden=true;});
+
+/* ===== Wochen-Vorschau: 7 Tage Solunar (offline) + Wetter (online) ===== */
+function wxDesc(code){
+  if(code==null) return {t:'–',e:'·'};
+  if(code===0) return {t:'klar',e:'☀'};
+  if(code<=2) return {t:'heiter',e:'🌤'};
+  if(code===3) return {t:'bewölkt',e:'☁'};
+  if(code<=48) return {t:'Nebel',e:'🌫'};
+  if(code<=57) return {t:'Niesel',e:'🌦'};
+  if(code<=67) return {t:'Regen',e:'🌧'};
+  if(code<=77) return {t:'Schnee',e:'🌨'};
+  if(code<=82) return {t:'Schauer',e:'🌦'};
+  if(code<=86) return {t:'Schneeschauer',e:'🌨'};
+  if(code>=95) return {t:'Gewitter',e:'⛈'};
+  return {t:'wechselhaft',e:'🌥'};
+}
+export const foreDlg=document.getElementById('foreDlg');
+export async function openForecast(){
+  const c=regionCenter();
+  const body=document.getElementById('foreBody');
+  foreDlg.hidden=false;
+  body.innerHTML='<p style="color:var(--muted)">Lade Vorschau …</p>';
+  /* 7 Tage Solunar offline berechnen */
+  const days=[];
+  const base=new Date(); base.setHours(12,0,0,0);
+  for(let i=0;i<7;i++){
+    const d=new Date(base.getTime()+i*86400000);
+    const win=solunar(c.lat,c.lng,d)||[];
+    const majors=win.filter(w=>w.type==='major');
+    days.push({date:d, majors, mond:mondPhase(d)});
+  }
+  /* Wetter dazuholen (online) – wenn es scheitert, bleibt die Solunar-Vorschau */
+  let wx=null;
+  try{
+    const u='https://api.open-meteo.com/v1/forecast?latitude='+c.lat.toFixed(3)+'&longitude='+c.lng.toFixed(3)
+      +'&daily=weather_code,temperature_2m_max,temperature_2m_min,wind_speed_10m_max,pressure_msl_max&forecast_days=7&timezone=auto';
+    const r=await fetch(u); if(r.ok){ const j=await r.json(); if(j.daily&&j.daily.time) wx=j.daily; }
+  }catch(e){}
+  const WD=['So','Mo','Di','Mi','Do','Fr','Sa'];
+  let h='<p style="color:var(--muted);margin-bottom:10px">7-Tage-Ausblick für '+(state.REGION?esc(state.REGION.kurz||state.REGION.name):'aktuelle Region')
+    +'. <b>Major-Fenster</b> (Mond hoch/tief) sind die stärksten Beißzeiten.'+(wx?'':' <span style="color:var(--warn)">Wetter offline nicht verfügbar – nur Solunar.</span>')+'</p>';
+  days.forEach((day,i)=>{
+    const isToday=i===0;
+    let wxCell='';
+    if(wx){
+      const wd=wxDesc(wx.weather_code?wx.weather_code[i]:null);
+      const tmax=wx.temperature_2m_max?Math.round(wx.temperature_2m_max[i]):null;
+      const tmin=wx.temperature_2m_min?Math.round(wx.temperature_2m_min[i]):null;
+      const wind=wx.wind_speed_10m_max?Math.round(wx.wind_speed_10m_max[i]):null;
+      wxCell='<div style="font-size:11.5px;color:var(--muted);margin-top:2px">'+wd.e+' '+wd.t
+        +(tmax!=null?' · '+tmin+'–'+tmax+'°C':'')
+        +(wind!=null?' · 💨 '+wind+' km/h':'')+'</div>';
+    }
+    const winStr=day.majors.length
+      ? day.majors.map(m=>hhmm(m.from)+'–'+hhmm(m.to)).join('  ·  ')
+      : '<span style="color:var(--muted)">–</span>';
+    h+='<div style="padding:8px 0;border-bottom:1px solid var(--line)'+(isToday?';background:rgba(110,168,196,.08);border-radius:8px;padding-left:8px;padding-right:8px':'')+'">'
+      +'<div style="display:flex;align-items:baseline;gap:8px">'
+      +'<b style="min-width:74px">'+WD[day.date.getDay()]+' '+fmtMD(day.date)+(isToday?' <span style="color:var(--dusk)">heute</span>':'')+'</b>'
+      +'<span style="font-family:\'Space Mono\',monospace;font-size:12px">'+winStr+'</span>'
+      +'<span style="margin-left:auto">'+day.mond.split(' ')[0]+'</span>'
+      +'</div>'+wxCell+'</div>';
+  });
+  h+='<p style="color:var(--muted);margin-top:10px;font-size:11px">Solunar-Fenster sind astronomisch berechnet (offline verfügbar). Wetter von Open-Meteo. Näherungswerte – Wasserstand, Front-Durchgang und eigene Beobachtung schlagen jede Vorhersage.</p>';
+  body.innerHTML=h;
+}
+document.getElementById('foreClose').onclick=()=>{foreDlg.hidden=true;};
+foreDlg.addEventListener('click',e=>{if(e.target===foreDlg)foreDlg.hidden=true;});
 
 /* ===== "Heute passt es?"-Score – transparent, additiv, ehrlich bei fehlenden Daten ===== */
 export function computeScore(){
