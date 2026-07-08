@@ -131,6 +131,12 @@
   .pop-note{font-size:11.5px;background:#dfe7df;border-left:3px solid var(--forelle);
     padding:6px 8px;border-radius:0 6px 6px 0;margin-top:8px;color:#33423d}
   .pop-warn{border-left-color:var(--warn);background:#eddcd8;color:#4a2a24}
+  .pop-links{display:flex;flex-wrap:wrap;gap:5px;margin:2px 0 8px}
+  .pop-link{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:600;
+    color:#2c5966;background:#e4eeec;border:1px solid #c8dcd8;border-radius:7px;
+    padding:4px 8px;text-decoration:none;line-height:1.2}
+  .pop-link:hover{background:#d4e6e2}
+  .pop-link .ic{width:12px;height:12px}
   .pop-actions{display:flex;gap:6px;margin-top:10px}
   .pop-btn{flex:1;text-align:center;font-size:12px;font-weight:700;text-decoration:none;
     border-radius:7px;padding:8px 6px;border:0;cursor:pointer}
@@ -217,13 +223,15 @@
   footer a{color:var(--dusk)}
 
   @media(min-width:820px){
-    .view.active{flex-direction:row;flex-wrap:wrap}
-    .chips{width:100%}
-    #map{flex:1;height:auto}
-    .sheet{width:320px;max-height:none;border-top:0;border-left:1px solid var(--line)}
-    .sheet.collapsed{max-height:none}
-    .sheet-handle .arrow{display:none}
-    .locbtn{right:calc(320px + 10px);bottom:28px}
+    /* iPad/Desktop: Karte behält das robuste Spalten-Layout (KEIN flex-wrap –
+       sonst kollabiert die leere Karten-Div auf iOS-Safari auf 0 Höhe).
+       Die Spotliste wird zum schwebenden, einklappbaren Seitenpanel. */
+    #map{flex:1;min-height:0;height:auto}
+    .sheet{position:absolute;top:auto;right:14px;bottom:14px;width:320px;
+      max-height:calc(100% - 28px);border:1px solid var(--line);border-radius:14px;
+      box-shadow:0 10px 30px rgba(13,40,48,.4);z-index:500;overflow:hidden}
+    .sheet.collapsed{max-height:52px}
+    .locbtn{right:calc(320px + 28px);bottom:28px}
     .scrollpane{max-width:720px;margin:0 auto;width:100%}
   }
   @media(prefers-reduced-motion:reduce){

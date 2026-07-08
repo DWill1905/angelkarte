@@ -259,7 +259,7 @@ export function renderList(){
 renderList();
 
 export const sheet=document.getElementById('sheet'), handle=document.getElementById('sheetHandle');
-export function toggleSheet(){ if(window.innerWidth<820) sheet.classList.toggle('collapsed'); }
+export function toggleSheet(){ sheet.classList.toggle('collapsed'); }
 handle.onclick=toggleSheet;
 handle.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleSheet();}};
 
