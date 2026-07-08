@@ -7,7 +7,7 @@ import { openTools } from './tools.js';
 import { sunLine } from './ui.js';
 import { ICON, esc } from './util.js';
 import { loadWeather } from './weather.js';
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
   maxZoom:18, attribution:'&copy; OpenStreetMap'
 }).addTo(state.map);
 L.control.scale({imperial:false}).addTo(state.map);
@@ -263,3 +263,52 @@ export function toggleSheet(){ sheet.classList.toggle('collapsed'); }
 handle.onclick=toggleSheet;
 handle.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleSheet();}};
 
+
+/* ===== Offline-Kacheln: aktuellen Ausschnitt sichern (OSM-policy-konform, kein Bulk) ===== */
+function lon2tile(lon,z){return Math.floor((lon+180)/360*Math.pow(2,z));}
+function lat2tile(lat,z){const r=lat*Math.PI/180;return Math.floor((1-Math.log(Math.tan(r)+1/Math.cos(r))/Math.PI)/2*Math.pow(2,z));}
+export async function cacheViewport(prog){
+  if(!state.map||!('caches' in window)) return {total:0,done:0,noSupport:true};
+  const b=state.map.getBounds(), z0=Math.round(state.map.getZoom());
+  const zooms=[z0]; if(z0+1<=16) zooms.push(z0+1);
+  const urls=[];
+  for(const z of zooms){
+    const xa=lon2tile(b.getWest(),z), xb=lon2tile(b.getEast(),z);
+    const ya=lat2tile(b.getNorth(),z), yb=lat2tile(b.getSouth(),z);
+    for(let x=Math.min(xa,xb);x<=Math.max(xa,xb);x++)
+      for(let y=Math.min(ya,yb);y<=Math.max(ya,yb);y++)
+        urls.push('https://tile.openstreetmap.org/'+z+'/'+x+'/'+y+'.png');
+  }
+  if(urls.length>400) return {total:urls.length,done:0,tooMany:true};
+  const cache=await caches.open('angelkarte-tiles-v1');
+  let done=0, ok=0;
+  for(const url of urls){
+    try{
+      const hit=await cache.match(url);
+      if(hit){ ok++; }
+      else{ const r=await fetch(url,{mode:'no-cors'}); await cache.put(url,r); ok++; }
+    }catch(e){}
+    done++; if(prog) prog(done,urls.length);
+  }
+  return {total:urls.length,done,ok};
+}
+export const offDlg=document.getElementById('offDlg');
+export async function openOffline(){
+  const body=document.getElementById('offBody');
+  offDlg.hidden=false;
+  if(!('caches' in window)){ body.innerHTML='<p>Offline-Speichern wird von diesem Browser nicht unterstützt.</p>'; return; }
+  body.innerHTML='<p style="color:var(--muted)">Sichere den aktuellen Kartenausschnitt (aktuelle + eine tiefere Zoomstufe) für die Offline-Nutzung …</p><p id="offProg" style="font-family:\'Space Mono\',monospace;margin-top:8px">0 %</p>';
+  const prog=(d,t)=>{const el=document.getElementById('offProg'); if(el) el.textContent=Math.round(d/t*100)+' %  ('+d+'/'+t+' Kacheln)';};
+  const res=await cacheViewport(prog);
+  if(res.noSupport){ body.innerHTML='<p>Offline-Speichern nicht unterstützt.</p>'; return; }
+  if(res.tooMany){
+    body.innerHTML='<p>⚠ Der Ausschnitt umfasst zu viele Kacheln ('+res.total+'). Bitte näher heranzoomen (auf dein Angelrevier) und erneut sichern – so bleibt es fair gegenüber dem OpenStreetMap-Kachelserver.</p>';
+    return;
+  }
+  body.innerHTML='<p>✓ <b>'+res.ok+' Kacheln</b> für diesen Ausschnitt sind offline verfügbar. Am Wasser ohne Netz bleibt die Karte hier sichtbar.</p>'
+    +'<p style="color:var(--muted);margin-top:8px;font-size:11.5px">Hinweis: Nur der aktuell sichtbare Bereich wird gesichert (kein Massen-Download – das verstößt gegen die OSM-Nutzungsregeln). Für weitere Reviere jeweils dorthin zoomen und erneut sichern.</p>';
+}
+if(offDlg){
+  document.getElementById('offClose').onclick=()=>{offDlg.hidden=true;};
+  offDlg.addEventListener('click',e=>{if(e.target===offDlg)offDlg.hidden=true;});
+}

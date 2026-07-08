@@ -324,6 +324,7 @@
     <div class="mydlg-btns" style="flex-direction:column;gap:8px">
       <button class="fbtool" id="tScore" data-ic="target">Heute passt es?</button>
       <button class="fbtool" id="tFore" data-ic="sun">Wochen-Vorschau</button>
+      <button class="fbtool" id="tOff" data-ic="pin">Karte offline sichern</button>
       <button class="fbtool" id="tCol" data-ic="target">Köderberater</button>
       <button class="fbtool" id="tBite" data-ic="fish">Beißzeiten heute</button>
       <button class="fbtool" id="tPack" data-ic="bag">Packliste</button>
@@ -371,6 +372,14 @@
     <h3 data-ic="sun">Wochen-Vorschau</h3>
     <div id="foreBody" style="font-size:13px;line-height:1.55;max-height:62dvh;overflow-y:auto"></div>
     <div class="mydlg-btns"><button id="foreClose">Schließen</button></div>
+  </div>
+</div>
+
+<div class="mydlg-wrap" id="offDlg" hidden>
+  <div class="mydlg">
+    <h3 data-ic="pin">Karte offline sichern</h3>
+    <div id="offBody" style="font-size:13px;line-height:1.55;max-height:60dvh;overflow-y:auto"></div>
+    <div class="mydlg-btns"><button id="offClose">Schließen</button></div>
   </div>
 </div>
 
