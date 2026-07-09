@@ -75,6 +75,8 @@ const PROFILE: Record<string, Profil> = {
 
 /** Wurfgewichtsklasse aus Zielfischen und Gewässer. */
 function ruteAus(arten: string[], w: Wasser): string {
+  /* Ohne Artangaben keine Empfehlung erfinden – der Aufrufer fängt das ab. */
+  if (!arten.length) return 'Ohne Zielfischangabe nicht ableitbar';
   const bedarf = Math.max(0, ...arten.map((a) => PROFILE[a]?.rutePlus ?? 1));
   const fliess = w === 'fluss' || w === 'kanal';
   if (bedarf >= 4) return fliess ? 'Kräftige Spinn-/Baitcastrute 40–100 g, 2,40–2,70 m' : 'Baitcast-/H-Rute 50–120 g für schwere Köder';
@@ -158,6 +160,19 @@ export function tackleFor(s: Spot): { t: Tackle; kuratiert: boolean } {
 /** Rendert den Tackle-Block fürs Popup. */
 export function tackleHtml(s: Spot): string {
   if (s.cat === 'sperr' || s.cat === 'info') return '';
+
+  /* Ohne Artangaben ist jede Ableitung Raterei – ein eigener Spot bekam hier früher
+     eine "UL-Rute bis 10 g oder Fliegenrute", weil Math.max(0, ...[]) = 0 ergibt. */
+  if (!s.tackle && !(s.arten || []).length) {
+    return `<details class="tackle">
+      <summary>${ICON('fish')} Tackle für dieses Gewässer</summary>
+      <div class="tackle-body">
+        <div class="pop-row">Für diesen Spot sind keine Zielfischarten hinterlegt – daraus lässt sich
+          kein Gerät ableiten. Trage die Arten ein oder nutze den Köderberater im Werkzeuge-Menü.</div>
+      </div>
+    </details>`;
+  }
+
   const { t, kuratiert } = tackleFor(s);
   const jetzt = saison();
   const LABEL: Record<keyof Farben, string> = {

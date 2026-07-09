@@ -280,3 +280,103 @@ describe('Schonzeit-Grenzen (rechtlich kritisch)', () => {
     assert.equal(mitDatum(2026, 3, 2, () => app.inWindow([9, 15], [3, 1])), false);
   });
 });
+
+describe('Bug: Löschen und Bearbeiten warfen (currentTarget nach await)', () => {
+  test('ein Fang lässt sich löschen', async () => {
+    await loadRegion(ctx, 'elbe');
+    doc.querySelector('[data-view="fangbuch"]').click();
+    app.state.fbMem.length = 0;
+    app.state.fbMem.push(
+      { id: 111, datum: '1.7.2026', fisch: 'Zander', laenge: 55, spot: 'A', koeder: 'G', entnommen: false },
+      { id: 222, datum: '2.7.2026', fisch: 'Hecht', laenge: 70, spot: 'A', koeder: 'W', entnommen: false },
+    );
+    app.fbRender();
+    doc.querySelector('.fb-del').click();
+    await tick(ctx.window, 50);
+    assert.equal(app.state.fbMem.length, 1, 'Löschen hatte keine Wirkung');
+    assert.equal(app.state.fbMem[0].id, 111, 'der falsche Eintrag wurde gelöscht');
+  });
+
+  test('ein Fang lässt sich bearbeiten, ohne ein Duplikat zu erzeugen', async () => {
+    await loadRegion(ctx, 'elbe');
+    doc.querySelector('[data-view="fangbuch"]').click();
+    app.state.fbMem.length = 0;
+    app.state.fbMem.push({ id: 333, datum: '1.7.2026', fisch: 'Zander', laenge: 55, spot: 'Buhnenfeld Herrenkrug', koeder: 'Gummi', entnommen: false });
+    app.fbRender();
+
+    doc.querySelector('.fb-edit').click();
+    await tick(ctx.window, 50);
+    assert.equal(doc.getElementById('fbLaenge').value, '55', 'Werte wurden nicht ins Formular geladen');
+
+    doc.getElementById('fbLaenge').value = '60';
+    await doc.getElementById('fbSave').onclick();
+    await tick(ctx.window, 50);
+
+    assert.equal(app.state.fbMem.length, 1, 'Bearbeiten erzeugte ein Duplikat');
+    assert.equal(app.state.fbMem[0].laenge, 60);
+  });
+
+  test('kein Handler liest event.currentTarget nach einem await', () => {
+    const src = fs.readdirSync(path.join(ROOT, 'src'))
+      .filter((f) => f.endsWith('.ts'))
+      .map((f) => ({ f, t: fs.readFileSync(path.join(ROOT, 'src', f), 'utf8') }));
+
+    src.forEach(({ f, t }) => {
+      const zeilen = t.split('\n');
+      let inAsync = false, sahAwait = false;
+      zeilen.forEach((z, i) => {
+        if (/onclick\s*=\s*async/.test(z)) { inAsync = true; sahAwait = false; }
+        if (inAsync) {
+          if (/\bawait\b/.test(z)) sahAwait = true;
+          if (sahAwait && /\bev\.currentTarget\b/.test(z)) {
+            assert.fail(`${f}:${i + 1} liest ev.currentTarget nach einem await – dort ist es null`);
+          }
+          if (/^\s*\};?\s*$/.test(z)) inAsync = false;
+        }
+      });
+    });
+  });
+});
+
+describe('Bug: Tackle-Ableitung ohne Zielfischangaben', () => {
+  test('ein eigener Spot ohne Arten bekommt keine Fliegenruten-Empfehlung', () => {
+    const eigen = { name: 'Meine Buhne', cat: 'eigen', arten: [], lat: 52.15, lng: 11.67, my: true };
+    const html = app.popupHtml(eigen);
+    assert.ok(!/Fliegenrute|UL-Rute/.test(html),
+      'Ohne Artangaben wurde die leichteste Ruten-Klasse empfohlen (Math.max(0, ...[]) = 0)');
+    assert.match(html, /keine Zielfischarten hinterlegt/);
+  });
+
+  test('echte Spots bekommen weiterhin eine Ableitung', async () => {
+    await loadRegion(ctx, 'elbe');
+    const spot = app.state.SPOTS.find((s) => s.arten?.length);
+    const html = app.popupHtml(spot);
+    assert.ok(!/keine Zielfischarten hinterlegt/.test(html));
+    assert.match(html, /Rute/);
+  });
+});
+
+describe('Speicherfehler (voller Storage)', () => {
+  test('ein Fang geht nicht verloren und der Nutzer wird gewarnt', async () => {
+    const c = await startApp({
+      storageImpl: () => ({
+        async get() { throw new Error('nicht gefunden'); },
+        async set() { throw new Error('QuotaExceededError'); },
+      }),
+    });
+    await loadRegion(c, 'elbe');
+    c.document.querySelector('[data-view="fangbuch"]').click();
+    c.document.getElementById('fbFisch').value = 'Zander';
+    c.document.getElementById('fbLaenge').value = '55';
+    const sp = c.document.getElementById('fbSpot');
+    if (sp.options.length) sp.selectedIndex = 0;
+    await c.document.getElementById('fbSave').onclick();
+    await tick(c.window, 50);
+
+    assert.equal(c.app.state.fbMem.length, 1, 'Fang ging verloren');
+    assert.equal(c.app.state.persistent, false, 'persistent-Flag nicht gesetzt');
+    assert.match(c.document.getElementById('fbStatus').textContent, /nur für diese Sitzung/i,
+      'Der Nutzer erfährt nicht, dass nichts gespeichert wird');
+    c.close();
+  });
+});

@@ -131,7 +131,11 @@ export async function startApp(opts = {}) {
   w.URL.revokeObjectURL = () => {};
 
   const storageMem = {};
-  if (opts.storage !== false) {
+  if (opts.storageImpl) {
+    /* eigene Implementierung, z.B. um einen vollen Speicher zu simulieren.
+       Muss VOR dem Evaluieren des Bundles gesetzt sein – state.js bindet den Speicher beim Laden. */
+    w.storage = opts.storageImpl(storageMem);
+  } else if (opts.storage !== false) {
     w.storage = {
       async get(k) { if (!(k in storageMem)) throw new Error('nicht gefunden'); return { key: k, value: storageMem[k] }; },
       async set(k, v) { storageMem[k] = String(v); return { key: k, value: v }; },

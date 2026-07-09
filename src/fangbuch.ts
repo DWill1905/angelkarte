@@ -210,14 +210,18 @@ export function fbRender(){
       <div class="sub">${esc(e.spot)} · ${esc(e.datum)}${e.koeder?' · '+esc(e.koeder):''}${cx?'<br>'+esc(cx):''}</div></div>
       <button class="fb-edit" aria-label="Eintrag bearbeiten" data-id="${esc(e.id)}" style="background:none;border:0;color:var(--muted);cursor:pointer;padding:4px">${ICON('edit')}</button>
       <button class="fb-del" aria-label="Eintrag löschen" data-id="${esc(e.id)}">${ICON('x')}</button>`;
+    /* WICHTIG: dataset VOR dem await auslesen. Nach einem await ist die Event-Dispatch-Phase
+       beendet und `ev.currentTarget` ist null – Löschen und Bearbeiten warfen dadurch. */
     qs<HTMLElement>('.fb-del', d).onclick=async ev=>{
+      const id=Number((ev.currentTarget as HTMLElement).dataset.id);
       await fbReady;
-      state.fbMem=state.fbMem.filter(x=>x.id!==Number((ev.currentTarget as HTMLElement).dataset.id));
+      state.fbMem=state.fbMem.filter(x=>x.id!==id);
       await fbPersist();
     };
     qs<HTMLElement>('.fb-edit', d).onclick=async ev=>{
+      const id=Number((ev.currentTarget as HTMLElement).dataset.id);
       await fbReady;
-      const entry=state.fbMem.find(x=>x.id===Number((ev.currentTarget as HTMLElement).dataset.id));
+      const entry=state.fbMem.find(x=>x.id===id);
       if(!entry) return;
       /* Werte ins Formular laden */
       selectById('fbFisch').value=entry.fisch;
