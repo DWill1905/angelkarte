@@ -1,9 +1,9 @@
+/* Trip-Planer: Spots vormerken, als Tagesliste abrufen (regionsübergreifend, persistent) */
 import { byId, qsa } from './dom.js';
 import { state, store } from './state.js';
 import { esc, ICON } from './util.js';
 import { mapsLink } from './map.js';
 const KEY = 'trip';
-export function tripKey(regionId, name) { return regionId + '::' + name; }
 export function inTrip(name) {
     if (!state.REGION)
         return false;

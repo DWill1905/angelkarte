@@ -1,5 +1,4 @@
 /* Fangbuch */
-import type { Fang, MassGrenzen } from './types';
 import { byId, inputById, qs, qsa, selectById } from './dom.js';
 import { state, store } from './state.js';
 import { fmtMD, hhmm, inSchonzeit, masseAus, mondPhase, solunar } from './astro.js';
@@ -87,7 +86,6 @@ export function parseFangDatum(d){
 
 export function fbInsights(){
   const el=byId('fbInsights');
-  const withLen=state.fbMem.filter(e=>e.laenge);
   if(state.fbMem.length<8){ el.innerHTML='<p class="fineprint" style="margin-top:10px">Muster-Auswertung erscheint ab 8 Fängen (aktuell '+state.fbMem.length+'). Je mehr Fänge, desto aussagekräftiger.</p>'; return; }
   let h='<div class="insight"><h4>Deine Muster ('+state.fbMem.length+' Fänge)</h4>';
   const koeder=topCount(state.fbMem.map(e=>e.koeder));
@@ -274,7 +272,7 @@ byId('fbSave').onclick=async ()=>{
   const laengeOut: number|'' = (isNaN(laenge)||laenge<0||laenge>250)?'':laenge;
   const jetzt=new Date();
   state.fbMem.push({
-    id:uid(), fisch, laenge,
+    id:uid(), fisch, laenge: laengeOut,
     spot:fbSpotSel.value,
     koeder:inputById('fbKoeder').value.trim(),
     datum:jetzt.toLocaleDateString('de-DE'),

@@ -1,3 +1,12 @@
+/* Tackle-Empfehlung pro Gewässer.
+
+   Zwei Quellen:
+   1. Kuratiert – `spot.tackle` ist gesetzt (Erfahrungswerte, im Popup als solche gekennzeichnet).
+   2. Abgeleitet – aus Gewässercharakter (Fluss/Kanal/flacher oder tiefer See), Zielfischen,
+      Zugang und ggf. Tiefe. Transparent, weil die Regeln hier offen im Code stehen.
+
+   Wichtig: Das sind Erfahrungs- und Faustwerte, keine Rechtsangaben. Vorfach- und
+   Zugangsempfehlungen folgen aus dem Bestand (Hecht ⇒ Stahl) und der Gewässerform. */
 import { jahreszeit } from './saison.js';
 import { esc, ICON } from './util.js';
 /* ---------- Gewässercharakter ---------- */

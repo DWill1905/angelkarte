@@ -10,7 +10,7 @@ export async function loadMySpots(rid) {
         const a = r && r.value ? JSON.parse(r.value) : [];
         return Array.isArray(a) ? a.filter(m => m && typeof m.lat === 'number' && typeof m.lng === 'number') : [];
     }
-    catch (e) {
+    catch {
         return [];
     }
 }
@@ -35,7 +35,7 @@ export async function saveMySpot() {
     try {
         await store.set('myspots:' + state.REGION.id, JSON.stringify(list));
     }
-    catch (e) { }
+    catch { }
     state.SPOTS.push(mySpotObj(m));
     buildMarkers();
     buildChips();
@@ -49,7 +49,7 @@ window.delMySpot = async function (id) {
     try {
         await store.set('myspots:' + state.REGION.id, JSON.stringify(list));
     }
-    catch (e) { }
+    catch { }
     const i = state.SPOTS.findIndex(sp => sp.myId === id);
     if (i > -1) {
         const sp = state.SPOTS[i];
@@ -69,7 +69,7 @@ state.map.on('contextmenu', e => { if (!state.REGION)
     return; myPending = [e.latlng.lat, e.latlng.lng]; openMyDlg(); });
 /* iOS/Touch: contextmenu feuert bei Long-Press nicht zuverlässig -> eigener Halte-Timer */
 export let lpTimer = null, lpStart = null, lpMoved = false;
-state.map.on('touchstart mousedown', e => { }); /* Leaflet leitet an eigene Events weiter, wir nutzen den Container */
+state.map.on('touchstart mousedown', () => { }); /* Leaflet leitet an eigene Events weiter, wir nutzen den Container */
 export const mapC = state.map.getContainer();
 mapC.addEventListener('touchstart', ev => {
     if (ev.touches.length !== 1 || !state.REGION)

@@ -13,7 +13,7 @@ import { state } from './state.js';
 import { hhmm, inSchonzeit, solunar, sunTimes } from './astro.js';
 import { WT_OPT, wasserTyp } from './tackle.js';
 import { istAuflandig } from './plan.js';
-import { hotspotAktiv, jahreszeit } from './saison.js';
+import { hotspotAktiv } from './saison.js';
 import type { Hotspot, Spot, Wasser } from './types';
 
 export type Bewertbar = 'ja' | 'nein' | 'unbekannt';

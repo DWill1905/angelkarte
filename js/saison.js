@@ -1,6 +1,3 @@
-export const JAHRESZEIT_LABEL = {
-    fruehjahr: 'Frühjahr', sommer: 'Sommer', herbst: 'Herbst', winter: 'Winter',
-};
 /** Aktuelle Jahreszeit (meteorologisch). */
 export function jahreszeit(d = new Date()) {
     const m = d.getMonth() + 1;

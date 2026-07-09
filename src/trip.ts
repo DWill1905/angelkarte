@@ -1,12 +1,10 @@
 /* Trip-Planer: Spots vormerken, als Tagesliste abrufen (regionsübergreifend, persistent) */
-import type { TripEintrag } from './types';
 import { byId, qsa } from './dom.js';
 import { state, store } from './state.js';
 import { esc, ICON } from './util.js';
 import { mapsLink } from './map.js';
 
 const KEY='trip';
-export function tripKey(regionId: string, name: string): string { return regionId+'::'+name; }
 export function inTrip(name: string): boolean {
   if(!state.REGION) return false;
   return state.trip.some(t=>t.region===state.REGION.id && t.name===name);

@@ -11,10 +11,6 @@ import type { Hotspot, Spot } from './types';
 
 export type Jahreszeit = 'fruehjahr' | 'sommer' | 'herbst' | 'winter';
 
-export const JAHRESZEIT_LABEL: Record<Jahreszeit, string> = {
-  fruehjahr: 'Frühjahr', sommer: 'Sommer', herbst: 'Herbst', winter: 'Winter',
-};
-
 /** Aktuelle Jahreszeit (meteorologisch). */
 export function jahreszeit(d: Date = new Date()): Jahreszeit {
   const m = d.getMonth() + 1;

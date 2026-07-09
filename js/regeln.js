@@ -34,7 +34,6 @@ export function buildKalender() {
         for (let m = 1; m <= 12; m++) {
             let zu = false;
             if (sc.von) {
-                const md1 = m * 100 + 1, md28 = m * 100 + 28;
                 const v = sc.von[0] * 100 + sc.von[1], b = sc.bis[0] * 100 + sc.bis[1];
                 /* Monat gilt als geschont, wenn Monatsmitte im Fenster liegt */
                 const mid = m * 100 + 15;

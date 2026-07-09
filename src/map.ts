@@ -7,7 +7,6 @@ import { ratingHtml } from './rating.js';
 import { fokusFor, hotspotAktiv, istKante, spotImFokus } from './saison.js';
 import { haversine } from './astro.js';
 import { CATS } from './data.js';
-import { prefillFang } from './fangbuch.js';
 import { openTools } from './tools.js';
 import { sunLine } from './ui.js';
 import { ICON, esc } from './util.js';

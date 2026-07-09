@@ -49,7 +49,9 @@ export function mondPhase(d) {
     return ['🌑', '🌒', '🌓', '🌔', '🌕', '🌖', '🌗', '🌘'][Math.round(age / syn * 8) % 8];
 }
 /* Vereinfachte Mondkulmination (Transit) & Gegen-Transit für Solunar-Fenster */
-export function moonTimes(lat, lng, date) {
+/** Mond-Transit (Kulmination). Hängt nur von der geografischen Länge ab –
+    `_lat` bleibt nur der Symmetrie zu sunTimes(lat, lng, date) wegen erhalten. */
+export function moonTimes(_lat, lng, date) {
     const rad = Math.PI / 180;
     const d = (date - Date.UTC(2000, 0, 1, 12)) / 864e5; /* Tage seit J2000 */
     /* Mondlänge (vereinfachte Meeus-Näherung, für Transit-Zeitpunkt ausreichend) */

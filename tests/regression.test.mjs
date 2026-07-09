@@ -136,3 +136,49 @@ describe('Struktur: keine toten Verweise', () => {
     assert.deepEqual(fehlend, [], 'Ohne Cache-Eintrag bricht die Offline-Nutzung: ' + fehlend.join(', '));
   });
 });
+
+describe('Bug: validierte Fanglänge wurde verworfen', () => {
+  test('unsinnige Längen werden nicht gespeichert', async () => {
+    await loadRegion(ctx, 'elbe');
+    doc.querySelector('[data-view="fangbuch"]').click();
+    const sp = doc.getElementById('fbSpot');
+    if (sp.options.length) sp.selectedIndex = 0;
+
+    const faelle = [['', ''], ['9999', ''], ['-5', ''], ['55', 55]];
+    for (const [eingabe, erwartet] of faelle) {
+      app.state.fbMem.length = 0;
+      doc.getElementById('fbFisch').value = 'Zander';
+      doc.getElementById('fbLaenge').value = eingabe;
+      await doc.getElementById('fbSave').onclick();
+      await tick(ctx.window, 30);
+      assert.equal(app.state.fbMem[0].laenge, erwartet,
+        `Eingabe "${eingabe}" wurde als ${JSON.stringify(app.state.fbMem[0].laenge)} gespeichert`);
+    }
+  });
+
+  test('gespeicherte Länge ist nie NaN', async () => {
+    await loadRegion(ctx, 'elbe');
+    doc.querySelector('[data-view="fangbuch"]').click();
+    app.state.fbMem.length = 0;
+    doc.getElementById('fbFisch').value = 'Hecht';
+    doc.getElementById('fbLaenge').value = 'abc';
+    const sp = doc.getElementById('fbSpot');
+    if (sp.options.length) sp.selectedIndex = 0;
+    await doc.getElementById('fbSave').onclick();
+    await tick(ctx.window, 30);
+    const l = app.state.fbMem[0].laenge;
+    assert.ok(!(typeof l === 'number' && Number.isNaN(l)), 'NaN landet als null im Backup');
+  });
+
+  test('ein 9999-cm-Fisch taucht nicht in der Bestenliste auf', async () => {
+    app.state.fbMem.length = 0;
+    for (let i = 0; i < 8; i++) {
+      app.state.fbMem.push({ id: i, datum: `${i + 1}.7.2026`, fisch: 'Zander', laenge: 50 + i, spot: 'A', koeder: 'G', entnommen: false });
+    }
+    app.state.fbMem.push({ id: 99, datum: '9.7.2026', fisch: 'Zander', laenge: '', spot: 'A', koeder: 'G', entnommen: false });
+    app.fbInsights();
+    const h = doc.getElementById('fbInsights').innerHTML;
+    assert.ok(!/9999/.test(h));
+    assert.ok(!/NaN/.test(h), 'NaN darf nie in der Auswertung erscheinen');
+  });
+});

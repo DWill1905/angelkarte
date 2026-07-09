@@ -7,7 +7,6 @@
 
    Wichtig: Das sind Erfahrungs- und Faustwerte, keine Rechtsangaben. Vorfach- und
    Zugangsempfehlungen folgen aus dem Bestand (Hecht ⇒ Stahl) und der Gewässerform. */
-import { state } from './state.js';
 import { jahreszeit } from './saison.js';
 import { esc, ICON } from './util.js';
 import type { Farben, Spot, Tackle, Wasser } from './types';
