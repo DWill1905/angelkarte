@@ -15,5 +15,6 @@ import './tools.js';
 import './regeln.js';
 import './fangbuch.js';
 import './trip.js';
+import './rating.js';
 import './plan.js';
 import './fullscreen.js';

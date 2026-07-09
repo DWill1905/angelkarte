@@ -3,6 +3,7 @@ import type { Spot } from './types';
 import { buttonById, byId, inputById } from './dom.js';
 import { state } from './state.js';
 import { tackleHtml } from './tackle.js';
+import { ratingHtml } from './rating.js';
 import { fokusFor, hotspotAktiv, istKante, spotImFokus } from './saison.js';
 import { haversine } from './astro.js';
 import { CATS } from './data.js';
@@ -42,6 +43,7 @@ export function popupHtml(s: Spot): string {
     <div class="pop-row"><b>Erlaubnis</b>${s.karte}</div>
     ${s.kartenLinks&&s.kartenLinks.length?'<div class="pop-links">'+s.kartenLinks.map(l=>'<a class="pop-link" href="'+l.url+'" target="_blank" rel="noopener">'+ICON('pin')+esc(l.label)+'</a>').join('')+'</div>':''}
     ${s.zugang?'<div class="pop-row"><b>Zugang</b>'+(s.zugang==='boot'?'Überwiegend Bootssee – vom Ufer kaum möglich':'Vom Ufer beangelbar')+'</div>':''}
+    ${ratingHtml(s)}
     ${tackleHtml(s)}
     ${!s.line&&(s.cat==='raub'||s.cat==='fried')?'<div class="pop-row" data-wind="1"></div>':''}
     ${(s.cat==='raub'||s.cat==='fried')?'<div class="pop-row" data-wt="'+esc((s.arten||[]).join(","))+'"></div>':''}
