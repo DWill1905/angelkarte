@@ -1,9 +1,10 @@
 /* Fangbuch */
 import { state, store } from './state.js';
-import { fmtMD, hhmm, inSchonzeit, masseAus, mondPhase } from './astro.js';
+import { fmtMD, hhmm, inSchonzeit, masseAus, mondPhase, solunar } from './astro.js';
 import { uid } from './myspots.js';
 import { initRegions } from './region.js';
 import { ICON, esc } from './util.js';
+import { regionCenter } from './ui.js';
 import { loadWeather } from './weather.js';
 export const fbSpotSel=document.getElementById('fbSpot');
 export function buildFbOptions(){
@@ -61,6 +62,17 @@ export function bars(entries,total){
   ).join('');
 }
 /* Datum robust parsen: unterstützt "9.7.2026" (de-DE, so gespeichert) und "2026-07-09" (ISO, aus Alt-Backups) */
+/* War zum Fangzeitpunkt ein Solunar-Beißfenster aktiv? -> 'major' | 'minor' | null */
+export function beissfensterJetzt(zeitpunkt){
+  try{
+    const c=regionCenter();
+    const wins=solunar(c.lat,c.lng,zeitpunkt)||[];
+    const t=zeitpunkt.getTime();
+    const hit=wins.find(w=>t>=w.from&&t<=w.to);
+    return hit?hit.type:null;
+  }catch(e){ return null; }
+}
+
 export function parseFangDatum(d){
   if(!d) return null;
   let m=/^(\d{4})-(\d{2})-(\d{2})/.exec(d);
@@ -88,6 +100,14 @@ export function fbInsights(){
   }
   const spots=topCount(state.fbMem.map(e=>e.spot));
   if(spots.length){ h+='<b style="display:block;margin-top:8px">Top-Spots</b>'+bars(spots,state.fbMem.length); }
+  const mitFenster=state.fbMem.filter(e=>e.ctx&&e.ctx.fenster!==undefined&&e.ctx.fenster!==null);
+  if(mitFenster.length>=5){
+    const major=mitFenster.filter(e=>e.ctx.fenster==='major').length;
+    const pct=Math.round(major/mitFenster.length*100);
+    h+='<b style="display:block;margin-top:8px">Beißfenster (Solunar)</b><div style="margin-top:3px">'
+      +mitFenster.length+' Fänge im Beißfenster, davon '+pct+'% im starken Major-Fenster'
+      +(pct>=50?' – die Solunar-Fenster funktionieren bei dir!':'.')+'</div>';
+  }
   const arten=topCount(state.fbMem.map(e=>e.fisch));
   if(arten.length>1){ h+='<b style="display:block;margin-top:8px">Artenverteilung</b>'+bars(arten,state.fbMem.length); }
   const MON=['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
@@ -172,7 +192,7 @@ export function fbRender(){
   list.innerHTML='';
   [...state.fbMem].reverse().forEach(e=>{
     const d=document.createElement('div'); d.className='fb-entry';
-    const cx=e.ctx?[e.ctx.zeit,e.ctx.mond,e.ctx.druck?e.ctx.druck+' hPa'+(e.ctx.trend<=-1.5?'⇘':e.ctx.trend>=1.5?'⇗':''):null,e.ctx.wind,e.ctx.pegel?'Pegel '+e.ctx.pegel:null,e.ctx.wt!=null?'W '+e.ctx.wt+'°C':null].filter(Boolean).join(' · '):'';
+    const cx=e.ctx?[e.ctx.zeit,e.ctx.mond,e.ctx.fenster?(e.ctx.fenster==='major'?'★ Major':'☆ Minor'):null,e.ctx.druck?e.ctx.druck+' hPa'+(e.ctx.trend<=-1.5?'⇘':e.ctx.trend>=1.5?'⇗':''):null,e.ctx.wind,e.ctx.temp!=null?e.ctx.temp+'°C':null,e.ctx.pegel?'Pegel '+e.ctx.pegel:null,e.ctx.wt!=null?'W '+e.ctx.wt+'°C':null].filter(Boolean).join(' · '):'';
     d.innerHTML=`<div class="info"><div class="fish">${esc(e.fisch)} ${e.laenge?'· '+esc(e.laenge)+' cm':''} ${e.entnommen?'<span title="entnommen">🪣</span>':'<span title="zurückgesetzt">↩</span>'}</div>
       <div class="sub">${esc(e.spot)} · ${esc(e.datum)}${e.koeder?' · '+esc(e.koeder):''}${cx?'<br>'+esc(cx):''}</div></div>
       <button class="fb-edit" aria-label="Eintrag bearbeiten" data-id="${esc(e.id)}" style="background:none;border:0;color:var(--muted);cursor:pointer;padding:4px">${ICON('edit')}</button>
@@ -261,7 +281,9 @@ document.getElementById('fbSave').onclick=async ()=>{
       zeit:hhmm(jetzt), mond:mondPhase(jetzt),
       druck:state.WX?Math.round(state.WX.press):null, trend:state.WX?Math.round(state.WX.trendVal*10)/10:null,
       wind:state.WX?Math.round(state.WX.wind)+' '+state.WX.dir:null,
-      pegel:state.PEGEL?state.PEGEL.value:null, wt:state.PEGEL&&state.PEGEL.wt!=null?Math.round(state.PEGEL.wt):null
+      pegel:state.PEGEL?state.PEGEL.value:null, wt:state.PEGEL&&state.PEGEL.wt!=null?Math.round(state.PEGEL.wt):null,
+      temp:state.WX&&state.WX.temp!=null?Math.round(state.WX.temp):null,
+      fenster:beissfensterJetzt(jetzt), region:state.REGION?state.REGION.id:null
     }
   });
   document.getElementById('fbLaenge').value='';
