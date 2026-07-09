@@ -223,10 +223,20 @@ locBtn.onclick=()=>{
 /* Spotliste */
 export const listEl=document.getElementById('spotList'), countEl=document.getElementById('spotCount');
 export const sortEl=document.getElementById('spotSort');
+export const searchEl=document.getElementById('spotSearch');
+export let spotQuery='';
 export const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
 export function renderList(){
   listEl.innerHTML='';
   let vis=state.SPOTS.filter(spotVisible);
+  if(spotQuery){
+    const q=spotQuery.toLowerCase();
+    vis=vis.filter(s=>
+      (s.name||'').toLowerCase().includes(q) ||
+      (s.fisch||'').toLowerCase().includes(q) ||
+      (s.arten||[]).some(a=>a.toLowerCase().includes(q)) ||
+      (s.nr||'').toLowerCase().includes(q));
+  }
   if(state.userPos){
     vis.forEach(s=>s._d=haversine(state.userPos[0],state.userPos[1],s.lat,s.lng));
     vis.sort((a,b)=>a._d-b._d);
@@ -234,7 +244,9 @@ export function renderList(){
   countEl.textContent='('+vis.length+')';
   if(sortEl) sortEl.textContent = state.userPos ? '  · nach Entfernung' : '';
   if(!vis.length){
-    listEl.innerHTML='<div class="fb-empty" style="padding:20px">Keine Gewässer sichtbar – die Filter oben blenden gerade alles aus. Tippe Kategorie- oder Zielfisch-Chips an, um sie wieder einzublenden.</div>';
+    listEl.innerHTML=spotQuery
+      ? '<div class="fb-empty" style="padding:20px">Kein Treffer für „'+esc(spotQuery)+'". Suchbegriff löschen oder anderen Namen/Fischart probieren.</div>'
+      : '<div class="fb-empty" style="padding:20px">Keine Gewässer sichtbar – die Filter oben blenden gerade alles aus. Tippe Kategorie- oder Zielfisch-Chips an, um sie wieder einzublenden.</div>';
     return;
   }
   vis.forEach((s,idx)=>{
@@ -265,6 +277,11 @@ renderList();
 export const sheet=document.getElementById('sheet'), handle=document.getElementById('sheetHandle');
 export function toggleSheet(){ sheet.classList.toggle('collapsed'); }
 handle.onclick=toggleSheet;
+if(searchEl){
+  searchEl.oninput=()=>{ spotQuery=searchEl.value.trim(); renderList(); };
+  /* Klick ins Suchfeld darf das Sheet nicht zuklappen */
+  searchEl.onclick=e=>e.stopPropagation();
+}
 handle.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleSheet();}};
 
 
