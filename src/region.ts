@@ -6,7 +6,7 @@ import { buildFbOptions, checkFang } from './fangbuch.js';
 import { applyFilters, buildChips, buildMarkers, syncFishChips, sperrWarnung } from './map.js';
 import { loadMySpots, mySpotObj } from './myspots.js';
 import { buildRegeln, buildSchonUI } from './regeln.js';
-import { buildBanner, sunLine } from './ui.js';
+import { buildBanner, buildSaisonBar, sunLine } from './ui.js';
 import { loadWeather } from './weather.js';
 
 export async function initRegions(){
@@ -43,6 +43,7 @@ export async function loadRegion(r){
   if(typeof sunLine==='function') sunLine();
   state.fishSel=null; syncFishChips(); applyFilters();
   sperrWarnung(); /* Warnung für die neue Region neu bewerten */
+  buildSaisonBar();
   const pts=state.SPOTS.map(sp=>[sp.lat,sp.lng]);
   if(pts.length) state.map.fitBounds(pts,{padding:[30,30]});
   loadWeather();

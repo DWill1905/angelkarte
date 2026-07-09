@@ -1,6 +1,7 @@
 /* Header (Sonne/Banner) & Tabs */
 import { byId, qsa } from './dom.js';
 import { state } from './state.js';
+import { fokusFor, hotspotAktiv, spotImFokus } from './saison.js';
 import { hhmm, inWindow, mondPhase, sunTimes } from './astro.js';
 import { ICON, esc } from './util.js';
 export function regionCenter(){
@@ -45,3 +46,39 @@ qsa<HTMLElement>('.tab').forEach(t=>{
   };
 });
 
+/* ===== Saisonale Karte: Leiste + Erklärung =====
+   Hebt hervor, was in dieser Jahreszeit zählt – auf Basis der echten Saison-Angaben
+   der Hotspots und des Gewässercharakters. Es werden KEINE Krautfelder oder
+   Tiefenkanten als Flächen gezeichnet; dafür gibt es keine belastbaren Daten. */
+export function buildSaisonBar(): void {
+  const bar = byId('saisonBar');
+  const info = byId('saisonInfo');
+  if (!bar || !info) return;
+  const f = fokusFor();
+  const ICONS: Record<string, string> = { fruehjahr: 'waves', sommer: 'sun', herbst: 'wind', winter: 'moon' };
+
+  const aktive = state.SPOTS.reduce((n, s) => n + (s.hotspots || []).filter((h) => hotspotAktiv(h)).length, 0);
+  const gesamt = state.SPOTS.reduce((n, s) => n + (s.hotspots || []).length, 0);
+  const fokusSpots = state.SPOTS.filter((s) => spotImFokus(s, f)).length;
+
+  bar.innerHTML = ICON(ICONS[f.jahreszeit] || 'sun')
+    + '<span class="jz">' + esc(f.titel) + '</span>'
+    + '<span style="color:var(--muted)">' + esc(f.betont) + '</span>'
+    + '<span class="arrow">Was heißt das?</span>';
+
+  const body = byId('saisonBody') || info;
+  body.innerHTML = '<div>' + esc(f.hinweis) + '</div>'
+    + '<div style="margin-top:6px"><b>Auf der Karte:</b> '
+    + (gesamt ? aktive + ' von ' + gesamt + ' Hotspots sind jetzt in Saison (die übrigen sind gedimmt). ' : '')
+    + (fokusSpots ? fokusSpots + ' Gewässer passen zum Jahreszeit-Fokus und sind hervorgehoben.' : 'Kein Gewässer dieser Region passt zum aktuellen Fokus.')
+    + '</div>'
+    + '<div class="quelle">Grundlage: die Saison-Angaben der Hotspots und der Gewässertyp. '
+    + 'Krautfelder und Tiefenkanten werden <b>nicht</b> eingezeichnet – dafür gibt es keine verlässlichen Daten. '
+    + 'Die genaue Kante findest du mit Echolot, das Kraut mit der Polbrille.</div>';
+
+  bar.onclick = () => {
+    const offen = !info.hidden;
+    info.hidden = offen;
+    bar.setAttribute('aria-expanded', String(!offen));
+  };
+}

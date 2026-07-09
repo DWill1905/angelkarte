@@ -2,6 +2,8 @@
 import { byId } from './dom.js';
 import { state, store } from './state.js';
 import { istFliess } from './tackle.js';
+import { schilfToggle } from './reed.js';
+import { fokusFor } from './saison.js';
 import { NOW, fmtDate, fmtMD, haversine, hhmm, inSchonzeit, mondPhase, solunar, sunTimes } from './astro.js';
 import { regionCenter } from './ui.js';
 import { openOffline } from './map.js';
@@ -105,6 +107,16 @@ byId('tScore').onclick=()=>{toolsDlg.hidden=true;openScore();};
 byId('tFore').onclick=()=>{toolsDlg.hidden=true;openForecast();};
 byId('tOff').onclick=()=>{toolsDlg.hidden=true;openOffline();};
 byId('tTrip').onclick=()=>{toolsDlg.hidden=true;openTrip();};
+const schilfBtn=byId('schilfBtn');
+if(schilfBtn){
+  schilfBtn.onclick=async()=>{ toolsDlg.hidden=true; await schilfToggle(); };
+}
+/* Schilf ist im Frühjahr/Sommer taktisch relevant – im Winter blenden wir den Schalter aus. */
+export function syncSchilfBtn(){
+  const b=byId('schilfBtn');
+  if(b) b.hidden = !fokusFor().schilf;
+}
+syncSchilfBtn();
 byId('tCol').onclick=()=>{toolsDlg.hidden=true;openKb();};
 byId('tBite').onclick=()=>{toolsDlg.hidden=true;openBite();};
 byId('tPack').onclick=()=>{toolsDlg.hidden=true;openPack();};

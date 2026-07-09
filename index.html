@@ -91,6 +91,17 @@
   .chips.sub{background:var(--ink);padding-top:6px;padding-bottom:6px}
   .chips.sub .chip{background:transparent;border-color:var(--line);color:var(--muted);min-height:28px;padding:5px 11px}
   .chips.sub .chip.on{background:var(--dusk);border-color:var(--dusk);color:#0d3540;opacity:1;font-weight:600;box-shadow:0 0 0 3px rgba(110,168,196,.15)}
+  #saisonBar{flex:0 0 auto;display:flex;align-items:center;gap:8px;width:100%;
+    background:rgba(166,212,232,.10);border:0;border-bottom:1px solid var(--line);
+    color:var(--text);font:inherit;font-size:12px;padding:7px 14px;cursor:pointer;text-align:left}
+  #saisonBar:hover{background:rgba(166,212,232,.16)}
+  #saisonBar .jz{font-weight:700;color:var(--dusk)}
+  #saisonBar .arrow{margin-left:auto;color:var(--muted)}
+  #saisonInfo{flex:0 0 auto;background:rgba(22,50,60,.55);border-bottom:1px solid var(--line);
+    padding:9px 14px;font-size:12px;line-height:1.5;color:var(--muted)}
+  #saisonInfo b{color:var(--text)}
+  #saisonInfo .quelle{margin-top:6px;font-size:11px;opacity:.8}
+  .pin-fokus svg{filter:drop-shadow(0 0 5px rgba(166,212,232,.95))}
   #sperrWarn{flex:0 0 auto;background:#4a201a;border-bottom:1px solid #7a3527;color:#ffd0c4;
     font-size:12px;padding:8px 14px;line-height:1.4}
   #sperrWarn b{color:#ffb3a0}
@@ -284,6 +295,8 @@
 <div class="view active" id="view-karte">
   <div class="chips" id="chips" role="group" aria-label="Kategorien filtern"></div>
   <div class="chips sub" id="fishChips" role="group" aria-label="Nach Zielfisch filtern"></div>
+  <button id="saisonBar" type="button" aria-expanded="false"></button>
+  <div id="saisonInfo" hidden><div id="saisonBody"></div><div id="schilfStatus" style="margin-top:6px;font-size:11px"></div></div>
   <div id="sperrWarn" role="alert" hidden></div>
   <div id="map"></div>
   <button class="locbtn" id="locbtn" title="Meinen Standort anzeigen" data-ic="pin">Standort</button>
@@ -350,6 +363,7 @@
       <button class="fbtool" id="tFore" data-ic="sun">Wochen-Vorschau</button>
       <button class="fbtool" id="tOff" data-ic="pin">Karte offline sichern</button>
       <button class="fbtool" id="tTrip" data-ic="bag">Meine Trip-Liste <span id="tripCount" style="color:var(--dusk);font-weight:700"></span></button>
+      <button class="fbtool" id="schilfBtn" data-ic="waves" aria-pressed="false">Schilf einblenden (OSM)</button>
       <button class="fbtool" id="tCol" data-ic="target">Köderberater</button>
       <button class="fbtool" id="tBite" data-ic="fish">Beißzeiten heute</button>
       <button class="fbtool" id="tPack" data-ic="bag">Packliste</button>

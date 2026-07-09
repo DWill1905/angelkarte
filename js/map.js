@@ -1,6 +1,7 @@
 import { buttonById, byId, inputById } from './dom.js';
 import { state } from './state.js';
 import { tackleHtml } from './tackle.js';
+import { fokusFor, hotspotAktiv, istKante, spotImFokus } from './saison.js';
 import { haversine } from './astro.js';
 import { CATS } from './data.js';
 import { openTools } from './tools.js';
@@ -11,9 +12,9 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 18, attribution: '&copy; OpenStreetMap'
 }).addTo(state.map);
 L.control.scale({ imperial: false }).addTo(state.map);
-export function pinIcon(cat) {
+export function pinIcon(cat, fokus = false) {
     const c = CATS[cat].color;
-    return L.divIcon({ className: '', iconSize: [28, 40], iconAnchor: [14, 38], popupAnchor: [0, -34],
+    return L.divIcon({ className: '' + (fokus ? ' pin-fokus' : ''), iconSize: [28, 40], iconAnchor: [14, 38], popupAnchor: [0, -34],
         html: `<svg width="28" height="40" viewBox="0 0 28 40" aria-hidden="true">
       <path d="M14 1C7 1 1.5 6.5 1.5 13.5 1.5 23 14 38 14 38s12.5-15 12.5-24.5C26.5 6.5 21 1 14 1z"
         fill="${c}" stroke="rgba(255,255,255,.85)" stroke-width="2"/>
@@ -105,8 +106,22 @@ export function buildMarkers() {
     state.SPOTS.forEach(s => {
         if (s.marker)
             return; /* bereits gebaut (Regionswechsel zurück) */
-        s.hotMarkers = (s.hotspots || []).map(h => L.circleMarker([h.lat, h.lng], { radius: 6, color: '#fff', weight: 2, fillColor: CATS[s.cat].color, fillOpacity: .95 })
-            .bindPopup(hotPopup(s, h), { autoPanPadding: [20, 60] }).bindTooltip(h.name));
+        s.hotMarkers = (s.hotspots || []).map(h => {
+            /* Saisonale Karte: Hotspots außerhalb ihrer Saison werden gedimmt, nicht versteckt.
+               Kanten-Hotspots bekommen im Herbst/Winter einen betonten Ring. */
+            const aktiv = hotspotAktiv(h);
+            const fk = fokusFor();
+            const kante = istKante(h) && (fk.jahreszeit === 'herbst' || fk.jahreszeit === 'winter');
+            return L.circleMarker([h.lat, h.lng], {
+                radius: aktiv ? (kante ? 8 : 6) : 5,
+                color: kante ? '#f0bc5c' : '#fff',
+                weight: kante ? 3 : 2,
+                fillColor: CATS[s.cat].color,
+                fillOpacity: aktiv ? .95 : .35,
+                opacity: aktiv ? 1 : .45,
+            }).bindPopup(hotPopup(s, h), { autoPanPadding: [20, 60] })
+                .bindTooltip(h.name + (aktiv ? '' : ' · außerhalb der Saison') + (kante ? ' · Tiefenkante' : ''));
+        });
         if (s.line) {
             s.marker = L.polyline(s.line, {
                 color: LINECOL[s.farbe] || CATS[s.cat].color,
@@ -115,7 +130,7 @@ export function buildMarkers() {
             }).bindPopup(popupHtml(s), { autoPanPadding: [20, 60] });
         }
         else {
-            s.marker = L.marker([s.lat, s.lng], { icon: pinIcon(s.cat), title: s.name })
+            s.marker = L.marker([s.lat, s.lng], { icon: pinIcon(s.cat, spotImFokus(s)), title: s.name })
                 .bindPopup(popupHtml(s), { autoPanPadding: [20, 60] });
         }
     });
