@@ -11,3 +11,4 @@ import './weather.js';
 import './tools.js';
 import './regeln.js';
 import './fangbuch.js';
+import './trip.js';

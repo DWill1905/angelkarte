@@ -9,6 +9,7 @@ export const state = {
   uidLast: 0,
   WX: null, PEGEL: null, wxKey: '',
   fbMem: [], persistent: true, fbSaving: false,
+  trip: [], /* Merkliste: [{region,name}] */
   map: null,
 };
 

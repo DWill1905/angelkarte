@@ -3,6 +3,7 @@ import { state, store } from './state.js';
 import { NOW, fmtMD, haversine, hhmm, inSchonzeit, mondPhase, solunar, sunTimes } from './astro.js';
 import { regionCenter } from './ui.js';
 import { openOffline } from './map.js';
+import { openTrip, inTrip, setTripBtn } from './trip.js';
 import { esc } from './util.js';
 export function season(){const m=NOW.getMonth()+1;return m===12||m<=2?'winter':m<=5?'fruehjahr':m<=8?'sommer':'herbst';}
 export const KB={
@@ -101,6 +102,7 @@ toolsDlg.addEventListener('click',e=>{if(e.target===toolsDlg)toolsDlg.hidden=tru
 document.getElementById('tScore').onclick=()=>{toolsDlg.hidden=true;openScore();};
 document.getElementById('tFore').onclick=()=>{toolsDlg.hidden=true;openForecast();};
 document.getElementById('tOff').onclick=()=>{toolsDlg.hidden=true;openOffline();};
+document.getElementById('tTrip').onclick=()=>{toolsDlg.hidden=true;openTrip();};
 document.getElementById('tCol').onclick=()=>{toolsDlg.hidden=true;openKb();};
 document.getElementById('tBite').onclick=()=>{toolsDlg.hidden=true;openBite();};
 document.getElementById('tPack').onclick=()=>{toolsDlg.hidden=true;openPack();};
@@ -425,6 +427,8 @@ state.map.on('popupopen',e=>{
     if(txt) wtEl.innerHTML='<b>Wassertemperatur</b>'+txt;
     else wtEl.remove();
   }
+  const tEl=e.popup.getElement().querySelector('.pop-btn.trip');
+  if(tEl) setTripBtn(tEl,inTrip(tEl.dataset.spot));
   const wEl=e.popup.getElement().querySelector('[data-wind]');
   if(wEl){
     if(state.WX&&state.WX.wind>=8){
