@@ -43,6 +43,8 @@ for (const r of regions) {
   });
 
   /* Spots */
+  if (!r.geprueft) E('[' + r.id + '] geprueft-Datum fehlt (Datenfrische muss angegeben sein)');
+  else if (!/^\d{4}-\d{2}$/.test(r.geprueft)) E('[' + r.id + '] geprueft-Format ungültig ("' + r.geprueft + '", erwartet JJJJ-MM)');
   (r.spots || []).forEach(sp => {
     const t = tag + ' Spot „' + (sp.name || '?') + '“';
     if (!sp.name) E(t + ': name fehlt');

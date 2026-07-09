@@ -609,7 +609,7 @@ export const SCHON_HE=[
   {fisch:'Wels', von:null, bis:null, mm:'– (in HE keine Schonzeit/kein Maß)'}
 ];
 
-export const REGION_HE={id:'giessen',name:'Gießen / Lahntal (Hessen)',nachtangeln:'frei',kurz:'Gießen & Lahn',packliste:['Staatl. Fischereischein + Erlaubnisschein (IG Lahn / VSA / ASV je Gewässer)','Lange Spinnrute 20–40 g für die Lahn-Strömung','DropShot-Setup fürs Abklopfen vom Ufer','Stahl-/Titanvorfach (Hecht/Zander Pflicht am Wasser)','Wathose fürs Fliegenfischen an den Wehren','Kescher, Abhakmatte, Kopflampe'],
+export const REGION_HE={id:'giessen',geprueft:'2026-07',name:'Gießen / Lahntal (Hessen)',nachtangeln:'frei',kurz:'Gießen & Lahn',packliste:['Staatl. Fischereischein + Erlaubnisschein (IG Lahn / VSA / ASV je Gewässer)','Lange Spinnrute 20–40 g für die Lahn-Strömung','DropShot-Setup fürs Abklopfen vom Ufer','Stahl-/Titanvorfach (Hecht/Zander Pflicht am Wasser)','Wathose fürs Fliegenfischen an den Wehren','Kescher, Abhakmatte, Kopflampe'],
   koederfisch:['Grundel breitet sich auch in der Lahn aus – als toter Köderfisch am Grund auf Zander/Wels/Aal top.','Lebender Köderfisch verboten (Tierschutzgesetz).','An Vereinsgewässern Köderfischregeln des Erlaubnisscheins prüfen.','Döbel und Rotaugen sind klassische Lahn-Köderfische (wo erlaubt).'],
   schonQuelle:'Quelle: Hessische Fischereiverordnung (HFischV) vom 14.04.2023 – Entnahmefenster (Mindest- UND Höchstmaß!) für Hecht 50–90, Barbe 40–60, Aal 50–70, Karpfen(Wild) 45–60, Schleie 25–45. Zander: KEINE Schonzeit, ab 50 cm (gilt in HE als gebietsfremd). Wels ohne Maß. Verein/Erlaubnisschein kann strenger sein.',
   pegel:{warnAb:350,text:'Lahn-Hochwasser – Uferzugänge geprüft, Strömung beachten!'},
@@ -627,7 +627,7 @@ export const REGION_HE={id:'giessen',name:'Gießen / Lahntal (Hessen)',nachtange
   ],
   hinweis:'Angaben ohne Gewähr, recherchiert 07/2026 (HFischV 14.04.2023, Vereinsseiten VSA Gießen/ASV Wetzlar/ASV Lahnau, IG Lahn, Anglerforen). Maßgeblich sind der jeweilige Erlaubnisschein und die Beschilderung vor Ort. Entnahmefenster vor Entnahme prüfen.'};
 
-export const REGION_RLP={id:'mainz',name:'Rhein & Rheinhessen (Mainz)',nachtangeln:'frei',kurz:'Rhein & Rheinhessen',packliste:['Rheinischer Erlaubnisschein (Strom-km prüfen!)','Schwere Jigrute 30–60 g + Bleikopf-Vorrat (Steinpackung!)','Grundel-Dekore, Stahl-/FC-Vorfach','Wathose/Gummistiefel für Buhnen','Pegel checken – bei >400 cm Buhnen weg','Stirnlampe, Kescher, Abhakmatte'],
+export const REGION_RLP={id:'mainz',geprueft:'2026-07',name:'Rhein & Rheinhessen (Mainz)',nachtangeln:'frei',kurz:'Rhein & Rheinhessen',packliste:['Rheinischer Erlaubnisschein (Strom-km prüfen!)','Schwere Jigrute 30–60 g + Bleikopf-Vorrat (Steinpackung!)','Grundel-Dekore, Stahl-/FC-Vorfach','Wathose/Gummistiefel für Buhnen','Pegel checken – bei >400 cm Buhnen weg','Stirnlampe, Kescher, Abhakmatte'],
   koederfisch:['Grundel ist am Rhein der dominante Beifang und ideal als toter Köderfisch – vor Ort fangen, gebietsfremd aber ohnehin schon überall.','Köderfischsenke vom Ufer laut rheinischem Erlaubnisschein erlaubt.','Lebender Köderfisch verboten (Tierschutzgesetz).','Zander/Wels stehen auf Grundelfetzen &amp; -filet – am Grund an der Strömungskante anbieten.'],
   schonQuelle:'Quelle: Landesfischereiordnung RLP / FischGDV RP (abgeglichen 07/2026: Hecht 01.02.–15.04., Zander 01.04.–31.05., Barbe 01.05.–15.06., Aal-Maß 40 cm). Am Rhein gelten die artspezifischen Schonzeiten; die allg. Frühjahrsschonzeit 15.04.–31.05. gilt NICHT für Rhein/Mosel/Lahn. Verein/Erlaubnisschein kann strenger sein.',
   pegel:{warnAb:400,text:'Buhnen überspült – auf Hafenausfahrten ausweichen!'},
@@ -727,7 +727,7 @@ export const SCHON_EL=[
   {fisch:'Barsch', von:null, bis:null, mm:'– (kein gesetzl. Maß)'}
 ];
 
-export const REGION_EL={id:'elbe',name:'Elbe / Magdeburg (Sachsen-Anhalt)',nachtangeln:'frei',kurz:'Elbe (Magdeburg)',packliste:['Fischereischein + Erlaubnis (DAV Sachsen-Anhalt / Magdeburger AV)','Jigrute 15–40 g + Bleiköpfe 10–20 g','Gummifische 10–12 cm in Grün/Gelb/Weiß (Trübwasser!)','Stahl-/Titanvorfach + reichlich Jighaken (Hänger!)','Wathose/Gummistiefel für die Buhnen','Pegel Magdeburg-Strombrücke checken (ideal 1,20–1,80 m)','Kopflampe, Kescher, Abhakmatte'],
+export const REGION_EL={id:'elbe',geprueft:'2026-07',name:'Elbe / Magdeburg (Sachsen-Anhalt)',nachtangeln:'frei',kurz:'Elbe (Magdeburg)',packliste:['Fischereischein + Erlaubnis (DAV Sachsen-Anhalt / Magdeburger AV)','Jigrute 15–40 g + Bleiköpfe 10–20 g','Gummifische 10–12 cm in Grün/Gelb/Weiß (Trübwasser!)','Stahl-/Titanvorfach + reichlich Jighaken (Hänger!)','Wathose/Gummistiefel für die Buhnen','Pegel Magdeburg-Strombrücke checken (ideal 1,20–1,80 m)','Kopflampe, Kescher, Abhakmatte'],
   koederfisch:['Grundel & Gründling sind an der Elbe häufiger Beifang – als toter Köderfisch auf Zander/Wels/Aal top.','Lebender Köderfisch verboten (Tierschutzgesetz).','Wollhandkrabben plündern im Sommer Grundmontagen – Köder häufig kontrollieren.','Vom 15.02.–30.04. sind tote Köderfische UND Kunstköder verboten (Raubfischschonung).'],
   schonQuelle:'Quelle: Erlaubnisbestimmungen Magdeburger Anglerverein e.V. / DAV Landesanglerverband Sachsen-Anhalt (Stand lt. BLINKER-Gewässersteckbrief). Zander 15.02.–31.05./50, Hecht 15.02.–30.04./50, Barbe 01.04.–30.06./45, Aal-Maß 50. Max. 3 der gelisteten Arten pro Tag. ⚠ NUR für die Sachsen-Anhalt-Strecke – die Elbe fließt durch Sachsen, Niedersachsen, Brandenburg & Hamburg mit je eigenen Regeln!',
   pegel:{warnAb:350,text:'Buhnen überspült – auf Hafenausfahrten/Zollelbe ausweichen!'},
@@ -805,7 +805,7 @@ export const SCHON_MA=[
   {fisch:'Rapfen', von:null, bis:null, mm:'– (kein gesetzl. Maß)'}
 ];
 
-export const REGION_MA={id:'main',name:'Main / Frankfurt–Offenbach (Hessen)',nachtangeln:'frei',kurz:'Main (Frankfurt)',packliste:['Staatl. Fischereischein + Erlaubnisschein der Strecke','Jigrute 20–50 g, Bleiköpfe 10–25 g','Reichlich Jighaken (Steinpackung = Hänger!)','Gummifische + Fischfetzen; Grundeln als Köfi nutzen','Stahl-/Titanvorfach','Kopflampe – nachts kommen die Zander ans Ufer','Kescher mit langem Stiel (Spundwand!)'],
+export const REGION_MA={id:'main',geprueft:'2026-07',name:'Main / Frankfurt–Offenbach (Hessen)',nachtangeln:'frei',kurz:'Main (Frankfurt)',packliste:['Staatl. Fischereischein + Erlaubnisschein der Strecke','Jigrute 20–50 g, Bleiköpfe 10–25 g','Reichlich Jighaken (Steinpackung = Hänger!)','Gummifische + Fischfetzen; Grundeln als Köfi nutzen','Stahl-/Titanvorfach','Kopflampe – nachts kommen die Zander ans Ufer','Kescher mit langem Stiel (Spundwand!)'],
   koederfisch:['Grundeln sind Dauerbeifang und der beste tote Köderfisch auf Zander/Wels/Aal.','Lebender Köderfisch verboten (Tierschutzgesetz).','Fischfetzen funktionieren an der Spundwand hervorragend.','Vom 15.03.–30.04. ist im Zunftgebiet Hanau/Seligenstadt das Angeln mit Kunst-/Fischködern komplett untersagt – für die Frankfurter Strecke Erlaubnisschein prüfen!'],
   schonQuelle:'Quelle: Hessische Fischereiverordnung (HFischV) vom 14.04.2023 – Entnahmefenster (Mindest- UND Höchstmaß) für Hecht 50–90, Barbe 40–60, Aal 50–70, Karpfen(Wild) 45–60, Schleie 25–45. Zander: KEINE Schonzeit, ab 50 cm. Zusätzlich Erlaubnisschein-Regel: max. 3 Raubfische (Barsch/Hecht/Zander) pro Tag, max. 10/Woche. ⚠ Der Main ist in Streckenabschnitte verschiedener Fischerzünfte geteilt – Kilometergrenzen und Sperrzonen auf DEINER Karte prüfen!',
   pegel:{warnAb:400,text:'Main-Hochwasser – Uferwege und Spundwände gefährlich!'},
@@ -824,7 +824,7 @@ export const REGION_MA={id:'main',name:'Main / Frankfurt–Offenbach (Hessen)',n
   hinweis:'Angaben ohne Gewähr, recherchiert 07/2026 (fisch-hitparade, hejfish/Fischerhütte, angelguide, Zunft-Erlaubnisbestimmungen). Die Erlaubnisschein-Lage am Main ist durch historische Fischereirechte komplex – maßgeblich sind DEIN Erlaubnisschein (Strom-km!), die Beschilderung und die HFischV.'};
 
 export const REGIONS_EMBEDDED=[
- {id:'erzgebirge',name:'Erzgebirge / Freiberg (Sachsen)',nachtangeln:'lvsa',kurz:'Erzgebirge',packliste:['Erlaubnisschein + Personalausweis','Fangbuch (vor Angelbeginn ausfüllen!)','Maßband &amp; Hakenlöser','TWT: KEINE Maden/Fleisch – nur erlaubte Köder','Salmo-Strecke: Wathose + Einzelhaken + Sprengringzange','Kescher, Kopflampe (Nachtangeln 1h nach SU)'],
+ {id:'erzgebirge',geprueft:'2026-07',name:'Erzgebirge / Freiberg (Sachsen)',nachtangeln:'lvsa',kurz:'Erzgebirge',packliste:['Erlaubnisschein + Personalausweis','Fangbuch (vor Angelbeginn ausfüllen!)','Maßband &amp; Hakenlöser','TWT: KEINE Maden/Fleisch – nur erlaubte Köder','Salmo-Strecke: Wathose + Einzelhaken + Sprengringzange','Kescher, Kopflampe (Nachtangeln 1h nach SU)'],
   koederfisch:['Lebender Köderfisch ist in ganz Deutschland verboten (Tierschutzgesetz) – nur tote Köderfische verwenden.','Köderfische nur aus demselben Gewässer entnehmen (keine Verschleppung/Faunenverfälschung).','In Trinkwassertalsperren: Maden &amp; Fleisch als Köder verboten – Köderfisch dort tabu.','Fangbegrenzung Köderfische laut Erlaubnisschein beachten.'],
   schonQuelle:'Quelle: SächsFischVO 2022 + LVSA-Gewässerordnung (Verbandsregeln).',
   fusszeile:'Gastkarten: <a href="https://angeln-sachsen.de/avs/gastangler/gastkarten" target="_blank" rel="noopener">AVS Südsachsen</a>',
@@ -844,7 +844,7 @@ export const REGIONS_EMBEDDED=[
  REGION_HE,
  REGION_EL,
  REGION_MA,
- {id:'mecklenburg',name:'Mecklenburgische Kleinseenplatte (MV)',nachtangeln:'frei',kurz:'Kleinseenplatte',packliste:['Fischereischein + Fischereiabgabe MV (10€) + ggf. Touristenschein','Boot/Anker – Schleppen verboten, Ufer meist Schilf!','Echolot (Scharkanten weit draußen)','Stahl-/Titanvorfach (hohe Hechtdichte)','Mückenschutz (Wald überflutet)','Kescher, Kopflampe, Regenjacke'],
+ {id:'mecklenburg',geprueft:'2026-07',name:'Mecklenburgische Kleinseenplatte (MV)',nachtangeln:'frei',kurz:'Kleinseenplatte',packliste:['Fischereischein + Fischereiabgabe MV (10€) + ggf. Touristenschein','Boot/Anker – Schleppen verboten, Ufer meist Schilf!','Echolot (Scharkanten weit draußen)','Stahl-/Titanvorfach (hohe Hechtdichte)','Mückenschutz (Wald überflutet)','Kescher, Kopflampe, Regenjacke'],
   koederfisch:['Lebender Köderfisch verboten (Tierschutzgesetz).','Köderfische nur aus dem befischten Gewässer (Seenverbund Obere Havel).','Barsch &amp; kleine Plötze sind top Hecht-/Zanderköder – als Fischfetzen oder ganzer toter Köfi am System.','Kein Anfüttern in Schongebieten/Nationalpark-Zonen.'],
   schonQuelle:'⚠ KARTENREGELN der Seenfischerei Obere Havel – teils strenger als MV-Landesrecht und NUR auf deren Gewässern gültig!',
   fusszeile:'Angelkarten: <a href="https://fischerei-wesenberg.de" target="_blank" rel="noopener">Seenfischerei Obere Havel</a> + Fischereiabgabe MV',

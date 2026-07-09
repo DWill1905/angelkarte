@@ -21,6 +21,11 @@ export function pinIcon(cat){
       <circle cx="14" cy="13.5" r="4.5" fill="rgba(255,255,255,.9)"/></svg>`});
 }
 export function mapsLink(s){return 'https://www.google.com/maps/dir/?api=1&destination='+s.lat+','+s.lng;}
+export function monatLabel(ym){
+  const M=['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+  const m=/^(\d{4})-(\d{2})$/.exec(ym||'');
+  return m ? M[+m[2]-1]+' '+m[1] : (ym||'');
+}
 export function popupHtml(s){
   const c=CATS[s.cat];
   return `<span class="pop-cat" style="background:${c.color}">${c.label}</span><span class="pop-nr">${s.nr}</span>
@@ -38,7 +43,7 @@ export function popupHtml(s){
     <div class="pop-note${s.warn?' pop-warn':''}">${s.note}</div>
     ${s.schonzeitInfo?'<div class="pop-row"><b>Schonzeit-Besonderheit</b>'+s.schonzeitInfo+'</div>':''}
     ${s.hotspots&&s.hotspots.length?'<div class="pop-row" style="margin-top:8px"><b>Hotspots (kleine Punkte auf der Karte)</b>'+s.hotspots.map(h=>h.name).join(' · ')+'</div>':''}
-    <div class="verif">${s.verif==='C'?'⚠ Beleglage schwach – Bestand dokumentiert, Zugang/Gastkarte ungesichert':s.verif==='B'?'⚠ Datenlage teils unbelegt – vor Ort verifizieren':'✓ Kerndaten belegt (Ortsdaten/Primärquellen)'}</div>
+    <div class="verif">${s.verif==='C'?'⚠ Beleglage schwach – Bestand dokumentiert, Zugang/Gastkarte ungesichert':s.verif==='B'?'⚠ Datenlage teils unbelegt – vor Ort verifizieren':'✓ Kerndaten belegt (Ortsdaten/Primärquellen)'}${state.REGION&&state.REGION.geprueft?' · Daten geprüft '+esc(monatLabel(state.REGION.geprueft)):''}</div>
     <div class="pop-actions">
       <a class="pop-btn nav" href="${mapsLink(s)}" target="_blank" rel="noopener">Route</a>
       <button class="pop-btn log" onclick="prefillFang('${s.name.replace(/'/g,"\\'")}')">Fang loggen</button>
