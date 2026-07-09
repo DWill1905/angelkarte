@@ -745,6 +745,84 @@ export const REGION_EL={id:'elbe',name:'Elbe / Magdeburg (Sachsen-Anhalt)',nacht
   ],
   hinweis:'Angaben ohne Gewähr, recherchiert 07/2026 (BLINKER-Gewässersteckbrief Magdeburg, Magdeburger AV, hejfish, Anglerforen). Diese Regeln gelten NUR für die Sachsen-Anhalt-/Magdeburg-Strecke. Maßgeblich sind der jeweilige Erlaubnisschein (Strom-km!) und die Beschilderung vor Ort.'};
 
+/* ===== Region Main / Frankfurt–Offenbach (Hessen) – recherchiert 07/2026 ===== */
+export const SPOTS_MA=[
+  {name:'Main – Niddamündung Höchst',verif:'B',nr:'Frankfurter Zunft-/Stadtstrecke · linksmainisch',cat:'raub',
+   arten:['Zander','Wels','Barsch','Rapfen','Aal','Karpfen','Brasse'],
+   lat:50.09941,lng:8.55165,
+   fisch:'Zander, Wels, Barsch, Rapfen, Aal, Karpfen, Brassen',
+   methode:'Mündung der Nidda in den Main – klassische Strömungskante mit sandig-steinigem Grund, laut Praxisberichten einer der besten Zanderbereiche der Frankfurter Strecke. Gummifisch an der Kante, nachts Pose oder Grund mit totem Köderfisch nah am befestigten Ufer.',
+   karte:'Erlaubnisschein Main Frankfurt (Tages-/Monats-/Jahreskarte, u.a. Angel Bär Frankfurt) oder online über hejfish. Staatlicher Fischereischein nötig',
+   note:'⚠ Der Main ist trüb – Zander jagt auch tagsüber, nachts kommen die Räuber dicht ans Ufer. Grundeln sind Dauerbeifang: als toter Köderfisch nutzen statt sich ärgern. Tagesfang auf 3 Raubfische (Barsch/Hecht/Zander) begrenzt, max. 10/Woche. Bootsangeln verboten.',
+   kartenLinks:[{label:'hejfish – Main',url:'https://www.hejfish.com/d/12472-main'},{label:'Angel Bär (Gastkarten)',url:'https://www.angel-baer.de/gastkarten.htm'}],
+   hotspots:[
+     {name:'Kante westlich der Niddamündung',saison:'Herbst/Winter, Zander',lat:50.0990,lng:8.5490,tipp:'Westlich der Mündung liegen laut Praxisberichten viele sandig-steinige Zanderspots. Kanten mit Gummi absuchen. Lage grob.'}
+   ],warn:true,zugang:'ufer'},
+
+  {name:'Main – Gerbermühle / Frankfurt-Süd',verif:'B',nr:'Frankfurter Strecke · Stadtstrecke',cat:'raub',
+   arten:['Zander','Barsch','Wels','Aal','Karpfen','Brasse','Rotauge'],
+   lat:50.10600,lng:8.72158,
+   fisch:'Zander, Barsch, Wels, Aal, Karpfen, Brassen, Rotaugen',
+   methode:'Stadtstrecke mit befestigten Ufern und Spundwänden – nachts kommen Zander dicht heran. Vertikal/Dropshot an der Spundwand, Pose nachts ufernah. Steiniger Grund = Hängergefahr, Jigkopf-Vorrat einpacken.',
+   karte:'Erlaubnisschein Main Frankfurt (Angel Bär, Angelshop Offenbach) oder online hejfish',
+   note:'⚠ Sperrzonen im Stadtgebiet beachten (Hafenbecken, Osthafen-Oberhafenbecken, Staustufe Griesheim, Schleuse Offenbach) – Beschilderung lesen. Stehende Gewässer (Rumpenheimer/Bürgeler Kiesgrube) sind für Gastangler gesperrt. Bootsangeln verboten.',
+   kartenLinks:[{label:'hejfish – Main',url:'https://www.hejfish.com/d/12472-main'},{label:'Angel Bär (Gastkarten)',url:'https://www.angel-baer.de/gastkarten.htm'}],
+   hotspots:[],warn:true,zugang:'ufer'},
+
+  {name:'Main – Mainbogen Rumpenheim',verif:'B',nr:'Offenbach/Rumpenheim · naturnaher Bogen',cat:'raub',
+   arten:['Zander','Wels','Barsch','Hecht','Aal','Barbe','Döbel'],
+   lat:50.12931,lng:8.79670,
+   fisch:'Zander, Wels, Barsch, Hecht, Aal, Barbe, Döbel, Weißfische',
+   methode:'Der große Bogen beim NSG Rumpenheim: natürlich bewachsene Uferzonen statt Spundwand – der ruhigste Ansitzplatz der Strecke. Feedern auf Barbe/Brasse, abends Zander an den Kanten.',
+   karte:'Erlaubnisschein der zuständigen Zunft/Frankfurter Strecke – Kilometergrenzen auf der Karte prüfen! Online über hejfish',
+   note:'⚠ Naturschutzgebiet in der Nähe – Beschilderung genau beachten, nicht in gesperrte Zonen. Die Kiesgrube Rumpenheim ist für Gastangler NICHT freigegeben (nur mit Vereinsmitglied). Koordinate = Bogenbereich, Lage grob.',
+   kartenLinks:[{label:'hejfish – Main',url:'https://www.hejfish.com/d/12472-main'}],
+   hotspots:[],warn:true,zugang:'ufer'},
+
+  {name:'Staustufe Griesheim',nr:'SPERRZONE',cat:'sperr',arten:[],
+   lat:50.08975,lng:8.59949,
+   fisch:'–',methode:'–',karte:'–',
+   note:'⛔ Rund um die Staustufe Griesheim besteht laut Erlaubnisbestimmungen eine Sperrzone (rechts- und linksmainisch). Trotz idealer Zanderstruktur: hier NICHT angeln. Beschilderung beachten.',
+   hotspots:[],warn:true},
+
+  {name:'Schleuse Offenbach',nr:'SPERRZONE',cat:'sperr',arten:[],
+   lat:50.10793,lng:8.72710,
+   fisch:'–',methode:'–',karte:'–',
+   note:'⛔ Rund um die Schleuse Offenbach und den Riedgraben gilt eine Sperrzone. Das Zunftgebiet beginnt rechtsmainisch erst 100 m oberhalb der Schleuse (km 38,5). Nicht befischen.',
+   hotspots:[],warn:true}
+];
+
+/* Schonzeiten: hessisches Landesrecht (HFischV 14.04.2023) + Erlaubnisschein-Regeln der Main-Strecke */
+export const SCHON_MA=[
+  {fisch:'Zander', von:null, bis:null, mm:'ab 50 cm (keine Schonzeit – in HE gebietsfremd), max 3 Raubfische/Tag'},
+  {fisch:'Hecht', von:[2,1], bis:[4,15], mm:'Entnahmefenster 50–90 cm, max 3 Raubfische/Tag'},
+  {fisch:'Barsch', von:null, bis:null, mm:'– (kein Maß), max 3 Raubfische/Tag'},
+  {fisch:'Barbe', von:[5,1], bis:[6,30], mm:'Entnahmefenster 40–60 cm'},
+  {fisch:'Aal', von:[9,15], bis:[3,1], mm:'Entnahmefenster 50–70 cm'},
+  {fisch:'Karpfen', von:[3,15], bis:[5,31], mm:'Wildform: Entnahmefenster 45–60 cm'},
+  {fisch:'Schleie', von:[5,1], bis:[6,30], mm:'Entnahmefenster 25–45 cm'},
+  {fisch:'Wels', von:null, bis:null, mm:'– (in HE keine Schonzeit/kein Maß)'},
+  {fisch:'Rapfen', von:null, bis:null, mm:'– (kein gesetzl. Maß)'}
+];
+
+export const REGION_MA={id:'main',name:'Main / Frankfurt–Offenbach (Hessen)',nachtangeln:'frei',kurz:'Main (Frankfurt)',packliste:['Staatl. Fischereischein + Erlaubnisschein der Strecke','Jigrute 20–50 g, Bleiköpfe 10–25 g','Reichlich Jighaken (Steinpackung = Hänger!)','Gummifische + Fischfetzen; Grundeln als Köfi nutzen','Stahl-/Titanvorfach','Kopflampe – nachts kommen die Zander ans Ufer','Kescher mit langem Stiel (Spundwand!)'],
+  koederfisch:['Grundeln sind Dauerbeifang und der beste tote Köderfisch auf Zander/Wels/Aal.','Lebender Köderfisch verboten (Tierschutzgesetz).','Fischfetzen funktionieren an der Spundwand hervorragend.','Vom 15.03.–30.04. ist im Zunftgebiet Hanau/Seligenstadt das Angeln mit Kunst-/Fischködern komplett untersagt – für die Frankfurter Strecke Erlaubnisschein prüfen!'],
+  schonQuelle:'Quelle: Hessische Fischereiverordnung (HFischV) vom 14.04.2023 – Entnahmefenster (Mindest- UND Höchstmaß) für Hecht 50–90, Barbe 40–60, Aal 50–70, Karpfen(Wild) 45–60, Schleie 25–45. Zander: KEINE Schonzeit, ab 50 cm. Zusätzlich Erlaubnisschein-Regel: max. 3 Raubfische (Barsch/Hecht/Zander) pro Tag, max. 10/Woche. ⚠ Der Main ist in Streckenabschnitte verschiedener Fischerzünfte geteilt – Kilometergrenzen und Sperrzonen auf DEINER Karte prüfen!',
+  pegel:{warnAb:400,text:'Main-Hochwasser – Uferwege und Spundwände gefährlich!'},
+  fusszeile:'Erlaubnis: <a href="https://www.hejfish.com/d/12472-main" target="_blank" rel="noopener">hejfish – Main</a> · <a href="https://www.angel-baer.de/gastkarten.htm" target="_blank" rel="noopener">Angel Bär Frankfurt</a>. Streckengrenzen &amp; Sperrzonen beachten!',
+  spots:SPOTS_MA,schon:SCHON_MA,
+  banner:[
+    {von:[2,1],bis:[4,15],text:'<b>Hecht geschont</b> (01.02.–15.04.) – Entnahmefenster 50–90 cm.'},
+    {von:[3,15],bis:[4,30],text:'<b>Achtung:</b> In benachbarten Zunftgebieten (Hanau/Seligenstadt) 15.03.–30.04. Kunst-/Fischköder-Verbot – eigenen Erlaubnisschein prüfen!'},
+    {von:[5,1],bis:[6,30],text:'<b>Barbe &amp; Schleie geschont</b> (01.05.–30.06.).'}
+  ],
+  regeln:[
+    {titel:'Erlaubnisschein-Dschungel am Main',punkte:['Der Main ist in Abschnitte verschiedener Fischerzünfte/Vereine geteilt – historische Bannwasser und Koppelrechte machen es unübersichtlich','Nicht jede Karte gilt überall: Kilometergrenzen auf dem eigenen Schein prüfen (z.B. Zunftgebiet Steinheim km 46,8–69,5 linksmainisch)','Gastkarten teils limitiert und schnell vergriffen – Vereinsmitgliedschaft lohnt bei Regelmäßigkeit','Tageskarte Frankfurt ~8 € (Angel Bär u.a.), online über hejfish','Staatlicher Fischereischein zusätzlich nötig']},
+    {titel:'Sperrzonen (nicht angeln!)',punkte:['Staustufe Griesheim – rechts- und linksmainisch gesperrt','Schleuse Offenbach + Riedgraben','Hafenbecken, Oberhafenbecken des Osthafens Frankfurt','Bannwasser Hanau (Schloss Philippsruhe bis WSV-Hafen)','Stehende Gewässer (Rumpenheimer/Bürgeler Kiesgrube): Gastangler nur mit Vereinsmitglied','Bootsangeln ist auf der Strecke verboten']},
+    {titel:'Main-Praxis',punkte:['Zander steht an Staustufen, Steinpackungen, Brücken und versunkenen Buhnen (im Staubereich)','Trübes Wasser: Zander jagt auch tagsüber – nachts kommen Räuber dicht ans befestigte Ufer','Herbst ist die beste Raubfischzeit; Winter = Zander an tiefen Stellen','Grundeln als Chance: toter Köderfisch statt Ärgernis','Steiniger Grund + Strömung = Montageverlust einplanen; Pose nachts als Alternative zum Grundblei','Schiffsverkehr beachten – Wellenschlag an der Spundwand']}
+  ],
+  hinweis:'Angaben ohne Gewähr, recherchiert 07/2026 (fisch-hitparade, hejfish/Fischerhütte, angelguide, Zunft-Erlaubnisbestimmungen). Die Erlaubnisschein-Lage am Main ist durch historische Fischereirechte komplex – maßgeblich sind DEIN Erlaubnisschein (Strom-km!), die Beschilderung und die HFischV.'};
+
 export const REGIONS_EMBEDDED=[
  {id:'erzgebirge',name:'Erzgebirge / Freiberg (Sachsen)',nachtangeln:'lvsa',kurz:'Erzgebirge',packliste:['Erlaubnisschein + Personalausweis','Fangbuch (vor Angelbeginn ausfüllen!)','Maßband &amp; Hakenlöser','TWT: KEINE Maden/Fleisch – nur erlaubte Köder','Salmo-Strecke: Wathose + Einzelhaken + Sprengringzange','Kescher, Kopflampe (Nachtangeln 1h nach SU)'],
   koederfisch:['Lebender Köderfisch ist in ganz Deutschland verboten (Tierschutzgesetz) – nur tote Köderfische verwenden.','Köderfische nur aus demselben Gewässer entnehmen (keine Verschleppung/Faunenverfälschung).','In Trinkwassertalsperren: Maden &amp; Fleisch als Köder verboten – Köderfisch dort tabu.','Fangbegrenzung Köderfische laut Erlaubnisschein beachten.'],
@@ -765,6 +843,7 @@ export const REGIONS_EMBEDDED=[
  REGION_RLP,
  REGION_HE,
  REGION_EL,
+ REGION_MA,
  {id:'mecklenburg',name:'Mecklenburgische Kleinseenplatte (MV)',nachtangeln:'frei',kurz:'Kleinseenplatte',packliste:['Fischereischein + Fischereiabgabe MV (10€) + ggf. Touristenschein','Boot/Anker – Schleppen verboten, Ufer meist Schilf!','Echolot (Scharkanten weit draußen)','Stahl-/Titanvorfach (hohe Hechtdichte)','Mückenschutz (Wald überflutet)','Kescher, Kopflampe, Regenjacke'],
   koederfisch:['Lebender Köderfisch verboten (Tierschutzgesetz).','Köderfische nur aus dem befischten Gewässer (Seenverbund Obere Havel).','Barsch &amp; kleine Plötze sind top Hecht-/Zanderköder – als Fischfetzen oder ganzer toter Köfi am System.','Kein Anfüttern in Schongebieten/Nationalpark-Zonen.'],
   schonQuelle:'⚠ KARTENREGELN der Seenfischerei Obere Havel – teils strenger als MV-Landesrecht und NUR auf deren Gewässern gültig!',
