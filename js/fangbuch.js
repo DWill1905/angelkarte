@@ -77,6 +77,11 @@ export function fbInsights(){
   }
   const spots=topCount(state.fbMem.map(e=>e.spot));
   if(spots.length){ h+='<b style="display:block;margin-top:8px">Top-Spots</b>'+bars(spots,state.fbMem.length); }
+  const arten=topCount(state.fbMem.map(e=>e.fisch));
+  if(arten.length>1){ h+='<b style="display:block;margin-top:8px">Artenverteilung</b>'+bars(arten,state.fbMem.length); }
+  const MON=['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+  const monate=topCount(state.fbMem.map(e=>{const m=e.datum&&/^\d{4}-(\d{2})/.exec(e.datum);return m?MON[+m[1]-1]:null;}).filter(Boolean));
+  if(monate.length>1){ h+='<b style="display:block;margin-top:8px">Fängigste Monate</b>'+bars(monate,state.fbMem.length); }
   h+='</div>';
   /* Persönliche Bestenliste: größter Fisch je Art */
   const rekorde={};
