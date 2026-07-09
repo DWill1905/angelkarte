@@ -182,3 +182,101 @@ describe('Bug: validierte Fanglänge wurde verworfen', () => {
     assert.ok(!/NaN/.test(h), 'NaN darf nie in der Auswertung erscheinen');
   });
 });
+
+describe('Bug: Fangliste stand nach Backup-Import auf dem Kopf', () => {
+  test('neuester Fang steht immer oben – auch nach einem Import', async () => {
+    await loadRegion(ctx, 'elbe');
+    doc.querySelector('[data-view="fangbuch"]').click();
+    app.state.fbMem.length = 0;
+    app.state.fbMem.push(
+      { id: 1, datum: '1.7.2026', fisch: 'Zander', laenge: 50, spot: 'A', koeder: 'G', entnommen: false },
+      { id: 2, datum: '5.7.2026', fisch: 'Zander', laenge: 60, spot: 'A', koeder: 'G', entnommen: false },
+      { id: 3, datum: '9.7.2026', fisch: 'Zander', laenge: 70, spot: 'A', koeder: 'G', entnommen: false },
+    );
+    app.fbRender();
+    const vorher = [...doc.querySelectorAll('.fb-entry')].map((e) => (e.textContent.match(/\d+ cm/) || [''])[0]);
+    assert.deepEqual(vorher, ['70 cm', '60 cm', '50 cm'], 'Vorbedingung: neueste zuerst');
+
+    await app.fbRestore({ text: async () => JSON.stringify({ faenge: [
+      { id: 4, datum: '3.7.2026', fisch: 'Hecht', laenge: 80, spot: 'B', koeder: 'W', entnommen: false }] }) });
+    await tick(ctx.window, 30);
+
+    const nachher = [...doc.querySelectorAll('.fb-entry')].map((e) => (e.textContent.match(/\d+ cm/) || [''])[0]);
+    assert.deepEqual(nachher, ['70 cm', '60 cm', '80 cm', '50 cm'],
+      'Nach dem Import stand die Liste früher auf dem Kopf (reverse() statt Datumssortierung)');
+  });
+});
+
+describe('Bug: Empfehlung schlug Arten ohne Schonzeitdaten vor', () => {
+  test('eine Art ohne Schonzeit-/Maßdaten wird nie empfohlen', async () => {
+    await loadRegion(ctx, 'mecklenburg');
+    app.state.PEGEL = { value: 100, station: 'X', dist: 3, wt: 16 };
+    for (const r of app.state.REGIONS) {
+      await loadRegion(ctx, r.id);
+      const e = app.empfehlung();
+      if (!e?.zielfisch) continue;
+      const sc = app.state.SCHON.find((x) => x.fisch === e.zielfisch.art);
+      assert.ok(sc, `${r.id}: "${e.zielfisch.art}" empfohlen, obwohl keine Schonzeitdaten vorliegen – `
+        + 'der Maßcheck sagt für diesen Fall "KEINE Freigabe"');
+    }
+  });
+
+  test('sind alle Arten geschont, nennt der Satz keinen Fisch und keinen Köder', async () => {
+    await loadRegion(ctx, 'mecklenburg');
+    app.state.PEGEL = { value: 100, station: 'X', dist: 3, wt: 16 };
+    const sicherung = app.state.SCHON.map((s) => ({ ...s }));
+    app.state.SCHON.forEach((s) => { s.von = [1, 1]; s.bis = [12, 31]; });
+
+    const e = app.empfehlung();
+    assert.equal(e.zielfisch, null);
+    assert.ok(!/ auf [A-ZÄÖÜ]/.test(e.satz), 'nennt trotzdem einen Zielfisch');
+    assert.ok(!/Jigkopf|Gummifisch/.test(e.satz), 'nennt trotzdem einen Köder');
+    assert.ok(e.luecken.some((l) => /Schonzeit|geschont|Daten/i.test(l)), 'kein Hinweis in den Lücken');
+
+    app.state.SCHON.forEach((s, i) => { s.von = sicherung[i].von; s.bis = sicherung[i].bis; });
+  });
+});
+
+describe('Bug: Gummifisch am Jigkopf für Friedfische', () => {
+  test('Karpfen bekommt keinen Jigkopf empfohlen', async () => {
+    await loadRegion(ctx, 'mecklenburg');
+    app.state.PEGEL = { value: 100, station: 'X', dist: 3, wt: 18 };
+    const sicherung = app.state.SCHON.map((s) => ({ ...s }));
+    app.state.SCHON.forEach((s) => { if (s.fisch !== 'Karpfen') { s.von = [1, 1]; s.bis = [12, 31]; } else { s.von = null; s.bis = null; } });
+
+    const e = app.empfehlung();
+    assert.equal(e.zielfisch.art, 'Karpfen');
+    assert.ok(!/Jigkopf/.test(e.satz), 'Friedfisch am Jigkopf: ' + e.satz);
+    assert.match(e.satz, /Boilie|Mais|Feeder/);
+
+    app.state.SCHON.forEach((s, i) => { s.von = sicherung[i].von; s.bis = sicherung[i].bis; });
+  });
+});
+
+describe('Schonzeit-Grenzen (rechtlich kritisch)', () => {
+  const mitDatum = (jahr, monat, tag, fn) => {
+    const Echt = ctx.window.Date;
+    class Fake extends Echt {
+      constructor(...a) { if (a.length === 0) super(jahr, monat - 1, tag, 12); else super(...a); }
+      static now() { return new Echt(jahr, monat - 1, tag, 12).getTime(); }
+    }
+    ctx.window.Date = Fake;
+    try { return fn(); } finally { ctx.window.Date = Echt; }
+  };
+
+  test('Fenster innerhalb eines Jahres: Grenzen sind inklusiv', () => {
+    assert.equal(mitDatum(2026, 2, 14, () => app.inWindow([2, 15], [5, 31])), false);
+    assert.equal(mitDatum(2026, 2, 15, () => app.inWindow([2, 15], [5, 31])), true);
+    assert.equal(mitDatum(2026, 5, 31, () => app.inWindow([2, 15], [5, 31])), true);
+    assert.equal(mitDatum(2026, 6, 1, () => app.inWindow([2, 15], [5, 31])), false);
+  });
+
+  test('Fenster über den Jahreswechsel (Aal 15.09.–01.03.)', () => {
+    assert.equal(mitDatum(2026, 9, 14, () => app.inWindow([9, 15], [3, 1])), false);
+    assert.equal(mitDatum(2026, 9, 15, () => app.inWindow([9, 15], [3, 1])), true);
+    assert.equal(mitDatum(2026, 12, 31, () => app.inWindow([9, 15], [3, 1])), true);
+    assert.equal(mitDatum(2026, 1, 1, () => app.inWindow([9, 15], [3, 1])), true);
+    assert.equal(mitDatum(2026, 3, 1, () => app.inWindow([9, 15], [3, 1])), true);
+    assert.equal(mitDatum(2026, 3, 2, () => app.inWindow([9, 15], [3, 1])), false);
+  });
+});

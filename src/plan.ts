@@ -65,11 +65,15 @@ export interface Zielfisch {
   grund: string;
 }
 
-/** Wählt die aussichtsreichste, NICHT geschonte Art eines Spots. */
+/** Wählt die aussichtsreichste, NICHT geschonte Art eines Spots.
+    Arten ohne Schonzeit-/Maßdaten werden bewusst NICHT empfohlen: die Rechtslage ist
+    dann unbekannt, und der Maßcheck im Fangbuch sagt für genau diesen Fall „KEINE Freigabe".
+    Die App darf sich nicht selbst widersprechen. */
 export function zielfischFor(s: Spot, wt: number | null): Zielfisch | null {
   const erlaubt = (s.arten || []).filter((a) => {
     const sc = state.SCHON.find((x) => x.fisch === a);
-    return !sc || !inSchonzeit(sc);
+    if (!sc) return false; /* keine Daten -> nicht empfehlen */
+    return !inSchonzeit(sc);
   });
   const raub = erlaubt.filter((a) => RAUB.includes(a));
   const kandidaten = raub.length ? raub : erlaubt;
@@ -247,11 +251,27 @@ export interface Empfehlung {
   alternativen: Kandidat[];
 }
 
-/** Wählt aus der Tackle-Empfehlung die passende Ködergröße und Saisonfarbe. */
-function koederSatz(s: Spot, art: string | null): { koeder: string; jig: string } {
+/** Friedfische bekommen keinen Gummifisch am Jigkopf. */
+const FRIEDFISCH: Record<string, string> = {
+  Karpfen: 'Boilie oder Mais am Method-Feeder',
+  Schleie: 'Made- oder Maisbündel an feiner Posenmontage',
+  Brachse: 'Futterkorb mit Made/Wurm',
+  Brasse: 'Futterkorb mit Made/Wurm',
+  Barbe: 'Feeder mit Käse oder Tauwurm',
+  Döbel: 'Brotflocke oder kleiner Wobbler',
+  Rotauge: 'Made an feiner Pose',
+  Aal: 'Tauwurmbündel am Grund',
+};
+
+/** Wählt aus der Tackle-Empfehlung den passenden Köder und die Saisonfarbe. */
+function koederSatz(s: Spot, art: string | null): { koeder: string; jig: string | null } {
   const { t } = tackleFor(s);
   const jz = jahreszeit();
   const farbe = t.farben[jz].split(/[–;(,]/)[0].trim();
+
+  /* Kein Kunstköder-Setup für Fried- und Grundfische. */
+  if (art && FRIEDFISCH[art]) return { koeder: FRIEDFISCH[art], jig: null };
+
   const groesse = art === 'Barsch' ? '6–8 cm' : art === 'Wels' ? '15–25 cm' : art === 'Hecht' ? '12–19 cm' : '10–14 cm';
   /* Jigkopf: erste Gewichtsspanne aus der Tackle-Angabe, z.B. "10–17 g über Kraut, …" -> "10–17 g" */
   const jigMatch = /(\d+\s*[–-]\s*\d+\s*g|\d+\s*g)/.exec(t.jig);
@@ -277,6 +297,7 @@ export function empfehlung(jetzt: Date = new Date()): Empfehlung | null {
   if (!state.userPos) luecken.push('Kein Standort freigegeben – die Entfernung wurde nicht berücksichtigt.');
   if (k.spot.zugang === 'boot') luecken.push('Dieses Gewässer ist praktisch nur vom Boot zu beangeln.');
   if (k.spot.verif === 'C') luecken.push('Beleglage schwach: Gastkarte und Zugang vorher beim Verein klären.');
+  if (!zf) luecken.push('Für keine Art dieses Gewässers liegen offene Schonzeit-/Maßdaten vor (alles geschont oder Daten fehlen) – der Erlaubnisschein entscheidet.');
 
   const zeitText = zeit.bis
     ? `ab ${hhmm(zeit.von)} Uhr`
@@ -286,9 +307,12 @@ export function empfehlung(jetzt: Date = new Date()): Empfehlung | null {
     ? `an der Stelle „${k.hotspot.name}" (${k.spot.name})`
     : `am ${k.spot.name}`;
 
-  const satz = `Starte ${zeitText} ${ortText}`
-    + (zf ? ` auf ${zf.art}` : '')
-    + ` mit einem ${koeder} am ${jig}-Jigkopf.`;
+  /* Ohne offene Zielart wäre eine Köderempfehlung sinnlos – dann nennt der Satz nur Zeit und Ort. */
+  const satz = zf
+    ? `Starte ${zeitText} ${ortText} auf ${zf.art}`
+      + (jig ? ` mit einem ${koeder} am ${jig}-Jigkopf.` : ` mit ${koeder}.`)
+    : `${ortText.charAt(0).toUpperCase() + ortText.slice(1)} wäre ${zeitText} der beste Startpunkt – `
+      + `aber für keine Art dieses Gewässers liegen gerade offene Schonzeit-/Maßdaten vor.`;
 
   /* Maß/Entnahmefenster des Zielfischs – gehört zwingend zur Empfehlung. */
   let massHinweis: string | null = null;

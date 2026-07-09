@@ -1,4 +1,3 @@
-/* Fangbuch */
 import { byId, inputById, qs, qsa, selectById } from './dom.js';
 import { state, store } from './state.js';
 import { fmtMD, hhmm, inSchonzeit, masseAus, mondPhase, solunar } from './astro.js';
@@ -54,7 +53,7 @@ export function fbCsv() {
     if (!state.fbMem.length)
         return;
     const head = ['Datum', 'Fisch', 'Laenge_cm', 'Spot', 'Koeder', 'Entnommen', 'Zeit', 'Mond', 'Druck_hPa', 'Drucktrend', 'Wind', 'Pegel_cm', 'Wassertemp_C'];
-    const rows = state.fbMem.map(e => [e.datum, e.fisch, e.laenge || '', e.spot || '', e.koeder || '', e.entnommen ? 'ja' : 'nein',
+    const rows = fbSortiert().map(e => [e.datum, e.fisch, e.laenge || '', e.spot || '', e.koeder || '', e.entnommen ? 'ja' : 'nein',
         e.ctx ? e.ctx.zeit : '', e.ctx ? e.ctx.mond : '', e.ctx ? (e.ctx.druck || '') : '', e.ctx ? (e.ctx.trend || '') : '',
         e.ctx ? (e.ctx.wind || '') : '', e.ctx ? (e.ctx.pegel || '') : '', e.ctx && e.ctx.wt != null ? e.ctx.wt : ''
     ].map(v => { v = String(v); return /[";\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }).join(';'));
@@ -239,6 +238,18 @@ export function fbTools() {
     imp.onclick = () => inputById('fbFile').click();
     t.appendChild(imp);
 }
+/** Fänge für die Anzeige sortieren: neuester zuerst.
+    Vorher wurde nur `reverse()` benutzt, also die Einfügereihenfolge umgedreht –
+    nach einem Backup-Import (der nach Datum sortiert) stand die Liste dann auf dem Kopf. */
+export function fbSortiert() {
+    return [...state.fbMem].sort((a, b) => {
+        const da = parseFangDatum(a.datum), db = parseFangDatum(b.datum);
+        const t = (db ? db.getTime() : 0) - (da ? da.getTime() : 0);
+        if (t !== 0)
+            return t;
+        return (b.id || 0) - (a.id || 0); /* gleicher Tag: zuletzt eingetragen zuerst */
+    });
+}
 export function fbRender() {
     const list = byId('fbList');
     byId('fbStatus').textContent =
@@ -250,7 +261,7 @@ export function fbRender() {
         return;
     }
     list.innerHTML = '';
-    [...state.fbMem].reverse().forEach(e => {
+    fbSortiert().forEach(e => {
         const d = document.createElement('div');
         d.className = 'fb-entry';
         const cx = e.ctx ? [e.ctx.zeit, e.ctx.mond, e.ctx.fenster ? (e.ctx.fenster === 'major' ? '★ Major' : '☆ Minor') : null, e.ctx.druck ? e.ctx.druck + ' hPa' + (e.ctx.trend <= -1.5 ? '⇘' : e.ctx.trend >= 1.5 ? '⇗' : '') : null, e.ctx.wind, e.ctx.temp != null ? e.ctx.temp + '°C' : null, e.ctx.pegel ? 'Pegel ' + e.ctx.pegel : null, e.ctx.wt != null ? 'W ' + e.ctx.wt + '°C' : null].filter(Boolean).join(' · ') : '';
