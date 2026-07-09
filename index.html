@@ -91,6 +91,9 @@
   .chips.sub{background:var(--ink);padding-top:6px;padding-bottom:6px}
   .chips.sub .chip{background:transparent;border-color:var(--line);color:var(--muted);min-height:28px;padding:5px 11px}
   .chips.sub .chip.on{background:var(--dusk);border-color:var(--dusk);color:#0d3540;opacity:1;font-weight:600;box-shadow:0 0 0 3px rgba(110,168,196,.15)}
+  #sperrWarn{flex:0 0 auto;background:#4a201a;border-bottom:1px solid #7a3527;color:#ffd0c4;
+    font-size:12px;padding:8px 14px;line-height:1.4}
+  #sperrWarn b{color:#ffb3a0}
   #map{flex:1;min-height:0;background:#2a5966;z-index:0}
   .leaflet-container{font:inherit}
 
@@ -270,6 +273,7 @@
 <div class="view active" id="view-karte">
   <div class="chips" id="chips" role="group" aria-label="Kategorien filtern"></div>
   <div class="chips sub" id="fishChips" role="group" aria-label="Nach Zielfisch filtern"></div>
+  <div id="sperrWarn" role="alert" hidden></div>
   <div id="map"></div>
   <button class="locbtn" id="locbtn" title="Meinen Standort anzeigen" data-ic="pin">Standort</button>
   <div class="sheet collapsed" id="sheet">

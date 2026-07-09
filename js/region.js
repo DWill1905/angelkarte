@@ -2,7 +2,7 @@
 import { state, store } from './state.js';
 import { REGIONS_EMBEDDED } from './data.js';
 import { buildFbOptions, checkFang } from './fangbuch.js';
-import { applyFilters, buildChips, buildMarkers, syncFishChips } from './map.js';
+import { applyFilters, buildChips, buildMarkers, syncFishChips, sperrWarnung } from './map.js';
 import { loadMySpots, mySpotObj } from './myspots.js';
 import { buildRegeln, buildSchonUI } from './regeln.js';
 import { buildBanner, sunLine } from './ui.js';
@@ -41,6 +41,7 @@ export async function loadRegion(r){
   if(typeof checkFang==='function') checkFang(); /* Maßcheck an neue Region anpassen */
   if(typeof sunLine==='function') sunLine();
   state.fishSel=null; syncFishChips(); applyFilters();
+  sperrWarnung(); /* Warnung für die neue Region neu bewerten */
   const pts=state.SPOTS.map(sp=>[sp.lat,sp.lng]);
   if(pts.length) state.map.fitBounds(pts,{padding:[30,30]});
   loadWeather();

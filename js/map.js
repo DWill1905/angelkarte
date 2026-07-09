@@ -181,6 +181,27 @@ fishEl.appendChild(toolsBtn);
 /* Standort */
 
 export const locBtn=document.getElementById('locbtn');
+/* Warnt, wenn der eigene Standort nahe an einer eingetragenen Sperrzone liegt.
+   Ehrlich: Sperrzonen sind als Punkte erfasst, nicht als Polygone – deshalb ist das
+   ein Hinweis zum Nachschauen, keine exakte Grenze. */
+export function sperrWarnung(){
+  const box=document.getElementById('sperrWarn');
+  if(!box) return null;
+  if(!state.userPos||!state.SPOTS.length){ box.hidden=true; return null; }
+  const RADIUS_KM=1.5;
+  const nah=state.SPOTS
+    .filter(s=>s.cat==='sperr'&&typeof s.lat==='number')
+    .map(s=>({s,d:haversine(state.userPos[0],state.userPos[1],s.lat,s.lng)}))
+    .filter(x=>x.d<=RADIUS_KM)
+    .sort((a,b)=>a.d-b.d);
+  if(!nah.length){ box.hidden=true; return null; }
+  box.innerHTML='<b>⛔ Sperrzone in der Nähe</b>'
+    + nah.map(x=>'<div style="margin-top:3px">'+esc(x.s.name)+' · ca. '+x.d.toFixed(1)+' km</div>').join('')
+    + '<div style="margin-top:5px;font-size:11px;opacity:.85">Punktangabe, keine exakte Grenze – Beschilderung vor Ort prüfen.</div>';
+  box.hidden=false;
+  return nah[0];
+}
+
 export function locApply(p){
   state.userPos=[p.coords.latitude,p.coords.longitude];
   if(state.userMarker) state.userMarker.remove();
@@ -188,6 +209,7 @@ export function locApply(p){
     .addTo(state.map).bindTooltip('Du');
   state.map.setView(state.userPos,11);
   renderList();
+  sperrWarnung();
   if(sheet) sheet.classList.remove('collapsed'); /* Spotliste zeigen, damit nächste Spots sichtbar */
   state.wxKey=''; loadWeather();
   if(typeof sunLine==='function') sunLine();
