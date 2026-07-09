@@ -1,5 +1,6 @@
 {
  "id": "main",
+ "geprueft": "2026-07",
  "name": "Main / Frankfurt–Offenbach (Hessen)",
  "nachtangeln": "frei",
  "kurz": "Main (Frankfurt)",
@@ -27,6 +28,7 @@
  "spots": [
   {
    "name": "Main – Niddamündung Höchst",
+   "wasser": "fluss",
    "verif": "B",
    "nr": "Frankfurter Zunft-/Stadtstrecke · linksmainisch",
    "cat": "raub",
@@ -69,6 +71,7 @@
   },
   {
    "name": "Main – Gerbermühle / Frankfurt-Süd",
+   "wasser": "fluss",
    "verif": "B",
    "nr": "Frankfurter Strecke · Stadtstrecke",
    "cat": "raub",
@@ -103,6 +106,7 @@
   },
   {
    "name": "Main – Mainbogen Rumpenheim",
+   "wasser": "fluss",
    "verif": "B",
    "nr": "Offenbach/Rumpenheim · naturnaher Bogen",
    "cat": "raub",

@@ -1,5 +1,6 @@
 {
  "id": "mainz",
+ "geprueft": "2026-07",
  "name": "Rhein & Rheinhessen (Mainz)",
  "nachtangeln": "frei",
  "kurz": "Rhein & Rheinhessen",
@@ -26,6 +27,7 @@
  "spots": [
   {
    "name": "Rhein Mainz – Stadtstrecke",
+   "wasser": "fluss",
    "zugang": "ufer",
    "nr": "LFV RLP · ~Strom-km 498–500",
    "cat": "raub",
@@ -71,6 +73,7 @@
   },
   {
    "name": "Winterhafen Mainz",
+   "wasser": "kanal",
    "zugang": "ufer",
    "nr": "Beschilderung!",
    "cat": "raub",
@@ -98,6 +101,7 @@
   },
   {
    "name": "Industriehafen Mombach – Hafenausfahrt",
+   "wasser": "kanal",
    "zugang": "ufer",
    "nr": "~Strom-km 503 · nur Ausfahrt",
    "cat": "raub",
@@ -141,6 +145,7 @@
   },
   {
    "name": "Buhnen & Rampen Budenheim",
+   "wasser": "fluss",
    "zugang": "ufer",
    "nr": "LFV RLP · ~Strom-km 506–508",
    "cat": "raub",
@@ -168,6 +173,7 @@
   },
   {
    "name": "Altrhein Heidenfahrt",
+   "wasser": "see-flach",
    "zugang": "ufer",
    "verif": "B",
    "nr": "~Strom-km 511 · Teilsperrung",
@@ -198,6 +204,7 @@
   },
   {
    "name": "Hafen & Buhnen Oppenheim",
+   "wasser": "fluss",
    "zugang": "ufer",
    "nr": "LFV RLP · ~Strom-km 480",
    "cat": "raub",
@@ -225,6 +232,7 @@
   },
   {
    "name": "Rhein Nackenheim & Mühlarm",
+   "wasser": "fluss",
    "zugang": "ufer",
    "verif": "B",
    "nr": "LFV RLP · km 485–490",
@@ -264,6 +272,7 @@
   },
   {
    "name": "Buhnen Gimbsheim–Ibersheim",
+   "wasser": "fluss",
    "zugang": "ufer",
    "verif": "B",
    "nr": "LFV RLP · km ~453–460",
@@ -309,6 +318,7 @@
   },
   {
    "name": "Mainspitze & Maaraue",
+   "wasser": "fluss",
    "zugang": "ufer",
    "nr": "Mainmündung km 496,6 · HESSEN!",
    "cat": "raub",
@@ -336,6 +346,7 @@
   },
   {
    "name": "Ginsheimer Altrhein & Mündung",
+   "wasser": "see-flach",
    "zugang": "ufer",
    "nr": "~km 487–493 · HESSEN!",
    "cat": "raub",
@@ -372,6 +383,7 @@
   },
   {
    "name": "Eicher See",
+   "wasser": "see-tief",
    "zugang": "ufer",
    "nr": "Anglervereinigung Worms",
    "cat": "raub",
@@ -403,6 +415,7 @@
   },
   {
    "name": "Altrheinsee Eich",
+   "wasser": "see-flach",
    "zugang": "ufer",
    "nr": "Ortsgemeinde Eich",
    "cat": "fried",
@@ -425,6 +438,7 @@
   },
   {
    "name": "Angelsee Wörrstadt-Wallertheim",
+   "wasser": "see-flach",
    "verif": "C",
    "nr": "AV Wörrstadt/Wallertheim · Rheinhessen-Binnenland",
    "cat": "raub",
@@ -456,6 +470,7 @@
   },
   {
    "name": "Niederrheinsee Gimbsheim",
+   "wasser": "see-flach",
    "verif": "B",
    "nr": "Rheinhessen · bei Gimbsheim/Alsheim",
    "cat": "raub",
@@ -479,6 +494,7 @@
   },
   {
    "name": "Selz-Mündung Ingelheim",
+   "wasser": "fluss",
    "verif": "B",
    "nr": "Selz · Mündung in den Rhein bei Frei-Weinheim",
    "cat": "raub",
@@ -509,6 +525,7 @@
   },
   {
    "name": "Angelsee ASV Seerose Ober-Olm",
+   "wasser": "see-flach",
    "verif": "C",
    "nr": "ASV Seerose Ober-Olm 1980 · bei Nieder-Olm",
    "cat": "fried",

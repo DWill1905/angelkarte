@@ -1,6 +1,7 @@
 /* Werkzeuge-Menü: Köder, Beißzeiten, Packliste, Knoten, Blei, Score */
 import { byId } from './dom.js';
 import { state, store } from './state.js';
+import { istFliess } from './tackle.js';
 import { NOW, fmtDate, fmtMD, haversine, hhmm, inSchonzeit, mondPhase, solunar, sunTimes } from './astro.js';
 import { regionCenter } from './ui.js';
 import { openOffline } from './map.js';
@@ -113,7 +114,10 @@ byId('tLead').onclick=()=>{toolsDlg.hidden=true;openLead();};
 /* Bleigewicht-Berater: Strömung (Pegeltrend + Gewässertyp) + Tiefe */
 export const leadDlg=byId('leadDlg');
 export function openLead(){
-  const stroemung=state.REGION&&/rhein|mainz/i.test(state.REGION.id); /* Fließgewässer? */
+  /* Fließgewässer? Aus den Spots der Region ableiten – die alte Regex (/rhein|mainz/)
+     hielt Elbe, Main, Lahn und die Mulde faelschlich für Stillwasser. */
+  const fliessSpots=state.SPOTS.filter(istFliess).length;
+  const stroemung=fliessSpots>0;
   let h='<p style="color:var(--muted);margin-bottom:10px">Für '+(state.REGION?esc(state.REGION.kurz||state.REGION.name):'—')+'</p>';
   if(stroemung){
     const hoch=state.PEGEL&&state.REGION.pegel&&state.PEGEL.value>=state.REGION.pegel.warnAb;

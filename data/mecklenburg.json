@@ -1,5 +1,6 @@
 {
  "id": "mecklenburg",
+ "geprueft": "2026-07",
  "name": "Mecklenburgische Kleinseenplatte (MV)",
  "nachtangeln": "frei",
  "kurz": "Kleinseenplatte",
@@ -22,6 +23,7 @@
  "spots": [
   {
    "name": "Woblitzsee",
+   "wasser": "see-flach",
    "zugang": "ufer",
    "rig": "Stahl- oder Titanvorfach Pflichtprogramm (Hechtdichte!), H-Rute 40–80 g fürs Zanderjiggen, Echolot fürs Boot.",
    "nr": "Obere Havel",
@@ -46,6 +48,20 @@
      "url": "https://fischerei-wesenberg.de"
     }
    ],
+   "tackle": {
+    "rute": "H-Spinnrute 40–80 g, 2,40–2,70 m",
+    "koeder": "Gummi 12–19 cm, Swimbaits; im Kraut Weedless-Montagen",
+    "jig": "10–17 g über Kraut, 17–28 g an den Kanten",
+    "vorfach": "Titan oder 7×7-Stahl 40 cm – bei dieser Hechtdichte Pflicht",
+    "zugang": "Vom Ufer machbar (Stege, Schilfkanten); ein Belly-Boat erweitert den Radius deutlich",
+    "farben": {
+     "fruehjahr": "Naturdekore mit Kontrastpunkt (Barsch, roter Kopf) – klares Nachwinterwasser",
+     "sommer": "Naturtöne (Rotauge, Barsch); über Kraut gern Weiß/Perlmutt",
+     "herbst": "Kontrastreich (Feuertiger, Orange) – Hechte fressen sich Winterspeck an",
+     "winter": "Dezente Naturtöne, kleine Köder, extrem langsam führen"
+    },
+    "warum": "Hohe Hechtdichte + Krautfelder. Entnahmefenster (Hecht 55–85, Zander 55–75 cm): große Fische MÜSSEN zurück – großer Gummikescher, Abhakmatte, Hakenlöser und Einzelhaken-Umbau gehören ins Gepäck."
+   },
    "note": "Ø nur 1,6 m tief, Max. 7 m! Havel durchfließt den See, im Sommer viel Hausboot-Verkehr. Uferangeln laut Luftbild fast nur an Buhne (Campingpark) und Stadtufer Wesenberg möglich – sonst durchgehender Schilfgürtel, Scharkante weit dahinter: Boot + Echolot.",
    "hotspots": [
     {
@@ -81,6 +97,7 @@
   },
   {
    "name": "Zotzensee",
+   "wasser": "see-flach",
    "zugang": "boot",
    "rig": "Hechtcombo 30–80 g, Stahlvorfach, Weedless-Montagen fürs Kraut – Boot ist Pflicht.",
    "nr": "Obere Havel",
@@ -102,6 +119,20 @@
      "url": "https://fischerei-wesenberg.de"
     }
    ],
+   "tackle": {
+    "rute": "H-Spinnrute 30–80 g",
+    "koeder": "Gummi 12–16 cm, Weedless-Rigs, Chatterbaits über dem Kraut",
+    "jig": "7–14 g (flach, krautig) – so leicht wie möglich",
+    "vorfach": "Titan/Stahl 40 cm (Hechtwasser)",
+    "zugang": "Boot nötig – die Krautfelder und Rinnen sind vom Ufer nicht erreichbar",
+    "farben": {
+     "fruehjahr": "Naturdekore mit Kontrastpunkt (Barsch, roter Kopf) – klares Nachwinterwasser",
+     "sommer": "Naturtöne (Rotauge, Barsch); über Kraut gern Weiß/Perlmutt",
+     "herbst": "Kontrastreich (Feuertiger, Orange) – Hechte fressen sich Winterspeck an",
+     "winter": "Dezente Naturtöne, kleine Köder, extrem langsam führen"
+    },
+    "warum": "Flacher Krautsee: hängerarme Montagen schlagen Gewicht. Entnahmefenster (Hecht 55–85, Zander 55–75 cm): große Fische MÜSSEN zurück – großer Gummikescher, Abhakmatte, Hakenlöser und Einzelhaken-Umbau gehören ins Gepäck."
+   },
    "note": "Reines Bootsrevier: Wald bis ans Wasser, laut Luftbild keine freien Uferzugänge. Wasser eher trüb, Wald teils überflutet – Mückenschutz einpacken. Schleusenpassage ab Mirow.",
    "hotspots": [
     {
@@ -116,6 +147,7 @@
   },
   {
    "name": "Vilzsee",
+   "wasser": "see-flach",
    "zugang": "boot",
    "rig": "Mittlere Spinnrute, Stahlvorfach, flachlaufende Köder – Polbrille fürs Sichtangeln im klaren Wasser.",
    "nr": "Obere Havel",
@@ -136,11 +168,26 @@
      "url": "https://fischerei-wesenberg.de"
     }
    ],
+   "tackle": {
+    "rute": "Spinnrute 20–60 g",
+    "koeder": "Flachlaufende Wobbler, Spinnerbaits, Gummi 10–14 cm",
+    "jig": "7–14 g",
+    "vorfach": "Stahl/Titan 40 cm",
+    "zugang": "Boot; Polbrille ist hier Pflichtausrüstung für die Krautkanten",
+    "farben": {
+     "fruehjahr": "Naturdekore mit Kontrastpunkt (Barsch, roter Kopf) – klares Nachwinterwasser",
+     "sommer": "Naturtöne (Rotauge, Barsch); über Kraut gern Weiß/Perlmutt",
+     "herbst": "Kontrastreich (Feuertiger, Orange) – Hechte fressen sich Winterspeck an",
+     "winter": "Dezente Naturtöne, kleine Köder, extrem langsam führen"
+    },
+    "warum": "Sichttiefe hoch – Köder flach führen, Kanten mit Polbrille lesen. Entnahmefenster (Hecht 55–85, Zander 55–75 cm): große Fische MÜSSEN zurück – großer Gummikescher, Abhakmatte, Hakenlöser und Einzelhaken-Umbau gehören ins Gepäck."
+   },
    "note": "Klares, flaches Wasser – Sichtangeln möglich, Raubvogel-Revier.",
    "warn": false
   },
   {
    "name": "Großer Labussee",
+   "wasser": "see-tief",
    "zugang": "boot",
    "rig": "Zander-Jigrute 15–50 g, FC 0,40+ oder dünner Stahl, DropShot-Setup für die Barschtrupps.",
    "nr": "Obere Havel",
@@ -162,11 +209,26 @@
      "url": "https://fischerei-wesenberg.de"
     }
    ],
+   "tackle": {
+    "rute": "Jigrute 15–50 g für Zander, dazu H-Rute 40–80 g für Hecht",
+    "koeder": "Zander: No-Action-Shad 10–14 cm; Hecht: Gummi 15–19 cm",
+    "jig": "10–21 g an den Kanten, vertikal 15–28 g",
+    "vorfach": "FC 0,40 mm für Zander, Titan/Stahl bei gezieltem Hechtangeln",
+    "zugang": "Boot – die Zanderkanten liegen abseits des Ufers",
+    "farben": {
+     "fruehjahr": "Naturdekore mit Kontrastpunkt (Barsch, roter Kopf) – klares Nachwinterwasser",
+     "sommer": "Naturtöne (Rotauge, Barsch); über Kraut gern Weiß/Perlmutt",
+     "herbst": "Kontrastreich (Feuertiger, Orange) – Hechte fressen sich Winterspeck an",
+     "winter": "Dezente Naturtöne, kleine Köder, extrem langsam führen"
+    },
+    "warum": "Zwei-Combo-Revier: Zanderkanten und Hechtflachwasser liegen dicht beieinander. Entnahmefenster (Hecht 55–85, Zander 55–75 cm): große Fische MÜSSEN zurück – großer Gummikescher, Abhakmatte, Hakenlöser und Einzelhaken-Umbau gehören ins Gepäck."
+   },
    "note": "Ruhiger als der Woblitzsee, Übergang zum Useriner See (Nationalpark!).",
    "warn": false
   },
   {
    "name": "Useriner See",
+   "wasser": "see-flach",
    "zugang": "boot",
    "rig": "Wie Woblitzsee: Stahlvorfach, Jigrute – dazu Driftsack/Anker (Schleppen verboten).",
    "nr": "Obere Havel / Müritz-NP",
@@ -187,11 +249,26 @@
      "url": "https://fischerei-wesenberg.de"
     }
    ],
+   "tackle": {
+    "rute": "H-Spinnrute 40–80 g",
+    "koeder": "Gummi 12–19 cm, große Blinker; Schleppen mit tieflaufenden Wobblern",
+    "jig": "14–21 g",
+    "vorfach": "Titan/Stahl 40 cm",
+    "zugang": "Boot; Driftsack oder Anker für kontrollierte Drift über den Kanten",
+    "farben": {
+     "fruehjahr": "Naturdekore mit Kontrastpunkt (Barsch, roter Kopf) – klares Nachwinterwasser",
+     "sommer": "Naturtöne (Rotauge, Barsch); über Kraut gern Weiß/Perlmutt",
+     "herbst": "Kontrastreich (Feuertiger, Orange) – Hechte fressen sich Winterspeck an",
+     "winter": "Dezente Naturtöne, kleine Köder, extrem langsam führen"
+    },
+    "warum": "Schleppen ist hier effektiv – Driftkontrolle entscheidet. Entnahmefenster (Hecht 55–85, Zander 55–75 cm): große Fische MÜSSEN zurück – großer Gummikescher, Abhakmatte, Hakenlöser und Einzelhaken-Umbau gehören ins Gepäck."
+   },
    "note": "Liegt im Müritz-Nationalpark: Schutzzonen und Befahrensregeln beachten, Uferbereiche teils gesperrt.",
    "warn": true
   },
   {
    "name": "Mirower See",
+   "wasser": "see-flach",
    "zugang": "ufer",
    "rig": "Vom Ufer: Spinnrute 10–40 g mit Stahlvorfach an den Stegen, nachts Grundrute mit Tauwurm auf Aal.",
    "nr": "Obere Havel",
@@ -213,6 +290,20 @@
      "url": "https://fischerei-wesenberg.de"
     }
    ],
+   "tackle": {
+    "rute": "Spinnrute 10–40 g (Ufer), nachts Grundrute für Aal",
+    "koeder": "Gummi 10–14 cm, kleine Swimbaits; Aal: Tauwurm",
+    "jig": "7–17 g",
+    "vorfach": "Stahl/Titan 40 cm am Tag, Aal-Vorfach nachts",
+    "zugang": "Vom Ufer an Stegen und Kanten gut machbar – einer der wenigen echten Ufer-Seen hier",
+    "farben": {
+     "fruehjahr": "Naturdekore mit Kontrastpunkt (Barsch, roter Kopf) – klares Nachwinterwasser",
+     "sommer": "Naturtöne (Rotauge, Barsch); über Kraut gern Weiß/Perlmutt",
+     "herbst": "Kontrastreich (Feuertiger, Orange) – Hechte fressen sich Winterspeck an",
+     "winter": "Dezente Naturtöne, kleine Köder, extrem langsam führen"
+    },
+    "warum": "Ufer-Revier mit Zander- und Aalpotenzial – Doppelnutzung Tag/Nacht. Entnahmefenster (Hecht 55–85, Zander 55–75 cm): große Fische MÜSSEN zurück – großer Gummikescher, Abhakmatte, Hakenlöser und Einzelhaken-Umbau gehören ins Gepäck."
+   },
    "note": "Schlossinsel und Bootsverkehr – Randbereiche und frühe Stunden wählen.",
    "hotspots": [
     {
@@ -227,6 +318,7 @@
   },
   {
    "name": "Drewensee",
+   "wasser": "see-flach",
    "zugang": "boot",
    "rig": "Allround-Raubfischcombo mit Stahlvorfach, Gummifische 10–14 cm für die Fahrrinnen-Kanten.",
    "nr": "Obere Havel",
@@ -247,11 +339,26 @@
      "url": "https://fischerei-wesenberg.de"
     }
    ],
+   "tackle": {
+    "rute": "Allround-Raubfischrute 20–60 g",
+    "koeder": "Gummifische 10–14 cm, Swimbaits; Barsch: 5–8 cm",
+    "jig": "10–21 g",
+    "vorfach": "Stahl/Titan 40 cm",
+    "zugang": "Boot – die fängigen Kanten liegen weit draußen",
+    "farben": {
+     "fruehjahr": "Naturdekore mit Kontrastpunkt (Barsch, roter Kopf) – klares Nachwinterwasser",
+     "sommer": "Naturtöne (Rotauge, Barsch); über Kraut gern Weiß/Perlmutt",
+     "herbst": "Kontrastreich (Feuertiger, Orange) – Hechte fressen sich Winterspeck an",
+     "winter": "Dezente Naturtöne, kleine Köder, extrem langsam führen"
+    },
+    "warum": "Klassisches Kanten-Angeln, Echolot hilft beim Finden der Abbrüche. Entnahmefenster (Hecht 55–85, Zander 55–75 cm): große Fische MÜSSEN zurück – großer Gummikescher, Abhakmatte, Hakenlöser und Einzelhaken-Umbau gehören ins Gepäck."
+   },
    "note": "Ruhiges Revier zwischen Wesenberg und Ahrensberg.",
    "warn": false
   },
   {
    "name": "Rätzsee (bei Mirow/Canow)",
+   "wasser": "see-tief",
    "zugang": "ufer",
    "verif": "B",
    "rig": "Vom Ufer an den erreichbaren Buchten: Spinnrute mit Stahlvorfach auf Hecht, DropShot auf Barsch; nur E-Motor auf dem Boot erlaubt.",
@@ -277,6 +384,20 @@
      "url": "https://fischerei-wesenberg.de"
     }
    ],
+   "tackle": {
+    "rute": "H-Spinnrute 40–80 g; für die Tiefe zusätzlich Vertikalrute",
+    "koeder": "Gummi 12–19 cm; vertikal 10–14 cm No-Action-Shad",
+    "jig": "14–28 g an den Kanten, vertikal 20–35 g (bis 20 m!)",
+    "vorfach": "Titan/Stahl 40 cm",
+    "zugang": "Vom Ufer nur die Buchten erreichbar – die tiefen Bereiche brauchen ein Boot",
+    "farben": {
+     "fruehjahr": "Naturdekore mit Kontrastpunkt (Barsch, roter Kopf) – klares Nachwinterwasser",
+     "sommer": "Naturtöne (Rotauge, Barsch); über Kraut gern Weiß/Perlmutt",
+     "herbst": "Kontrastreich (Feuertiger, Orange) – Hechte fressen sich Winterspeck an",
+     "winter": "Dezente Naturtöne, kleine Köder, extrem langsam führen"
+    },
+    "warum": "Tiefer See (bis ~20 m): im Sommer und Winter stehen die Fische tief, im Frühjahr in den Buchten. Entnahmefenster (Hecht 55–85, Zander 55–75 cm): große Fische MÜSSEN zurück – großer Gummikescher, Abhakmatte, Hakenlöser und Einzelhaken-Umbau gehören ins Gepäck."
+   },
    "note": "Einer der wenigen Seen mit mehreren Uferzugängen: rund um den See führen Wege, das Ufer ist an einigen Stellen gut erreichbar (Nord: Zirtow, Süd: Fleether Mühle). Nur E-Motor erlaubt. Nachtangeln erlaubt. Riesiger Waldkomplex – Mückenschutz.",
    "hotspots": [
     {
@@ -291,6 +412,7 @@
   },
   {
    "name": "Klenzsee (bei Canow)",
+   "wasser": "see-tief",
    "zugang": "boot",
    "verif": "B",
    "rig": "Kräftige Spinn-/Baitcastrute für schwere Hechtköder + Stahlvorfach; Welsrute mit großem Köfi/Tauwurmbündel fürs Welsloch. Nur vom Boot sinnvoll.",
@@ -316,6 +438,20 @@
      "url": "https://fischerei-wesenberg.de"
     }
    ],
+   "tackle": {
+    "rute": "Kräftige Spinn-/Baitcastrute 50–120 g (Wels!), dazu Jigrute 15–50 g für Zander",
+    "koeder": "Große Gummis 15–25 cm, Swimbaits; Wels: Tauwurmbündel/Köderfisch am Grund",
+    "jig": "17–28 g, am Welsloch schwerer",
+    "vorfach": "Titan/Stahl 40 cm; für Wels 0,50 mm FC oder Kevlar",
+    "zugang": "Boot – Zanderberg und Welsloch liegen in der Seemitte",
+    "farben": {
+     "fruehjahr": "Naturdekore mit Kontrastpunkt (Barsch, roter Kopf) – klares Nachwinterwasser",
+     "sommer": "Naturtöne (Rotauge, Barsch); über Kraut gern Weiß/Perlmutt",
+     "herbst": "Kontrastreich (Feuertiger, Orange) – Hechte fressen sich Winterspeck an",
+     "winter": "Dezente Naturtöne, kleine Köder, extrem langsam führen"
+    },
+    "warum": "Wels im Bestand: Gerät eine Klasse stärker wählen, Schnurfassung beachten. Entnahmefenster (Hecht 55–85, Zander 55–75 cm): große Fische MÜSSEN zurück – großer Gummikescher, Abhakmatte, Hakenlöser und Einzelhaken-Umbau gehören ins Gepäck."
+   },
    "note": "Reines Bootsrevier (dichter Schilf-/Seerosengürtel, kaum Uferzugang). Nur E-Motor-/Ruderboot, Schlepp- und Driftangeln verboten. Nachtangeln erlaubt, 2 Ruten, max. 3 Edelfische/Tag.",
    "hotspots": [
     {
@@ -337,6 +473,7 @@
   },
   {
    "name": "Großer Priepertsee",
+   "wasser": "see-tief",
    "zugang": "boot",
    "verif": "B",
    "rig": "Zander-Jigrute 15–50 g für die tiefen Kanten (26 m!), Pilker gehen hier laut Ortsanglern gut; Stahlvorfach auf Hecht. Boot nötig.",
@@ -362,6 +499,20 @@
      "url": "https://fischerei-wesenberg.de"
     }
    ],
+   "tackle": {
+    "rute": "Jigrute 15–50 g + Vertikalrute für die tiefen Kanten; bei gezieltem Wels 50–120 g",
+    "koeder": "No-Action-Shad 10–14 cm; Pilker funktionieren an der Tiefenkante",
+    "jig": "17–28 g an den Kanten, vertikal 20–40 g (tiefster See der Strecke)",
+    "vorfach": "FC 0,40–0,45 mm; Titan/Stahl bei Hechtbeifang",
+    "zugang": "Boot mit Echolot – die Tiefenkante und der Havel-Einlauf sind das Ziel",
+    "farben": {
+     "fruehjahr": "Naturdekore mit Kontrastpunkt (Barsch, roter Kopf) – klares Nachwinterwasser",
+     "sommer": "Naturtöne (Rotauge, Barsch); über Kraut gern Weiß/Perlmutt",
+     "herbst": "Kontrastreich (Feuertiger, Orange) – Hechte fressen sich Winterspeck an",
+     "winter": "Dezente Naturtöne, kleine Köder, extrem langsam führen"
+    },
+    "warum": "Tiefster See der Kleinseenplatte: Vertikalangeln an der Kante ist die Methode. Entnahmefenster (Hecht 55–85, Zander 55–75 cm): große Fische MÜSSEN zurück – großer Gummikescher, Abhakmatte, Hakenlöser und Einzelhaken-Umbau gehören ins Gepäck."
+   },
    "note": "Reges Wasserwander-/Hausbootrevier (Obere-Havel-Wasserstraße) – Dämmerung nutzen. ⚠ Wasserskistrecke auf dem See: markierten Bereich meiden. Kaum Uferstellen, Boot empfohlen. Schleppen verboten, Nachtangeln erlaubt.",
    "hotspots": [
     {

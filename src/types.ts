@@ -61,6 +61,12 @@ export interface Spot {
   schonzeitInfo?: string;
   /** Beschreibung der Strecke (Flussabschnitte). */
   strecke?: string;
+  /** Gewässercharakter. Fehlt er, wird er aus cat/line/note abgeleitet. */
+  wasser?: Wasser;
+  /** Kuratierte Tackle-Empfehlung. Fehlt sie, wird sie abgeleitet. */
+  tackle?: Tackle;
+  /** Maximaltiefe in Metern, falls belegt (steuert Jigkopf & Rutenwahl). */
+  tiefe?: number;
   /** Laufzeit: Entfernung zum Nutzerstandort in km (von renderList gesetzt). */
   _d?: number;
   /** Laufzeit: Leaflet-Marker bzw. Polyline dieses Spots. */
@@ -117,6 +123,38 @@ export interface Region {
   banner?: Banner[];
   regeln?: Regelblock[];
   hinweis?: string;
+}
+
+
+/** Gewässercharakter – bestimmt Jigkopfgewicht, Rutenhärte und Köderführung. */
+export type Wasser = 'fluss' | 'kanal' | 'see-flach' | 'see-tief';
+
+/** Saisonale Köderfarben. */
+export interface Farben {
+  fruehjahr: string;
+  sommer: string;
+  herbst: string;
+  winter: string;
+}
+
+/** Konkrete Tackle-Empfehlung für ein Gewässer.
+    Erfahrungswerte, keine Rechtsangaben – Ködergrößen/-farben sind Richtwerte,
+    die Vorfach- und Zugangsangaben folgen aus Zielfisch und Gewässertyp. */
+export interface Tackle {
+  /** z.B. "Spinnrute 40–80 g, 2,40–2,70 m" */
+  rute: string;
+  /** z.B. "Gummi 12–19 cm, Swimbaits bis 25 cm" */
+  koeder: string;
+  /** Jigkopf-Spanne, z.B. "10–21 g" – bei Fließgewässern pegelabhängig. */
+  jig: string;
+  /** z.B. "Titan/Stahl 40 cm (Hechtgefahr)" */
+  vorfach: string;
+  /** Boot- oder Uferempfehlung, konkret begründet. */
+  zugang: string;
+  /** Saisonale Köderfarben. */
+  farben: Farben;
+  /** Kurzbegründung, warum genau dieses Setup. */
+  warum?: string;
 }
 
 /** Kategorie-Metadaten (Label + Farbe). */

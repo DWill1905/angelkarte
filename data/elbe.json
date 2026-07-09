@@ -1,5 +1,6 @@
 {
  "id": "elbe",
+ "geprueft": "2026-07",
  "name": "Elbe / Magdeburg (Sachsen-Anhalt)",
  "nachtangeln": "frei",
  "kurz": "Elbe (Magdeburg)",
@@ -27,6 +28,7 @@
  "spots": [
   {
    "name": "Buhnenfeld Herrenkrug",
+   "wasser": "fluss",
    "verif": "B",
    "nr": "Magdeburger Anglerverein · Elbe rechtes Ufer",
    "cat": "raub",
@@ -70,6 +72,7 @@
   },
   {
    "name": "Elbe Magdeburg-Prester",
+   "wasser": "fluss",
    "verif": "B",
    "nr": "Magdeburger Anglerverein · oberhalb Abzweig Alte Elbe",
    "cat": "raub",
@@ -111,6 +114,7 @@
   },
   {
    "name": "Rothenseer Abstiegskanal",
+   "wasser": "kanal",
    "verif": "B",
    "nr": "Magdeburger Anglerverein · Kanal",
    "cat": "raub",
@@ -142,6 +146,7 @@
   },
   {
    "name": "Industriehafen Magdeburg",
+   "wasser": "kanal",
    "verif": "B",
    "nr": "Magdeburger Anglerverein · Hafenbecken",
    "cat": "raub",
@@ -173,6 +178,7 @@
   },
   {
    "name": "Zollelbe Magdeburg",
+   "wasser": "kanal",
    "verif": "B",
    "nr": "Magdeburger Anglerverein · Nebenarm",
    "cat": "raub",
@@ -204,6 +210,7 @@
   },
   {
    "name": "Buhnenfelder Rothensee–Rogätz",
+   "wasser": "fluss",
    "verif": "B",
    "nr": "Elbe · zusammenhängende Buhnenfelder nördl. Magdeburg",
    "cat": "raub",

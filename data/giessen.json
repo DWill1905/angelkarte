@@ -1,5 +1,6 @@
 {
  "id": "giessen",
+ "geprueft": "2026-07",
  "name": "Gießen / Lahntal (Hessen)",
  "nachtangeln": "frei",
  "kurz": "Gießen & Lahn",
@@ -26,6 +27,7 @@
  "spots": [
   {
    "name": "Lahn – Stadtstrecke Gießen",
+   "wasser": "fluss",
    "verif": "B",
    "nr": "IG Lahn · Launsbach–Stadtwerkewehr",
    "cat": "raub",
@@ -72,6 +74,7 @@
   },
   {
    "name": "VSA Angelsee Heuchelheim",
+   "wasser": "see-tief",
    "verif": "B",
    "nr": "VSA Gießen · Lahnpark",
    "cat": "raub",
@@ -112,6 +115,7 @@
   },
   {
    "name": "Dutenhofener See",
+   "wasser": "see-tief",
    "verif": "B",
    "rig": "Boot mit E-Motor/Ruder empfohlen (verkrautetes Ufer). Hechtcombo mit Stahlvorfach, Welszeug für die Nacht, Zandergummi an den Kanten.",
    "nr": "Kiessee · zw. Gießen & Wetzlar",
@@ -158,6 +162,7 @@
   },
   {
    "name": "Lahn bei Wetzlar (Gaststrecke ASV)",
+   "wasser": "fluss",
    "verif": "B",
    "nr": "ASV Wetzlar · Naunheim–Dillmündung",
    "cat": "raub",
@@ -204,6 +209,7 @@
   },
   {
    "name": "Wißmarer See",
+   "wasser": "see-flach",
    "verif": "B",
    "nr": "AC Wißmar · Lahnschleife bei Wettenberg",
    "cat": "raub",
@@ -241,6 +247,7 @@
   },
   {
    "name": "Silbersee Launsbach",
+   "wasser": "see-flach",
    "verif": "C",
    "nr": "AV Silbersee · Lahnaue bei Launsbach",
    "cat": "raub",

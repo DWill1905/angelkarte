@@ -201,13 +201,14 @@ export const SCHON_SN = [
 ];
 /* ============ Region: Mecklenburgische Kleinseenplatte (recherchiert 07/2026) ============ */
 export const SPOTS_MV = [
-    { name: 'Woblitzsee', zugang: 'ufer',
+    { name: 'Woblitzsee', wasser: 'see-flach', zugang: 'ufer',
         rig: 'Stahl- oder Titanvorfach Pflichtprogramm (Hechtdichte!), H-Rute 40–80 g fürs Zanderjiggen, Echolot fürs Boot.', nr: 'Obere Havel', cat: 'raub', arten: ['Hecht', 'Zander', 'Barsch', 'Aal', 'Karpfen', 'Schleie', 'Brachse'],
         lat: 53.3001, lng: 13.0102,
         fisch: 'Hecht, Zander, Barsch, Aal, Karpfen, Schleie, Brachse (14 gemeldete Arten)',
         methode: 'Vom verankerten Boot: Gummifisch an den Havel-Rinnen auf Zander, große Köder an Schilfkanten auf Hecht. Schleppen verboten!',
         karte: 'Angelkarte Seenfischerei Obere Havel – online (fischerei-wesenberg.de) oder Fischereihof Wesenberg',
         kartenLinks: [{ label: 'Fischereihof Wesenberg', url: 'https://fischerei-wesenberg.de' }],
+        tackle: { rute: 'H-Spinnrute 40–80 g, 2,40–2,70 m', koeder: 'Gummi 12–19 cm, Swimbaits; im Kraut Weedless-Montagen', jig: '10–17 g über Kraut, 17–28 g an den Kanten', vorfach: 'Titan oder 7×7-Stahl 40 cm – bei dieser Hechtdichte Pflicht', zugang: 'Vom Ufer machbar (Stege, Schilfkanten); ein Belly-Boat erweitert den Radius deutlich', farben: { fruehjahr: 'Naturdekore mit Kontrastpunkt (Barsch, roter Kopf) – klares Nachwinterwasser', sommer: 'Naturtöne (Rotauge, Barsch); über Kraut gern Weiß/Perlmutt', herbst: 'Kontrastreich (Feuertiger, Orange) – Hechte fressen sich Winterspeck an', winter: 'Dezente Naturtöne, kleine Köder, extrem langsam führen' }, warum: 'Hohe Hechtdichte + Krautfelder. Entnahmefenster (Hecht 55–85, Zander 55–75 cm): große Fische MÜSSEN zurück – großer Gummikescher, Abhakmatte, Hakenlöser und Einzelhaken-Umbau gehören ins Gepäck.' },
         note: 'Ø nur 1,6 m tief, Max. 7 m! Havel durchfließt den See, im Sommer viel Hausboot-Verkehr. Uferangeln laut Luftbild fast nur an Buhne (Campingpark) und Stadtufer Wesenberg möglich – sonst durchgehender Schilfgürtel, Scharkante weit dahinter: Boot + Echolot.',
         hotspots: [
             { name: 'Havel-Einlauf & 7-m-Kuhle', saison: 'Jun–Sep + Winter (tiefste Stelle)', lat: 53.3070, lng: 13.0040, tipp: 'DIE Stelle: tiefste Kuhle des Sees (7 m) direkt vor der Havel-Einmündung am Campingpark Havelberge. Zander tagsüber an der 5–7-m-Kante. UFER-TIPP: Die gepflasterte Buhne ist einer von nur zwei schilffreien Uferzugängen am See – abends Aal, Barsch.' },
@@ -215,90 +216,99 @@ export const SPOTS_MV = [
             { name: 'Kammerkanal-Mündung', saison: 'Jun–Aug, nachts', lat: 53.3090, lng: 13.0280, tipp: 'Kanal Richtung Zierker See – bekannt für seinen Welsbestand. Abends raubende Barsche entlang der Stege. Lage ungefähr.' },
             { name: 'Ufer: Stadtufer/Havel-Auslauf Wesenberg', saison: 'Mai–Okt, abends', lat: 53.2890, lng: 13.0010, tipp: 'Zweiter schilffreier Uferzugang (Luftbild): Stadtufer und Hafenumfeld Wesenberg. Aal-Strecke am Abend, Barsch an den Stegen. Achtung: 100 m Mindestabstand zur Schleuse!' }
         ], warn: false },
-    { name: 'Zotzensee', zugang: 'boot',
+    { name: 'Zotzensee', wasser: 'see-flach', zugang: 'boot',
         rig: 'Hechtcombo 30–80 g, Stahlvorfach, Weedless-Montagen fürs Kraut – Boot ist Pflicht.', nr: 'Obere Havel', cat: 'raub', arten: ['Hecht', 'Barsch', 'Aal', 'Schleie'],
         lat: 53.2437, lng: 12.8125,
         fisch: 'Hecht, Barsch, Aal, Schleie',
         methode: 'Flacher, krautiger Hechtsee: Spinnerbait/Jerkbait über Kraut, Westbuchten mit Ankerplätzen',
         karte: 'Angelkarte Obere Havel (Meisterbereich Mirow, Tel. 039833 20423)',
         kartenLinks: [{ label: 'Fischereihof Wesenberg', url: 'https://fischerei-wesenberg.de' }],
+        tackle: { rute: 'H-Spinnrute 30–80 g', koeder: 'Gummi 12–16 cm, Weedless-Rigs, Chatterbaits über dem Kraut', jig: '7–14 g (flach, krautig) – so leicht wie möglich', vorfach: 'Titan/Stahl 40 cm (Hechtwasser)', zugang: 'Boot nötig – die Krautfelder und Rinnen sind vom Ufer nicht erreichbar', farben: { fruehjahr: 'Naturdekore mit Kontrastpunkt (Barsch, roter Kopf) – klares Nachwinterwasser', sommer: 'Naturtöne (Rotauge, Barsch); über Kraut gern Weiß/Perlmutt', herbst: 'Kontrastreich (Feuertiger, Orange) – Hechte fressen sich Winterspeck an', winter: 'Dezente Naturtöne, kleine Köder, extrem langsam führen' }, warum: 'Flacher Krautsee: hängerarme Montagen schlagen Gewicht. Entnahmefenster (Hecht 55–85, Zander 55–75 cm): große Fische MÜSSEN zurück – großer Gummikescher, Abhakmatte, Hakenlöser und Einzelhaken-Umbau gehören ins Gepäck.' },
         note: 'Reines Bootsrevier: Wald bis ans Wasser, laut Luftbild keine freien Uferzugänge. Wasser eher trüb, Wald teils überflutet – Mückenschutz einpacken. Schleusenpassage ab Mirow.',
         hotspots: [
             { name: 'Westbuchten', saison: 'Mai–Okt', lat: 53.2450, lng: 12.8050, tipp: 'Ruhige Ankerbuchten am Westufer – Hecht über und an den Krautfeldern, Spinnerbait/Chatterbait flach geführt. Lage ungefähr.' }
         ], warn: false },
-    { name: 'Vilzsee', zugang: 'boot',
+    { name: 'Vilzsee', wasser: 'see-flach', zugang: 'boot',
         rig: 'Mittlere Spinnrute, Stahlvorfach, flachlaufende Köder – Polbrille fürs Sichtangeln im klaren Wasser.', nr: 'Obere Havel', cat: 'raub', arten: ['Hecht', 'Barsch', 'Schleie'],
         lat: 53.2099, lng: 12.8336,
         fisch: 'Hecht, Barsch, Schleie',
         methode: 'Flach, Seerosenfelder: flachlaufende Wobbler und Spinnerbaits an den Kanten VOR den Feldern (Felder selbst tabu)',
         karte: 'Angelkarte Obere Havel (Meisterbereich Mirow)',
         kartenLinks: [{ label: 'Fischereihof Wesenberg', url: 'https://fischerei-wesenberg.de' }],
+        tackle: { rute: 'Spinnrute 20–60 g', koeder: 'Flachlaufende Wobbler, Spinnerbaits, Gummi 10–14 cm', jig: '7–14 g', vorfach: 'Stahl/Titan 40 cm', zugang: 'Boot; Polbrille ist hier Pflichtausrüstung für die Krautkanten', farben: { fruehjahr: 'Naturdekore mit Kontrastpunkt (Barsch, roter Kopf) – klares Nachwinterwasser', sommer: 'Naturtöne (Rotauge, Barsch); über Kraut gern Weiß/Perlmutt', herbst: 'Kontrastreich (Feuertiger, Orange) – Hechte fressen sich Winterspeck an', winter: 'Dezente Naturtöne, kleine Köder, extrem langsam führen' }, warum: 'Sichttiefe hoch – Köder flach führen, Kanten mit Polbrille lesen. Entnahmefenster (Hecht 55–85, Zander 55–75 cm): große Fische MÜSSEN zurück – großer Gummikescher, Abhakmatte, Hakenlöser und Einzelhaken-Umbau gehören ins Gepäck.' },
         note: 'Klares, flaches Wasser – Sichtangeln möglich, Raubvogel-Revier.', warn: false },
-    { name: 'Großer Labussee', zugang: 'boot',
+    { name: 'Großer Labussee', wasser: 'see-tief', zugang: 'boot',
         rig: 'Zander-Jigrute 15–50 g, FC 0,40+ oder dünner Stahl, DropShot-Setup für die Barschtrupps.', nr: 'Obere Havel', cat: 'raub', arten: ['Hecht', 'Zander', 'Barsch', 'Aal'],
         lat: 53.3067, lng: 12.9504,
         fisch: 'Hecht, Zander, Barsch, Aal',
         methode: 'Tieferes Havelbecken: Zander an Kanten und Löchern jiggen, Barschtrupps mit DropShot suchen',
         karte: 'Angelkarte Obere Havel (Meisterbereich Wesenberg)',
         kartenLinks: [{ label: 'Fischereihof Wesenberg', url: 'https://fischerei-wesenberg.de' }],
+        tackle: { rute: 'Jigrute 15–50 g für Zander, dazu H-Rute 40–80 g für Hecht', koeder: 'Zander: No-Action-Shad 10–14 cm; Hecht: Gummi 15–19 cm', jig: '10–21 g an den Kanten, vertikal 15–28 g', vorfach: 'FC 0,40 mm für Zander, Titan/Stahl bei gezieltem Hechtangeln', zugang: 'Boot – die Zanderkanten liegen abseits des Ufers', farben: { fruehjahr: 'Naturdekore mit Kontrastpunkt (Barsch, roter Kopf) – klares Nachwinterwasser', sommer: 'Naturtöne (Rotauge, Barsch); über Kraut gern Weiß/Perlmutt', herbst: 'Kontrastreich (Feuertiger, Orange) – Hechte fressen sich Winterspeck an', winter: 'Dezente Naturtöne, kleine Köder, extrem langsam führen' }, warum: 'Zwei-Combo-Revier: Zanderkanten und Hechtflachwasser liegen dicht beieinander. Entnahmefenster (Hecht 55–85, Zander 55–75 cm): große Fische MÜSSEN zurück – großer Gummikescher, Abhakmatte, Hakenlöser und Einzelhaken-Umbau gehören ins Gepäck.' },
         note: 'Ruhiger als der Woblitzsee, Übergang zum Useriner See (Nationalpark!).', warn: false },
-    { name: 'Useriner See', zugang: 'boot',
+    { name: 'Useriner See', wasser: 'see-flach', zugang: 'boot',
         rig: 'Wie Woblitzsee: Stahlvorfach, Jigrute – dazu Driftsack/Anker (Schleppen verboten).', nr: 'Obere Havel / Müritz-NP', cat: 'raub', arten: ['Hecht', 'Zander', 'Barsch'],
         lat: 53.3431, lng: 12.9680,
         fisch: 'Hecht, Zander, Barsch',
         methode: 'Vom verankerten Boot an den Fahrwasser-Kanten; bei Wind schnell kabbelig (5,2 km lang)',
         karte: 'Angelkarte Obere Havel – Nationalpark-Regeln beachten',
         kartenLinks: [{ label: 'Fischereihof Wesenberg', url: 'https://fischerei-wesenberg.de' }],
+        tackle: { rute: 'H-Spinnrute 40–80 g', koeder: 'Gummi 12–19 cm, große Blinker; Schleppen mit tieflaufenden Wobblern', jig: '14–21 g', vorfach: 'Titan/Stahl 40 cm', zugang: 'Boot; Driftsack oder Anker für kontrollierte Drift über den Kanten', farben: { fruehjahr: 'Naturdekore mit Kontrastpunkt (Barsch, roter Kopf) – klares Nachwinterwasser', sommer: 'Naturtöne (Rotauge, Barsch); über Kraut gern Weiß/Perlmutt', herbst: 'Kontrastreich (Feuertiger, Orange) – Hechte fressen sich Winterspeck an', winter: 'Dezente Naturtöne, kleine Köder, extrem langsam führen' }, warum: 'Schleppen ist hier effektiv – Driftkontrolle entscheidet. Entnahmefenster (Hecht 55–85, Zander 55–75 cm): große Fische MÜSSEN zurück – großer Gummikescher, Abhakmatte, Hakenlöser und Einzelhaken-Umbau gehören ins Gepäck.' },
         note: 'Liegt im Müritz-Nationalpark: Schutzzonen und Befahrensregeln beachten, Uferbereiche teils gesperrt.', warn: true },
-    { name: 'Mirower See', zugang: 'ufer',
+    { name: 'Mirower See', wasser: 'see-flach', zugang: 'ufer',
         rig: 'Vom Ufer: Spinnrute 10–40 g mit Stahlvorfach an den Stegen, nachts Grundrute mit Tauwurm auf Aal.', nr: 'Obere Havel', cat: 'raub', arten: ['Hecht', 'Zander', 'Barsch', 'Aal'],
         lat: 53.2826, lng: 12.8074,
         fisch: 'Hecht, Zander, Barsch, Aal',
         methode: 'Stadtnaher Allrounder: abends auf Zander an der Fahrrinne, Aal vom Ufer (Nachtangeln erlaubt)',
         karte: 'Angelkarte Obere Havel (Meisterbereich Mirow, Mühlenstr. 21)',
         kartenLinks: [{ label: 'Fischereihof Wesenberg', url: 'https://fischerei-wesenberg.de' }],
+        tackle: { rute: 'Spinnrute 10–40 g (Ufer), nachts Grundrute für Aal', koeder: 'Gummi 10–14 cm, kleine Swimbaits; Aal: Tauwurm', jig: '7–17 g', vorfach: 'Stahl/Titan 40 cm am Tag, Aal-Vorfach nachts', zugang: 'Vom Ufer an Stegen und Kanten gut machbar – einer der wenigen echten Ufer-Seen hier', farben: { fruehjahr: 'Naturdekore mit Kontrastpunkt (Barsch, roter Kopf) – klares Nachwinterwasser', sommer: 'Naturtöne (Rotauge, Barsch); über Kraut gern Weiß/Perlmutt', herbst: 'Kontrastreich (Feuertiger, Orange) – Hechte fressen sich Winterspeck an', winter: 'Dezente Naturtöne, kleine Köder, extrem langsam führen' }, warum: 'Ufer-Revier mit Zander- und Aalpotenzial – Doppelnutzung Tag/Nacht. Entnahmefenster (Hecht 55–85, Zander 55–75 cm): große Fische MÜSSEN zurück – großer Gummikescher, Abhakmatte, Hakenlöser und Einzelhaken-Umbau gehören ins Gepäck.' },
         note: 'Schlossinsel und Bootsverkehr – Randbereiche und frühe Stunden wählen.',
         hotspots: [
             { name: 'Ufer: Stadtufer & Schlossinsel', saison: 'Mai–Okt abends, Aal Jun–Aug', lat: 53.2720, lng: 12.8150, tipp: 'Bester Ufer-Spot der Kleinseenplatte (Luftbild): befestigtes Stadtufer mit vielen Stegen und der Schlossinsel-Brücke. Abends Barsch an den Stegen, nachts Aal – kurze Wege, kein Boot nötig.' }
         ], warn: false },
-    { name: 'Drewensee', zugang: 'boot',
+    { name: 'Drewensee', wasser: 'see-flach', zugang: 'boot',
         rig: 'Allround-Raubfischcombo mit Stahlvorfach, Gummifische 10–14 cm für die Fahrrinnen-Kanten.', nr: 'Obere Havel', cat: 'raub', arten: ['Hecht', 'Zander', 'Barsch'],
         lat: 53.2600, lng: 13.0330,
         fisch: 'Hecht, Zander, Barsch',
         methode: 'Klassisches Ansitz- und Spinnrevier am Havelkanal Ahrensberg',
         karte: 'Angelkarte Obere Havel (Meisterbereich Ahrensberg, Tel. 039832 20230)',
         kartenLinks: [{ label: 'Fischereihof Wesenberg', url: 'https://fischerei-wesenberg.de' }],
+        tackle: { rute: 'Allround-Raubfischrute 20–60 g', koeder: 'Gummifische 10–14 cm, Swimbaits; Barsch: 5–8 cm', jig: '10–21 g', vorfach: 'Stahl/Titan 40 cm', zugang: 'Boot – die fängigen Kanten liegen weit draußen', farben: { fruehjahr: 'Naturdekore mit Kontrastpunkt (Barsch, roter Kopf) – klares Nachwinterwasser', sommer: 'Naturtöne (Rotauge, Barsch); über Kraut gern Weiß/Perlmutt', herbst: 'Kontrastreich (Feuertiger, Orange) – Hechte fressen sich Winterspeck an', winter: 'Dezente Naturtöne, kleine Köder, extrem langsam führen' }, warum: 'Klassisches Kanten-Angeln, Echolot hilft beim Finden der Abbrüche. Entnahmefenster (Hecht 55–85, Zander 55–75 cm): große Fische MÜSSEN zurück – großer Gummikescher, Abhakmatte, Hakenlöser und Einzelhaken-Umbau gehören ins Gepäck.' },
         note: 'Ruhiges Revier zwischen Wesenberg und Ahrensberg.', warn: false },
-    { name: 'Rätzsee (bei Mirow/Canow)', zugang: 'ufer', verif: 'B',
+    { name: 'Rätzsee (bei Mirow/Canow)', wasser: 'see-tief', zugang: 'ufer', verif: 'B',
         rig: 'Vom Ufer an den erreichbaren Buchten: Spinnrute mit Stahlvorfach auf Hecht, DropShot auf Barsch; nur E-Motor auf dem Boot erlaubt.', nr: 'Obere Havel · Meisterbereich Canow/Mirow', cat: 'raub', arten: ['Hecht', 'Zander', 'Barsch', 'Aal', 'Schleie', 'Karpfen', 'Wels'],
         lat: 53.2870, lng: 12.8590,
         fisch: 'Hecht, Zander, Barsch, Aal, Schleie, Karpfen, Wels, Weißfisch (Artenangaben teils user-generated)',
         methode: '290-ha-Waldsee bis 20 m tief, sehr facettenreich mit Buchten/Kanälen/Halbinseln: Hecht an den Schilfkanten der Buchten, Zander an den tiefen Löchern und Steilkanten',
         karte: 'Angelkarte Obere Havel (Meisterbereich Canow Tel. 039828 20476 oder Mirow 039833 20423) – gilt für alle Seen des Verbunds',
         kartenLinks: [{ label: 'Fischereihof Wesenberg', url: 'https://fischerei-wesenberg.de' }],
+        tackle: { rute: 'H-Spinnrute 40–80 g; für die Tiefe zusätzlich Vertikalrute', koeder: 'Gummi 12–19 cm; vertikal 10–14 cm No-Action-Shad', jig: '14–28 g an den Kanten, vertikal 20–35 g (bis 20 m!)', vorfach: 'Titan/Stahl 40 cm', zugang: 'Vom Ufer nur die Buchten erreichbar – die tiefen Bereiche brauchen ein Boot', farben: { fruehjahr: 'Naturdekore mit Kontrastpunkt (Barsch, roter Kopf) – klares Nachwinterwasser', sommer: 'Naturtöne (Rotauge, Barsch); über Kraut gern Weiß/Perlmutt', herbst: 'Kontrastreich (Feuertiger, Orange) – Hechte fressen sich Winterspeck an', winter: 'Dezente Naturtöne, kleine Köder, extrem langsam führen' }, warum: 'Tiefer See (bis ~20 m): im Sommer und Winter stehen die Fische tief, im Frühjahr in den Buchten. Entnahmefenster (Hecht 55–85, Zander 55–75 cm): große Fische MÜSSEN zurück – großer Gummikescher, Abhakmatte, Hakenlöser und Einzelhaken-Umbau gehören ins Gepäck.' },
         note: 'Einer der wenigen Seen mit mehreren Uferzugängen: rund um den See führen Wege, das Ufer ist an einigen Stellen gut erreichbar (Nord: Zirtow, Süd: Fleether Mühle). Nur E-Motor erlaubt. Nachtangeln erlaubt. Riesiger Waldkomplex – Mückenschutz.',
         hotspots: [
             { name: 'Übergang zum Zirtowsee (Nordufer)', saison: 'Mai–Okt', lat: 53.3010, lng: 12.8630, tipp: 'Enge Verbindung zum Zirtowsee am Nordufer – Engstellen und Kanäle sind klassische Hecht- und Barschzüge. Vom Ufer bei Zirtow erreichbar. Lage ungefähr.' }
         ], warn: false },
-    { name: 'Klenzsee (bei Canow)', zugang: 'boot', verif: 'B',
+    { name: 'Klenzsee (bei Canow)', wasser: 'see-tief', zugang: 'boot', verif: 'B',
         rig: 'Kräftige Spinn-/Baitcastrute für schwere Hechtköder + Stahlvorfach; Welsrute mit großem Köfi/Tauwurmbündel fürs Welsloch. Nur vom Boot sinnvoll.', nr: 'Obere Havel · Meisterbereich Canow', cat: 'raub', arten: ['Hecht', 'Zander', 'Barsch', 'Wels', 'Aal', 'Karpfen', 'Schleie'],
         lat: 53.2760, lng: 12.8990,
         fisch: 'Hecht, Zander, Barsch, Wels, Aal, Karpfen, Schleie, Weißfisch',
         methode: '73-ha-See bis 20 m tief, mit Gobenowsee per Kanal verbunden: Hecht an Seerosen/Schilfspitzen (Mai top), Zander an den Steilkanten und tiefen Löchern, Wels im „Welsloch". Kaum Uferstellen – Boot nötig, Schleppen verboten.',
         karte: 'Angelkarte Obere Havel (Fischereihof Canow Tel. 039828 20476) – Tageskarte ~12€, gilt für alle Verbund-Seen',
         kartenLinks: [{ label: 'Fischereihof Wesenberg', url: 'https://fischerei-wesenberg.de' }],
+        tackle: { rute: 'Kräftige Spinn-/Baitcastrute 50–120 g (Wels!), dazu Jigrute 15–50 g für Zander', koeder: 'Große Gummis 15–25 cm, Swimbaits; Wels: Tauwurmbündel/Köderfisch am Grund', jig: '17–28 g, am Welsloch schwerer', vorfach: 'Titan/Stahl 40 cm; für Wels 0,50 mm FC oder Kevlar', zugang: 'Boot – Zanderberg und Welsloch liegen in der Seemitte', farben: { fruehjahr: 'Naturdekore mit Kontrastpunkt (Barsch, roter Kopf) – klares Nachwinterwasser', sommer: 'Naturtöne (Rotauge, Barsch); über Kraut gern Weiß/Perlmutt', herbst: 'Kontrastreich (Feuertiger, Orange) – Hechte fressen sich Winterspeck an', winter: 'Dezente Naturtöne, kleine Köder, extrem langsam führen' }, warum: 'Wels im Bestand: Gerät eine Klasse stärker wählen, Schnurfassung beachten. Entnahmefenster (Hecht 55–85, Zander 55–75 cm): große Fische MÜSSEN zurück – großer Gummikescher, Abhakmatte, Hakenlöser und Einzelhaken-Umbau gehören ins Gepäck.' },
         note: 'Reines Bootsrevier (dichter Schilf-/Seerosengürtel, kaum Uferzugang). Nur E-Motor-/Ruderboot, Schlepp- und Driftangeln verboten. Nachtangeln erlaubt, 2 Ruten, max. 3 Edelfische/Tag.',
         hotspots: [
             { name: 'Zanderberg am Ostufer', saison: 'Mai–Okt, Dämmerung/Nacht', lat: 53.2730, lng: 12.9030, tipp: 'Gegenüber dem Kanal aus dem Gobenowsee, bei der Pappel-Gruppe am Ufer: ein sandiger Unterwasserberg nur Rutenlängen vom Schilf. Zander treiben abends/nachts ihre Beute den Hang hinauf. Lage ungefähr.' },
             { name: 'Welsloch (hinter der ersten Kurve)', saison: 'Sommernächte + Winter', lat: 53.2790, lng: 12.8960, tipp: 'In der Bucht steigt der Grund von 13 auf 3 m an; direkt hinter der ersten scharfen Kurve am rechten Ufer liegt ein 9-m-Loch mitten in der flachen Zone – bester Wels- und Winterzander-Platz. Großer Köderfisch oder Tauwurmbündel am Grund. Lage ungefähr.' }
         ], warn: false },
-    { name: 'Großer Priepertsee', zugang: 'boot', verif: 'B',
+    { name: 'Großer Priepertsee', wasser: 'see-tief', zugang: 'boot', verif: 'B',
         rig: 'Zander-Jigrute 15–50 g für die tiefen Kanten (26 m!), Pilker gehen hier laut Ortsanglern gut; Stahlvorfach auf Hecht. Boot nötig.', nr: 'Obere Havel · Meisterbereich Ahrensberg', cat: 'raub', arten: ['Zander', 'Hecht', 'Barsch', 'Aal', 'Schleie', 'Wels', 'Karpfen'],
         lat: 53.2560, lng: 13.0180,
         fisch: 'Zander (sehr gut), Hecht, Barsch, Aal, Schleie, Wels, Karpfen, Weißfisch',
         methode: '104 ha, Ø ~8–10 m, nördlich von Priepert steil bis 26 m: als Zandergewässer bekannt. Havel-Einlauf (wird schnell tief) und die Steilkanten jiggen, Unterwasserberg am Nordende suchen',
         karte: 'Angelkarte Obere Havel (Fischereihof Ahrensberg Tel. 039832 20230) – Tageskarte ~12€, gilt für alle Verbund-Seen',
         kartenLinks: [{ label: 'Fischereihof Wesenberg', url: 'https://fischerei-wesenberg.de' }],
+        tackle: { rute: 'Jigrute 15–50 g + Vertikalrute für die tiefen Kanten; bei gezieltem Wels 50–120 g', koeder: 'No-Action-Shad 10–14 cm; Pilker funktionieren an der Tiefenkante', jig: '17–28 g an den Kanten, vertikal 20–40 g (tiefster See der Strecke)', vorfach: 'FC 0,40–0,45 mm; Titan/Stahl bei Hechtbeifang', zugang: 'Boot mit Echolot – die Tiefenkante und der Havel-Einlauf sind das Ziel', farben: { fruehjahr: 'Naturdekore mit Kontrastpunkt (Barsch, roter Kopf) – klares Nachwinterwasser', sommer: 'Naturtöne (Rotauge, Barsch); über Kraut gern Weiß/Perlmutt', herbst: 'Kontrastreich (Feuertiger, Orange) – Hechte fressen sich Winterspeck an', winter: 'Dezente Naturtöne, kleine Köder, extrem langsam führen' }, warum: 'Tiefster See der Kleinseenplatte: Vertikalangeln an der Kante ist die Methode. Entnahmefenster (Hecht 55–85, Zander 55–75 cm): große Fische MÜSSEN zurück – großer Gummikescher, Abhakmatte, Hakenlöser und Einzelhaken-Umbau gehören ins Gepäck.' },
         note: 'Reges Wasserwander-/Hausbootrevier (Obere-Havel-Wasserstraße) – Dämmerung nutzen. ⚠ Wasserskistrecke auf dem See: markierten Bereich meiden. Kaum Uferstellen, Boot empfohlen. Schleppen verboten, Nachtangeln erlaubt.',
         hotspots: [
             { name: 'Havel-Einlauf (Nord, Richtung Wangnitzsee)', saison: 'ganzjährig, Zander top', lat: 53.2640, lng: 13.0170, tipp: 'Ortsangler-Tipp: gleich am Haveleinlauf wird es schnell tief – klassischer Zanderzug, auch beidseitig Richtung Wangnitzsee. Tiefste Stelle (26 m) liegt nördlich von Priepert. Lage ungefähr.' }
@@ -321,7 +331,7 @@ export const SCHON_MV = [
 ];
 /* ============ Region: Rhein & Rheinhessen / Mainz (recherchiert 07/2026) ============ */
 export const SPOTS_RLP = [
-    { name: 'Rhein Mainz – Stadtstrecke', zugang: 'ufer', nr: 'LFV RLP · ~Strom-km 498–500', cat: 'raub',
+    { name: 'Rhein Mainz – Stadtstrecke', wasser: 'fluss', zugang: 'ufer', nr: 'LFV RLP · ~Strom-km 498–500', cat: 'raub',
         arten: ['Zander', 'Barsch', 'Rapfen', 'Wels', 'Aal', 'Döbel', 'Brachse'],
         lat: 50.0010, lng: 8.2790,
         fisch: 'Zander, Barsch, Rapfen, Wels, Aal, Barbe, Döbel, Brassen – Grundel ist Hauptfutter',
@@ -334,7 +344,7 @@ export const SPOTS_RLP = [
             { name: 'Theodor-Heuss-Brücke', saison: 'ganzjährig, top Okt–Dez', lat: 50.0060, lng: 8.2745, tipp: 'Der dokumentierte Zander-Klassiker der Stadt: um und hinter den Brückenpfeilern, beste Zeit Dämmerung und nachts. Viel Angeldruck – antizyklisch angeln (unter der Woche, sehr früh).' },
             { name: 'Rapfen-Spundwände', saison: 'Mai–Sep, ab ~16 Uhr', lat: 49.9960, lng: 8.2830, tipp: 'Rapfen treiben Kleinfisch an den Spundwänden in die Ecke – Sommer ab ca. 16 Uhr Oberflächenrauben, flach laufender schlanker Wobbler oder Spöket.' }
         ], warn: false },
-    { name: 'Winterhafen Mainz', zugang: 'ufer', nr: 'Beschilderung!', cat: 'raub',
+    { name: 'Winterhafen Mainz', wasser: 'kanal', zugang: 'ufer', nr: 'Beschilderung!', cat: 'raub',
         arten: ['Barsch', 'Hecht', 'Rapfen', 'Wels', 'Zander'],
         lat: 49.9926, lng: 8.2854,
         fisch: 'Barsch, Hecht, Rapfen, Wels, Zander, Rotauge (Fangmeldungen)',
@@ -343,7 +353,7 @@ export const SPOTS_RLP = [
         rig: 'Barschrute 5–21 g reicht im Hafen, Finesse-Montagen an den Wänden entlang',
         kartenLinks: [{ label: 'LFV RLP – Rheinkarte', url: 'https://lfv-rhl-rhh.de/fischerei-erlaubnisscheine/rhein/' }],
         note: 'Nur teilweise freigegeben und es gab wiederholt Ärger – Beschilderung genau prüfen, im Zweifel weiterziehen. Viele Schaulustige.', warn: true },
-    { name: 'Industriehafen Mombach – Hafenausfahrt', zugang: 'ufer', nr: '~Strom-km 503 · nur Ausfahrt', cat: 'raub',
+    { name: 'Industriehafen Mombach – Hafenausfahrt', wasser: 'kanal', zugang: 'ufer', nr: '~Strom-km 503 · nur Ausfahrt', cat: 'raub',
         arten: ['Zander', 'Barsch', 'Aal', 'Brachse', 'Wels'],
         lat: 50.0310, lng: 8.2210,
         fisch: 'Zander, Barsch, Aal, Brassen, Wels',
@@ -356,7 +366,7 @@ export const SPOTS_RLP = [
             { name: 'Hinter dem Bauhaus', saison: 'ganzjährig', lat: 50.0305, lng: 8.2200, tipp: 'Zugänglicher Klassiker am erlaubten Ausfahrtsbereich – Ansitz und Raubfisch, entsprechend frequentiert.' },
             { name: 'Auspitze Ingelheimer Aue', saison: 'Okt–Mär + Hochwasser', lat: 50.0370, lng: 8.2340, tipp: 'Die Spitze der Insel an der Hafenausfahrt – Strömungskante trifft Stillwasser, klassischer Zanderzug. Lage ungefähr.' }
         ], warn: true },
-    { name: 'Buhnen & Rampen Budenheim', zugang: 'ufer', nr: 'LFV RLP · ~Strom-km 506–508', cat: 'raub',
+    { name: 'Buhnen & Rampen Budenheim', wasser: 'fluss', zugang: 'ufer', nr: 'LFV RLP · ~Strom-km 506–508', cat: 'raub',
         arten: ['Zander', 'Barsch', 'Döbel', 'Aal', 'Brachse'],
         lat: 50.0295, lng: 8.1675,
         fisch: 'Zander, Barsch, Barbe, Döbel, Aal, Brassen',
@@ -365,7 +375,7 @@ export const SPOTS_RLP = [
         rig: 'Jigköpfe 15–30 g je nach Strömung; fürs Posenangeln hinter den Rampen leichte Matchrute',
         kartenLinks: [{ label: 'LFV RLP – Rheinkarte', url: 'https://lfv-rhl-rhh.de/fischerei-erlaubnisscheine/rhein/' }],
         note: 'Zwei Rampen an der chemischen Fabrik plus eine kleine stromauf – die ruhigen Bereiche dahinter sind die Friedfisch-Geheimecken. Parkplatz am Kiosk Rheinblick.', warn: false },
-    { name: 'Altrhein Heidenfahrt', zugang: 'ufer', verif: 'B', nr: '~Strom-km 511 · Teilsperrung', cat: 'fried',
+    { name: 'Altrhein Heidenfahrt', wasser: 'see-flach', zugang: 'ufer', verif: 'B', nr: '~Strom-km 511 · Teilsperrung', cat: 'fried',
         arten: ['Zander', 'Barsch', 'Hecht', 'Karpfen', 'Schleie', 'Brachse', 'Aal'],
         lat: 50.0121, lng: 8.1021,
         fisch: 'Zander, Barsch, Hecht, Karpfen, Schleie, Brassen, Aal',
@@ -374,7 +384,7 @@ export const SPOTS_RLP = [
         rig: 'Feeder/Pose fürs Stillwasser, Spinnrute für den Ausgang zum Strom',
         kartenLinks: [{ label: 'LFV RLP – Rheinkarte', url: 'https://lfv-rhl-rhh.de/fischerei-erlaubnisscheine/rhein/' }],
         note: 'Beliebt und teils saisonal gesperrt (Berichte über Sperrung bis 31.08. kursieren) – Beschilderung maßgeblich. Badestrand nebenan = Sommer-Trubel.', warn: true },
-    { name: 'Hafen & Buhnen Oppenheim', zugang: 'ufer', nr: 'LFV RLP · ~Strom-km 480', cat: 'raub',
+    { name: 'Hafen & Buhnen Oppenheim', wasser: 'fluss', zugang: 'ufer', nr: 'LFV RLP · ~Strom-km 480', cat: 'raub',
         arten: ['Zander', 'Barsch', 'Wels', 'Aal', 'Brachse'],
         lat: 49.8594, lng: 8.3575,
         fisch: 'Zander, Barsch, Wels, Aal, Brassen, Barbe',
@@ -383,7 +393,7 @@ export const SPOTS_RLP = [
         rig: 'Rhein-Standard: Jigrute 30–60 g, Grundelfarben; Welsrute lohnt als zweite Rute',
         kartenLinks: [{ label: 'LFV RLP – Rheinkarte', url: 'https://lfv-rhl-rhh.de/fischerei-erlaubnisscheine/rhein/' }],
         note: 'Gut kombinierbar: Hafeneinfahrt bei Hochwasser, Buhnen bei Normalpegel. Marina-Bereich respektieren.', warn: false },
-    { name: 'Rhein Nackenheim & Mühlarm', zugang: 'ufer', verif: 'B', nr: 'LFV RLP · km 485–490', cat: 'raub',
+    { name: 'Rhein Nackenheim & Mühlarm', wasser: 'fluss', zugang: 'ufer', verif: 'B', nr: 'LFV RLP · km 485–490', cat: 'raub',
         arten: ['Zander', 'Barsch', 'Rapfen', 'Wels', 'Hecht', 'Aal', 'Brachse'],
         lat: 49.9558, lng: 8.3360,
         fisch: 'Zander, Barsch, Rapfen, Wels, Hecht, Aal, Brassen (Artenangaben teils user-generated)',
@@ -395,7 +405,7 @@ export const SPOTS_RLP = [
         hotspots: [
             { name: 'Mühlarm bei der B9', saison: 'ganzjährig, top bei Hochwasser', lat: 49.9585, lng: 8.3345, tipp: 'Strömungsberuhigter Nebenarm zwischen Ufer und den Inseln – ideal wenn der Hauptstrom bei Hochwasser unfischbar wird. Viele Bootsstege, Friedfisch und Zander. Inselseite wegen NSG-Sperren meiden!' }
         ], warn: true },
-    { name: 'Buhnen Gimbsheim–Ibersheim', zugang: 'ufer', verif: 'B', nr: 'LFV RLP · km ~453–460', cat: 'raub',
+    { name: 'Buhnen Gimbsheim–Ibersheim', wasser: 'fluss', zugang: 'ufer', verif: 'B', nr: 'LFV RLP · km ~453–460', cat: 'raub',
         arten: ['Zander', 'Barsch', 'Wels', 'Aal', 'Barbe', 'Brachse', 'Karpfen'],
         lat: 49.7250, lng: 8.4340,
         fisch: 'Zander (kapital, 3–7 Pfd berichtet), Barsch, Wels, Aal, Barbe, Brassen, Karpfen',
@@ -407,7 +417,7 @@ export const SPOTS_RLP = [
             { name: 'Ibersheim gegenüber AKW Biblis', saison: 'Okt–Mär + warme Winternächte', lat: 49.7050, lng: 8.4460, tipp: 'Gegenüber/unterhalb des Kraftwerks berichten Ortsangler durchschnittlich 7-Pfd-Zander – toter Köderfisch am Grund. Oberhalb feiner mit Gummi an die Buhnenkante. Lage ungefähr (km ~455).' },
             { name: 'Buhne an der Natorampe (Gimbsheim)', saison: 'Mai–Okt', lat: 49.7380, lng: 8.4290, tipp: 'Große Buhne, Futterkorb bringt Massen an Brassen und kleinere Barben; gute Barsche. Achtung Hänger (Totholz). Von Oppenheim aus die ersten, vom Eicher See aus die letzten Buhnen. Lage ungefähr.' }
         ], warn: true },
-    { name: 'Mainspitze & Maaraue', zugang: 'ufer', nr: 'Mainmündung km 496,6 · HESSEN!', cat: 'raub',
+    { name: 'Mainspitze & Maaraue', wasser: 'fluss', zugang: 'ufer', nr: 'Mainmündung km 496,6 · HESSEN!', cat: 'raub',
         arten: ['Zander', 'Barsch', 'Wels', 'Rapfen', 'Aal'],
         lat: 49.9937, lng: 8.2940,
         fisch: 'Zander, Barsch, Wels, Rapfen, Aal',
@@ -416,7 +426,7 @@ export const SPOTS_RLP = [
         rig: 'Jigrute + nachts Wobbler; vor der Maarauespitze liegt ein Steinwall unter Wasser (Boot: ankern, Hängergefahr)',
         kartenLinks: [{ label: 'hejfish (Hessen, online)', url: 'https://www.hejfish.com' }],
         note: 'Grenze RLP/Hessen: Fußgängerbrücke zur Maaraue. Die Maarauespitze selbst ist Polizeigelände und unzugänglich – dort raubt es sichtbar, erreichbar ist der Bereich davor.', warn: true },
-    { name: 'Ginsheimer Altrhein & Mündung', zugang: 'ufer', nr: '~km 487–493 · HESSEN!', cat: 'raub',
+    { name: 'Ginsheimer Altrhein & Mündung', wasser: 'see-flach', zugang: 'ufer', nr: '~km 487–493 · HESSEN!', cat: 'raub',
         arten: ['Zander', 'Wels', 'Barsch', 'Hecht', 'Karpfen'],
         lat: 49.9440, lng: 8.3524,
         fisch: 'Zander, Wels, Barsch, Hecht, Karpfen',
@@ -428,7 +438,7 @@ export const SPOTS_RLP = [
         hotspots: [
             { name: 'Treburer Buhnenfeld (km 487–493)', saison: 'Jun–Okt bei Normalpegel', lat: 49.9550, lng: 8.3250, tipp: '6 km Buhnenfeld auf der Nonnenaue – Fahrrad mitnehmen und Kilometer machen, die hinteren Buhnen sehen kaum Angler. Lage ungefähr, hessischer Schein nötig.' }
         ], warn: true },
-    { name: 'Eicher See', zugang: 'ufer', nr: 'Anglervereinigung Worms', cat: 'raub',
+    { name: 'Eicher See', wasser: 'see-tief', zugang: 'ufer', nr: 'Anglervereinigung Worms', cat: 'raub',
         schonzeitInfo: 'Vereinsbestimmungen der AVW gelten zusätzlich zur FischGDV – Karte genau lesen.',
         arten: ['Zander', 'Hecht', 'Wels', 'Barsch', 'Karpfen', 'Schleie', 'Aal', 'Brachse'],
         lat: 49.7646, lng: 8.4290,
@@ -438,7 +448,7 @@ export const SPOTS_RLP = [
         rig: 'Tiefwasser-Setup: Jigköpfe bis 30 g, Vertikal-tauglich vom Boot; Welsrute mit 0,60er FC als Nachtoption',
         kartenLinks: [{ label: 'Anglervereinigung Worms', url: 'https://www.avw1924.de/gew%C3%A4sserkarten' }],
         note: 'Das Raubfisch-Stillgewässer Rheinhessens (~30 Autominuten): direkte Rheinverbindung, dadurch Wels- und Zanderbestand. An der Marina (Familie Luy) ist ein Angelkahn für 4 Personen mietbar – bei 15 m Tiefe die beste Option. Sommer: Badebetrieb, Randzeiten nutzen.', warn: false },
-    { name: 'Altrheinsee Eich', zugang: 'ufer', nr: 'Ortsgemeinde Eich', cat: 'fried',
+    { name: 'Altrheinsee Eich', wasser: 'see-flach', zugang: 'ufer', nr: 'Ortsgemeinde Eich', cat: 'fried',
         arten: ['Karpfen', 'Schleie', 'Hecht', 'Barsch', 'Aal', 'Brachse'],
         lat: 49.7596, lng: 8.4036,
         fisch: 'Karpfen, Schleie, Hecht, Barsch, Aal, Brassen',
@@ -446,7 +456,7 @@ export const SPOTS_RLP = [
         karte: 'Angelkarte bei der Ortsgemeinde Eich (Tel. 06246-276) – 15 € Gastgebühr nur in Begleitung eines Eicher Bürgers!',
         rig: 'Feeder/Pose; klares Wasser: feine Vorfächer',
         note: 'Sehr restriktive Gastregelung – ohne Eicher Begleitung keine Karte. Eher Ergänzung zum Eicher See nebenan. Parken kostenpflichtig.', warn: true },
-    { name: 'Angelsee Wörrstadt-Wallertheim', verif: 'C', nr: 'AV Wörrstadt/Wallertheim · Rheinhessen-Binnenland', cat: 'raub',
+    { name: 'Angelsee Wörrstadt-Wallertheim', wasser: 'see-flach', verif: 'C', nr: 'AV Wörrstadt/Wallertheim · Rheinhessen-Binnenland', cat: 'raub',
         arten: ['Zander', 'Hecht', 'Wels', 'Barsch', 'Rapfen', 'Karpfen', 'Schleie', 'Aal'],
         lat: 49.83737, lng: 8.04023,
         fisch: 'Zander, Hecht, Wels, Barsch, Rapfen, Karpfen, Schleie, Aal, Weißfische',
@@ -455,7 +465,7 @@ export const SPOTS_RLP = [
         kartenLinks: [{ label: 'AV Wörrstadt/Wallertheim', url: 'https://www.angelverein-woerrstadt-wallertheim.de' }],
         note: '⚠ Datenlage zur Größe/Tiefe uneinheitlich (verif C): eine Quelle nennt ~67 ha/15 m, andere führen es als kleineren Teich – vor Anfahrt Größe und Gastkartenausgabe beim Verein klären. Koordinate = Vereinsgelände Wallertheim. Vereinsspezifische Entnahmefenster möglich (in RLP bei Vereinsseen üblich).',
         hotspots: [], warn: true, zugang: 'ufer' },
-    { name: 'Niederrheinsee Gimbsheim', verif: 'B', nr: 'Rheinhessen · bei Gimbsheim/Alsheim', cat: 'raub',
+    { name: 'Niederrheinsee Gimbsheim', wasser: 'see-flach', verif: 'B', nr: 'Rheinhessen · bei Gimbsheim/Alsheim', cat: 'raub',
         arten: ['Zander', 'Hecht', 'Karpfen', 'Barsch', 'Schleie', 'Aal'],
         lat: 49.77419, lng: 8.38029,
         fisch: 'Zander, Hecht, Karpfen, Barsch, Schleie, Aal, Weißfische',
@@ -463,7 +473,7 @@ export const SPOTS_RLP = [
         karte: 'Erlaubnisschein über den bewirtschaftenden Verein – Modalitäten vor Ort/online (hejfish) prüfen',
         note: '⚠ Freizeit-/Badesee: im Sommer tagsüber stark genutzt (sehr klares Wasser, beliebt zum Baden) – Dämmerung und Randsaison sind fängiger. Nicht mit dem benachbarten Eicher See verwechseln.',
         hotspots: [], warn: true, zugang: 'ufer' },
-    { name: 'Selz-Mündung Ingelheim', verif: 'B', nr: 'Selz · Mündung in den Rhein bei Frei-Weinheim', cat: 'raub',
+    { name: 'Selz-Mündung Ingelheim', wasser: 'fluss', verif: 'B', nr: 'Selz · Mündung in den Rhein bei Frei-Weinheim', cat: 'raub',
         arten: ['Döbel', 'Barsch', 'Hecht', 'Aal', 'Rapfen', 'Karpfen', 'Brachse'],
         lat: 49.99560, lng: 8.05340,
         fisch: 'Döbel, Barsch, Hecht, Aal, Rapfen, Karpfen, Brassen, Weißfische',
@@ -472,7 +482,7 @@ export const SPOTS_RLP = [
         kartenLinks: [{ label: 'LFV RLP – Rheinkarte', url: 'https://lfv-rhl-rhh.de/fischerei-erlaubnisscheine/rhein/' }],
         note: '⚠ Rund um die Mündung liegen Naturschutzgebiete mit Angelverbot (Fulder Aue–Ilmen Aue, Sandaue) – Beschilderung genau beachten. Die kleine Selz führt bei Trockenheit wenig Wasser.',
         hotspots: [], warn: true, zugang: 'ufer' },
-    { name: 'Angelsee ASV Seerose Ober-Olm', verif: 'C', nr: 'ASV Seerose Ober-Olm 1980 · bei Nieder-Olm', cat: 'fried',
+    { name: 'Angelsee ASV Seerose Ober-Olm', wasser: 'see-flach', verif: 'C', nr: 'ASV Seerose Ober-Olm 1980 · bei Nieder-Olm', cat: 'fried',
         arten: ['Karpfen', 'Schleie', 'Zander', 'Rotauge', 'Rotfeder', 'Karausche', 'Regenbogenforelle'],
         lat: 49.91821, lng: 8.19599,
         fisch: 'Karpfen, Schleie, Zander, Rotauge, Rotfeder, Karausche, (Regenbogenforelle-Besatz)',
@@ -508,7 +518,7 @@ export const SCHON_RLP = [
 /* ============ Regionsdefinitionen (eingebetteter Fallback zur JSON-Datenbank) ============ */
 /* ===== Region Gießen / Lahntal (Hessen) – recherchiert 07/2026 ===== */
 export const SPOTS_HE = [
-    { name: 'Lahn – Stadtstrecke Gießen', verif: 'B', nr: 'IG Lahn · Launsbach–Stadtwerkewehr', cat: 'raub',
+    { name: 'Lahn – Stadtstrecke Gießen', wasser: 'fluss', verif: 'B', nr: 'IG Lahn · Launsbach–Stadtwerkewehr', cat: 'raub',
         arten: ['Hecht', 'Barbe', 'Döbel', 'Barsch', 'Aal', 'Karpfen', 'Äsche', 'Bachforelle'],
         lat: 50.58385, lng: 8.66391,
         fisch: 'Hecht, Barbe, Döbel, Barsch, Aal, Karpfen, Äsche, Bachforelle, Weißfische',
@@ -520,7 +530,7 @@ export const SPOTS_HE = [
             { name: 'Stadtwerke-Wehr (Streckenende)', saison: 'ganzjährig, Salmoniden im Frühjahr', lat: 50.58385, lng: 8.66391, tipp: 'Sauerstoffreiches Wehrwasser am Ende der Gießener Stadtstrecke: Barben und Döbel im Strömungskehr, im Frühjahr Äsche und Bachforelle. Vom Ufer gut zugänglich.' },
             { name: 'Gleibach-Einlauf Launsbach', saison: 'Frühjahr/Herbst', lat: 50.5910, lng: 8.6470, tipp: 'Kühleres Zulaufwasser zieht Salmoniden und Weißfisch – Streckenanfang der Gießener Karte (unterhalb A480).' }
         ], warn: false, zugang: 'ufer' },
-    { name: 'VSA Angelsee Heuchelheim', verif: 'B', nr: 'VSA Gießen · Lahnpark', cat: 'raub',
+    { name: 'VSA Angelsee Heuchelheim', wasser: 'see-tief', verif: 'B', nr: 'VSA Gießen · Lahnpark', cat: 'raub',
         arten: ['Zander', 'Hecht', 'Karpfen', 'Barsch', 'Aal'],
         lat: 50.56909, lng: 8.62285,
         fisch: 'Zander, Hecht, Karpfen, Barsch, gute Aale',
@@ -531,7 +541,7 @@ export const SPOTS_HE = [
         hotspots: [
             { name: 'Steilufer Nordseite', saison: 'Okt–Mär, Zander', lat: 50.5698, lng: 8.6232, tipp: 'An der tiefen Kante (bis 10 m) mit Gummi/totem Köfi auf Zander; im Winter nur Kunstköder/Köderfisch erlaubt.' }
         ], warn: true, zugang: 'ufer' },
-    { name: 'Dutenhofener See', verif: 'B',
+    { name: 'Dutenhofener See', wasser: 'see-tief', verif: 'B',
         rig: 'Boot mit E-Motor/Ruder empfohlen (verkrautetes Ufer). Hechtcombo mit Stahlvorfach, Welszeug für die Nacht, Zandergummi an den Kanten.', nr: 'Kiessee · zw. Gießen & Wetzlar', cat: 'raub',
         arten: ['Hecht', 'Zander', 'Wels', 'Barsch', 'Karpfen', 'Aal', 'Schleie'],
         lat: 50.56701, lng: 8.61113,
@@ -544,7 +554,7 @@ export const SPOTS_HE = [
             { name: 'Tiefes Loch (11,4 m) Seemitte', saison: 'Hochsommer + Winter', lat: 50.5670, lng: 8.6111, tipp: 'Tiefste Stelle für Sommer-/Winterzander und Wels – nur vom Boot. Vom Hessischen Landesamt auf 11,4 m vermessen.' },
             { name: 'Ostufer-Krautkante', saison: 'Frühjahr Hecht', lat: 50.5665, lng: 8.6140, tipp: 'Ruhigere Ecke am Ostufer, Krautkanten – Hecht. Abstand zum gesperrten NSG-Westteil (Vogelschutz) halten.' }
         ], warn: true, zugang: 'boot' },
-    { name: 'Lahn bei Wetzlar (Gaststrecke ASV)', verif: 'B', nr: 'ASV Wetzlar · Naunheim–Dillmündung', cat: 'raub',
+    { name: 'Lahn bei Wetzlar (Gaststrecke ASV)', wasser: 'fluss', verif: 'B', nr: 'ASV Wetzlar · Naunheim–Dillmündung', cat: 'raub',
         arten: ['Hecht', 'Barsch', 'Wels', 'Döbel', 'Aal', 'Barbe', 'Bachforelle', 'Äsche'],
         lat: 50.5620, lng: 8.5150,
         fisch: 'Hecht, Barsch, Wels, Döbel, Bachforelle, Äsche, Barbe, Aal, Schleie',
@@ -556,7 +566,7 @@ export const SPOTS_HE = [
             { name: 'Dillmündung (Dillspitze)', saison: 'ganzjährig', lat: 50.5604, lng: 8.5029, tipp: 'Mündungsbereich der Dill in die Lahn – Strömungskante zieht Barsch, Hecht und Döbel. Streckenende km 13.' },
             { name: 'Auslauf Naunheimer Schleuse', saison: 'ganzjährig', lat: 50.57562, lng: 8.52680, tipp: 'Streckenanfang der ASV-Gaststrecke direkt am Schleusenauslauf – strömungsberuhigte Kanten, Barsch und Hecht.' }
         ], warn: false, zugang: 'ufer' },
-    { name: 'Wißmarer See', verif: 'B', nr: 'AC Wißmar · Lahnschleife bei Wettenberg', cat: 'raub',
+    { name: 'Wißmarer See', wasser: 'see-flach', verif: 'B', nr: 'AC Wißmar · Lahnschleife bei Wettenberg', cat: 'raub',
         arten: ['Zander', 'Hecht', 'Barsch', 'Aal', 'Karpfen', 'Schleie'],
         lat: 50.64193, lng: 8.69152,
         fisch: 'Zander, Hecht, Barsch, Aal, Karpfen, Schleie, Weißfische',
@@ -567,7 +577,7 @@ export const SPOTS_HE = [
         hotspots: [
             { name: 'Tiefe Ecke Nordost', saison: 'Sommer, Zander', lat: 50.6430, lng: 8.6935, tipp: 'Die einzige tiefere Zone (bis 4,3 m) liegt im nordöstlichen Seeteil – im flachen See der beste Sauerstoff-/Rückzugsbereich für Zander. Lage grob (Struktur mit Echolot verifizieren).' }
         ], warn: true, zugang: 'ufer' },
-    { name: 'Silbersee Launsbach', verif: 'C', nr: 'AV Silbersee · Lahnaue bei Launsbach', cat: 'raub',
+    { name: 'Silbersee Launsbach', wasser: 'see-flach', verif: 'C', nr: 'AV Silbersee · Lahnaue bei Launsbach', cat: 'raub',
         arten: ['Zander', 'Hecht', 'Barsch', 'Wels', 'Aal', 'Karpfen', 'Schleie', 'Döbel'],
         lat: 50.61575, lng: 8.67495,
         fisch: 'Zander, Hecht, Barsch, Wels, Aal, Karpfen, Schleie, Döbel, Weißfische',
@@ -628,7 +638,7 @@ export const REGION_RLP = { id: 'mainz', geprueft: '2026-07', name: 'Rhein & Rhe
     hinweis: 'Angaben ohne Gewähr, recherchiert 07/2026 (FischGDV RP, LFV RLP, Anglerforen). Maßgeblich: Erlaubnisschein mit Strom-km-Angaben und Beschilderung. Mindestmaße RLP vor Entnahme gegenprüfen.' };
 /* ===== Region Elbe / Magdeburg (Sachsen-Anhalt) – recherchiert 07/2026 ===== */
 export const SPOTS_EL = [
-    { name: 'Buhnenfeld Herrenkrug', verif: 'B', nr: 'Magdeburger Anglerverein · Elbe rechtes Ufer', cat: 'raub',
+    { name: 'Buhnenfeld Herrenkrug', wasser: 'fluss', verif: 'B', nr: 'Magdeburger Anglerverein · Elbe rechtes Ufer', cat: 'raub',
         arten: ['Zander', 'Hecht', 'Wels', 'Rapfen', 'Barsch', 'Karpfen', 'Aal', 'Brasse'],
         lat: 52.1535, lng: 11.6720,
         fisch: 'Zander, Hecht, Wels, Rapfen, Barsch, Karpfen, Aal, Brasse',
@@ -639,7 +649,7 @@ export const SPOTS_EL = [
         hotspots: [
             { name: 'Buhnenkopf-Strömungskante', saison: 'Juni–Winter, Zander', lat: 52.1540, lng: 11.6710, tipp: 'Am Buhnenkopf bildet die Strömungskante Verwirbelungen an der Oberfläche – dort steht der Zander. Gummi 20 m flussab an der Kante führen.' }
         ], warn: true, zugang: 'ufer' },
-    { name: 'Elbe Magdeburg-Prester', verif: 'B', nr: 'Magdeburger Anglerverein · oberhalb Abzweig Alte Elbe', cat: 'raub',
+    { name: 'Elbe Magdeburg-Prester', wasser: 'fluss', verif: 'B', nr: 'Magdeburger Anglerverein · oberhalb Abzweig Alte Elbe', cat: 'raub',
         arten: ['Zander', 'Hecht', 'Wels', 'Rapfen', 'Barsch', 'Aal'],
         lat: 52.1034, lng: 11.6748,
         fisch: 'Zander, Hecht, Wels, Rapfen, Barsch, Aal',
@@ -650,7 +660,7 @@ export const SPOTS_EL = [
         hotspots: [
             { name: 'Erste/letzte Buhne am Alte-Elbe-Abzweig', saison: 'Dämmerung, Zander', lat: 52.1050, lng: 11.6770, tipp: 'Die Rand-Buhnen eines Feldes und die Altarm-Mündung sind Top-Ansitzplätze mit Köderfisch. Lage grob – Buhnenreihe abgehen.' }
         ], warn: true, zugang: 'ufer' },
-    { name: 'Rothenseer Abstiegskanal', verif: 'B', nr: 'Magdeburger Anglerverein · Kanal', cat: 'raub',
+    { name: 'Rothenseer Abstiegskanal', wasser: 'kanal', verif: 'B', nr: 'Magdeburger Anglerverein · Kanal', cat: 'raub',
         arten: ['Zander', 'Barsch', 'Hecht', 'Weißfisch'],
         lat: 52.2057, lng: 11.6875,
         fisch: 'Zander, Barsch, Hecht, Weißfisch',
@@ -659,7 +669,7 @@ export const SPOTS_EL = [
         note: '⚠ In Kanälen und Häfen ist das Angeln nicht überall erlaubt – auf Verbotsschilder achten. Winter kann sich lohnen (Zander beißt). 15.02.–30.04. Kunstköderverbot.',
         kartenLinks: [{ label: 'Magdeburger Anglerverein', url: 'https://www.magdeburger-anglerverein.de' }, { label: 'hejfish (online)', url: 'https://www.hejfish.com' }],
         hotspots: [], warn: true, zugang: 'ufer' },
-    { name: 'Industriehafen Magdeburg', verif: 'B', nr: 'Magdeburger Anglerverein · Hafenbecken', cat: 'raub',
+    { name: 'Industriehafen Magdeburg', wasser: 'kanal', verif: 'B', nr: 'Magdeburger Anglerverein · Hafenbecken', cat: 'raub',
         arten: ['Zander', 'Barsch', 'Hecht', 'Weißfisch'],
         lat: 52.1648, lng: 11.6688,
         fisch: 'Zander, Barsch, Hecht, Weißfisch',
@@ -668,7 +678,7 @@ export const SPOTS_EL = [
         note: '⚠ Angeln nicht im ganzen Hafen erlaubt – Beschilderung strikt beachten. Hafenausfahrt = Hochwasser-Hotspot. 15.02.–30.04. Kunstköderverbot.',
         kartenLinks: [{ label: 'Magdeburger Anglerverein', url: 'https://www.magdeburger-anglerverein.de' }, { label: 'hejfish (online)', url: 'https://www.hejfish.com' }],
         hotspots: [], warn: true, zugang: 'ufer' },
-    { name: 'Zollelbe Magdeburg', verif: 'B', nr: 'Magdeburger Anglerverein · Nebenarm', cat: 'raub',
+    { name: 'Zollelbe Magdeburg', wasser: 'kanal', verif: 'B', nr: 'Magdeburger Anglerverein · Nebenarm', cat: 'raub',
         arten: ['Barsch', 'Zander', 'Hecht', 'Weißfisch'],
         lat: 52.1305, lng: 11.6496,
         fisch: 'Barsch (im Herbst massenhaft), Zander, Hecht, Weißfisch',
@@ -677,7 +687,7 @@ export const SPOTS_EL = [
         note: '⚠ Stadtgewässer, teils Baustellen am Ufer. Bootsangeln zwischen km 324,0 (Buckauer Fähre) und km 327,4 (Zollelbe-Mündung) NICHT erlaubt. Herbst = Barschzeit.',
         kartenLinks: [{ label: 'Magdeburger Anglerverein', url: 'https://www.magdeburger-anglerverein.de' }, { label: 'hejfish (online)', url: 'https://www.hejfish.com' }],
         hotspots: [], warn: true, zugang: 'ufer' },
-    { name: 'Buhnenfelder Rothensee–Rogätz', verif: 'B', nr: 'Elbe · zusammenhängende Buhnenfelder nördl. Magdeburg', cat: 'raub',
+    { name: 'Buhnenfelder Rothensee–Rogätz', wasser: 'fluss', verif: 'B', nr: 'Elbe · zusammenhängende Buhnenfelder nördl. Magdeburg', cat: 'raub',
         arten: ['Zander', 'Hecht', 'Barsch', 'Aal', 'Rapfen', 'Wels', 'Brasse'],
         lat: 52.2600, lng: 11.7150,
         fisch: 'Zander, Hecht, Barsch, Aal, Rapfen, Wels, dicke Brassen/Alande',
@@ -720,7 +730,7 @@ export const REGION_EL = { id: 'elbe', geprueft: '2026-07', name: 'Elbe / Magdeb
     hinweis: 'Angaben ohne Gewähr, recherchiert 07/2026 (BLINKER-Gewässersteckbrief Magdeburg, Magdeburger AV, hejfish, Anglerforen). Diese Regeln gelten NUR für die Sachsen-Anhalt-/Magdeburg-Strecke. Maßgeblich sind der jeweilige Erlaubnisschein (Strom-km!) und die Beschilderung vor Ort.' };
 /* ===== Region Main / Frankfurt–Offenbach (Hessen) – recherchiert 07/2026 ===== */
 export const SPOTS_MA = [
-    { name: 'Main – Niddamündung Höchst', verif: 'B', nr: 'Frankfurter Zunft-/Stadtstrecke · linksmainisch', cat: 'raub',
+    { name: 'Main – Niddamündung Höchst', wasser: 'fluss', verif: 'B', nr: 'Frankfurter Zunft-/Stadtstrecke · linksmainisch', cat: 'raub',
         arten: ['Zander', 'Wels', 'Barsch', 'Rapfen', 'Aal', 'Karpfen', 'Brasse'],
         lat: 50.09941, lng: 8.55165,
         fisch: 'Zander, Wels, Barsch, Rapfen, Aal, Karpfen, Brassen',
@@ -731,7 +741,7 @@ export const SPOTS_MA = [
         hotspots: [
             { name: 'Kante westlich der Niddamündung', saison: 'Herbst/Winter, Zander', lat: 50.0990, lng: 8.5490, tipp: 'Westlich der Mündung liegen laut Praxisberichten viele sandig-steinige Zanderspots. Kanten mit Gummi absuchen. Lage grob.' }
         ], warn: true, zugang: 'ufer' },
-    { name: 'Main – Gerbermühle / Frankfurt-Süd', verif: 'B', nr: 'Frankfurter Strecke · Stadtstrecke', cat: 'raub',
+    { name: 'Main – Gerbermühle / Frankfurt-Süd', wasser: 'fluss', verif: 'B', nr: 'Frankfurter Strecke · Stadtstrecke', cat: 'raub',
         arten: ['Zander', 'Barsch', 'Wels', 'Aal', 'Karpfen', 'Brasse', 'Rotauge'],
         lat: 50.10600, lng: 8.72158,
         fisch: 'Zander, Barsch, Wels, Aal, Karpfen, Brassen, Rotaugen',
@@ -740,7 +750,7 @@ export const SPOTS_MA = [
         note: '⚠ Sperrzonen im Stadtgebiet beachten (Hafenbecken, Osthafen-Oberhafenbecken, Staustufe Griesheim, Schleuse Offenbach) – Beschilderung lesen. Stehende Gewässer (Rumpenheimer/Bürgeler Kiesgrube) sind für Gastangler gesperrt. Bootsangeln verboten.',
         kartenLinks: [{ label: 'hejfish – Main', url: 'https://www.hejfish.com/d/12472-main' }, { label: 'Angel Bär (Gastkarten)', url: 'https://www.angel-baer.de/gastkarten.htm' }],
         hotspots: [], warn: true, zugang: 'ufer' },
-    { name: 'Main – Mainbogen Rumpenheim', verif: 'B', nr: 'Offenbach/Rumpenheim · naturnaher Bogen', cat: 'raub',
+    { name: 'Main – Mainbogen Rumpenheim', wasser: 'fluss', verif: 'B', nr: 'Offenbach/Rumpenheim · naturnaher Bogen', cat: 'raub',
         arten: ['Zander', 'Wels', 'Barsch', 'Hecht', 'Aal', 'Barbe', 'Döbel'],
         lat: 50.12931, lng: 8.79670,
         fisch: 'Zander, Wels, Barsch, Hecht, Aal, Barbe, Döbel, Weißfische',

@@ -1,0 +1,157 @@
+import { esc, ICON } from './util.js';
+/* ---------- Gewässercharakter ---------- */
+/** Leitet den Gewässercharakter ab, wenn er nicht gesetzt ist. */
+export function wasserTyp(s) {
+    if (s.wasser)
+        return s.wasser;
+    if (s.cat === 'fluss' || s.cat === 'forelle' || Array.isArray(s.line))
+        return 'fluss';
+    const txt = ((s.name || '') + ' ' + (s.nr || '') + ' ' + (s.methode || '')).toLowerCase();
+    if (/kanal|hafen|abstiegs|zollelbe/.test(txt))
+        return 'kanal';
+    if (typeof s.tiefe === 'number')
+        return s.tiefe >= 8 ? 'see-tief' : 'see-flach';
+    if (/tief|kante|\b1[0-9] ?m|\b2[0-9] ?m/.test(txt))
+        return 'see-tief';
+    return 'see-flach';
+}
+/** Fließt das Gewässer? (ersetzt die alte, regionsweite Rhein-Erkennung) */
+export function istFliess(s) {
+    const w = wasserTyp(s);
+    return w === 'fluss' || w === 'kanal';
+}
+const PROFILE = {
+    Hecht: { rutePlus: 3, koeder: 'Gummi 12–19 cm, Swimbaits bis 25 cm, große Spinner/Blinker', stahl: true },
+    Wels: { rutePlus: 4, koeder: 'Große Gummis 15–25 cm, Tauwurmbündel, toter Köderfisch', stahl: true },
+    Zander: { rutePlus: 2, koeder: 'Gummi 10–14 cm (No-Action-Shad), toter Köderfisch (Grundel)', stahl: false },
+    Barsch: { rutePlus: 1, koeder: 'Gummi 5–8 cm, kleine Spinner, DropShot-Köder', stahl: false },
+    Rapfen: { rutePlus: 2, koeder: 'Schlanke Blinker 15–25 g, Streamer, kleine Wobbler', stahl: false },
+    Aal: { rutePlus: 2, koeder: 'Tauwurm, Köderfischfetzen (Grundgrundmontage)', stahl: false },
+    Karpfen: { rutePlus: 2, koeder: 'Boilies, Mais, Method-Feeder', stahl: false },
+    Schleie: { rutePlus: 1, koeder: 'Made, Mais, kleine Boilies', stahl: false },
+    Bachforelle: { rutePlus: 0, koeder: 'Kleine Spinner 2–5 g, Wobbler bis 5 cm, Naturköder', stahl: false },
+    Barbe: { rutePlus: 2, koeder: 'Feeder mit Käse/Mais, Tauwurm', stahl: false },
+    Döbel: { rutePlus: 1, koeder: 'Kleine Wobbler, Brot, Insekten', stahl: false },
+};
+/** Wurfgewichtsklasse aus Zielfischen und Gewässer. */
+function ruteAus(arten, w) {
+    const bedarf = Math.max(0, ...arten.map((a) => PROFILE[a]?.rutePlus ?? 1));
+    const fliess = w === 'fluss' || w === 'kanal';
+    if (bedarf >= 4)
+        return fliess ? 'Kräftige Spinn-/Baitcastrute 40–100 g, 2,40–2,70 m' : 'Baitcast-/H-Rute 50–120 g für schwere Köder';
+    if (bedarf >= 3)
+        return fliess ? 'H-Spinnrute 30–80 g, 2,70 m (Strömung + Wurfweite)' : 'H-Spinnrute 40–80 g, 2,40–2,70 m';
+    if (bedarf >= 2)
+        return fliess ? 'Jigrute 20–60 g, 2,70 m (Grundkontakt in der Strömung)' : 'Spinnrute 15–50 g, 2,40 m';
+    if (bedarf >= 1)
+        return fliess ? 'Leichte Spinnrute 5–25 g' : 'Barsch-/Finesse-Rute 5–21 g';
+    return 'UL-Rute bis 10 g oder Fliegenrute #4–5';
+}
+/** Jigkopf-Spanne. Fließgewässer: pegelabhängig, deshalb Spanne + Faustregel. */
+function jigAus(w, tiefe) {
+    switch (w) {
+        case 'fluss': return '10–30 g (Buhnenfeld 10–21 g, Hauptstrom 21–40 g) – leichtester Kopf mit Grundkontakt in 5–8 s';
+        case 'kanal': return '7–15 g – ruhigeres Wasser, feiner anfüttern';
+        case 'see-tief': return (tiefe && tiefe >= 15 ? '14–28 g' : '10–21 g') + ' an den Kanten, vertikal 15–30 g';
+        default: return '5–12 g – flach und langsam führen, Krautkanten abklopfen';
+    }
+}
+/** Vorfach: Stahl/Titan sobald Hecht oder Wels im Bestand sind. */
+function vorfachAus(arten) {
+    const raubZahn = arten.some((a) => PROFILE[a]?.stahl);
+    if (raubZahn)
+        return 'Titan oder 7×7-Stahl, 30–40 cm – Pflicht, sobald Hecht/Wels im Gewässer sind';
+    if (arten.includes('Zander'))
+        return 'Fluorocarbon 0,35–0,45 mm, 60–80 cm (kein Stahl nötig, aber Hechtbeifang möglich)';
+    return 'Fluorocarbon 0,20–0,30 mm';
+}
+/** Boot- oder Uferempfehlung, begründet statt behauptet. */
+function zugangAus(s, w) {
+    if (s.zugang === 'boot') {
+        return 'Boot klar im Vorteil – die fängigen Kanten und Tiefen sind vom Ufer nicht erreichbar' +
+            (w === 'see-tief' ? '. Echolot lohnt sich, Driftsack für kontrollierte Drift.' : '.');
+    }
+    if (w === 'fluss')
+        return 'Vom Ufer gut zu beangeln – Strecke machen und jede Buhne/Kante gründlich abfischen, statt an einer Stelle zu verharren.';
+    if (w === 'kanal')
+        return 'Vom Ufer: Kanten und Spundwände senkrecht abklopfen (Vertikal/DropShot).';
+    return 'Vom Ufer beangelbar – Krautkanten, Einläufe und Stege ansteuern; ein Belly-Boat erweitert den Radius deutlich.';
+}
+/** Saisonale Farbwahl, abhängig von der typischen Wassertrübung. */
+function farbenAus(w) {
+    const truebe = w === 'fluss' || w === 'kanal';
+    if (truebe) {
+        return {
+            fruehjahr: 'Grelle Signalfarben (Firetiger, Gelb) – Schmelzwasser trübt zusätzlich',
+            sommer: 'Grün/Weiß, Grundeldekore – die Hauptbeute ist grundelbraun gemustert',
+            herbst: 'Weiß, Perlmutt, UV-Akzente – kürzeres Licht, Räuber jagen auf Sicht',
+            winter: 'Dunkle, natürliche Töne (Braun, Motoroil) bei klarerem Winterwasser',
+        };
+    }
+    return {
+        fruehjahr: 'Natürlich mit Kontrastpunkt (Barschdekor, roter Kopf) – klares Wasser nach der Eiszeit',
+        sommer: 'Naturtöne (Rotauge, Barsch); bei Algenblüte gern Weiß',
+        herbst: 'Kontrastreich (Feuertiger, Orange) – Beutefische stehen tiefer, Sicht nimmt ab',
+        winter: 'Klarwasser: dezente Naturtöne, kleine Köder, sehr langsam',
+    };
+}
+/** Aktuelle Jahreszeit (nur zur Hervorhebung im Popup). */
+export function saison(d = new Date()) {
+    const m = d.getMonth() + 1;
+    if (m <= 2 || m === 12)
+        return 'winter';
+    if (m <= 5)
+        return 'fruehjahr';
+    if (m <= 8)
+        return 'sommer';
+    return 'herbst';
+}
+/** Erzeugt die Tackle-Empfehlung: kuratiert, sonst abgeleitet. */
+export function tackleFor(s) {
+    if (s.tackle)
+        return { t: s.tackle, kuratiert: true };
+    const w = wasserTyp(s);
+    const arten = s.arten || [];
+    return {
+        kuratiert: false,
+        t: {
+            rute: ruteAus(arten, w),
+            koeder: arten.map((a) => PROFILE[a]?.koeder).filter(Boolean)[0]
+                || 'Nach Zielfisch wählen – siehe Köderberater im Werkzeuge-Menü',
+            jig: jigAus(w, s.tiefe),
+            vorfach: vorfachAus(arten),
+            zugang: zugangAus(s, w),
+            farben: farbenAus(w),
+        },
+    };
+}
+/** Rendert den Tackle-Block fürs Popup. */
+export function tackleHtml(s) {
+    if (s.cat === 'sperr' || s.cat === 'info')
+        return '';
+    const { t, kuratiert } = tackleFor(s);
+    const jetzt = saison();
+    const LABEL = {
+        fruehjahr: 'Frühjahr', sommer: 'Sommer', herbst: 'Herbst', winter: 'Winter',
+    };
+    const farbZeilen = Object.keys(LABEL).map((k) => {
+        const aktiv = k === jetzt;
+        return `<div style="${aktiv ? 'color:var(--dusk);font-weight:600' : 'color:var(--muted)'}">`
+            + `${aktiv ? '▸ ' : '　'}<b>${LABEL[k]}:</b> ${esc(t.farben[k])}</div>`;
+    }).join('');
+    return `<details class="tackle">
+    <summary>${ICON('fish')} Tackle für dieses Gewässer</summary>
+    <div class="tackle-body">
+      <div class="pop-row"><b>Rute</b>${esc(t.rute)}</div>
+      <div class="pop-row"><b>Köder</b>${esc(t.koeder)}</div>
+      <div class="pop-row"><b>Jigkopf</b>${esc(t.jig)}</div>
+      <div class="pop-row"><b>Vorfach</b>${esc(t.vorfach)}</div>
+      <div class="pop-row"><b>Boot / Ufer</b>${esc(t.zugang)}</div>
+      <div class="pop-row"><b>Köderfarben nach Saison</b>${farbZeilen}</div>
+      ${t.warum ? `<div class="pop-row"><b>Warum</b>${esc(t.warum)}</div>` : ''}
+      <div class="verif">${kuratiert
+        ? '✎ Kuratiert für dieses Gewässer – Erfahrungswerte, kein Gesetz'
+        : '⚙ Abgeleitet aus Gewässertyp, Zielfischen und Zugang – als Startpunkt gedacht'}</div>
+    </div>
+  </details>`;
+}

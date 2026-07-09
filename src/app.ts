@@ -5,6 +5,7 @@ import './astro.js';
 import './mapcore.js';
 import './region.js';
 import './ui.js';
+import './tackle.js';
 import './map.js';
 import './myspots.js';
 import './weather.js';
