@@ -25,6 +25,8 @@ if (touchesCode) {
   try {
     const out = execFileSync('node', [path.join(__dirname, 'check-imports.mjs')], { encoding: 'utf8' });
     process.stdout.write(out);
+    const st = execFileSync('node', [path.join(__dirname, 'check-state.mjs')], { encoding: 'utf8' });
+    process.stdout.write(st);
   } catch (e) {
     if (e.stdout) process.stdout.write(e.stdout);
     if (e.stderr) process.stderr.write(e.stderr);

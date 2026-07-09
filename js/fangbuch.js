@@ -103,6 +103,37 @@ export function fbInsights(){
   }
   el.innerHTML=h;
 }
+/* ===== Backup: vollständiger Export/Import als JSON (reimportierbar, anders als CSV) ===== */
+export function fbBackup(){
+  const payload={format:'angelkarte-fangbuch',version:1,exportiert:new Date().toISOString(),anzahl:state.fbMem.length,faenge:state.fbMem};
+  const blob=new Blob([JSON.stringify(payload,null,1)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='fangbuch-'+new Date().toISOString().slice(0,10)+'.json';
+  a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+/* Eindeutiger Schlüssel eines Fangs – für Duplikaterkennung beim Merge */
+function fangKey(e){ return [e.datum,e.fisch,e.laenge||'',e.spot||'',e.koeder||''].join('|'); }
+export async function fbRestore(file){
+  const st=document.getElementById('fbStatus');
+  const zeig=m=>{ if(st) st.textContent=m; };
+  let data;
+  try{ data=JSON.parse(await file.text()); }
+  catch(e){ zeig('❌ Datei ist kein gültiges JSON.'); return {error:'parse'}; }
+  const liste=Array.isArray(data)?data:(data&&Array.isArray(data.faenge)?data.faenge:null);
+  if(!liste){ zeig('❌ Kein Fangbuch-Backup erkannt (Feld "faenge" fehlt).'); return {error:'format'}; }
+  const gueltig=liste.filter(e=>e&&typeof e==='object'&&e.fisch&&e.datum);
+  if(!gueltig.length){ zeig('❌ Keine gültigen Fänge in der Datei.'); return {error:'leer'}; }
+  /* MERGE statt Überschreiben: vorhandene Fänge bleiben, Duplikate werden übersprungen */
+  const vorhanden=new Set(state.fbMem.map(fangKey));
+  let neu=0;
+  gueltig.forEach(e=>{ if(!vorhanden.has(fangKey(e))){ state.fbMem.push(e); vorhanden.add(fangKey(e)); neu++; } });
+  state.fbMem.sort((a,b)=>String(b.datum).localeCompare(String(a.datum)));
+  await fbPersist();
+  zeig('✓ '+neu+' neue Fänge importiert'+(gueltig.length-neu>0?' ('+(gueltig.length-neu)+' Duplikate übersprungen)':'')+'.');
+  return {neu,duplikate:gueltig.length-neu};
+}
+
 export function fbTools(){
   const t=document.getElementById('fbTools');
   if(!t) return;
@@ -110,7 +141,13 @@ export function fbTools(){
   if(state.fbMem.length){
     const b=document.createElement('button'); b.className='fbtool'; b.textContent='⬇ CSV-Export';
     b.onclick=fbCsv; t.appendChild(b);
+    const bk=document.createElement('button'); bk.className='fbtool'; bk.textContent='💾 Backup (JSON)';
+    bk.title='Vollständige Sicherung – kann wieder importiert werden';
+    bk.onclick=fbBackup; t.appendChild(bk);
   }
+  /* Import immer anbieten (auch bei leerem Fangbuch – z.B. nach Gerätewechsel) */
+  const imp=document.createElement('button'); imp.className='fbtool'; imp.textContent='📂 Backup einlesen';
+  imp.onclick=()=>document.getElementById('fbFile').click(); t.appendChild(imp);
 }
 export function fbRender(){
   const list=document.getElementById('fbList');
@@ -122,7 +159,7 @@ export function fbRender(){
     return;
   }
   list.innerHTML='';
-  [...fbMem].reverse().forEach(e=>{
+  [...state.fbMem].reverse().forEach(e=>{
     const d=document.createElement('div'); d.className='fb-entry';
     const cx=e.ctx?[e.ctx.zeit,e.ctx.mond,e.ctx.druck?e.ctx.druck+' hPa'+(e.ctx.trend<=-1.5?'⇘':e.ctx.trend>=1.5?'⇗':''):null,e.ctx.wind,e.ctx.pegel?'Pegel '+e.ctx.pegel:null,e.ctx.wt!=null?'W '+e.ctx.wt+'°C':null].filter(Boolean).join(' · '):'';
     d.innerHTML=`<div class="info"><div class="fish">${esc(e.fisch)} ${e.laenge?'· '+esc(e.laenge)+' cm':''} ${e.entnommen?'<span title="entnommen">🪣</span>':'<span title="zurückgesetzt">↩</span>'}</div>
@@ -257,4 +294,14 @@ if('serviceWorker' in navigator&&location.protocol==='https:'){
       });
     });
   }).catch(()=>{});
+}
+
+/* Datei-Input für Backup-Import verdrahten */
+const fbFileEl=document.getElementById('fbFile');
+if(fbFileEl){
+  fbFileEl.onchange=async e=>{
+    const f=e.target.files&&e.target.files[0];
+    if(f) await fbRestore(f);
+    e.target.value=''; /* gleiche Datei erneut wählbar */
+  };
 }
