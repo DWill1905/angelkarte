@@ -91,6 +91,35 @@
   .chips.sub{background:var(--ink);padding-top:6px;padding-bottom:6px}
   .chips.sub .chip{background:transparent;border-color:var(--line);color:var(--muted);min-height:28px;padding:5px 11px}
   .chips.sub .chip.on{background:var(--dusk);border-color:var(--dusk);color:#0d3540;opacity:1;font-weight:600;box-shadow:0 0 0 3px rgba(110,168,196,.15)}
+  /* --- Vollbild-Knopf --- */
+  .fsbtn{position:absolute;z-index:500;display:flex;align-items:center;justify-content:center;
+    width:40px;height:40px;border-radius:11px;border:1px solid var(--shoal);
+    background:rgba(22,50,60,.86);color:var(--text);cursor:pointer;
+    backdrop-filter:blur(3px);
+    top:calc(12px + env(safe-area-inset-top));
+    right:calc(12px + env(safe-area-inset-right))}
+  .fsbtn:hover{background:rgba(22,50,60,.96)}
+  .fsbtn .ic{width:18px;height:18px}
+
+  /* --- Vollbildmodus: Header, Tabs und Saison-Leiste weichen --- */
+  body.map-fs > header,
+  body.map-fs > .tabs{display:none}
+  body.map-fs #saisonBar,
+  body.map-fs #saisonInfo,
+  body.map-fs #swUpdate,
+  body.map-fs #banner{display:none}
+  /* Gewitter-/Sturmwarnung bleibt: Sicherheit geht vor Bildschirmfläche. */
+  body.map-fs #stormWarn{display:block;padding-top:calc(8px + env(safe-area-inset-top))}
+  body.map-fs .view.active{padding:0}
+  /* Sperrzonen-Warnung bleibt sichtbar – sie darf nie hinter dem Vollbild verschwinden. */
+  body.map-fs #sperrWarn{padding-top:calc(8px + env(safe-area-inset-top))}
+  body.map-fs .fsbtn{top:calc(12px + env(safe-area-inset-top))}
+  body.map-fs .locbtn{bottom:calc(28px + env(safe-area-inset-bottom))}
+  body.map-fs .sheet{bottom:calc(14px + env(safe-area-inset-bottom))}
+  @media(max-width:819px){
+    body.map-fs .sheet{bottom:0}
+  }
+
   #saisonBar{flex:0 0 auto;display:flex;align-items:center;gap:8px;width:100%;
     background:rgba(166,212,232,.10);border:0;border-bottom:1px solid var(--line);
     color:var(--text);font:inherit;font-size:12px;padding:7px 14px;cursor:pointer;text-align:left}
@@ -300,6 +329,7 @@
   <div id="sperrWarn" role="alert" hidden></div>
   <div id="map"></div>
   <button class="locbtn" id="locbtn" title="Meinen Standort anzeigen" data-ic="pin">Standort</button>
+  <button class="fsbtn" id="fsBtn" type="button" aria-pressed="false" title="Karte im Vollbild" aria-label="Karte im Vollbild"></button>
   <div class="sheet collapsed" id="sheet">
     <div class="sheet-handle" id="sheetHandle" role="button" tabindex="0" aria-label="Spotliste ein-/ausklappen">
       <h2>Spots <span id="spotCount"></span><span id="spotSort" style="color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0"></span></h2>
