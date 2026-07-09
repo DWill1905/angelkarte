@@ -45,6 +45,8 @@ if (touchesCode) {
     process.stdout.write(out);
     const st = execFileSync('node', [path.join(__dirname, 'check-state.mjs')], { encoding: 'utf8' });
     process.stdout.write(st);
+    const cy = execFileSync('node', [path.join(__dirname, 'check-cycles.mjs')], { encoding: 'utf8' });
+    process.stdout.write(cy.split('\n').slice(-2).join('\n'));
   } catch (e) {
     if (e.stdout) process.stdout.write(e.stdout);
     if (e.stderr) process.stderr.write(e.stderr);

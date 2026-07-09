@@ -48,7 +48,8 @@ export function winkelDiff(a: number, b: number): number {
  */
 export function istAuflandig(spot: Spot, h: Hotspot, windAusGrad: number): boolean | null {
   if (typeof spot.lat !== 'number' || typeof h.lat !== 'number') return null;
-  if (winkelDiff(spot.lat, h.lat) === 0 && spot.lng === h.lng) return null;
+  /* Identischer Punkt: keine Peilung möglich (Hotspot liegt exakt auf dem Spot-Zentrum). */
+  if (spot.lat === h.lat && spot.lng === h.lng) return null;
   const windZiel = (windAusGrad + 180) % 360;
   const b = peilung(spot.lat, spot.lng!, h.lat, h.lng);
   return winkelDiff(b, windZiel) <= 60;

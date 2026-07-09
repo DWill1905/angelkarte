@@ -28,6 +28,8 @@ import { schilfLaden, schilfAus, schilfAktiv } from './reed.js';
 import { fullscreenToggle, fullscreenAktiv } from './fullscreen.js';
 import { empfehlung, kandidaten, openPlan, zielfischFor, startzeitFor, peilung, himmelsrichtung, winkelDiff, istAuflandig } from './plan.js';
 import { bewerteSpot, bewerteAlle, sterneAus, sterneText } from './rating.js';
+import { jahreszeit } from './saison.js';
+import { saison } from './tackle.js';
 import { inWindow, inSchonzeit, daysUntilMD, masseAus, fmtMD, fmtDate, solunar, haversine } from './astro.js';
 window.__app = { state, popupHtml, mapsLink, spotVisible, sperrWarnung, locApply,
   fbInsights, fbRestore, parseFangDatum, beissfensterJetzt, fbRender,
@@ -35,7 +37,7 @@ window.__app = { state, popupHtml, mapsLink, spotVisible, sperrWarnung, locApply
   fullscreenToggle, fullscreenAktiv,
   empfehlung, kandidaten, openPlan, zielfischFor, startzeitFor,
   peilung, himmelsrichtung, winkelDiff, istAuflandig,
-  bewerteSpot, bewerteAlle, sterneAus, sterneText,
+  bewerteSpot, bewerteAlle, sterneAus, sterneText, jahreszeit, saison,
   inWindow, inSchonzeit, daysUntilMD, masseAus, fmtMD, fmtDate, solunar, haversine };
 `);
   try {
@@ -46,21 +48,46 @@ window.__app = { state, popupHtml, mapsLink, spotVisible, sperrWarnung, locApply
   return BUNDLE;
 }
 
-/** Leaflet-Stub: alles ist aufrufbar und liefert sich selbst zurück. */
+/** Leaflet-Stub: alles ist aufrufbar und liefert sich selbst zurück.
+    Zusätzlich wird verfolgt, welche Layer der Karte hinzugefügt wurden – sonst
+    liefert `map.hasLayer()` immer false und Tests wie „ist der Schilf-Layer aktiv?"
+    prüfen in Wahrheit nichts. */
 function leafletStub(opts = {}) {
+  const aktiveLayer = new Set();
+  opts.aktiveLayer = aktiveLayer;
+
+  const mkLayer = () => {
+    const layer = new Proxy(function () {}, {
+      get: (_t, p) => {
+        if (p === Symbol.toPrimitive) return () => 0;
+        if (p === '__istLayer') return true;
+        if (p === 'addTo') return () => { aktiveLayer.add(layer); return layer; };
+        if (p === 'remove') return () => { aktiveLayer.delete(layer); return layer; };
+        if (p === 'bindTooltip' || p === 'bindPopup' || p === 'openPopup') return () => layer;
+        if (p === 'getElement') return () => null;
+        return layer;
+      },
+      apply: () => layer,
+    });
+    return layer;
+  };
+
   const stub = new Proxy(function () {}, {
     get: (_t, p) => {
       if (p === Symbol.toPrimitive) return () => 0;
       if (p === 'lat') return opts.lat ?? 52;
       if (p === 'lng') return opts.lng ?? 11.6;
-      if (p === 'hasLayer') return () => false;
+      if (p === 'hasLayer') return (l) => aktiveLayer.has(l);
+      if (p === 'removeLayer') return (l) => { aktiveLayer.delete(l); };
+      if (p === 'addLayer') return (l) => { aktiveLayer.add(l); };
       if (p === 'getElement') return () => null;
       if (p === 'getContainer') return () => ({ addEventListener: () => {} });
       if (p === 'getBounds') return () => opts.bounds ?? { getWest: () => 11.5, getEast: () => 11.7, getNorth: () => 52.2, getSouth: () => 52.0 };
       if (p === 'getZoom') return () => opts.zoom ?? 12;
-      if (p === 'on') return (ev, fn) => { (opts.handlers ||= {})[ev] = fn; };
+      if (p === 'on' || p === 'once') return (ev, fn) => { (opts.handlers ||= {})[ev] = fn; };
       if (p === 'invalidateSize') return () => { opts.invalidateCalls = (opts.invalidateCalls || 0) + 1; };
-      if (p === 'remove' || p === 'addTo' || p === 'bindTooltip' || p === 'setView') return () => stub;
+      if (p === 'layerGroup' || p === 'polygon' || p === 'polyline' || p === 'circleMarker' || p === 'marker') return () => mkLayer();
+      if (p === 'remove' || p === 'addTo' || p === 'bindTooltip' || p === 'setView' || p === 'flyTo') return () => stub;
       return stub;
     },
     apply: () => stub,

@@ -8,6 +8,7 @@
    Wichtig: Das sind Erfahrungs- und Faustwerte, keine Rechtsangaben. Vorfach- und
    Zugangsempfehlungen folgen aus dem Bestand (Hecht ⇒ Stahl) und der Gewässerform. */
 import { state } from './state.js';
+import { jahreszeit } from './saison.js';
 import { esc, ICON } from './util.js';
 import type { Farben, Spot, Tackle, Wasser } from './types';
 
@@ -132,14 +133,9 @@ function farbenAus(w: Wasser): Farben {
   };
 }
 
-/** Aktuelle Jahreszeit (nur zur Hervorhebung im Popup). */
-export function saison(d: Date = new Date()): keyof Farben {
-  const m = d.getMonth() + 1;
-  if (m <= 2 || m === 12) return 'winter';
-  if (m <= 5) return 'fruehjahr';
-  if (m <= 8) return 'sommer';
-  return 'herbst';
-}
+/** Aktuelle Jahreszeit. Re-Export der EINEN Implementierung aus saison.ts –
+    zwei Kopien derselben Logik sind eine Fehlerquelle (siehe WT_OPT). */
+export const saison = jahreszeit;
 
 /** Erzeugt die Tackle-Empfehlung: kuratiert, sonst abgeleitet. */
 export function tackleFor(s: Spot): { t: Tackle; kuratiert: boolean } {

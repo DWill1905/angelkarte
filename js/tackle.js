@@ -1,3 +1,4 @@
+import { jahreszeit } from './saison.js';
 import { esc, ICON } from './util.js';
 /* ---------- Gewässercharakter ---------- */
 /** Leitet den Gewässercharakter ab, wenn er nicht gesetzt ist. */
@@ -114,17 +115,9 @@ function farbenAus(w) {
         winter: 'Klarwasser: dezente Naturtöne, kleine Köder, sehr langsam',
     };
 }
-/** Aktuelle Jahreszeit (nur zur Hervorhebung im Popup). */
-export function saison(d = new Date()) {
-    const m = d.getMonth() + 1;
-    if (m <= 2 || m === 12)
-        return 'winter';
-    if (m <= 5)
-        return 'fruehjahr';
-    if (m <= 8)
-        return 'sommer';
-    return 'herbst';
-}
+/** Aktuelle Jahreszeit. Re-Export der EINEN Implementierung aus saison.ts –
+    zwei Kopien derselben Logik sind eine Fehlerquelle (siehe WT_OPT). */
+export const saison = jahreszeit;
 /** Erzeugt die Tackle-Empfehlung: kuratiert, sonst abgeleitet. */
 export function tackleFor(s) {
     if (s.tackle)

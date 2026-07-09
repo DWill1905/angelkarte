@@ -113,15 +113,20 @@ export function schilfAus(): void {
   if (layer && state.map) state.map.removeLayer(layer);
   layer = null;
   meldung('');
+  knopfSync();
+}
+
+/** Schalterzustand an die Realität angleichen. */
+function knopfSync(): void {
+  const btn = byId('schilfBtn');
+  if (!btn) return;
+  const an = schilfAktiv();
+  btn.classList.toggle('on', an);
+  btn.setAttribute('aria-pressed', String(an));
 }
 
 export async function schilfToggle(): Promise<void> {
   if (schilfAktiv()) schilfAus();
   else await schilfLaden();
-  const btn = byId('schilfBtn');
-  if (btn) {
-    const an = schilfAktiv();
-    btn.classList.toggle('on', an);
-    btn.setAttribute('aria-pressed', String(an));
-  }
+  knopfSync();
 }

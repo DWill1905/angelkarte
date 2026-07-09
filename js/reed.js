@@ -108,16 +108,21 @@ export function schilfAus() {
         state.map.removeLayer(layer);
     layer = null;
     meldung('');
+    knopfSync();
+}
+/** Schalterzustand an die Realität angleichen. */
+function knopfSync() {
+    const btn = byId('schilfBtn');
+    if (!btn)
+        return;
+    const an = schilfAktiv();
+    btn.classList.toggle('on', an);
+    btn.setAttribute('aria-pressed', String(an));
 }
 export async function schilfToggle() {
     if (schilfAktiv())
         schilfAus();
     else
         await schilfLaden();
-    const btn = byId('schilfBtn');
-    if (btn) {
-        const an = schilfAktiv();
-        btn.classList.toggle('on', an);
-        btn.setAttribute('aria-pressed', String(an));
-    }
+    knopfSync();
 }
