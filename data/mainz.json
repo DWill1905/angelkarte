@@ -524,8 +524,14 @@
    "lat": 49.91821,
    "lng": 8.19599,
    "fisch": "Karpfen, Schleie, Zander, Rotauge, Rotfeder, Karausche, (Regenbogenforelle-Besatz)",
-   "methode": "Kleiner, gepflegter Vereinssee (~0,3 ha, bis ~4 m) im Selztal bei Ober-Olm. Klassisches Friedfisch-Ansitzangeln, gelegentlich Forellenbesatz. Familienfreundlich, ruhig.",
+   "methode": "Kleiner, gepflegter Vereinssee (2.700 m² Wasserfläche) im Selztal bei Ober-Olm. Winterpause 26.11.–5.3. (Gewässer gesperrt). Klassisches Friedfisch-Ansitzangeln, gelegentlich Forellenbesatz. Familienfreundlich, ruhig.",
    "karte": "Erlaubnisschein ASV Seerose Ober-Olm 1980 e.V. – Gastkarten beim Verein erfragen",
+   "kartenLinks": [
+    {
+     "label": "ASV Seerose – Angelweiher",
+     "url": "https://asvseerose.de/Unser-Angelweiher"
+    }
+   ],
    "note": "⚠ Kleiner Vereinsteich (verif C): eher Friedfisch/Ansitz, kein großes Raubfischrevier. Vereinsgelände mit Bewirtung. Jugendfreundlich, aber Gastregelung vorab klären.",
    "hotspots": [],
    "warn": false,

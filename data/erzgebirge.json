@@ -39,6 +39,12 @@
    "fisch": "Barsch, Hecht, Karpfen, Schleie, Brasse, Weißfisch (Zander selten)",
    "methode": "Gummifisch & Wobbler an den Kanten der Bachtäler, DropShot auf Barsch – weite Würfe nötig, Fische oft bis ~15 m Tiefe",
    "karte": "AVS-Erlaubnisschein + TWT-Belehrung (Quittung im Fangbuch)",
+   "kartenLinks": [
+    {
+     "label": "AVS Sachsen – Gastkarten",
+     "url": "https://angeln-sachsen.de/avs/gastangler/gastkarten"
+    }
+   ],
    "note": "Trinkwassertalsperre: kein Boot, kein Waten, kein Anfüttern, keine Maden/Fleisch, kein Nachtangeln. Schonmaß 60 cm für ALLE Salmoniden. Parkplatz am NO-Ufer (Lippersdorfer Str.), Rundwanderweg erschließt alle Ufer.",
    "hotspots": [
     {
@@ -210,6 +216,12 @@
    "fisch": "Bachforelle, Regenbogenforelle, Äsche, Döbel, Barsch",
    "methode": "Fliege &amp; UL-Spinner mit Einzelhaken – Gumpen, Kolke, unterspülte Ufer",
    "karte": "Gelbe Strecke: nur mit Jahres-Salmonidenschein des AVS",
+   "kartenLinks": [
+    {
+     "label": "AVS Sachsen – Gastkarten",
+     "url": "https://angeln-sachsen.de/avs/gastangler/gastkarten"
+    }
+   ],
    "note": "Für Gastangler ohne Jahres-Salmoschein NICHT zugänglich. Sperr- und Fly-only-Abschnitte vorhanden – Beschilderung beachten.",
    "warn": true
   },
@@ -267,6 +279,12 @@
    "fisch": "Bachforelle, Äsche, Döbel, Barsch – guter Salmonidenbestand",
    "methode": "Leichte Spinnrute bis 10 g oder Fliege, Wathose empfohlen (Gumpen &amp; Kolke!)",
    "karte": "Allgemeine AVS-Berechtigung / Gastkarte – kein Salmoschein nötig",
+   "kartenLinks": [
+    {
+     "label": "AVS Sachsen – Gastkarten",
+     "url": "https://angeln-sachsen.de/avs/gastangler/gastkarten"
+    }
+   ],
    "note": "Die realistische Mulde-Strecke für Gastangler: Forellen &amp; Döbel fast überall, Barsche in tiefen Gumpen.",
    "warn": false
   },
@@ -308,6 +326,12 @@
    "fisch": "Bachforelle, Regenbogenforelle, Äsche, Weißfisch",
    "methode": "Nymphe in den Taschen zwischen den Felsen, UL-Spinner – Wathose mit rutschfester Sohle",
    "karte": "Grüne Strecke: allgemeine AVS-Berechtigung, aber nach Salmonidenregeln (Flug/Spinn, 1 Rute, Einzelhaken)",
+   "kartenLinks": [
+    {
+     "label": "AVS Sachsen – Gastkarten",
+     "url": "https://angeln-sachsen.de/avs/gastangler/gastkarten"
+    }
+   ],
    "note": "Mäander zwischen bewaldeten Hängen, wechselnd sandig bis felsig – versteckte Rinnen und Löcher.",
    "warn": false
   },
@@ -359,6 +383,12 @@
    "fisch": "Bachforelle, Regenbogenforelle, Döbel, Barsch, Hecht, Aal, Karpfen",
    "methode": "UL-Spinnfischen, Pose – laut Fangstatistik erfolgreichste Methode hier",
    "karte": "Allgemeine AVS-Berechtigung / Gastkarte",
+   "kartenLinks": [
+    {
+     "label": "AVS Sachsen – Gastkarten",
+     "url": "https://angeln-sachsen.de/avs/gastangler/gastkarten"
+    }
+   ],
    "note": "Fischreiche, stark befischte Strecke. Achtung: privates Fischereirecht zwischen Grünhainichen und Borstendorf – siehe rote Sperrstrecke.",
    "warn": false
   },
@@ -409,6 +439,12 @@
    "fisch": "Karpfen, Graskarpfen, Schleie, Aal, Barsch",
    "methode": "Grundangeln (Boilie, Mais), Pose in der Dämmerung auf Schleie, abends auf Aal",
    "karte": "AVS-Erlaubnisschein / Gastkarte",
+   "kartenLinks": [
+    {
+     "label": "AVS Sachsen – Gastkarten",
+     "url": "https://angeln-sachsen.de/avs/gastangler/gastkarten"
+    }
+   ],
    "note": "Kleiner Naturteich bei Gränitz (OT Brand-Erbisdorf). Angelstatus vorab im AVS-Gewässerverzeichnis prüfen – Lage/Zuordnung nicht eindeutig.",
    "warn": false
   },
@@ -430,6 +466,12 @@
    "fisch": "Karpfen, Brachse, Schleie, Aal, Barsch",
    "methode": "Feeder & Method Feeder auf Karpfen, Madenbündel auf Brachse",
    "karte": "AVS-Erlaubnisschein / Gastkarte",
+   "kartenLinks": [
+    {
+     "label": "AVS Sachsen – Gastkarten",
+     "url": "https://angeln-sachsen.de/avs/gastangler/gastkarten"
+    }
+   ],
    "note": "Stadtnah und gut erreichbar – solides Friedfischgewässer.",
    "warn": false
   },
@@ -468,6 +510,12 @@
    "methode": "Grund/Pose außerhalb der Bade-Bojen, Randzeiten nutzen",
    "karte": "Fischereigewässer der RWA – Status/Nummer im AVS-Gewässerverzeichnis prüfen",
    "rig": "Feeder- oder Posenrute, 0,25er Mono reicht – Boilies/Mais auf Karpfen, Wurm auf Schleie in der Dämmerung",
+   "kartenLinks": [
+    {
+     "label": "AVS Sachsen – Gastkarten",
+     "url": "https://angeln-sachsen.de/avs/gastangler/gastkarten"
+    }
+   ],
    "note": "8-ha-Kunstteich (1570), zugleich EU-Badegewässer mit Naturbad und Bootsverleih: im Sommer tagsüber Badebetrieb – früh morgens oder abends angeln.",
    "warn": false
   },
@@ -488,6 +536,12 @@
    "methode": "Klassisches Ansitzangeln, Ufer gut zugänglich, Parken schwierig",
    "karte": "RWA-Kunstteich – Status/Nummer im AVS-Gewässerverzeichnis prüfen",
    "rig": "Method Feeder auf Karpfen, feine Posenmontage auf Schleie",
+   "kartenLinks": [
+    {
+     "label": "AVS Sachsen – Gastkarten",
+     "url": "https://angeln-sachsen.de/avs/gastangler/gastkarten"
+    }
+   ],
    "note": "FFH-Gebiet \"Freiberger Bergwerksteiche\", wird wie der Großteich zyklisch abgelassen – Wasserstand vor dem Trip prüfen.",
    "warn": true
   },
