@@ -25,25 +25,33 @@ Schonzeiten-Status, Fangbuch, Beißzeiten-/Köder-/Blei-Beratern und einem
 
 ## Architektur
 
-Der App-Code ist in **ES-Module** unter `js/` aufgeteilt. `index.html` laedt Leaflet (global)
-und den Einstiegspunkt `js/app.js`; der Browser loest die Imports nativ auf – **kein Build-Schritt**.
+Der App-Code ist in **TypeScript** unter `src/` geschrieben und wird nach `js/` kompiliert.
+`index.html` laedt Leaflet (global) und den Einstiegspunkt `js/app.js`; der Browser loest die
+ES-Module-Imports nativ auf – **kein Bundler zur Laufzeit**, GitHub Pages liefert `js/` unveraendert aus.
+
+Die Typen liegen zentral in `src/types.ts` (Spot, Region, Schonzeit, Fang, …). Damit sind auch die
+60 KB Regionsdaten in `src/data.ts` compilergeprueft: ein Tippfehler in einer Kategorie oder ein
+fehlendes Pflichtfeld faellt beim Bauen auf, nicht am Wasser.
 
 | Modul | Verantwortung |
 |-------|---------------|
-| `state.js` | Zentraler mutable State (als Objekt) + Storage-Shim |
-| `util.js` | HTML-Escape, SVG-Icon-Set |
-| `data.js` | Regionsdaten: Kategorien, Spots, Schonzeiten, `REGIONS_EMBEDDED` |
-| `astro.js` | Sonne, Mond, Solunar, Schonzeit-Fenster |
-| `mapcore.js` | Leaflet-Instanz (frueh initialisiert, reihenfolge-kritisch) |
-| `region.js` | Regions-Verwaltung (JSON-DB + eingebetteter Fallback) |
-| `ui.js` | Header (Sonne/Banner) & Tabs |
-| `map.js` | Marker, Filter, Popups, Standort, Spot-Liste |
-| `myspots.js` | Eigene Spots (Long-Press/Rechtsklick) |
-| `weather.js` | Wetter & Pegel (Open-Meteo + PEGELONLINE) |
-| `tools.js` | Werkzeuge-Menue (Score, Koeder, Beisszeiten, Packliste, Knoten, Blei) |
-| `regeln.js` | Regeln-Tab & Schonzeit-Kalender |
-| `fangbuch.js` | Fangbuch |
-| `app.js` | Einstiegspunkt, laedt Module in Abhaengigkeitsreihenfolge |
+| `types.ts` | Zentrale Typdefinitionen (Spot, Region, Schonzeit, Fang, AppState) |
+| `dom.ts` | Typsichere DOM-Helfer (byId, qs, qsa) |
+| `state.ts` | Zentraler mutable State (als Objekt) + Storage-Shim |
+| `util.ts` | HTML-Escape, SVG-Icon-Set |
+| `data.ts` | Regionsdaten: Kategorien, Spots, Schonzeiten, `REGIONS_EMBEDDED` |
+| `astro.ts` | Sonne, Mond, Solunar, Schonzeit-Fenster |
+| `mapcore.ts` | Leaflet-Instanz (frueh initialisiert, reihenfolge-kritisch) |
+| `region.ts` | Regions-Verwaltung (JSON-DB + eingebetteter Fallback) |
+| `ui.ts` | Header (Sonne/Banner) & Tabs |
+| `map.ts` | Marker, Filter, Popups, Standort, Spot-Liste |
+| `myspots.ts` | Eigene Spots (Long-Press/Rechtsklick) |
+| `weather.ts` | Wetter & Pegel (Open-Meteo + PEGELONLINE) |
+| `tools.ts` | Werkzeuge-Menue (Score, Koeder, Beisszeiten, Packliste, Knoten, Blei) |
+| `regeln.ts` | Regeln-Tab & Schonzeit-Kalender |
+| `fangbuch.ts` | Fangbuch inkl. Backup/Restore |
+| `trip.ts` | Trip-Planer (gemerkte Spots) |
+| `app.ts` | Einstiegspunkt, laedt Module in Abhaengigkeitsreihenfolge |
 
 Geteilter Zustand liegt im `state`-Objekt aus `state.js` (Properties werden mutiert, nie neu
 zugewiesen) – so sehen alle Module live dieselben Werte, ohne die Import-Bindungen zu verletzen.
@@ -57,12 +65,40 @@ Voraussetzung fuer Tests/Build-Helfer: Node.js. `esbuild` wird nur fuer den Test
 gebraucht (nicht fuers Deployment).
 
 ```
+node tools/build.mjs            # src/*.ts -> js/ kompilieren (vor jedem Deploy noetig)
+node tools/check-build.mjs      # Typecheck + Drift-Check (ist js/ aktuell zu src/?)
+node tools/test.mjs             # komplette Test-Suite (Node-Test-Runner + jsdom)
+
 node tools/gen-data.mjs         # data/*.json aus js/data.js regenerieren
 node tools/check-data.mjs       # pruefen ob data/*.json bit-genau zu js/data.js passen
 node tools/validate-data.mjs    # Datenintegritaet (Schonzeiten, Masse, Koordinaten, zugang, verif)
-node tools/check-imports.mjs    # fehlende moduluebergreifende Importe finden (Live-Crash-Schutz)
-node tools/build-test-bundle.mjs# Test-Bundle fuer den jsdom-Harness bauen
+node tools/test-load.mjs        # echter Live-Ladepfad (Manifest -> Dateien)
+node tools/check-imports.mjs    # fehlende moduluebergreifende Importe finden
+node tools/check-state.mjs      # nackte State-Referenzen finden (z.B. fbMem statt state.fbMem)
 ```
+
+Voraussetzungen fuer die Werkzeuge (einmalig pro Umgebung):
+
+```
+npm install typescript --no-save --prefix /tmp/ts-install
+npm install esbuild    --no-save --prefix /tmp/esbuild-install   # nur fuer den Test-Harness
+```
+
+## Tests
+
+Die Suite liegt unter `tests/` und nutzt den eingebauten Node-Test-Runner (keine zusaetzliche
+Abhaengigkeit) plus jsdom:
+
+| Datei | Inhalt |
+|-------|--------|
+| `tests/logik.test.mjs` | Datumsfenster, Schonzeiten, Entnahmefenster, Solunar, Entfernungen |
+| `tests/daten.test.mjs` | Regionsdaten: Pflichtfelder, Koordinaten, Kartenlinks, Manifest |
+| `tests/fangbuch.test.mjs` | Speichern, Maszcheck, Statistik, Backup/Restore |
+| `tests/app.test.mjs` | Regionswechsel, Popups, Filter, Trip-Liste, Sperrzonen-Warnung |
+
+Die Datentests pruefen **Regeln statt konkreter Zahlen**, damit neue Regionen automatisch
+mitgeprueft werden. `tools/test.mjs` kompiliert vorher TypeScript und laeuft im Deploy-Waechter
+automatisch mit – ein roter Test blockiert den Deploy auf `main`.
 
 Nach jeder Datenaenderung in `js/data.js`: `gen-data.mjs` -> `check-data.mjs` ausfuehren,
 damit die JSON-Dateien synchron bleiben. `validate-data.mjs` laeuft im Deploy automatisch mit

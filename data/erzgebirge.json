@@ -1,5 +1,6 @@
 {
  "id": "erzgebirge",
+ "geprueft": "2026-07",
  "name": "Erzgebirge / Freiberg (Sachsen)",
  "nachtangeln": "lvsa",
  "kurz": "Erzgebirge",
@@ -556,7 +557,7 @@
    "methode": "—",
    "karte": "Kein reguläres Angelgewässer",
    "note": "Naturschutzgebiet, Teil der Revierwasserlaufanstalt, wird alle 4 Jahre abgelassen. Schönes Vogelrevier, aber kein Zielgewässer.",
-   "warn": false
+   "warn": true
   }
  ],
  "schon": [

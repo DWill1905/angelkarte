@@ -10,6 +10,7 @@ const path = require('path');
 const TOKEN = process.env.GH_TOKEN;
 const REPO = 'DWill1905/angelkarte';
 const [, , message, ...files] = process.argv;
+const BRANCH = process.env.GH_BRANCH || 'main';
 if (!TOKEN || !message || !files.length) {
   console.error('Nutzung: GH_TOKEN=... node tools/deploy.js "Message" datei1 [datei2 ...]');
   process.exit(1);
@@ -19,7 +20,24 @@ if (!TOKEN || !message || !files.length) {
    Blockiert den Deploy bei stillen Datenfehlern (Schonzeiten/Maße/Spots). */
 const touchesRegionData = files.some(f => /js\/data\.js$|data\/[a-z]+\.json$/.test(f));
 const touchesData = files.some(f => /index\.html$|data\/|js\/data\.js$/.test(f));
-const touchesCode = files.some(f => /js\/.+\.js$/.test(f));
+const touchesSrc = files.some(f => /src\/.+\.ts$/.test(f));
+const touchesCode = files.some(f => /js\/.+\.js$|src\/.+\.ts$/.test(f));
+/* TypeScript: Typecheck + Drift (js/ muss zu src/ passen) + Test-Suite */
+if (touchesSrc || touchesCode) {
+  const { execFileSync } = require('child_process');
+  for (const [tool, label] of [['check-build.mjs', 'Typecheck/Build'], ['test.mjs', 'Test-Suite']]) {
+    try {
+      const out = execFileSync('node', [path.join(__dirname, tool)], { encoding: 'utf8' });
+      process.stdout.write(out.split('\n').slice(-4).join('\n'));
+    } catch (e) {
+      if (e.stdout) process.stdout.write(e.stdout);
+      if (e.stderr) process.stderr.write(e.stderr);
+      console.error('\n✖ ' + label + ' fehlgeschlagen.');
+      if (BRANCH === 'main') process.exit(1);
+      console.error('   (Branch-Deploy: nur Warnung, kein Abbruch)');
+    }
+  }
+}
 if (touchesCode) {
   const { execFileSync } = require('child_process');
   try {
@@ -30,8 +48,9 @@ if (touchesCode) {
   } catch (e) {
     if (e.stdout) process.stdout.write(e.stdout);
     if (e.stderr) process.stderr.write(e.stderr);
-    console.error('\n✖ Deploy abgebrochen: fehlende modulübergreifende Importe (Live-Crash-Gefahr).');
-    process.exit(1);
+    console.error('\n✖ Import-/State-Check fehlgeschlagen.');
+    if (BRANCH === 'main') process.exit(1);
+    console.error('   (Branch-Deploy: nur Warnung, kein Abbruch)');
   }
 }
 if (touchesData) {
@@ -57,8 +76,9 @@ if (touchesData) {
     process.stdout.write(loadOut);
   } catch (e) {
     if (e.stdout) process.stdout.write(e.stdout);
-    console.error('\n✖ Deploy abgebrochen: Daten-/Ladecheck fehlgeschlagen. Bitte Fehler oben beheben.');
-    process.exit(1);
+    console.error('\n✖ Daten-/Ladecheck fehlgeschlagen.');
+    if (BRANCH === 'main') process.exit(1);
+    console.error('   (Branch-Deploy: nur Warnung, kein Abbruch)');
   }
 }
 
@@ -79,7 +99,7 @@ const api = async (method, url, body) => {
 
 (async () => {
   // 1) Basis: aktueller Head + Tree
-  const ref = await api('GET', `/repos/${REPO}/git/ref/heads/main`);
+  const ref = await api('GET', `/repos/${REPO}/git/ref/heads/${BRANCH}`);
   const baseCommit = ref.object.sha;
   const commit = await api('GET', `/repos/${REPO}/git/commits/${baseCommit}`);
   console.log('Basis:', baseCommit.slice(0, 7));
@@ -106,13 +126,15 @@ const api = async (method, url, body) => {
     tree: newTree.sha,
     parents: [baseCommit],
   });
-  await api('PATCH', `/repos/${REPO}/git/refs/heads/main`, { sha: newCommit.sha });
+  await api('PATCH', `/repos/${REPO}/git/refs/heads/${BRANCH}`, { sha: newCommit.sha });
+  if (BRANCH !== 'main') { console.log('Commit auf Branch ' + BRANCH + ' – kein Pages-Build erwartet.'); }
   console.log('Commit:', newCommit.sha.slice(0, 7), '->', message);
 
   // 4) Deploy sicherstellen: GitHub triggert bei Git-Data-Pushes unzuverlässig.
   //    Warten, prüfen ob ein Run für den neuen Commit läuft/lief – sonst (oder bei
   //    failure/cancelled) genau EINEN Build anstoßen. Bis zu 3 Versuche.
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  if (BRANCH !== 'main') { console.log('Fertig (Branch-Commit, GitHub Pages baut nur main).'); return; }
   for (let attempt = 1; attempt <= 3; attempt++) {
     await sleep(20000);
     const runs = await api('GET', `/repos/${REPO}/actions/runs?per_page=5`);
