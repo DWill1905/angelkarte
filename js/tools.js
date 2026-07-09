@@ -394,8 +394,37 @@ kbDlg.addEventListener('click',e=>{if(e.target===kbDlg)kbDlg.hidden=true;});
 /* Handy gedreht / Fenster skaliert: Karte neu vermessen */
 export let rsT; addEventListener('resize',()=>{clearTimeout(rsT);rsT=setTimeout(()=>state.map.invalidateSize(),150);});
 
+/* Wassertemperatur-Einordnung je Zielfisch (grobe Aktivitätsoptima) */
+const WT_OPT={Zander:[12,22],Hecht:[8,18],Barsch:[10,22],Wels:[18,26],Aal:[16,25],
+  Karpfen:[18,26],Schleie:[18,26],Rapfen:[14,24],Bachforelle:[8,16],Regenbogenforelle:[8,16],
+  Äsche:[8,16],Barbe:[14,22],Döbel:[12,22],Quappe:[2,10]};
+function wtHinweis(wt,arten){
+  if(wt==null) return null;
+  const rel=(arten||[]).filter(a=>WT_OPT[a]).slice(0,4);
+  if(!rel.length) return Math.round(wt)+' °C';
+  const gut=[],traege=[],aktiv=[];
+  rel.forEach(a=>{const [lo,hi]=WT_OPT[a];
+    if(wt>=lo&&wt<=hi) gut.push(a); else if(wt<lo) traege.push(a); else aktiv.push(a);});
+  let t=Math.round(wt)+' °C · ';
+  const teile=[];
+  if(gut.length) teile.push('<b>optimal für '+gut.join(', ')+'</b>');
+  if(traege.length) teile.push('zu kalt für '+traege.join(', ')+' (träge, langsam führen)');
+  if(aktiv.length) teile.push('über Optimum für '+aktiv.join(', ')+' (tiefe/kühle Zonen suchen)');
+  t+=teile.join(' · ');
+  if(wt>=25) t+=' <span style="color:var(--warn)">⚠ Hitzestress – Drill kurz, C&amp;R vermeiden</span>';
+  return t;
+}
+
 /* Distanz im Popup nachtragen */
 state.map.on('popupopen',e=>{
+  const wtEl=e.popup.getElement().querySelector('[data-wt]');
+  if(wtEl){
+    const wt=(state.PEGEL&&typeof state.PEGEL.wt==='number')?state.PEGEL.wt:(state.WX&&typeof state.WX.wt==='number'?state.WX.wt:null);
+    const arten=(wtEl.dataset.wt||'').split(',').map(x=>x.trim()).filter(Boolean);
+    const txt=wtHinweis(wt,arten);
+    if(txt) wtEl.innerHTML='<b>Wassertemperatur</b>'+txt;
+    else wtEl.remove();
+  }
   const wEl=e.popup.getElement().querySelector('[data-wind]');
   if(wEl){
     if(state.WX&&state.WX.wind>=8){
