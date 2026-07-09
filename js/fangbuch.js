@@ -60,6 +60,17 @@ export function bars(entries,total){
     '<div class="bar"><span>'+esc(k)+'</span><span class="barfill" style="width:'+Math.round(n/total*90)+'px"></span><span>'+n+'</span></div>'
   ).join('');
 }
+/* Datum robust parsen: unterstützt "9.7.2026" (de-DE, so gespeichert) und "2026-07-09" (ISO, aus Alt-Backups) */
+export function parseFangDatum(d){
+  if(!d) return null;
+  let m=/^(\d{4})-(\d{2})-(\d{2})/.exec(d);
+  if(m) return new Date(+m[1],+m[2]-1,+m[3]);
+  m=/^(\d{1,2})\.(\d{1,2})\.(\d{4})/.exec(d);
+  if(m) return new Date(+m[3],+m[2]-1,+m[1]);
+  const t=Date.parse(d);
+  return isNaN(t)?null:new Date(t);
+}
+
 export function fbInsights(){
   const el=document.getElementById('fbInsights');
   const withLen=state.fbMem.filter(e=>e.laenge);
@@ -80,7 +91,7 @@ export function fbInsights(){
   const arten=topCount(state.fbMem.map(e=>e.fisch));
   if(arten.length>1){ h+='<b style="display:block;margin-top:8px">Artenverteilung</b>'+bars(arten,state.fbMem.length); }
   const MON=['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
-  const monate=topCount(state.fbMem.map(e=>{const m=e.datum&&/^\d{4}-(\d{2})/.exec(e.datum);return m?MON[+m[1]-1]:null;}).filter(Boolean));
+  const monate=topCount(state.fbMem.map(e=>{const d=parseFangDatum(e.datum);return d?MON[d.getMonth()]:null;}).filter(Boolean));
   if(monate.length>1){ h+='<b style="display:block;margin-top:8px">Fängigste Monate</b>'+bars(monate,state.fbMem.length); }
   h+='</div>';
   /* Persönliche Bestenliste: größter Fisch je Art */
@@ -128,7 +139,7 @@ export async function fbRestore(file){
   const vorhanden=new Set(state.fbMem.map(fangKey));
   let neu=0;
   gueltig.forEach(e=>{ if(!vorhanden.has(fangKey(e))){ state.fbMem.push(e); vorhanden.add(fangKey(e)); neu++; } });
-  state.fbMem.sort((a,b)=>String(b.datum).localeCompare(String(a.datum)));
+  state.fbMem.sort((a,b)=>{const da=parseFangDatum(a.datum),db=parseFangDatum(b.datum);return (db?db.getTime():0)-(da?da.getTime():0);});
   await fbPersist();
   zeig('✓ '+neu+' neue Fänge importiert'+(gueltig.length-neu>0?' ('+(gueltig.length-neu)+' Duplikate übersprungen)':'')+'.');
   return {neu,duplikate:gueltig.length-neu};
