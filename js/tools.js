@@ -1,8 +1,9 @@
 /* Werkzeuge-Menü: Köder, Beißzeiten, Packliste, Knoten, Blei, Score */
 import { byId } from './dom.js';
 import { state, store } from './state.js';
-import { istFliess } from './tackle.js';
+import { WT_OPT, istFliess } from './tackle.js';
 import { schilfToggle } from './reed.js';
+import { openPlan } from './plan.js';
 import { fokusFor } from './saison.js';
 import { NOW, fmtDate, fmtMD, haversine, hhmm, inSchonzeit, mondPhase, solunar, sunTimes } from './astro.js';
 import { regionCenter } from './ui.js';
@@ -118,6 +119,7 @@ export function openTools() { toolsDlg.hidden = false; }
 byId('toolsClose').onclick = () => { toolsDlg.hidden = true; };
 toolsDlg.addEventListener('click', e => { if (e.target === toolsDlg)
     toolsDlg.hidden = true; });
+byId('tPlan').onclick = () => { toolsDlg.hidden = true; openPlan(); };
 byId('tScore').onclick = () => { toolsDlg.hidden = true; openScore(); };
 byId('tFore').onclick = () => { toolsDlg.hidden = true; openForecast(); };
 byId('tOff').onclick = () => { toolsDlg.hidden = true; openOffline(); };
@@ -520,10 +522,7 @@ kbDlg.addEventListener('click', e => { if (e.target === kbDlg)
 /* Handy gedreht / Fenster skaliert: Karte neu vermessen */
 export let rsT;
 addEventListener('resize', () => { clearTimeout(rsT); rsT = setTimeout(() => state.map.invalidateSize(), 150); });
-/* Wassertemperatur-Einordnung je Zielfisch (grobe Aktivitätsoptima) */
-const WT_OPT = { Zander: [12, 22], Hecht: [8, 18], Barsch: [10, 22], Wels: [18, 26], Aal: [16, 25],
-    Karpfen: [18, 26], Schleie: [18, 26], Rapfen: [14, 24], Bachforelle: [8, 16], Regenbogenforelle: [8, 16],
-    Äsche: [8, 16], Barbe: [14, 22], Döbel: [12, 22], Quappe: [2, 10] };
+/* Aktivitätsoptima: zentrale Tabelle aus tackle.ts (keine zweite Kopie!) */
 function wtHinweis(wt, arten) {
     if (wt == null)
         return null;

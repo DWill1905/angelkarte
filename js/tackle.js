@@ -20,6 +20,25 @@ export function istFliess(s) {
     const w = wasserTyp(s);
     return w === 'fluss' || w === 'kanal';
 }
+/** Aktivitätsoptima in °C – EINE Quelle für die ganze App (Popup-Hinweis und Empfehlung).
+    Hecht ist bewusst weit nach unten offen: er ist der klassische Kaltwasser-Räuber
+    und beißt zuverlässig, wenn Zander längst träge ist. */
+export const WT_OPT = {
+    Hecht: [4, 18],
+    Zander: [10, 22],
+    Barsch: [8, 22],
+    Wels: [18, 26],
+    Aal: [16, 25],
+    Rapfen: [14, 24],
+    Karpfen: [18, 26],
+    Schleie: [18, 26],
+    Bachforelle: [6, 16],
+    Regenbogenforelle: [6, 16],
+    Äsche: [6, 16],
+    Barbe: [14, 22],
+    Döbel: [12, 22],
+    Quappe: [1, 8],
+};
 const PROFILE = {
     Hecht: { rutePlus: 3, koeder: 'Gummi 12–19 cm, Swimbaits bis 25 cm, große Spinner/Blinker', stahl: true },
     Wels: { rutePlus: 4, koeder: 'Große Gummis 15–25 cm, Tauwurmbündel, toter Köderfisch', stahl: true },

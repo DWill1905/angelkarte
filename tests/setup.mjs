@@ -26,11 +26,14 @@ import { fbInsights, fbRestore, parseFangDatum, beissfensterJetzt, fbRender } fr
 import { toggleTrip, inTrip, openTrip, tripReady } from './trip.js';
 import { schilfLaden, schilfAus, schilfAktiv } from './reed.js';
 import { fullscreenToggle, fullscreenAktiv } from './fullscreen.js';
+import { empfehlung, kandidaten, openPlan, zielfischFor, startzeitFor, peilung, himmelsrichtung, winkelDiff, istAuflandig } from './plan.js';
 import { inWindow, inSchonzeit, daysUntilMD, masseAus, fmtMD, fmtDate, solunar, haversine } from './astro.js';
 window.__app = { state, popupHtml, mapsLink, spotVisible, sperrWarnung, locApply,
   fbInsights, fbRestore, parseFangDatum, beissfensterJetzt, fbRender,
   toggleTrip, inTrip, openTrip, tripReady, schilfLaden, schilfAus, schilfAktiv,
   fullscreenToggle, fullscreenAktiv,
+  empfehlung, kandidaten, openPlan, zielfischFor, startzeitFor,
+  peilung, himmelsrichtung, winkelDiff, istAuflandig,
   inWindow, inSchonzeit, daysUntilMD, masseAus, fmtMD, fmtDate, solunar, haversine };
 `);
   try {
