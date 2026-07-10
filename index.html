@@ -99,7 +99,11 @@
     align-items:center;gap:4px;cursor:pointer;padding:0}
   #menuBtn span{display:block;width:17px;height:2px;background:var(--text);border-radius:2px}
   header{position:relative;padding-left:64px}
-  .menu-wrap{position:fixed;inset:0;background:rgba(10,26,32,.6);z-index:1200;
+  /* Sichtbarkeit über eine Klasse, nicht über das hidden-Attribut: `display:flex` würde
+     das Attribut sonst aushebeln, sobald eine Regel ohne !important dazwischenkommt.
+     Standard ist zu – das ist der sichere Zustand. */
+  .menu-wrap{display:none}
+  .menu-wrap.offen{position:fixed;inset:0;background:rgba(10,26,32,.6);z-index:1200;
     display:flex;justify-content:flex-start;backdrop-filter:blur(2px)}
   .menu-panel{width:min(320px,86vw);height:100%;overflow-y:auto;background:var(--panel);
     border-right:1px solid var(--shoal);padding:14px 14px calc(20px + env(safe-area-inset-bottom));
@@ -425,7 +429,7 @@
   <select id="regionSel" aria-label="Region wählen" style="margin-top:8px;max-width:100%;font-family:'Space Mono',monospace;font-size:12px;background:rgba(35,79,91,.45);border:1px solid var(--shoal);color:var(--text);border-radius:8px;padding:7px 10px"></select>
 </header>
 
-<div class="menu-wrap" id="menuWrap" hidden>
+<div class="menu-wrap" id="menuWrap">
   <nav class="menu-panel" id="menuPanel" aria-label="Hauptmenü">
     <div class="menu-kopf">
       <span>Menü</span>

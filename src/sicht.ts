@@ -53,14 +53,16 @@ export async function ladeSicht(): Promise<Sicht> {
 
 /* ---------- Hauptmenü ---------- */
 
+const OFFEN = 'offen';
+
 export function menuOffen(): boolean {
   const w = byId('menuWrap');
-  return !!w && !w.hidden;
+  return !!w && w.classList.contains(OFFEN);
 }
 export function menuAuf(): void {
   const w = byId('menuWrap');
   if (!w) return;
-  w.hidden = false;
+  w.classList.add(OFFEN);
   byId('menuBtn')?.setAttribute('aria-expanded', 'true');
   const f = byId('menuFuss');
   if (f && state.REGION) {
@@ -72,9 +74,13 @@ export function menuAuf(): void {
 export function menuZu(): void {
   const w = byId('menuWrap');
   if (!w) return;
-  w.hidden = true;
+  w.classList.remove(OFFEN);
   byId('menuBtn')?.setAttribute('aria-expanded', 'false');
 }
+
+/* Sicherheitsnetz: Falls durch einen Cache-Mix ein alter Zustand hängen bleibt,
+   startet das Menü in jedem Fall geschlossen. */
+menuZu();
 
 /* Verdrahtung: Sicht-Schalter (im Menü) */
 const box = byId('sichtWahl');

@@ -164,27 +164,53 @@ describe('Der Bewertungsblock ist standardmäßig offen', () => {
 });
 
 describe('Hauptmenü', () => {
+  /* Sichtbarkeit heißt: die Klasse ist gesetzt UND das CSS blendet ohne sie aus.
+     Vorher prüfte der Test nur `wrap.hidden` – das Attribut war gesetzt, aber
+     `display:flex` in `.menu-wrap` hebelte es aus. Das Menü blieb offen. */
+  const menuSichtbar = () => doc.getElementById('menuWrap').classList.contains('offen');
+
+  test('das CSS blendet das Menü ohne Klasse aus', () => {
+    assert.match(css, /\.menu-wrap\{display:none\}/,
+      'Ohne diese Regel entscheidet nur das hidden-Attribut – und display:flex schlägt es');
+    assert.match(css, /\.menu-wrap\.offen\{[^}]*display:flex/);
+  });
+
+  test('das Menü hängt nicht mehr am hidden-Attribut', () => {
+    const html = doc.getElementById('menuWrap').outerHTML;
+    assert.ok(!/\shidden\b/.test(html.slice(0, 60)), 'zwei Mechanismen für denselben Zustand');
+  });
   test('Knopf im Header öffnet und schließt', async () => {
     const btn = doc.getElementById('menuBtn');
     const wrap = doc.getElementById('menuWrap');
     assert.ok(btn && wrap);
-    assert.equal(wrap.hidden, true, 'Menü startet geschlossen');
+    assert.equal(menuSichtbar(), false, 'Menü startet geschlossen');
 
     btn.click();
     await tick(ctx.window, 30);
-    assert.equal(wrap.hidden, false);
+    assert.equal(menuSichtbar(), true);
     assert.equal(btn.getAttribute('aria-expanded'), 'true');
 
     btn.click();
     await tick(ctx.window, 20);
-    assert.equal(wrap.hidden, true);
+    assert.equal(menuSichtbar(), false);
+    assert.equal(btn.getAttribute('aria-expanded'), 'false');
   });
 
   test('Escape schließt das Menü', async () => {
     doc.getElementById('menuBtn').click();
     await tick(ctx.window, 20);
     doc.dispatchEvent(new ctx.window.KeyboardEvent('keydown', { key: 'Escape' }));
-    assert.equal(doc.getElementById('menuWrap').hidden, true);
+    assert.equal(menuSichtbar(), false);
+  });
+
+  test('ein Klick auf den Hintergrund schließt', async () => {
+    doc.getElementById('menuBtn').click();
+    await tick(ctx.window, 20);
+    const wrap = doc.getElementById('menuWrap');
+    const ev = new ctx.window.MouseEvent('click', { bubbles: true });
+    Object.defineProperty(ev, 'target', { value: wrap });
+    wrap.dispatchEvent(ev);
+    assert.equal(menuSichtbar(), false);
   });
 
   test('ein Sichtwechsel schließt das Menü, damit die Wirkung sichtbar wird', async () => {
@@ -193,7 +219,7 @@ describe('Hauptmenü', () => {
     doc.querySelector('[data-sicht="einfach"]').onclick();
     await tick(ctx.window, 40);
     assert.ok(doc.body.classList.contains('sicht-einfach'));
-    assert.equal(doc.getElementById('menuWrap').hidden, true,
+    assert.equal(menuSichtbar(), false,
       'Sonst verdeckt das Panel genau das, was sich ändert');
     await app.setzeSicht('pro');
   });
@@ -214,7 +240,7 @@ describe('Hauptmenü', () => {
     doc.getElementById('mPlan').click();
     await tick(ctx.window, 60);
     assert.equal(doc.getElementById('planDlg').hidden, false);
-    assert.equal(doc.getElementById('menuWrap').hidden, true);
+    assert.equal(menuSichtbar(), false);
     doc.getElementById('planClose').click();
   });
 
