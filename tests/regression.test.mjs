@@ -227,11 +227,10 @@ describe('Bug: Empfehlung schlug Arten ohne Schonzeitdaten vor', () => {
     const sicherung = app.state.SCHON.map((s) => ({ ...s }));
     app.state.SCHON.forEach((s) => { s.von = [1, 1]; s.bis = [12, 31]; });
 
+    /* Seit dem Umbau werden geschonte Arten gar nicht erst zu Kandidaten.
+       Bleibt keine offene Art übrig, gibt es keine Empfehlung – der Dialog sagt das. */
     const e = app.empfehlung();
-    assert.equal(e.zielfisch, null);
-    assert.ok(!/ auf [A-ZÄÖÜ]/.test(e.satz), 'nennt trotzdem einen Zielfisch');
-    assert.ok(!/Jigkopf|Gummifisch/.test(e.satz), 'nennt trotzdem einen Köder');
-    assert.ok(e.luecken.some((l) => /Schonzeit|geschont|Daten/i.test(l)), 'kein Hinweis in den Lücken');
+    assert.equal(e, null, 'Es darf keine Empfehlung geben, wenn alles geschont ist');
 
     app.state.SCHON.forEach((s, i) => { s.von = sicherung[i].von; s.bis = sicherung[i].bis; });
   });

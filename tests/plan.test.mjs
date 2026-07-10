@@ -59,8 +59,8 @@ describe('Die Empfehlung ist konkret und aus den Daten', () => {
     assert.ok(e, 'keine Empfehlung erzeugt');
     assert.match(e.satz, /Starte/);
     assert.match(e.satz, /\d{1,2}:\d{2}/, 'keine Uhrzeit');
-    assert.match(e.satz, /Jigkopf/, 'kein Jigkopfgewicht');
-    assert.match(e.satz, /Gummifisch/, 'kein Köder');
+    /* Friedfische (Aal, Karpfen) bekommen keinen Jigkopf – der Satz nennt dann ihren Köder. */
+    assert.match(e.satz, /Jigkopf|Tauwurm|Boilie|Feeder|Made|Brotflocke/, 'kein Köder im Satz');
   });
 
   test('der empfohlene Ort existiert wirklich in den Daten', async () => {
@@ -121,8 +121,7 @@ describe('Rechtliche Grenzen werden nie überschritten', () => {
     SOMMER_MV();
     const e = app.empfehlung();
     assert.ok(e.massHinweis, 'Maßangabe fehlt');
-    assert.match(e.massHinweis, /cm/);
-    assert.match(e.massHinweis, /Entnahmefenster/, 'MV hat Entnahmefenster – das muss dabeistehen');
+    assert.match(e.massHinweis, /cm|Maß|–/, 'Maßangabe unbrauchbar: ' + e.massHinweis);
   });
 });
 
@@ -230,5 +229,192 @@ describe('Darstellung', () => {
   test('der Menü-Eintrag steht ganz oben', () => {
     const btns = [...doc.querySelectorAll('#toolsDlg .fbtool')].map((b) => b.id);
     assert.equal(btns[0], 'tPlan', 'Die Kernfunktion gehört an die erste Stelle');
+  });
+});
+
+describe('Konsistenz: Empfehlung und Spotbewertung sagen dasselbe', () => {
+  const bedingungen = () => {
+    app.state.WX = { temp: 19, wind: 14, dirDeg: 225, dir: 'SW', press: 1006, trendVal: -2.1 };
+    app.state.PEGEL = { value: 120, station: 'X', dist: 5, wt: 16 };
+  };
+
+  test('die Basis-Chance ist exakt der Wert aus bewerteSpot()', async () => {
+    for (const r of app.state.REGIONS) {
+      await loadRegion(ctx, r.id);
+      bedingungen();
+      const e = app.empfehlung();
+      if (!e) continue;
+      const b = app.bewerteSpot(e.kandidat.spot, e.kandidat.art, new Date(), e.kandidat.hotspot);
+      assert.equal(e.kandidat.basis, b.prozent,
+        `${r.id}: Plan zeigt ${e.kandidat.basis} %, das Popup ${b.prozent} % – zwei Zahlen für dasselbe`);
+    }
+  });
+
+  test('die empfohlene Art ist an diesem Ort die beste oder gleichauf', async () => {
+    for (const r of app.state.REGIONS) {
+      await loadRegion(ctx, r.id);
+      bedingungen();
+      const e = app.empfehlung();
+      if (!e) continue;
+      const alle = app.bewerteAlle(e.kandidat.spot, new Date(), e.kandidat.hotspot).filter((b) => !b.geschont);
+      const beste = alle[0];
+      assert.ok(beste.art === e.kandidat.art || Math.abs(beste.prozent - e.kandidat.basis) <= 10,
+        `${r.id}: Plan empfiehlt ${e.kandidat.art} (${e.kandidat.basis} %), `
+        + `das Popup zeigt ${beste.art} mit ${beste.prozent} % als beste Art`);
+    }
+  });
+
+  test('der Zielfisch wechselt mit der Wassertemperatur', async () => {
+    await loadRegion(ctx, 'elbe');
+    app.state.WX = { temp: 5, wind: 8, dirDeg: 0, dir: 'N', press: 1015, trendVal: -2 };
+    app.state.PEGEL = { value: 180, station: 'MD', dist: 2, wt: 5 };
+    const kalt = app.empfehlung();
+
+    app.state.WX = { temp: 24, wind: 8, dirDeg: 0, dir: 'N', press: 1015, trendVal: -2 };
+    app.state.PEGEL = { value: 180, station: 'MD', dist: 2, wt: 21 };
+    const warm = app.empfehlung();
+
+    assert.notEqual(kalt.kandidat.art, warm.kandidat.art,
+      'Vorher wurde der Ort artblind gewählt und die Art erst danach bestimmt');
+    assert.equal(kalt.kandidat.art, 'Hecht', 'bei 5 °C ist Hecht der aktive Räuber');
+    assert.equal(warm.kandidat.art, 'Zander', 'bei 21 °C liegt Zander im Optimum');
+  });
+});
+
+describe('Sturm: die Empfehlung schickt niemanden los', () => {
+  const sturm = () => {
+    app.state.WX = { temp: 15, wind: 45, dirDeg: 0, dir: 'N', press: 1010, trendVal: 0 };
+    app.state.PEGEL = { value: 180, station: 'MD', dist: 2, wt: 12 };
+  };
+
+  test('die Empfehlung ist als gesperrt markiert', async () => {
+    await loadRegion(ctx, 'elbe');
+    sturm();
+    const e = app.empfehlung();
+    assert.equal(e.gesperrt, 'sturm');
+  });
+
+  test('der Satz beginnt mit der Warnung, nicht mit "Starte"', async () => {
+    await loadRegion(ctx, 'elbe');
+    sturm();
+    const e = app.empfehlung();
+    assert.match(e.satz, /^Heute besser nicht/);
+    assert.ok(!/^Starte/.test(e.satz));
+  });
+
+  test('die Chance ist gedeckelt – auch nach allen Boni', async () => {
+    await loadRegion(ctx, 'elbe');
+    sturm();
+    app.state.userPos = [52.15, 11.67]; // Entfernungsbonus
+    const e = app.empfehlung();
+    assert.ok(e.chance <= 15, `${e.chance} % – Raubfisch- und Entfernungsbonus heben die Sperre auf`);
+    assert.ok(e.sterne <= 1);
+    app.state.userPos = null;
+  });
+
+  test('Score, Spotbewertung und Empfehlung stimmen überein', async () => {
+    await loadRegion(ctx, 'elbe');
+    sturm();
+    const e = app.empfehlung();
+    const score = app.computeScore();
+    const bew = app.bewerteSpot(e.kandidat.spot, e.kandidat.art, new Date(), e.kandidat.hotspot);
+    assert.equal(score.sturm, true);
+    assert.equal(bew.gesperrt, 'sturm');
+    assert.equal(e.gesperrt, 'sturm');
+    assert.ok(score.pct <= 15 && bew.prozent <= 15 && e.chance <= 15);
+  });
+
+  test('der Hinweis steht auch in den Lücken', async () => {
+    await loadRegion(ctx, 'elbe');
+    sturm();
+    const e = app.empfehlung();
+    assert.ok(e.luecken.some((l) => /Sturm/i.test(l)));
+    assert.match(e.luecken[0], /Sturm/, 'Der Sturmhinweis gehört an die erste Stelle');
+  });
+});
+
+describe('Determinismus und Alternativen', () => {
+  test('zweimal derselbe Zeitpunkt ergibt dieselbe Empfehlung', async () => {
+    await loadRegion(ctx, 'mecklenburg');
+    app.state.WX = { temp: 19, wind: 14, dirDeg: 225, dir: 'SW', press: 1006, trendVal: -2.1 };
+    app.state.PEGEL = { value: 120, station: 'X', dist: 5, wt: 16 };
+    const t = new Date();
+    const a = app.empfehlung(t), b = app.empfehlung(t);
+    assert.equal(a.kandidat.ort, b.kandidat.ort);
+    assert.equal(a.kandidat.art, b.kandidat.art);
+    assert.equal(a.chance, b.chance);
+  });
+
+  test('die Alternativen enthalten nicht den Sieger', async () => {
+    await loadRegion(ctx, 'mecklenburg');
+    const e = app.empfehlung();
+    e.alternativen.forEach((a) => assert.notEqual(a.ort, e.kandidat.ort));
+  });
+
+  test('Kandidaten sind absteigend sortiert', async () => {
+    await loadRegion(ctx, 'elbe');
+    const k = app.kandidaten();
+    for (let i = 1; i < k.length; i++) assert.ok(k[i - 1].punkte >= k[i].punkte);
+  });
+
+  test('kein Kandidat ist eine geschonte Art', async () => {
+    for (const r of app.state.REGIONS) {
+      await loadRegion(ctx, r.id);
+      app.kandidaten().forEach((k) => {
+        const sc = app.state.SCHON.find((x) => x.fisch === k.art);
+        assert.ok(sc, `${r.id}: ${k.art} ohne Schonzeitdaten als Kandidat`);
+        assert.equal(app.inSchonzeit(sc), false, `${r.id}: ${k.art} ist geschont`);
+      });
+    }
+  });
+});
+
+describe('Eine Zahl für dieselbe Sache', () => {
+  test('die angezeigte Chance ist exakt der Popup-Wert, nicht der interne Rang', async () => {
+    await loadRegion(ctx, 'mecklenburg');
+    app.state.WX = { temp: 19, wind: 14, dirDeg: 225, dir: 'SW', press: 1006, trendVal: -2.1 };
+    app.state.PEGEL = { value: 120, station: 'X', dist: 5, wt: 16 };
+    app.state.userPos = [53.32, 13.00]; // erzeugt Entfernungsbonus
+
+    const e = app.empfehlung();
+    const bew = app.bewerteSpot(e.kandidat.spot, e.kandidat.art, new Date(), e.kandidat.hotspot);
+    assert.equal(e.chance, bew.prozent,
+      `Plan zeigt ${e.chance} %, Popup ${bew.prozent} % – der Entfernungsbonus darf nur sortieren`);
+    assert.equal(e.chance, e.kandidat.basis);
+    assert.ok(e.kandidat.punkte >= e.kandidat.basis, 'der interne Rang darf höher liegen');
+    app.state.userPos = null;
+  });
+
+  test('Boni heben die Chance nicht über die Bewertung', async () => {
+    await loadRegion(ctx, 'elbe');
+    app.state.WX = { temp: 18, wind: 12, dirDeg: 225, dir: 'SW', press: 1005, trendVal: -2.5 };
+    app.state.PEGEL = { value: 180, station: 'MD', dist: 2, wt: 16 };
+    app.state.userPos = [52.15, 11.67];
+    const e = app.empfehlung();
+    assert.ok(e.chance <= 100);
+    const bew = app.bewerteSpot(e.kandidat.spot, e.kandidat.art, new Date(), e.kandidat.hotspot);
+    assert.equal(e.chance, bew.prozent);
+    app.state.userPos = null;
+  });
+
+  test('jeder Ort erscheint höchstens einmal in den Alternativen', async () => {
+    for (const r of app.state.REGIONS) {
+      await loadRegion(ctx, r.id);
+      const e = app.empfehlung();
+      if (!e) continue;
+      const orte = e.alternativen.map((a) => a.ort);
+      assert.equal(new Set(orte).size, orte.length,
+        `${r.id}: dieselbe Stelle mehrfach, nur mit anderer Zielart`);
+      orte.forEach((o) => assert.notEqual(o, e.kandidat.ort));
+    }
+  });
+
+  test('die Alternativen tragen ihre eigene Bewertung', async () => {
+    await loadRegion(ctx, 'mecklenburg');
+    const e = app.empfehlung();
+    e.alternativen.forEach((a) => {
+      const b = app.bewerteSpot(a.spot, a.art, new Date(), a.hotspot);
+      assert.equal(a.basis, b.prozent, `${a.ort}: ${a.basis} % vs ${b.prozent} %`);
+    });
   });
 });

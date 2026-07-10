@@ -15,51 +15,17 @@
    nachvollziehbare Vorauswahl – die Entscheidung trifft der Angler. */
 import { state } from './state.js';
 import { hhmm, inSchonzeit, solunar, sunTimes, haversine } from './astro.js';
-import { WT_OPT, tackleFor, wasserTyp } from './tackle.js';
-import { fokusFor, hotspotAktiv, istKante, jahreszeit } from './saison.js';
+import { WT_OPT, tackleFor } from './tackle.js';
+import { bewerteSpot, sterneAus, sterneText } from './rating.js';
+import { jahreszeit } from './saison.js';
 import type { Hotspot, Spot } from './types';
 
-/* ---------- Hilfsgrößen ---------- */
-
-/** Peilung von a nach b in Grad (0 = Nord, 90 = Ost). */
-export function peilung(aLat: number, aLng: number, bLat: number, bLng: number): number {
-  const r = Math.PI / 180;
-  const dLng = (bLng - aLng) * r;
-  const y = Math.sin(dLng) * Math.cos(bLat * r);
-  const x = Math.cos(aLat * r) * Math.sin(bLat * r) - Math.sin(aLat * r) * Math.cos(bLat * r) * Math.cos(dLng);
-  return (Math.atan2(y, x) / r + 360) % 360;
-}
-
-const HIMMEL = ['Nord', 'Nordost', 'Ost', 'Südost', 'Süd', 'Südwest', 'West', 'Nordwest'];
-export function himmelsrichtung(grad: number): string {
-  return HIMMEL[Math.round(((grad % 360) / 45)) % 8];
-}
-
-/** Kleinste Winkeldifferenz zwischen zwei Peilungen (0–180). */
-export function winkelDiff(a: number, b: number): number {
-  const d = Math.abs(a - b) % 360;
-  return d > 180 ? 360 - d : d;
-}
-
-/**
- * Liegt der Punkt am auflandigen Ufer?
- * Wind "aus 225° (SW)" bewegt sich nach 45° (NO) – Plankton und Weißfisch treiben dorthin,
- * Räuber folgen. Ein Hotspot, der vom Gewässerzentrum aus in Windrichtung liegt, ist auflandig.
- */
-export function istAuflandig(spot: Spot, h: Hotspot, windAusGrad: number): boolean | null {
-  if (typeof spot.lat !== 'number' || typeof h.lat !== 'number') return null;
-  /* Identischer Punkt: keine Peilung möglich (Hotspot liegt exakt auf dem Spot-Zentrum). */
-  if (spot.lat === h.lat && spot.lng === h.lng) return null;
-  const windZiel = (windAusGrad + 180) % 360;
-  const b = peilung(spot.lat, spot.lng!, h.lat, h.lng);
-  return winkelDiff(b, windZiel) <= 60;
-}
+/* Geometrie liegt in geo.ts – hier nur re-exportiert, damit bestehende Aufrufer bleiben können. */
+export { peilung, himmelsrichtung, winkelDiff, istAuflandig } from './geo.js';
 
 /* ---------- Zielfisch ---------- */
 
 /* Aktivitätsoptima kommen aus tackle.ts – eine einzige Quelle für die ganze App. */
-const RAUB = ['Zander', 'Hecht', 'Wels', 'Barsch', 'Rapfen', 'Bachforelle', 'Aal'];
-
 export interface Zielfisch {
   art: string;
   grund: string;
@@ -133,105 +99,92 @@ export function startzeitFor(lat: number, lng: number, jetzt: Date = new Date())
   };
 }
 
-/* ---------- Bewertung von Ort-Kandidaten ---------- */
+/* ---------- Bewertung von Ort-Kandidaten ----------
+
+   Grundlage ist bewerteSpot() aus rating.ts – dieselbe Funktion, die im Popup „Chancen heute"
+   anzeigt. Vorher hatte plan.ts eigene, gröbere Faktoren; Empfehlung und Popup konnten
+   deshalb verschiedene Zielfische nennen (Popup „Wels 96 %", Plan „auf Barsch").
+
+   Bewertet wird das PAAR (Ort, Zielart), nicht erst der Ort und dann die Art. Sonst ist die
+   Ortswahl artblind: bei 5 °C und bei 21 °C kam derselbe Ort heraus, obwohl der Zielfisch
+   von Hecht auf Zander wechselt. */
 
 export interface Faktor { text: string; punkte: number; }
 export interface Kandidat {
   spot: Spot;
   hotspot: Hotspot | null;
+  art: string;
+  /** 0–100, aus bewerteSpot() – identisch mit der Anzeige im Popup. Das ist DIE Chance. */
+  basis: number;
+  /** Interner Rang: basis plus planspezifische Zu-/Abschläge (Entfernung, Zugang, Beleglage).
+      Nur für die Reihenfolge – niemals anzeigen, sonst stünden zwei Zahlen für dasselbe. */
   punkte: number;
   faktoren: Faktor[];
+  /** Sturm oder Schonzeit: dann wird nicht empfohlen. */
+  gesperrt?: 'sturm' | 'schonzeit';
   /** Name des empfohlenen Ortes – immer aus den Daten, nie erfunden. */
   ort: string;
   lat: number;
   lng: number;
 }
 
-/** Alle beangelbaren Orte (Gewässer und ihre Hotspots) bewerten. */
+const RAUB = ['Zander', 'Hecht', 'Wels', 'Barsch', 'Rapfen', 'Bachforelle', 'Aal'];
+
+/** Alle Paare aus beangelbarem Ort und erlaubter Zielart bewerten. */
 export function kandidaten(jetzt: Date = new Date()): Kandidat[] {
-  const monat = jetzt.getMonth() + 1;
-  const f = fokusFor(jahreszeit(jetzt));
-  const wx = state.WX;
-  const pegel = state.PEGEL;
-  const hochwasser = !!(pegel && state.REGION?.pegel && pegel.value >= state.REGION.pegel.warnAb);
   const out: Kandidat[] = [];
 
   state.SPOTS.filter((s) => s.cat !== 'sperr' && s.cat !== 'info' && !s.my).forEach((s) => {
-    const wasser = wasserTyp(s);
     const orte: Array<Hotspot | null> = (s.hotspots || []).length ? [...(s.hotspots as Hotspot[])] : [null];
 
+    /* Nur Arten mit Schonzeit-/Maßdaten – die Rechtslage muss bekannt sein. */
+    const arten = (s.arten || []).filter((a) => state.SCHON.some((x) => x.fisch === a));
+
     orte.forEach((h) => {
-      const faktoren: Faktor[] = [];
-      let p = 0;
+      arten.forEach((art) => {
+        const b = bewerteSpot(s, art, jetzt, h);
+        if (b.geschont) return; /* nie eine geschonte Art empfehlen */
 
-      /* 1) Passt der Ort in diese Jahreszeit?
-         Gewässer ohne Hotspot-Daten bekommen einen neutralen Basiswert – sonst würden sie
-         systematisch verlieren, obwohl ihnen nur die Detaildaten fehlen (z.B. Häfen, die
-         bei Hochwasser die richtige Wahl wären). */
-      if (h) {
-        if (hotspotAktiv(h, monat)) { p += 2; faktoren.push({ text: `„${h.name}" ist laut Spot-Daten jetzt in Saison (${h.saison})`, punkte: 2 }); }
-        else { p -= 2; faktoren.push({ text: `„${h.name}" ist außerhalb seiner Saison (${h.saison})`, punkte: -2 }); }
-        if (istKante(h) && (f.jahreszeit === 'herbst' || f.jahreszeit === 'winter')) {
-          p += 1.5; faktoren.push({ text: 'Tiefenkante – im Herbst/Winter stehen die Räuber dort', punkte: 1.5 });
+        const faktoren: Faktor[] = b.gruende
+          .filter((g) => g.status !== 'unbekannt')
+          .map((g) => ({ text: g.text, punkte: Math.round((g.erreicht - g.moeglich / 2) * 10) / 10 }));
+
+        let p = b.prozent;
+
+        /* Planspezifische Zu-/Abschläge, die eine Spotbewertung nicht kennt. */
+        if (s.zugang === 'boot') { p -= 12; faktoren.push({ text: 'Nur vom Boot sinnvoll zu beangeln', punkte: -12 }); }
+        if (s.verif === 'C') { p -= 8; faktoren.push({ text: 'Beleglage dieses Gewässers ist schwach – vorher beim Verein prüfen', punkte: -8 }); }
+        if (RAUB.includes(art)) { p += 3; faktoren.push({ text: art + ' ist ein Raubfisch – dein Schwerpunkt', punkte: 3 }); }
+
+        if (state.userPos && typeof s.lat === 'number') {
+          const d = haversine(state.userPos[0], state.userPos[1], h?.lat ?? s.lat, h?.lng ?? s.lng!);
+          if (d <= 10) { p += 8; faktoren.push({ text: `nur ${d.toFixed(1)} km von dir entfernt`, punkte: 8 }); }
+          else if (d <= 30) { p += 3; faktoren.push({ text: `${d.toFixed(0)} km entfernt`, punkte: 3 }); }
+          else { p -= 5; faktoren.push({ text: `${d.toFixed(0)} km entfernt – lohnt eher als Tagestour`, punkte: -5 }); }
         }
-      } else {
-        p += 1; /* neutral: keine Saison-Info, also weder Bonus noch Strafe */
-      }
-      if (f.bevorzugt.includes(wasser)) {
-        p += 1.5; faktoren.push({ text: `${f.titel}: ${f.betont}`, punkte: 1.5 });
-      }
 
-      /* 2) Wind: auflandiges Ufer bevorzugen */
-      if (wx && h && typeof s.lat === 'number') {
-        const auf = istAuflandig(s, h, wx.dirDeg);
-        if (auf === true && wx.wind >= 6) {
-          p += 1.5;
-          faktoren.push({ text: `Wind aus ${wx.dir} (${Math.round(wx.wind)} km/h) drückt aufs Ufer – Plankton und Weißfisch treiben dorthin`, punkte: 1.5 });
-        } else if (auf === false && wx.wind >= 12) {
-          p -= 0.5;
-          faktoren.push({ text: `Liegt im Windschatten (Wind aus ${wx.dir})`, punkte: -0.5 });
-        }
-      }
+        const lat = h?.lat ?? s.lat;
+        const lng = h?.lng ?? s.lng;
+        if (typeof lat !== 'number' || typeof lng !== 'number') return;
 
-      /* 3) Luftdruck */
-      if (wx && typeof wx.trendVal === 'number') {
-        if (wx.trendVal <= -1.5) { p += 1; faktoren.push({ text: `Luftdruck fällt (${wx.trendVal.toFixed(1)} hPa/3 h) – klassisch die beste Phase`, punkte: 1 }); }
-        else if (wx.trendVal >= 1.5) { p -= 0.5; faktoren.push({ text: 'Luftdruck steigt stark – Fische oft zurückhaltend', punkte: -0.5 }); }
-      }
+        /* Deckelung ZULETZT: sonst heben Raubfisch- und Entfernungsbonus die Sturmsperre wieder an. */
+        if (b.gesperrt === 'sturm') p = Math.min(p, 15);
 
-      /* 4) Pegel / Hochwasser (nur Fließgewässer) */
-      if (hochwasser) {
-        if (wasser === 'kanal') { p += 1.5; faktoren.push({ text: 'Hochwasser im Hauptstrom – Häfen und Kanäle sind jetzt die Zuflucht', punkte: 1.5 }); }
-        else if (wasser === 'fluss') { p -= 3.5; faktoren.push({ text: `Hochwasser (${pegel!.value} cm) – Buhnen überspült, Strömung zu stark`, punkte: -3.5 }); }
-      }
-
-      /* 5) Zugang: ohne Boot ist ein Bootssee wenig wert */
-      if (s.zugang === 'boot') { p -= 1; faktoren.push({ text: 'Nur vom Boot sinnvoll zu beangeln', punkte: -1 }); }
-
-      /* 6) Entfernung, falls Standort bekannt */
-      if (state.userPos && typeof s.lat === 'number') {
-        const d = haversine(state.userPos[0], state.userPos[1], h?.lat ?? s.lat, h?.lng ?? s.lng!);
-        if (d <= 10) { p += 1.5; faktoren.push({ text: `nur ${d.toFixed(1)} km von dir entfernt`, punkte: 1.5 }); }
-        else if (d <= 30) { p += 0.5; faktoren.push({ text: `${d.toFixed(0)} km entfernt`, punkte: 0.5 }); }
-        else { p -= 0.5; faktoren.push({ text: `${d.toFixed(0)} km entfernt – lohnt eher als Tagestour`, punkte: -0.5 }); }
-      }
-
-      /* 7) Datenlage ehrlich einpreisen */
-      if (s.verif === 'C') { p -= 1; faktoren.push({ text: 'Beleglage dieses Gewässers ist schwach – vorher beim Verein prüfen', punkte: -1 }); }
-
-      const lat = h?.lat ?? s.lat;
-      const lng = h?.lng ?? s.lng;
-      if (typeof lat !== 'number' || typeof lng !== 'number') return;
-
-      out.push({
-        spot: s, hotspot: h, punkte: p, faktoren,
-        ort: h ? `${h.name} (${s.name})` : s.name,
-        lat, lng,
+        out.push({
+          spot: s, hotspot: h, art, basis: b.prozent, punkte: Math.max(0, Math.min(100, p)),
+          faktoren, gesperrt: b.gesperrt,
+          ort: h ? `${h.name} (${s.name})` : s.name,
+          lat, lng,
+        });
       });
     });
   });
 
-  return out.sort((a, b) => b.punkte - a.punkte);
+  /* Beste zuerst; bei Gleichstand gewinnt der Raubfisch, dann der Name (deterministisch). */
+  return out.sort((a, b) =>
+    b.punkte - a.punkte
+    || (RAUB.includes(b.art) ? 1 : 0) - (RAUB.includes(a.art) ? 1 : 0)
+    || a.ort.localeCompare(b.ort));
 }
 
 /* ---------- Die Empfehlung ---------- */
@@ -244,11 +197,31 @@ export interface Empfehlung {
   zeit: Startzeit;
   zielfisch: Zielfisch | null;
   koeder: string;
-  jig: string;
+  jig: string | null;
   faktoren: Faktor[];
+  /** 0–100, identisch mit der Anzeige „Chancen heute" im Popup. */
+  chance: number;
+  sterne: number;
+  /** Sturm: dann wird nicht empfohlen loszufahren. */
+  gesperrt?: 'sturm';
   /** Signale, die gerade fehlen – offen benannt statt stillschweigend übergangen. */
   luecken: string[];
   alternativen: Kandidat[];
+}
+
+/** Wählt aus der Tackle-Empfehlung den passenden Köder und die Saisonfarbe. */
+function koederSatz(s: Spot, art: string | null): { koeder: string; jig: string | null } {
+  const { t } = tackleFor(s);
+  const jz = jahreszeit();
+  const farbe = t.farben[jz].split(/[–;(,]/)[0].trim();
+
+  /* Kein Kunstköder-Setup für Fried- und Grundfische. */
+  if (art && FRIEDFISCH[art]) return { koeder: FRIEDFISCH[art], jig: null };
+
+  const groesse = art === 'Barsch' ? '6–8 cm' : art === 'Wels' ? '15–25 cm' : art === 'Hecht' ? '12–19 cm' : '10–14 cm';
+  const jigMatch = /(\d+\s*[–-]\s*\d+\s*g|\d+\s*g)/.exec(t.jig);
+  const jig = jigMatch ? jigMatch[1].replace(/\s+/g, '') : '10–21g';
+  return { koeder: `${groesse.replace(" ", "-")}-Gummifisch (${farbe})`, jig };
 }
 
 /** Friedfische bekommen keinen Gummifisch am Jigkopf. */
@@ -263,20 +236,11 @@ const FRIEDFISCH: Record<string, string> = {
   Aal: 'Tauwurmbündel am Grund',
 };
 
-/** Wählt aus der Tackle-Empfehlung den passenden Köder und die Saisonfarbe. */
-function koederSatz(s: Spot, art: string | null): { koeder: string; jig: string | null } {
-  const { t } = tackleFor(s);
-  const jz = jahreszeit();
-  const farbe = t.farben[jz].split(/[–;(,]/)[0].trim();
-
-  /* Kein Kunstköder-Setup für Fried- und Grundfische. */
-  if (art && FRIEDFISCH[art]) return { koeder: FRIEDFISCH[art], jig: null };
-
-  const groesse = art === 'Barsch' ? '6–8 cm' : art === 'Wels' ? '15–25 cm' : art === 'Hecht' ? '12–19 cm' : '10–14 cm';
-  /* Jigkopf: erste Gewichtsspanne aus der Tackle-Angabe, z.B. "10–17 g über Kraut, …" -> "10–17 g" */
-  const jigMatch = /(\d+\s*[–-]\s*\d+\s*g|\d+\s*g)/.exec(t.jig);
-  const jig = jigMatch ? jigMatch[1].replace(/\s+/g, '') : '10–21g';
-  return { koeder: `${groesse.replace(" ", "-")}-Gummifisch (${farbe})`, jig };
+/** Pro Ort nur den stärksten Kandidaten behalten – sonst steht dieselbe Stelle
+    dreimal in den Alternativen, nur mit anderer Zielart. */
+function besteJeOrt(liste: Kandidat[]): Kandidat[] {
+  const gesehen = new Set<string>();
+  return liste.filter((k) => (gesehen.has(k.ort) ? false : (gesehen.add(k.ort), true)));
 }
 
 export function empfehlung(jetzt: Date = new Date()): Empfehlung | null {
@@ -284,12 +248,19 @@ export function empfehlung(jetzt: Date = new Date()): Empfehlung | null {
   if (!liste.length) return null;
   const k = liste[0];
 
-  const mitte = state.REGION ? { lat: k.lat, lng: k.lng } : null;
-  const zeit = startzeitFor(mitte!.lat, mitte!.lng, jetzt);
-
+  const zeit = startzeitFor(k.lat, k.lng, jetzt);
   const wt = state.PEGEL?.wt ?? state.WX?.wt ?? null;
-  const zf = zielfischFor(k.spot, wt);
-  const { koeder, jig } = koederSatz(k.spot, zf?.art ?? null);
+
+  /* Begründung für den Zielfisch aus dem Temperaturprofil. */
+  const opt = WT_OPT[k.art];
+  let grund = 'im Bestand und aktuell nicht geschont';
+  if (opt && wt != null) {
+    if (wt >= opt[0] && wt <= opt[1]) grund = `${Math.round(wt)} °C liegen im Aktivitätsoptimum (${opt[0]}–${opt[1]} °C)`;
+    else if (wt < opt[0]) grund = `bei ${Math.round(wt)} °C eher träge, aber die beste offene Option hier`;
+    else grund = `${Math.round(wt)} °C über dem Optimum – tiefe Zonen suchen`;
+  }
+  const zf: Zielfisch = { art: k.art, grund };
+  const { koeder, jig } = koederSatz(k.spot, k.art);
 
   const luecken: string[] = [];
   if (!state.WX) luecken.push('Kein Wetter verfügbar (offline?) – Wind und Luftdruck fließen nicht ein.');
@@ -297,32 +268,34 @@ export function empfehlung(jetzt: Date = new Date()): Empfehlung | null {
   if (!state.userPos) luecken.push('Kein Standort freigegeben – die Entfernung wurde nicht berücksichtigt.');
   if (k.spot.zugang === 'boot') luecken.push('Dieses Gewässer ist praktisch nur vom Boot zu beangeln.');
   if (k.spot.verif === 'C') luecken.push('Beleglage schwach: Gastkarte und Zugang vorher beim Verein klären.');
-  if (!zf) luecken.push('Für keine Art dieses Gewässers liegen offene Schonzeit-/Maßdaten vor (alles geschont oder Daten fehlen) – der Erlaubnisschein entscheidet.');
 
-  const zeitText = zeit.bis
-    ? `ab ${hhmm(zeit.von)} Uhr`
-    : `zur ${zeit.label} (ca. ${hhmm(zeit.von)} Uhr)`;
+  const schon = state.SCHON.find((x) => x.fisch === k.art);
+  const massHinweis = schon ? `${k.art}: ${schon.mm}` : null;
 
+  const zeitText = zeit.bis ? `ab ${hhmm(zeit.von)} Uhr` : `zur ${zeit.label} (ca. ${hhmm(zeit.von)} Uhr)`;
   const ortText = k.hotspot
     ? `an der Stelle „${k.hotspot.name}" (${k.spot.name})`
     : `am ${k.spot.name}`;
 
-  /* Ohne offene Zielart wäre eine Köderempfehlung sinnlos – dann nennt der Satz nur Zeit und Ort. */
-  const satz = zf
-    ? `Starte ${zeitText} ${ortText} auf ${zf.art}`
-      + (jig ? ` mit einem ${koeder} am ${jig}-Jigkopf.` : ` mit ${koeder}.`)
-    : `${ortText.charAt(0).toUpperCase() + ortText.slice(1)} wäre ${zeitText} der beste Startpunkt – `
-      + `aber für keine Art dieses Gewässers liegen gerade offene Schonzeit-/Maßdaten vor.`;
+  /* Sturm: nicht losschicken. Score und Spotbewertung sperren bereits – die Empfehlung
+     tat es bisher nicht und widersprach damit beiden. */
+  const sturm = k.gesperrt === 'sturm';
+  const satz = sturm
+    ? `Heute besser nicht: Sturm (${Math.round(state.WX!.wind)} km/h). `
+      + `Sobald es abflaut, wäre ${ortText} ${zeitText} der beste Startpunkt – auf ${k.art}.`
+    : `Starte ${zeitText} ${ortText} auf ${k.art}`
+      + (jig ? ` mit einem ${koeder} am ${jig}-Jigkopf.` : ` mit ${koeder}.`);
 
-  /* Maß/Entnahmefenster des Zielfischs – gehört zwingend zur Empfehlung. */
-  let massHinweis: string | null = null;
-  if (zf) {
-    const sc = state.SCHON.find((x) => x.fisch === zf.art);
-    if (sc) massHinweis = `${zf.art}: ${sc.mm}`;
-  }
+  if (sturm) luecken.unshift('Sturm ab 35 km/h – Angeln ist heute unverantwortlich (Wellen, Blitzschlag).');
 
-  return { satz, massHinweis, kandidat: k, zeit, zielfisch: zf, koeder, jig, faktoren: k.faktoren, luecken, alternativen: liste.slice(1, 4) };
+  return {
+    satz, massHinweis, kandidat: k, zeit, zielfisch: zf, koeder, jig,
+    faktoren: k.faktoren, chance: k.basis, sterne: sterneAus(k.basis, sturm),
+    gesperrt: sturm ? 'sturm' : undefined,
+    luecken, alternativen: besteJeOrt(liste.filter((x) => x.ort !== k.ort)).slice(0, 3),
+  };
 }
+
 
 /* ---------- Darstellung ---------- */
 import { byId } from './dom.js';
@@ -347,7 +320,13 @@ export function openPlan(): void {
   letzterKandidat = e.kandidat;
 
   const fak = [...e.faktoren].sort((a, b) => b.punkte - a.punkte);
-  let h = '<div class="plan-satz">' + esc(e.satz) + '</div>';
+  let h = '';
+  if (e.gesperrt === 'sturm') h += '<div class="rate-sturm">⚠ Sturm – Angeln ist heute unverantwortlich.</div>';
+  h += '<div class="plan-satz">' + esc(e.satz) + '</div>';
+  /* Dieselbe Zahl wie „Chancen heute" im Popup – zwei Werte für dasselbe wären verwirrend. */
+  h += '<div class="plan-chance"><span class="plan-sterne">' + sterneText(e.sterne) + '</span>'
+    + '<span class="plan-proz">' + e.chance + ' %</span>'
+    + '<span class="plan-basis">Chance für ' + esc(e.kandidat.art) + ' an diesem Ort – dieselbe Zahl wie im Popup</span></div>';
   if (e.massHinweis) h += '<div class="plan-mass">⚖ ' + esc(e.massHinweis) + '</div>';
 
   h += '<div class="plan-sec"><h4>Warum dort</h4>'
@@ -370,7 +349,7 @@ export function openPlan(): void {
 
   if (e.alternativen.length) {
     h += '<div class="plan-sec"><h4>Alternativen</h4>'
-      + e.alternativen.map((a) => '<div class="plan-alt">' + esc(a.ort) + '</div>').join('')
+      + e.alternativen.map((a) => '<div class="plan-alt">' + esc(a.ort) + ' · ' + esc(a.art) + ' <b>' + a.basis + ' %</b></div>').join('')
       + '</div>';
   }
 

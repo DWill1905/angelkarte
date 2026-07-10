@@ -44,6 +44,10 @@ for (const f of files) {
   const imp = new Set();
   for (const m of src.matchAll(/import\s*\{([^}]*)\}\s*from/g))
     m[1].split(',').forEach(x => { const n = x.trim().split(/\s+as\s+/).pop().trim(); if (n) imp.add(n); });
+  /* Re-Exporte zählen wie Importe: `export { peilung } from './geo.js'` bindet den Namen
+     zwar nicht lokal, aber das Modul hat ihn nachweislich – kein fehlender Import. */
+  for (const m of src.matchAll(/export\s*\{([^}]*)\}\s*from/g))
+    m[1].split(',').forEach(x => { const n = x.trim().split(/\s+as\s+/)[0].trim(); if (n) imp.add(n); });
   imported[f] = imp;
   const exp = new Set();
   for (const m of src.matchAll(/export\s+(?:async\s+)?(?:function|const|let|var)\s+([A-Za-z_$][\w$]*)/g)) exp.add(m[1]);

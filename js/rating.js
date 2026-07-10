@@ -12,7 +12,7 @@
 import { state } from './state.js';
 import { hhmm, inSchonzeit, solunar, sunTimes } from './astro.js';
 import { WT_OPT, wasserTyp } from './tackle.js';
-import { istAuflandig } from './plan.js';
+import { istAuflandig } from './geo.js';
 import { hotspotAktiv } from './saison.js';
 const PROFIL = {
     Hecht: { wasser: ['see-flach', 'see-tief', 'fluss'], hoch: [3, 4, 9, 10, 11], daemmerung: false, truebung: false },
