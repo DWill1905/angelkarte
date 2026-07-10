@@ -267,3 +267,47 @@ describe('Hauptmenü', () => {
     assert.match(pro.textContent, /Pro/);
   });
 });
+
+describe('Header entschlackt: Wetter im eigenen Dialog', () => {
+  test('Sonnen- und Wetterzeile stehen nicht mehr im Header', () => {
+    assert.equal(doc.querySelector('header #sunline'), null);
+    assert.equal(doc.querySelector('header #wxline'), null);
+    assert.ok(doc.querySelector('#wxDlg #sunline'), 'Sonnenzeile gehört in den Wetter-Dialog');
+    assert.ok(doc.querySelector('#wxDlg #wxline'));
+  });
+
+  test('die IDs existieren genau einmal', () => {
+    ['sunline', 'wxline'].forEach((id) =>
+      assert.equal(doc.querySelectorAll('#' + id).length, 1, `doppelte ID: ${id}`));
+  });
+
+  test('der Chip im Header öffnet den Wetter-Dialog', async () => {
+    const chip = doc.getElementById('wxChip');
+    assert.ok(chip, 'Chip fehlt – der schnelle Blick ginge verloren');
+    chip.click();
+    await tick(ctx.window, 30);
+    assert.equal(doc.getElementById('wxDlg').hidden, false);
+    doc.getElementById('wxClose').click();
+  });
+
+  test('der Menüpunkt öffnet den Wetter-Dialog und schließt das Menü', async () => {
+    doc.getElementById('menuBtn').click();
+    await tick(ctx.window, 20);
+    doc.getElementById('mWx').click();
+    await tick(ctx.window, 40);
+    assert.equal(doc.getElementById('wxDlg').hidden, false);
+    assert.ok(!doc.getElementById('menuWrap').classList.contains('offen'));
+    doc.getElementById('wxClose').click();
+  });
+
+  test('der Header lässt rechts Platz für den Chip', () => {
+    assert.match(css, /header\{[^}]*padding-right:104px/,
+      'Sonst läuft der Titel unter den Chip');
+  });
+
+  test('Warnbanner bleiben im Header-Bereich, nicht im Dialog', () => {
+    assert.ok(doc.getElementById('stormWarn'), 'Gewitterwarnung darf nicht in einem Dialog verschwinden');
+    assert.ok(doc.getElementById('sperrWarn'));
+    assert.equal(doc.querySelector('#wxDlg #stormWarn'), null);
+  });
+});

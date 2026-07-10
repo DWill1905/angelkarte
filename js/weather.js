@@ -29,6 +29,7 @@ export async function loadWeather() {
         const dirs = ['N', 'NO', 'O', 'SO', 'S', 'SW', 'W', 'NW'];
         const dir = dirs[Math.round((c.wind_direction_10m || 0) / 45) % 8];
         state.WX = { temp: c.temperature_2m, wind: c.wind_speed_10m, dirDeg: c.wind_direction_10m || 0, dir, press: c.surface_pressure, trendVal };
+        wxChipSetzen();
         /* Gewitter-/Sturmwarnung: WMO-Codes 95/96/99 = Gewitter, Böen > 60 km/h */
         checkStorm(d, c);
         el.innerHTML = ICON('sun') + ' ' + Math.round(c.temperature_2m) + '°C · ' + ICON('wind') + ' ' + Math.round(c.wind_speed_10m) + ' km/h ' + esc(dir)
@@ -132,3 +133,37 @@ export async function loadPegel(ctr, el) {
     }
     catch (e) { }
 }
+/* ---------- Kompakter Wetter-Chip im Header ----------
+   Der Header trug bisher zwei volle Textzeilen (Sonne/Mond und Wetter/Pegel) und fraß
+   damit Kartenfläche. Beide Zeilen leben jetzt im Dialog „Wetter & Bedingungen"; im Header
+   bleibt nur das Nötigste: Temperatur, Drucktrend und – falls kritisch – eine Warnfarbe. */
+export function wxChipSetzen() {
+    const chip = byId('wxChip');
+    if (!chip)
+        return;
+    const wx = state.WX;
+    if (!wx) {
+        chip.textContent = '–';
+        chip.classList.remove('warn');
+        return;
+    }
+    const pfeil = wx.trendVal <= -1.5 ? '⇘' : wx.trendVal >= 1.5 ? '⇗' : '→';
+    const sturm = wx.wind >= 35;
+    chip.textContent = Math.round(wx.temp) + '° ' + pfeil + (sturm ? ' ⚠' : '');
+    chip.classList.toggle('warn', sturm);
+    chip.title = sturm
+        ? 'Sturm – Wetter und Bedingungen ansehen'
+        : Math.round(wx.temp) + ' °C, Luftdruck ' + (wx.trendVal <= -1.5 ? 'fällt' : wx.trendVal >= 1.5 ? 'steigt' : 'stabil');
+}
+export const wxDlg = byId('wxDlg');
+export function openWetter() {
+    if (wxDlg)
+        wxDlg.hidden = false;
+}
+if (wxDlg) {
+    byId('wxClose')?.addEventListener('click', () => { wxDlg.hidden = true; });
+    wxDlg.addEventListener('click', (e) => { if (e.target === wxDlg)
+        wxDlg.hidden = true; });
+}
+byId('wxChip')?.addEventListener('click', openWetter);
+wxChipSetzen();

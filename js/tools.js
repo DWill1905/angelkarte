@@ -5,6 +5,7 @@ import { WT_OPT, istFliess } from './tackle.js';
 import { schilfToggle } from './reed.js';
 import { openPlan } from './plan.js';
 import { menuZu } from './sicht.js';
+import { openWetter, wxDlg } from './weather.js';
 import { fullscreenToggle } from './fullscreen.js';
 import { fokusFor } from './saison.js';
 import { NOW, fmtDate, fmtMD, haversine, hhmm, inSchonzeit, mondPhase, solunar, sunTimes } from './astro.js';
@@ -125,11 +126,14 @@ byId('tPlan').onclick = () => { toolsDlg.hidden = true; openPlan(); };
 /* Schnellzugriff aus dem Hauptmenü – schließt das Menü und öffnet die Funktion. */
 const ausMenu = (fn) => () => { menuZu(); fn(); };
 byId('mPlan')?.addEventListener('click', ausMenu(openPlan));
+byId('mWx')?.addEventListener('click', ausMenu(openWetter));
 byId('mTools')?.addEventListener('click', ausMenu(openTools));
 byId('mTrip')?.addEventListener('click', ausMenu(openTrip));
 byId('mOff')?.addEventListener('click', ausMenu(openOffline));
 byId('mFull')?.addEventListener('click', ausMenu(fullscreenToggle));
 byId('tScore').onclick = () => { toolsDlg.hidden = true; openScore(); };
+byId('wxScore')?.addEventListener('click', () => { if (wxDlg)
+    wxDlg.hidden = true; openScore(); });
 byId('tFore').onclick = () => { toolsDlg.hidden = true; openForecast(); };
 byId('tOff').onclick = () => { toolsDlg.hidden = true; openOffline(); };
 byId('tTrip').onclick = () => { toolsDlg.hidden = true; openTrip(); };
