@@ -17,7 +17,10 @@ export function haversine(a, b, c, d) {
 }
 /* Sonnenauf-/untergang (vereinfacht, ausreichend genau) */
 export function sunTimes(lat, lng, date) {
-    const rad = Math.PI / 180, J = Math.floor(date / 864e5) + 2440587.5 - 2451545 + 0.0009 - lng / 360;
+    /* Kein Math.floor! Es verwirft die Tageszeit und verschiebt die Julianische Tageszahl
+       um einen halben Tag – beim Runden auf den naechsten Sonnentag landete man dadurch
+       systematisch beim Vortag. Die Uhrzeiten stimmten, das Datum war um 1 Tag zu frueh. */
+    const rad = Math.PI / 180, J = date / 864e5 + 2440587.5 - 2451545 + 0.0009 - lng / 360;
     const n = Math.round(J), Js = 2451545 + 0.0009 - lng / 360 + n;
     const M = (357.5291 + 0.98560028 * (Js - 2451545)) % 360;
     const C = 1.9148 * Math.sin(M * rad) + 0.02 * Math.sin(2 * M * rad);

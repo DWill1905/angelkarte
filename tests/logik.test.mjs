@@ -130,3 +130,64 @@ describe('solunar – Beißfenster', () => {
     assert.ok(wins.length > 0, 'Solunar muss ohne Netz Fenster liefern');
   });
 });
+
+describe('Bug: sunTimes lieferte das Datum des Vortages', () => {
+  /* Math.floor(date/864e5) verwarf die Tageszeit und verschob die Julianische Tageszahl
+     um einen halben Tag. Die Uhrzeiten stimmten, das Datum war systematisch um einen Tag
+     zu früh – dadurch lagen alle Solunar-Fenster in der Vergangenheit. */
+  const ORT = [52.13, 11.63]; // Magdeburg
+
+  test('Sonnenauf- und -untergang tragen das angefragte Datum', () => {
+    for (const [monat, tag] of [[0, 15], [5, 21], [6, 9], [11, 21]]) {
+      /* Mittag als Bezug: dann liegt der ganze lichte Tag sicher im selben Kalendertag,
+         unabhängig von der Zeitzone der Testumgebung. */
+      const d = new Date(2026, monat, tag, 12);
+      const st = app.sunTimes(...ORT, d);
+      assert.equal(st.rise.getDate(), tag, `Aufgang am falschen Tag (Monat ${monat + 1})`);
+      assert.equal(st.set.getDate(), tag, `Untergang am falschen Tag (Monat ${monat + 1})`);
+      assert.equal(st.dusk.getDate(), tag, 'Dämmerung am falschen Tag');
+    }
+  });
+
+  test('Sonnenzeiten stimmen auf 20 Minuten mit echten Werten überein', () => {
+    /* Zeitzonenunabhängig: wir vergleichen UTC-Minuten, sonst schlägt der Test
+       je nach TZ der Umgebung fehl (der Deploy-Wächter läuft in UTC). */
+    const utcMin = (d) => d.getUTCHours() * 60 + d.getUTCMinutes();
+    const faelle = [
+      // Magdeburg, Sonnenwenden – Referenz in UTC (MESZ = UTC+2, MEZ = UTC+1)
+      [new Date(Date.UTC(2026, 5, 21, 12)), 2 * 60 + 50, 19 * 60 + 25],
+      [new Date(Date.UTC(2026, 11, 21, 12)), 7 * 60 + 17, 15 * 60 + 0],
+    ];
+    faelle.forEach(([d, rSoll, sSoll]) => {
+      const st = app.sunTimes(...ORT, d);
+      assert.ok(Math.abs(utcMin(st.rise) - rSoll) <= 20, `Aufgang ${utcMin(st.rise)} vs ${rSoll} (UTC)`);
+      assert.ok(Math.abs(utcMin(st.set) - sSoll) <= 20, `Untergang ${utcMin(st.set)} vs ${sSoll} (UTC)`);
+    });
+  });
+
+  test('alle Solunar-Fenster liegen am Bezugstag', () => {
+    const bezug = new Date(2026, 6, 9, 12);
+    const wins = app.solunar(...ORT, bezug);
+    assert.ok(wins.length >= 4);
+    wins.forEach((wnd) => {
+      const von = new Date(wnd.from), bis = new Date(wnd.to);
+      const trifft = von.getDate() === 9 || bis.getDate() === 9;
+      assert.ok(trifft, `Fenster ${wnd.label} liegt am ${von.getDate()}., nicht am Bezugstag`);
+    });
+  });
+
+  test('die Fenster sind chronologisch sortiert', () => {
+    const wins = app.solunar(...ORT, new Date(2026, 6, 9, 12));
+    for (let i = 1; i < wins.length; i++) {
+      assert.ok(wins[i].from >= wins[i - 1].from, 'Fenster nicht sortiert');
+    }
+  });
+
+  test('der Tag der Sommersonnenwende ist länger als der der Wintersonnenwende', () => {
+    const sommer = app.sunTimes(...ORT, new Date(2026, 5, 21, 12));
+    const winter = app.sunTimes(...ORT, new Date(2026, 11, 21, 12));
+    const dauer = (st) => (st.set - st.rise) / 3600000;
+    assert.ok(dauer(sommer) > 16 && dauer(sommer) < 17.5, `Sommer: ${dauer(sommer).toFixed(1)} h`);
+    assert.ok(dauer(winter) > 7 && dauer(winter) < 8.5, `Winter: ${dauer(winter).toFixed(1)} h`);
+  });
+});
