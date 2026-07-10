@@ -208,3 +208,71 @@ describe('Regeln-Tab', () => {
     }
   });
 });
+
+describe('UI: Popup ist auf das Wesentliche reduziert', () => {
+  const ohneKlappinhalt = (html) =>
+    html.replace(/<details[\s\S]*?<\/details>/g, (m) => (m.match(/<summary[\s\S]*?<\/summary>/) || [''])[0]);
+  const nurText = (html) => html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+
+  test('ohne Aufklappen bleibt das Popup unter 30 Zeilen', async () => {
+    await loadRegion(ctx, 'mecklenburg');
+    app.state.WX = { temp: 19, wind: 14, dirDeg: 225, dir: 'SW', press: 1006, trendVal: -2.1 };
+    app.state.PEGEL = { value: 120, station: 'X', dist: 5, wt: 16 };
+    const html = app.popupHtml(app.state.SPOTS.find((s) => s.name.includes('Woblitzsee')));
+    const zeilen = Math.round(nurText(ohneKlappinhalt(html)).length / 55);
+    assert.ok(zeilen <= 30, `${zeilen} Zeilen sofort sichtbar – vorher waren es 66`);
+  });
+
+  test('die Fangchance steht vor den Erlaubnisformalitäten', async () => {
+    await loadRegion(ctx, 'mecklenburg');
+    const html = app.popupHtml(app.state.SPOTS.find((s) => s.name.includes('Woblitzsee')));
+    const chancen = html.indexOf('class="rating"');
+    const erlaubnis = html.indexOf('<b>Erlaubnis');
+    assert.ok(chancen >= 0 && erlaubnis >= 0);
+    assert.ok(chancen < erlaubnis, 'Am Wasser interessiert zuerst, ob es sich lohnt');
+  });
+
+  test('Methode, Rig und Hotspots stecken in einem Klappblock', async () => {
+    await loadRegion(ctx, 'elbe');
+    const html = app.popupHtml(app.state.SPOTS.find((s) => s.name.includes('Herrenkrug')));
+    assert.match(html, /class="pop-details"/);
+    assert.ok(!/pop-details[^>]*open/.test(html), 'Der Detailblock soll zugeklappt starten');
+    const body = html.slice(html.indexOf('pop-details'));
+    assert.match(body, /Methode/);
+  });
+
+  test('Warnung und Erlaubnis bleiben immer sichtbar (nicht eingeklappt)', async () => {
+    await loadRegion(ctx, 'mecklenburg');
+    const html = app.popupHtml(app.state.SPOTS.find((s) => s.warn));
+    const sichtbar = ohneKlappinhalt(html);
+    assert.match(sichtbar, /pop-warn|pop-note/, 'Warnung darf nie im Klappblock verschwinden');
+    assert.match(sichtbar, /<b>Erlaubnis/, 'Die Erlaubnis ist rechtlich relevant');
+  });
+
+  test('Sperrzonen bekommen keinen Detail- und keinen Tackle-Block', async () => {
+    await loadRegion(ctx, 'main');
+    const html = app.popupHtml(app.state.SPOTS.find((s) => s.cat === 'sperr'));
+    assert.ok(!/pop-details/.test(html));
+    assert.ok(!/class="tackle"/.test(html));
+    assert.match(html, /pop-warn/, 'Die Sperrwarnung muss stehen');
+  });
+});
+
+describe('UI: Werkzeuge-Menü ist gruppiert', () => {
+  test('drei Gruppen mit Überschriften', () => {
+    const gruppen = [...doc.querySelectorAll('.tool-gruppe')].map((e) => e.textContent);
+    assert.deepEqual(gruppen, ['Planen', 'Am Wasser', 'Karte & Listen']);
+  });
+
+  test('die Kernfunktion steht über den Gruppen und volle Breite', () => {
+    const erster = doc.querySelector('#toolsDlg .fbtool');
+    assert.equal(erster.id, 'tPlan');
+    assert.ok(erster.classList.contains('plan'));
+  });
+
+  test('kein Werkzeug ist verloren gegangen', () => {
+    const ids = [...doc.querySelectorAll('#toolsDlg .fbtool')].map((b) => b.id);
+    ['tPlan', 'tScore', 'tFore', 'tBite', 'tCol', 'tLead', 'tKnot', 'tPack', 'tTrip', 'tOff', 'schilfBtn']
+      .forEach((id) => assert.ok(ids.includes(id), `${id} fehlt`));
+  });
+});

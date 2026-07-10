@@ -32,23 +32,33 @@ export function monatLabel(ym){
 }
 export function popupHtml(s: Spot): string {
   const c=CATS[s.cat];
+  const beangelbar = s.cat!=='sperr' && s.cat!=='info';
+  /* Reihenfolge nach Relevanz am Wasser:
+     Kopf → Chancen heute → aktuelle Bedingungen → Warnung → Erlaubnis → Details (zu) → Aktionen.
+     Vorher standen die Erlaubnisformalitäten vor der Fangchance, und Methode/Rig/Strecke
+     bliesen das Popup auf 15 Zeilen auf. */
   return `<span class="pop-cat" style="background:${c.color}">${c.label}</span><span class="pop-nr">${s.nr}</span>
     <div class="pop-title">${s.name}</div>
     <div class="pop-dist" data-dist="${s.lat},${s.lng}"></div>
-    ${s.strecke?'<div class="pop-row"><b>Strecke</b>'+s.strecke+'</div>':''}
-    <div class="pop-row"><b>Zielfisch</b>${s.fisch}</div>
-    <div class="pop-row"><b>Methode &amp; Köder</b>${s.methode}</div>
-    ${s.rig?'<div class="pop-row"><b>Gerät &amp; Rig</b>'+s.rig+'</div>':''}
-    <div class="pop-row"><b>Erlaubnis</b>${s.karte}</div>
-    ${s.kartenLinks&&s.kartenLinks.length?'<div class="pop-links">'+s.kartenLinks.map(l=>'<a class="pop-link" href="'+l.url+'" target="_blank" rel="noopener">'+ICON('pin')+esc(l.label)+'</a>').join('')+'</div>':''}
-    ${s.zugang?'<div class="pop-row"><b>Zugang</b>'+(s.zugang==='boot'?'Überwiegend Bootssee – vom Ufer kaum möglich':'Vom Ufer beangelbar')+'</div>':''}
     ${ratingHtml(s)}
-    ${tackleHtml(s)}
-    ${!s.line&&s.cat!=='sperr'&&s.cat!=='info'?'<div class="pop-row" data-wind="1"></div>':''}
-    ${s.cat!=='sperr'&&s.cat!=='info'?'<div class="pop-row" data-wt="'+esc((s.arten||[]).join(","))+'"></div>':''}
+    ${!s.line&&beangelbar?'<div class="pop-row" data-wind="1"></div>':''}
+    ${beangelbar?'<div class="pop-row" data-wt="'+esc((s.arten||[]).join(","))+'"></div>':''}
     <div class="pop-note${s.warn?' pop-warn':''}">${s.note}</div>
     ${s.schonzeitInfo?'<div class="pop-row"><b>Schonzeit-Besonderheit</b>'+s.schonzeitInfo+'</div>':''}
-    ${s.hotspots&&s.hotspots.length?'<div class="pop-row" style="margin-top:8px"><b>Hotspots (kleine Punkte auf der Karte)</b>'+s.hotspots.map(h=>h.name).join(' · ')+'</div>':''}
+    <div class="pop-row"><b>Erlaubnis</b>${s.karte}</div>
+    ${s.kartenLinks&&s.kartenLinks.length?'<div class="pop-links">'+s.kartenLinks.map(l=>'<a class="pop-link" href="'+l.url+'" target="_blank" rel="noopener">'+ICON('pin')+esc(l.label)+'</a>').join('')+'</div>':''}
+    ${beangelbar?`<details class="pop-details">
+      <summary>Gewässer &amp; Methode</summary>
+      <div class="pop-details-body">
+        ${s.strecke?'<div class="pop-row"><b>Strecke</b>'+s.strecke+'</div>':''}
+        <div class="pop-row"><b>Zielfisch</b>${s.fisch}</div>
+        <div class="pop-row"><b>Methode &amp; Köder</b>${s.methode}</div>
+        ${s.rig?'<div class="pop-row"><b>Gerät &amp; Rig</b>'+s.rig+'</div>':''}
+        ${s.zugang?'<div class="pop-row"><b>Zugang</b>'+(s.zugang==='boot'?'Überwiegend Bootssee – vom Ufer kaum möglich':'Vom Ufer beangelbar')+'</div>':''}
+        ${s.hotspots&&s.hotspots.length?'<div class="pop-row"><b>Hotspots (kleine Punkte auf der Karte)</b>'+s.hotspots.map(h=>h.name).join(' · ')+'</div>':''}
+      </div>
+    </details>`:''}
+    ${tackleHtml(s)}
     <div class="verif">${s.verif==='C'?'⚠ Beleglage schwach – Bestand dokumentiert, Zugang/Gastkarte ungesichert':s.verif==='B'?'⚠ Datenlage teils unbelegt – vor Ort verifizieren':'✓ Kerndaten belegt (Ortsdaten/Primärquellen)'}${state.REGION&&state.REGION.geprueft?' · Daten geprüft '+esc(monatLabel(state.REGION.geprueft)):''}</div>
     <div class="pop-actions">
       <a class="pop-btn nav" href="${mapsLink(s)}" target="_blank" rel="noopener">Route</a>
