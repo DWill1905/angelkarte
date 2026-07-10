@@ -41,8 +41,8 @@ export function popupHtml(s) {
     ${s.zugang ? '<div class="pop-row"><b>Zugang</b>' + (s.zugang === 'boot' ? 'Überwiegend Bootssee – vom Ufer kaum möglich' : 'Vom Ufer beangelbar') + '</div>' : ''}
     ${ratingHtml(s)}
     ${tackleHtml(s)}
-    ${!s.line && (s.cat === 'raub' || s.cat === 'fried') ? '<div class="pop-row" data-wind="1"></div>' : ''}
-    ${(s.cat === 'raub' || s.cat === 'fried') ? '<div class="pop-row" data-wt="' + esc((s.arten || []).join(",")) + '"></div>' : ''}
+    ${!s.line && s.cat !== 'sperr' && s.cat !== 'info' ? '<div class="pop-row" data-wind="1"></div>' : ''}
+    ${s.cat !== 'sperr' && s.cat !== 'info' ? '<div class="pop-row" data-wt="' + esc((s.arten || []).join(",")) + '"></div>' : ''}
     <div class="pop-note${s.warn ? ' pop-warn' : ''}">${s.note}</div>
     ${s.schonzeitInfo ? '<div class="pop-row"><b>Schonzeit-Besonderheit</b>' + s.schonzeitInfo + '</div>' : ''}
     ${s.hotspots && s.hotspots.length ? '<div class="pop-row" style="margin-top:8px"><b>Hotspots (kleine Punkte auf der Karte)</b>' + s.hotspots.map(h => h.name).join(' · ') + '</div>' : ''}

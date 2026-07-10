@@ -432,3 +432,30 @@ describe('Bug: CSV-Export verschluckte den Wert 0', () => {
     assert.ok(!/undefined|null|NaN/.test(f('Drucktrend') + f('Pegel_cm')));
   });
 });
+
+describe('Bug: Wetterzeilen fehlten bei Salmoniden- und Flussstrecken', () => {
+  test('jeder beangelbare Spot bekommt die Wassertemperatur-Zeile', async () => {
+    for (const r of app.state.REGIONS) {
+      await loadRegion(ctx, r.id);
+      app.state.SPOTS.filter((s) => !s.my && s.cat !== 'sperr' && s.cat !== 'info').forEach((s) => {
+        assert.match(app.popupHtml(s), /data-wt=/,
+          `${r.id}/${s.name} (cat=${s.cat}): keine Wassertemperatur – bei Salmoniden das wichtigste Kriterium`);
+      });
+    }
+  });
+
+  test('Flussstrecken (Polylines) bekommen keine Windzeile, alle anderen schon', async () => {
+    await loadRegion(ctx, 'erzgebirge');
+    app.state.SPOTS.filter((s) => !s.my && s.cat !== 'sperr' && s.cat !== 'info').forEach((s) => {
+      const hatWind = /data-wind=/.test(app.popupHtml(s));
+      assert.equal(hatWind, !s.line, `${s.name}: Windzeile ${hatWind ? 'vorhanden' : 'fehlt'}`);
+    });
+  });
+
+  test('Sperrzonen bekommen keine Wetterzeilen', async () => {
+    await loadRegion(ctx, 'main');
+    const sperr = app.state.SPOTS.find((s) => s.cat === 'sperr');
+    const h = app.popupHtml(sperr);
+    assert.ok(!/data-wt=|data-wind=/.test(h));
+  });
+});
