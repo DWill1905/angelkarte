@@ -92,6 +92,37 @@
   .chips.sub .chip{background:transparent;border-color:var(--line);color:var(--muted);min-height:28px;padding:5px 11px}
   .chips.sub .chip.on{background:var(--dusk);border-color:var(--dusk);color:#0d3540;opacity:1;font-weight:600;box-shadow:0 0 0 3px rgba(110,168,196,.15)}
   /* --- Vollbild-Knopf --- */
+  /* --- Sicht-Umschalter --- */
+  .sicht-zeile{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .sicht-label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+  .sicht-wahl{margin-left:auto;display:inline-flex;border:1px solid var(--shoal);border-radius:9px;overflow:hidden}
+  .sicht-wahl button{background:transparent;border:0;color:var(--muted);font:inherit;font-size:12px;
+    padding:6px 14px;cursor:pointer}
+  .sicht-wahl button.on{background:var(--dusk);color:#12333d;font-weight:700}
+
+  /* --- Einfache Sicht: Vertiefungen ausblenden ---
+     NIEMALS ausgeblendet: .pop-note/.pop-warn (Warnungen), Erlaubnis-Zeile, .pop-links,
+     .rate-mass (Maß/Entnahmefenster), #sperrWarn, #stormWarn. Das ist die Grenze. */
+  body.sicht-einfach .pop-details{display:none}
+  body.sicht-einfach .tackle{display:none}
+  body.sicht-einfach .rating .rate-art-block:not(:first-of-type){display:none}
+  body.sicht-einfach .rating .rate-g{display:none}
+  body.sicht-einfach .rating .rate-hinweis{display:none}
+  body.sicht-einfach .rating > .rating-body > .verif{display:none}
+  body.sicht-einfach .rate-kopf{cursor:default}
+  body.sicht-einfach .rate-kopf::after{content:none}
+  body.sicht-einfach .pop-row[data-wind]{display:none}
+  body.sicht-einfach .pop-nr{display:none}
+  body.sicht-einfach #saisonInfo{display:none}
+  /* Werkzeuge: in der einfachen Sicht bleiben Planen (ohne Wochen-Vorschau) und die Trip-Liste */
+  body.sicht-einfach [data-gruppe="wasser"],
+  body.sicht-einfach [data-reihe="wasser"],
+  body.sicht-einfach [data-gruppe="karte"],
+  body.sicht-einfach #tOff,
+  body.sicht-einfach #schilfBtn,
+  body.sicht-einfach #tFore{display:none}
+  body.sicht-einfach [data-reihe="karte"]{grid-template-columns:1fr}
+
   .tool-gruppen{display:flex;flex-direction:column;gap:4px}
   .tool-gruppe{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dusk);
     margin:12px 0 2px;font-weight:700}
@@ -445,25 +476,32 @@
   <div class="mydlg">
     <h3 data-ic="tools">Werkzeuge</h3>
     <div class="tool-gruppen">
+      <div class="sicht-zeile">
+        <span class="sicht-label">Ansicht</span>
+        <div class="sicht-wahl" id="sichtWahl" role="group" aria-label="Ansicht wählen">
+          <button type="button" data-sicht="einfach" aria-pressed="false">Einfach</button>
+          <button type="button" data-sicht="pro" aria-pressed="true">Pro</button>
+        </div>
+      </div>
       <button class="fbtool plan" id="tPlan" data-ic="target">Heute würde ich hier anfangen</button>
 
-      <h4 class="tool-gruppe">Planen</h4>
-      <div class="tool-reihe">
+      <h4 class="tool-gruppe" data-gruppe="planen">Planen</h4>
+      <div class="tool-reihe" data-reihe="planen">
         <button class="fbtool" id="tScore" data-ic="target">Heute passt es?</button>
         <button class="fbtool" id="tFore" data-ic="sun">Wochen-Vorschau</button>
         <button class="fbtool" id="tBite" data-ic="fish">Beißzeiten heute</button>
       </div>
 
-      <h4 class="tool-gruppe">Am Wasser</h4>
-      <div class="tool-reihe">
+      <h4 class="tool-gruppe" data-gruppe="wasser">Am Wasser</h4>
+      <div class="tool-reihe" data-reihe="wasser">
         <button class="fbtool" id="tCol" data-ic="target">Köderberater</button>
         <button class="fbtool" id="tLead" data-ic="weight">Bleigewicht</button>
         <button class="fbtool" id="tKnot" data-ic="knot">Knoten</button>
         <button class="fbtool" id="tPack" data-ic="bag">Packliste</button>
       </div>
 
-      <h4 class="tool-gruppe">Karte &amp; Listen</h4>
-      <div class="tool-reihe">
+      <h4 class="tool-gruppe" data-gruppe="karte">Karte &amp; Listen</h4>
+      <div class="tool-reihe" data-reihe="karte">
         <button class="fbtool" id="tTrip" data-ic="bag">Trip-Liste <span id="tripCount" style="color:var(--dusk);font-weight:700"></span></button>
         <button class="fbtool" id="tOff" data-ic="pin">Offline sichern</button>
         <button class="fbtool" id="schilfBtn" data-ic="waves" aria-pressed="false">Schilf (OSM)</button>

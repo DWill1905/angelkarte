@@ -264,7 +264,9 @@ export function ratingHtml(s, hotspot = null) {
         return `<details class="rate-art-block"${offen ? ' open' : ''}>${kopf}
       <div class="rate-body">${gruende}${mass}${unklar}</div></details>`;
     }).join('');
-    return `<details class="rating">
+    /* Offen, nicht zugeklappt: die Fangchance ist die Kernaussage des Popups.
+       In der einfachen Sicht blendet CSS die Gruende und die Zweitarten aus. */
+    return `<details class="rating" open>
     <summary>${'★'} Chancen heute</summary>
     <div class="rating-body">
       ${sturm ? '<div class="rate-sturm">⚠ Sturm – Angeln ist heute unverantwortlich. Die Bewertung ist gedeckelt.</div>' : ''}

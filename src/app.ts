@@ -17,4 +17,5 @@ import './fangbuch.js';
 import './trip.js';
 import './rating.js';
 import './plan.js';
+import './sicht.js';
 import './fullscreen.js';

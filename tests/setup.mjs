@@ -27,6 +27,7 @@ import { toggleTrip, inTrip, openTrip, tripReady } from './trip.js';
 import { schilfLaden, schilfAus, schilfAktiv } from './reed.js';
 import { computeScore } from './tools.js';
 import { fullscreenToggle, fullscreenAktiv } from './fullscreen.js';
+import { setzeSicht, aktuelleSicht, ladeSicht, sichtReady } from './sicht.js';
 import { empfehlung, kandidaten, openPlan, zielfischFor, startzeitFor, peilung, himmelsrichtung, winkelDiff, istAuflandig } from './plan.js';
 import { bewerteSpot, bewerteAlle, sterneAus, sterneText } from './rating.js';
 import { jahreszeit } from './saison.js';
@@ -35,7 +36,7 @@ import { daysUntilMD, fmtDate, fmtMD, haversine, inSchonzeit, inWindow, masseAus
 window.__app = { state, popupHtml, mapsLink, spotVisible, sperrWarnung, locApply,
   fbInsights, fbRestore, parseFangDatum, beissfensterJetzt, fbRender, fbSortiert, fbCsv,
   toggleTrip, inTrip, openTrip, tripReady, schilfLaden, schilfAus, schilfAktiv,
-  fullscreenToggle, fullscreenAktiv,
+  fullscreenToggle, fullscreenAktiv, setzeSicht, aktuelleSicht, ladeSicht, sichtReady,
   empfehlung, kandidaten, openPlan, zielfischFor, startzeitFor,
   peilung, himmelsrichtung, winkelDiff, istAuflandig,
   bewerteSpot, bewerteAlle, sterneAus, sterneText, jahreszeit, saison, computeScore,
