@@ -39,7 +39,12 @@ export async function loadWeather(){
 export function checkStorm(d,c){
   const warn=byId('stormWarn');
   if(!warn) return;
-  const now=new Date(); const nowH=now.toISOString().slice(0,13);
+  const now=new Date();
+  /* Open-Meteo liefert wegen timezone=auto LOKALE Zeitstempel ("2026-07-09T14:00").
+     toISOString() gibt UTC – im Sommer zwei Stunden Versatz. Die Gewitterwarnung prüfte
+     dadurch 12:00–15:00 statt 14:00–17:00, schaute also kaum in die Zukunft. */
+  const pad=(n)=>String(n).padStart(2,'0');
+  const nowH=now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate())+'T'+pad(now.getHours());
   let msg='';
   const codeNow=c.weather_code;
   if([95,96,99].includes(codeNow)){ msg='⛈ GEWITTER JETZT – sofort raus aus dem Wasser, Rute ablegen, Schutz suchen!'; }

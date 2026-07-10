@@ -512,3 +512,56 @@ describe('Bug: Score meldete bei Sturm "50 % – mäßig"', () => {
     assert.equal(r.factors.length, 5, 'Score hat fünf Faktoren – Pegel und Wind getrennt');
   });
 });
+
+describe('Bug: Gewitterwarnung schaute wegen UTC-Versatz kaum voraus', () => {
+  const pad = (n) => String(n).padStart(2, '0');
+  const lokalStunde = (basis, versatz) => {
+    const d = new Date(basis);
+    d.setHours(basis.getHours() + versatz, 0, 0, 0);
+    return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) + 'T' + pad(d.getHours()) + ':00';
+  };
+
+  /** Open-Meteo liefert wegen timezone=auto LOKALE Zeitstempel. */
+  const wetterMock = (gewitterBei) => {
+    const jetzt = new Date();
+    const versaetze = [-2, -1, 0, 1, 2, 3, 4, 5];
+    return async (u) => {
+      if (!/open-meteo/.test(String(u))) throw new Error('offline');
+      return { ok: true, json: async () => ({
+        current: { time: lokalStunde(jetzt, 0), temperature_2m: 19, wind_speed_10m: 11,
+          wind_direction_10m: 225, surface_pressure: 1011, weather_code: 1 },
+        hourly: {
+          time: versaetze.map((v) => lokalStunde(jetzt, v)),
+          weather_code: versaetze.map((v) => (v === gewitterBei ? 95 : 1)),
+          wind_gusts_10m: versaetze.map(() => 10),
+          surface_pressure: versaetze.map((_, i) => 1013 - i),
+        },
+      })};
+    };
+  };
+
+  test('ein Gewitter in 3 Stunden wird erkannt', async () => {
+    const c = await startApp({ fetchImpl: wetterMock(3) });
+    await loadRegion(c, 'elbe');
+    await tick(c.window, 220);
+    const warn = c.document.getElementById('stormWarn');
+    assert.match(warn.textContent, /Gewitter/,
+      'Vor dem Fix startete das Prüffenster zwei Stunden in der Vergangenheit');
+    c.close();
+  });
+
+  test('ohne Gewitter bleibt die Warnung leer', async () => {
+    const c = await startApp({ fetchImpl: wetterMock(99) });
+    await loadRegion(c, 'elbe');
+    await tick(c.window, 220);
+    assert.ok(!/Gewitter/.test(c.document.getElementById('stormWarn').textContent));
+    c.close();
+  });
+
+  test('die Stundenberechnung nutzt lokale Zeit, nicht UTC', () => {
+    const src = fs.readFileSync(path.join(ROOT, 'src', 'weather.ts'), 'utf8');
+    assert.ok(!/nowH\s*=\s*now\.toISOString/.test(src),
+      'toISOString() liefert UTC – Open-Meteo liefert bei timezone=auto lokale Zeit');
+    assert.match(src, /now\.getHours\(\)/);
+  });
+});
