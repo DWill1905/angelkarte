@@ -380,3 +380,55 @@ describe('Speicherfehler (voller Storage)', () => {
     c.close();
   });
 });
+
+describe('Bug: CSV-Export verschluckte den Wert 0', () => {
+  /** RFC-4180-Parser – naives split(';') scheitert an gequoteten Feldern. */
+  const parseCsvZeile = (z) => {
+    const out = []; let cur = '', q = false;
+    for (let i = 0; i < z.length; i++) {
+      const c = z[i];
+      if (q) { if (c === '"') { if (z[i + 1] === '"') { cur += '"'; i++; } else q = false; } else cur += c; }
+      else if (c === '"') q = true;
+      else if (c === ';') { out.push(cur); cur = ''; }
+      else cur += c;
+    }
+    out.push(cur); return out;
+  };
+
+  const exportiere = async (fang) => {
+    const c = await startApp();
+    let csv = '';
+    c.window.Blob = class { constructor(a) { csv = a[0]; } };
+    await loadRegion(c, 'elbe');
+    c.app.state.fbMem.length = 0;
+    c.app.state.fbMem.push(fang);
+    c.app.fbCsv();
+    c.close();
+    const zeilen = csv.replace(/^\ufeff/, '').split('\n');
+    const kopf = parseCsvZeile(zeilen[0]);
+    const daten = parseCsvZeile(zeilen[1]);
+    return (feld) => daten[kopf.indexOf(feld)];
+  };
+
+  test('ein Drucktrend von 0.0 (stabile Lage) bleibt erhalten', async () => {
+    const f = await exportiere({ id: 1, datum: '1.7.2026', fisch: 'Zander', laenge: 55, spot: 'A', koeder: 'G',
+      entnommen: false, ctx: { zeit: '20:00', mond: 'M', druck: 1013, trend: 0, wind: 'SW', pegel: 0, wt: 0 } });
+    assert.equal(f('Drucktrend'), '0', 'Der Wert 0 wurde durch `||` in einen leeren String verwandelt');
+    assert.equal(f('Pegel_cm'), '0');
+    assert.equal(f('Wassertemp_C'), '0');
+  });
+
+  test('Semikolon und Anführungszeichen werden korrekt gequotet', async () => {
+    const f = await exportiere({ id: 1, datum: '1.7.2026', fisch: 'Zander', laenge: 55,
+      spot: 'Buhne; Nord', koeder: 'Gummi "rot"', entnommen: false });
+    assert.equal(f('Spot'), 'Buhne; Nord', 'Semikolon zerlegt sonst die Zeile');
+    assert.equal(f('Koeder'), 'Gummi "rot"');
+  });
+
+  test('fehlende Werte bleiben leer, werden nicht zu "undefined"', async () => {
+    const f = await exportiere({ id: 1, datum: '1.7.2026', fisch: 'Zander', laenge: 55, spot: 'A', koeder: '', entnommen: false });
+    assert.equal(f('Koeder'), '');
+    assert.equal(f('Druck_hPa'), '');
+    assert.ok(!/undefined|null|NaN/.test(f('Drucktrend') + f('Pegel_cm')));
+  });
+});

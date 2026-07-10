@@ -53,9 +53,12 @@ export function fbCsv() {
     if (!state.fbMem.length)
         return;
     const head = ['Datum', 'Fisch', 'Laenge_cm', 'Spot', 'Koeder', 'Entnommen', 'Zeit', 'Mond', 'Druck_hPa', 'Drucktrend', 'Wind', 'Pegel_cm', 'Wassertemp_C'];
-    const rows = fbSortiert().map(e => [e.datum, e.fisch, e.laenge || '', e.spot || '', e.koeder || '', e.entnommen ? 'ja' : 'nein',
-        e.ctx ? e.ctx.zeit : '', e.ctx ? e.ctx.mond : '', e.ctx ? (e.ctx.druck || '') : '', e.ctx ? (e.ctx.trend || '') : '',
-        e.ctx ? (e.ctx.wind || '') : '', e.ctx ? (e.ctx.pegel || '') : '', e.ctx && e.ctx.wt != null ? e.ctx.wt : ''
+    /* `||` würde den Wert 0 verschlucken: ein Drucktrend von 0.0 (stabile Lage) oder ein
+       Pegel von 0 cm sind echte Messwerte, keine fehlenden. Deshalb überall auf null/undefined prüfen. */
+    const val = (x) => (x === null || x === undefined || x === '' ? '' : x);
+    const rows = fbSortiert().map(e => [e.datum, e.fisch, val(e.laenge), val(e.spot), val(e.koeder), e.entnommen ? 'ja' : 'nein',
+        e.ctx ? val(e.ctx.zeit) : '', e.ctx ? val(e.ctx.mond) : '', e.ctx ? val(e.ctx.druck) : '', e.ctx ? val(e.ctx.trend) : '',
+        e.ctx ? val(e.ctx.wind) : '', e.ctx ? val(e.ctx.pegel) : '', e.ctx ? val(e.ctx.wt) : ''
     ].map(v => { v = String(v); return /[";\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }).join(';'));
     const csv = '\ufeff' + head.join(';') + '\n' + rows.join('\n');
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });

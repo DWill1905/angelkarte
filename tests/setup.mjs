@@ -22,7 +22,7 @@ export function buildBundle() {
 import './app.js';
 import { state } from './state.js';
 import { popupHtml, mapsLink, spotVisible, sperrWarnung, locApply } from './map.js';
-import { fbInsights, fbRestore, parseFangDatum, beissfensterJetzt, fbRender } from './fangbuch.js';
+import { fbInsights, fbRestore, parseFangDatum, beissfensterJetzt, fbRender, fbSortiert, fbCsv } from './fangbuch.js';
 import { toggleTrip, inTrip, openTrip, tripReady } from './trip.js';
 import { schilfLaden, schilfAus, schilfAktiv } from './reed.js';
 import { fullscreenToggle, fullscreenAktiv } from './fullscreen.js';
@@ -32,7 +32,7 @@ import { jahreszeit } from './saison.js';
 import { saison } from './tackle.js';
 import { inWindow, inSchonzeit, daysUntilMD, masseAus, fmtMD, fmtDate, solunar, haversine } from './astro.js';
 window.__app = { state, popupHtml, mapsLink, spotVisible, sperrWarnung, locApply,
-  fbInsights, fbRestore, parseFangDatum, beissfensterJetzt, fbRender,
+  fbInsights, fbRestore, parseFangDatum, beissfensterJetzt, fbRender, fbSortiert, fbCsv,
   toggleTrip, inTrip, openTrip, tripReady, schilfLaden, schilfAus, schilfAktiv,
   fullscreenToggle, fullscreenAktiv,
   empfehlung, kandidaten, openPlan, zielfischFor, startzeitFor,
