@@ -51,15 +51,48 @@ export async function ladeSicht(): Promise<Sicht> {
   return s;
 }
 
-/* Verdrahtung der Schalter */
+/* ---------- Hauptmenü ---------- */
+
+export function menuOffen(): boolean {
+  const w = byId('menuWrap');
+  return !!w && !w.hidden;
+}
+export function menuAuf(): void {
+  const w = byId('menuWrap');
+  if (!w) return;
+  w.hidden = false;
+  byId('menuBtn')?.setAttribute('aria-expanded', 'true');
+  const f = byId('menuFuss');
+  if (f && state.REGION) {
+    f.textContent = state.REGION.name + (state.REGION.geprueft ? ' · Daten geprüft ' + state.REGION.geprueft : '');
+  }
+  const badge = byId('menuTripCount');
+  if (badge) badge.textContent = state.trip.length ? '(' + state.trip.length + ')' : '';
+}
+export function menuZu(): void {
+  const w = byId('menuWrap');
+  if (!w) return;
+  w.hidden = true;
+  byId('menuBtn')?.setAttribute('aria-expanded', 'false');
+}
+
+/* Verdrahtung: Sicht-Schalter (im Menü) */
 const box = byId('sichtWahl');
 if (box) {
   box.querySelectorAll('button').forEach((b) => {
-    (b as HTMLElement).onclick = () => {
+    (b as HTMLElement).onclick = async () => {
       const s = (b as HTMLElement).dataset.sicht as Sicht;
-      if (s) setzeSicht(s);
+      if (!s) return;
+      await setzeSicht(s);
+      /* Menü schließen: sonst sieht man die Wirkung nicht, weil das Panel davor liegt. */
+      menuZu();
     };
   });
 }
+
+byId('menuBtn')?.addEventListener('click', () => (menuOffen() ? menuZu() : menuAuf()));
+byId('menuClose')?.addEventListener('click', menuZu);
+byId('menuWrap')?.addEventListener('click', (e) => { if (e.target === byId('menuWrap')) menuZu(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && menuOffen()) menuZu(); });
 
 export const sichtReady = ladeSicht();

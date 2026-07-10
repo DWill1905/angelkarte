@@ -162,3 +162,82 @@ describe('Der Bewertungsblock ist standardmäßig offen', () => {
     assert.match(html, /<details class="rating" open>/);
   });
 });
+
+describe('Hauptmenü', () => {
+  test('Knopf im Header öffnet und schließt', async () => {
+    const btn = doc.getElementById('menuBtn');
+    const wrap = doc.getElementById('menuWrap');
+    assert.ok(btn && wrap);
+    assert.equal(wrap.hidden, true, 'Menü startet geschlossen');
+
+    btn.click();
+    await tick(ctx.window, 30);
+    assert.equal(wrap.hidden, false);
+    assert.equal(btn.getAttribute('aria-expanded'), 'true');
+
+    btn.click();
+    await tick(ctx.window, 20);
+    assert.equal(wrap.hidden, true);
+  });
+
+  test('Escape schließt das Menü', async () => {
+    doc.getElementById('menuBtn').click();
+    await tick(ctx.window, 20);
+    doc.dispatchEvent(new ctx.window.KeyboardEvent('keydown', { key: 'Escape' }));
+    assert.equal(doc.getElementById('menuWrap').hidden, true);
+  });
+
+  test('ein Sichtwechsel schließt das Menü, damit die Wirkung sichtbar wird', async () => {
+    doc.getElementById('menuBtn').click();
+    await tick(ctx.window, 20);
+    doc.querySelector('[data-sicht="einfach"]').onclick();
+    await tick(ctx.window, 40);
+    assert.ok(doc.body.classList.contains('sicht-einfach'));
+    assert.equal(doc.getElementById('menuWrap').hidden, true,
+      'Sonst verdeckt das Panel genau das, was sich ändert');
+    await app.setzeSicht('pro');
+  });
+
+  test('die Fußzeile nennt Region und Datenstand', async () => {
+    await loadRegion(ctx, 'mecklenburg');
+    doc.getElementById('menuBtn').click();
+    await tick(ctx.window, 20);
+    const fuss = doc.getElementById('menuFuss').textContent;
+    assert.match(fuss, /Kleinseenplatte|Mecklenburg/i);
+    assert.match(fuss, /geprüft/);
+    doc.getElementById('menuClose').click();
+  });
+
+  test('Schnellzugriffe öffnen ihre Funktion und schließen das Menü', async () => {
+    doc.getElementById('menuBtn').click();
+    await tick(ctx.window, 20);
+    doc.getElementById('mPlan').click();
+    await tick(ctx.window, 60);
+    assert.equal(doc.getElementById('planDlg').hidden, false);
+    assert.equal(doc.getElementById('menuWrap').hidden, true);
+    doc.getElementById('planClose').click();
+  });
+
+  test('der Trip-Zähler steht im Menü', async () => {
+    app.state.trip.length = 0;
+    await loadRegion(ctx, 'elbe');
+    await app.toggleTrip(app.state.SPOTS.find((s) => !s.my && s.cat !== 'sperr').name);
+    doc.getElementById('menuBtn').click();
+    await tick(ctx.window, 20);
+    assert.equal(doc.getElementById('menuTripCount').textContent, '(1)');
+    doc.getElementById('menuClose').click();
+    app.state.trip.length = 0;
+  });
+
+  test('der Sicht-Schalter existiert genau einmal', () => {
+    assert.equal(doc.querySelectorAll('#sichtWahl').length, 1, 'doppelte IDs brechen die Verdrahtung');
+  });
+
+  test('die beiden Sichten sind beschriftet und erklärt', () => {
+    const einfach = doc.querySelector('[data-sicht="einfach"]');
+    const pro = doc.querySelector('[data-sicht="pro"]');
+    assert.match(einfach.textContent, /Einfach/);
+    assert.match(einfach.textContent, /Erlaubnis|Warnung|Wichtigste/i, 'Der Nutzer soll wissen, was bleibt');
+    assert.match(pro.textContent, /Pro/);
+  });
+});

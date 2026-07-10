@@ -92,13 +92,38 @@
   .chips.sub .chip{background:transparent;border-color:var(--line);color:var(--muted);min-height:28px;padding:5px 11px}
   .chips.sub .chip.on{background:var(--dusk);border-color:var(--dusk);color:#0d3540;opacity:1;font-weight:600;box-shadow:0 0 0 3px rgba(110,168,196,.15)}
   /* --- Vollbild-Knopf --- */
-  /* --- Sicht-Umschalter --- */
-  .sicht-zeile{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-  .sicht-label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
-  .sicht-wahl{margin-left:auto;display:inline-flex;border:1px solid var(--shoal);border-radius:9px;overflow:hidden}
-  .sicht-wahl button{background:transparent;border:0;color:var(--muted);font:inherit;font-size:12px;
-    padding:6px 14px;cursor:pointer}
-  .sicht-wahl button.on{background:var(--dusk);color:#12333d;font-weight:700}
+  /* --- Hauptmenü --- */
+  #menuBtn{position:absolute;top:calc(12px + env(safe-area-inset-top));left:14px;z-index:20;
+    width:38px;height:38px;border-radius:10px;border:1px solid var(--shoal);
+    background:rgba(22,50,60,.55);display:flex;flex-direction:column;justify-content:center;
+    align-items:center;gap:4px;cursor:pointer;padding:0}
+  #menuBtn span{display:block;width:17px;height:2px;background:var(--text);border-radius:2px}
+  header{position:relative;padding-left:64px}
+  .menu-wrap{position:fixed;inset:0;background:rgba(10,26,32,.6);z-index:1200;
+    display:flex;justify-content:flex-start;backdrop-filter:blur(2px)}
+  .menu-panel{width:min(320px,86vw);height:100%;overflow-y:auto;background:var(--panel);
+    border-right:1px solid var(--shoal);padding:14px 14px calc(20px + env(safe-area-inset-bottom));
+    padding-top:calc(14px + env(safe-area-inset-top));display:flex;flex-direction:column;gap:2px}
+  .menu-kopf{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+  .menu-kopf span{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}
+  .menu-kopf button{background:none;border:0;color:var(--muted);font-size:18px;cursor:pointer;padding:4px 6px}
+  .menu-gruppe{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dusk);
+    margin:14px 0 6px;font-weight:700}
+  .menu-sicht{display:flex;flex-direction:column;gap:7px}
+  .menu-sicht button{display:flex;flex-direction:column;align-items:flex-start;gap:2px;
+    background:rgba(22,50,60,.45);border:1px solid var(--shoal);border-radius:10px;
+    padding:10px 12px;color:var(--text);font:inherit;cursor:pointer;text-align:left}
+  .menu-sicht button b{font-size:13.5px}
+  .menu-sicht button small{font-size:11px;color:var(--muted);line-height:1.35}
+  .menu-sicht button.on{border-color:var(--dusk);background:rgba(166,212,232,.16)}
+  .menu-sicht button.on b{color:var(--dusk)}
+  .menu-liste{display:flex;flex-direction:column;gap:6px}
+  .menu-item{display:flex;align-items:center;gap:9px;background:rgba(22,50,60,.35);
+    border:1px solid var(--line);border-radius:9px;padding:10px 12px;color:var(--text);
+    font:inherit;font-size:13px;cursor:pointer;text-align:left}
+  .menu-item:hover{background:rgba(22,50,60,.6)}
+  .menu-item .ic{width:15px;height:15px;flex:0 0 auto}
+  .menu-fuss{margin-top:auto;padding-top:16px;font-size:11px;color:var(--muted);line-height:1.5}
 
   /* --- Einfache Sicht: Vertiefungen ausblenden ---
      NIEMALS ausgeblendet: .pop-note/.pop-warn (Warnungen), Erlaubnis-Zeile, .pop-links,
@@ -390,12 +415,49 @@
 <body>
 
 <header>
+  <button id="menuBtn" type="button" aria-label="Menü öffnen" aria-expanded="false" aria-controls="menuPanel">
+    <span></span><span></span><span></span>
+  </button>
   <div class="eyebrow">Revierwasserlaufanstalt · Osterzgebirge</div>
   <h1 id="appTitle">Angelrevier <span class="tilde">~</span></h1>
   <div class="sun" id="sunline"></div>
   <div class="sun" id="wxline" aria-live="polite"></div>
   <select id="regionSel" aria-label="Region wählen" style="margin-top:8px;max-width:100%;font-family:'Space Mono',monospace;font-size:12px;background:rgba(35,79,91,.45);border:1px solid var(--shoal);color:var(--text);border-radius:8px;padding:7px 10px"></select>
 </header>
+
+<div class="menu-wrap" id="menuWrap" hidden>
+  <nav class="menu-panel" id="menuPanel" aria-label="Hauptmenü">
+    <div class="menu-kopf">
+      <span>Menü</span>
+      <button id="menuClose" type="button" aria-label="Menü schließen">✕</button>
+    </div>
+
+    <h4 class="menu-gruppe">Ansicht</h4>
+    <div class="menu-sicht" id="sichtWahl" role="group" aria-label="Ansicht wählen">
+      <button type="button" data-sicht="einfach" aria-pressed="false">
+        <b>Einfach</b><small>Nur das Wichtigste: Chance, Erlaubnis, Warnung</small>
+      </button>
+      <button type="button" data-sicht="pro" aria-pressed="true">
+        <b>Pro</b><small>Alle Details: Tackle, Faktoren, Methode</small>
+      </button>
+    </div>
+
+    <h4 class="menu-gruppe">Schnellzugriff</h4>
+    <div class="menu-liste">
+      <button class="menu-item" id="mPlan" data-ic="target">Heute würde ich hier anfangen</button>
+      <button class="menu-item" id="mTools" data-ic="tools">Alle Werkzeuge</button>
+      <button class="menu-item" id="mTrip" data-ic="bag">Trip-Liste <span id="menuTripCount"></span></button>
+    </div>
+
+    <h4 class="menu-gruppe">Karte</h4>
+    <div class="menu-liste">
+      <button class="menu-item" id="mFull" data-ic="target">Vollbild</button>
+      <button class="menu-item" id="mOff" data-ic="pin">Karte offline sichern</button>
+    </div>
+
+    <div class="menu-fuss" id="menuFuss"></div>
+  </nav>
+</div>
 
 <div class="banner" id="stormWarn" style="background:linear-gradient(90deg,#4a1614,#5a1e18);color:#ffd7cf;font-weight:600"></div>
 <div class="banner" id="swUpdate" style="background:#16323c"></div>
@@ -476,13 +538,6 @@
   <div class="mydlg">
     <h3 data-ic="tools">Werkzeuge</h3>
     <div class="tool-gruppen">
-      <div class="sicht-zeile">
-        <span class="sicht-label">Ansicht</span>
-        <div class="sicht-wahl" id="sichtWahl" role="group" aria-label="Ansicht wählen">
-          <button type="button" data-sicht="einfach" aria-pressed="false">Einfach</button>
-          <button type="button" data-sicht="pro" aria-pressed="true">Pro</button>
-        </div>
-      </div>
       <button class="fbtool plan" id="tPlan" data-ic="target">Heute würde ich hier anfangen</button>
 
       <h4 class="tool-gruppe" data-gruppe="planen">Planen</h4>

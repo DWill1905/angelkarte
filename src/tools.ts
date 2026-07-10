@@ -4,6 +4,8 @@ import { state, store } from './state.js';
 import { WT_OPT, istFliess } from './tackle.js';
 import { schilfToggle } from './reed.js';
 import { openPlan } from './plan.js';
+import { menuZu } from './sicht.js';
+import { fullscreenToggle } from './fullscreen.js';
 import { fokusFor } from './saison.js';
 import { NOW, fmtDate, fmtMD, haversine, hhmm, inSchonzeit, mondPhase, solunar, sunTimes } from './astro.js';
 import { regionCenter } from './ui.js';
@@ -105,6 +107,14 @@ export function openTools(){ toolsDlg.hidden=false; }
 byId('toolsClose').onclick=()=>{toolsDlg.hidden=true;};
 toolsDlg.addEventListener('click',e=>{if(e.target===toolsDlg)toolsDlg.hidden=true;});
 byId('tPlan').onclick=()=>{toolsDlg.hidden=true;openPlan();};
+
+/* Schnellzugriff aus dem Hauptmenü – schließt das Menü und öffnet die Funktion. */
+const ausMenu=(fn: () => void) => () => { menuZu(); fn(); };
+byId('mPlan')?.addEventListener('click', ausMenu(openPlan));
+byId('mTools')?.addEventListener('click', ausMenu(openTools));
+byId('mTrip')?.addEventListener('click', ausMenu(openTrip));
+byId('mOff')?.addEventListener('click', ausMenu(openOffline));
+byId('mFull')?.addEventListener('click', ausMenu(fullscreenToggle));
 byId('tScore').onclick=()=>{toolsDlg.hidden=true;openScore();};
 byId('tFore').onclick=()=>{toolsDlg.hidden=true;openForecast();};
 byId('tOff').onclick=()=>{toolsDlg.hidden=true;openOffline();};
