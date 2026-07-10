@@ -459,3 +459,56 @@ describe('Bug: Wetterzeilen fehlten bei Salmoniden- und Flussstrecken', () => {
     assert.ok(!/data-wt=|data-wind=/.test(h));
   });
 });
+
+describe('Bug: Score meldete bei Sturm "50 % – mäßig"', () => {
+  const wetter = (wind, extra = {}) => {
+    app.state.WX = { temp: 18, wind, dirDeg: 0, dir: 'N', press: 1005, trendVal: -2.5, ...extra };
+    app.state.PEGEL = { value: 180, station: 'X', dist: 1, wt: 16 };
+  };
+
+  test('Sturm ab 35 km/h sperrt den Score auf höchstens 15 %', async () => {
+    await loadRegion(ctx, 'elbe');
+    wetter(42);
+    const r = app.computeScore();
+    assert.equal(r.sturm, true, 'Sturm nicht erkannt');
+    assert.ok(r.pct <= 15, `Score bei 42 km/h: ${r.pct} %`);
+  });
+
+  test('der Score widerspricht der Spotbewertung nicht mehr', async () => {
+    await loadRegion(ctx, 'mecklenburg');
+    app.state.WX = { temp: 20, wind: 42, dirDeg: 0, dir: 'N', press: 1010, trendVal: 0 };
+    app.state.PEGEL = { value: 120, station: 'X', dist: 3, wt: 16 };
+    const score = app.computeScore();
+    const bewertung = app.bewerteSpot(app.state.SPOTS.find((s) => s.name.includes('Woblitzsee')), 'Hecht');
+    assert.ok(score.pct <= 15 && bewertung.prozent <= 15,
+      `Score ${score.pct} % vs Spotbewertung ${bewertung.prozent} % – beide müssen sperren`);
+  });
+
+  test('Wind wird auch an Fließgewässern mit Pegel bewertet', async () => {
+    await loadRegion(ctx, 'elbe');
+    wetter(12);
+    const ruhig = app.computeScore().pct;
+    wetter(30);
+    const stuermisch = app.computeScore().pct;
+    assert.ok(stuermisch < ruhig,
+      `30 km/h muss den Score senken (${stuermisch} % vs ${ruhig} %) – vorher war Wind an Fluessen unsichtbar`);
+    const windFaktor = app.computeScore().factors.find((f) => f.name === 'Wind');
+    assert.ok(windFaktor && windFaktor.pts != null, 'Wind-Faktor fehlt trotz vorhandener Winddaten');
+  });
+
+  test('knapp unter der Sturmgrenze wird nicht gesperrt', async () => {
+    await loadRegion(ctx, 'elbe');
+    wetter(34);
+    const r = app.computeScore();
+    assert.ok(!r.sturm);
+    assert.ok(r.pct > 15);
+  });
+
+  test('der Hinweis nennt die tatsächliche Faktorenzahl', async () => {
+    await loadRegion(ctx, 'elbe');
+    app.state.WX = null; app.state.PEGEL = null;
+    const r = app.computeScore();
+    assert.ok(r.knownCount < r.factors.length);
+    assert.equal(r.factors.length, 5, 'Score hat fünf Faktoren – Pegel und Wind getrennt');
+  });
+});

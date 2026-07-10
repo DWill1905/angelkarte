@@ -25,6 +25,7 @@ import { popupHtml, mapsLink, spotVisible, sperrWarnung, locApply } from './map.
 import { fbInsights, fbRestore, parseFangDatum, beissfensterJetzt, fbRender, fbSortiert, fbCsv } from './fangbuch.js';
 import { toggleTrip, inTrip, openTrip, tripReady } from './trip.js';
 import { schilfLaden, schilfAus, schilfAktiv } from './reed.js';
+import { computeScore } from './tools.js';
 import { fullscreenToggle, fullscreenAktiv } from './fullscreen.js';
 import { empfehlung, kandidaten, openPlan, zielfischFor, startzeitFor, peilung, himmelsrichtung, winkelDiff, istAuflandig } from './plan.js';
 import { bewerteSpot, bewerteAlle, sterneAus, sterneText } from './rating.js';
@@ -37,7 +38,7 @@ window.__app = { state, popupHtml, mapsLink, spotVisible, sperrWarnung, locApply
   fullscreenToggle, fullscreenAktiv,
   empfehlung, kandidaten, openPlan, zielfischFor, startzeitFor,
   peilung, himmelsrichtung, winkelDiff, istAuflandig,
-  bewerteSpot, bewerteAlle, sterneAus, sterneText, jahreszeit, saison,
+  bewerteSpot, bewerteAlle, sterneAus, sterneText, jahreszeit, saison, computeScore,
   inWindow, inSchonzeit, daysUntilMD, masseAus, fmtMD, fmtDate, solunar, haversine };
 `);
   try {

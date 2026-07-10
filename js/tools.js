@@ -428,7 +428,7 @@ export function computeScore() {
     }
     else
         factors.push({ name: 'Wassertemp.', pts: null, max: 2, txt: 'Keine Wassertemperatur verfügbar' });
-    /* Faktor 4: Pegel (Fluss) oder Wind (See) */
+    /* Faktor 4: Pegel – nur an Fließgewässern mit Pegelstation */
     const istFluss = state.PEGEL && state.PEGEL.value != null;
     if (istFluss) {
         const hoch = state.REGION.pegel && state.PEGEL.value >= state.REGION.pegel.warnAb;
@@ -448,7 +448,11 @@ export function computeScore() {
         }
         factors.push({ name: 'Pegel', pts: pt, max: 2, txt });
     }
-    else if (state.WX && typeof state.WX.wind === 'number') {
+    else
+        factors.push({ name: 'Pegel', pts: null, max: 2, txt: 'Kein Pegel in Reichweite' });
+    /* Faktor 5: Wind – IMMER bewerten. Vorher war das ein `else if` zum Pegel, wodurch
+       an Fließgewässern selbst 34 km/h unsichtbar blieben und der Score 100 % zeigte. */
+    if (state.WX && typeof state.WX.wind === 'number') {
         let pt, txt;
         if (state.WX.wind >= 5 && state.WX.wind <= 20) {
             pt = 2;
@@ -458,20 +462,34 @@ export function computeScore() {
             pt = 1;
             txt = 'Wenig Wind (' + Math.round(state.WX.wind) + ' km/h) – Wasser ruhig';
         }
-        else {
-            pt = 1;
-            txt = 'Kräftiger Wind (' + Math.round(state.WX.wind) + ' km/h) – schwer zu werfen';
+        else if (state.WX.wind < 35) {
+            pt = 0.5;
+            txt = 'Starker Wind (' + Math.round(state.WX.wind) + ' km/h) – schwer zu werfen, Wellen';
         }
-        factors.push({ name: 'Wind/See', pts: pt, max: 2, txt });
+        else {
+            pt = 0;
+            txt = 'Sturm (' + Math.round(state.WX.wind) + ' km/h) – nicht befischbar';
+        }
+        factors.push({ name: 'Wind', pts: pt, max: 2, txt });
     }
     else
-        factors.push({ name: 'Pegel/Wind', pts: null, max: 2, txt: 'Keine Pegel-/Winddaten' });
+        factors.push({ name: 'Wind', pts: null, max: 2, txt: 'Keine Winddaten' });
     /* Summe nur über bekannte Faktoren */
     const known = factors.filter(f => f.pts != null);
     const sum = known.reduce((a, f) => a + f.pts, 0);
     const maxSum = known.reduce((a, f) => a + f.max, 0);
-    const pct = maxSum > 0 ? Math.round(sum / maxSum * 100) : null;
-    return { factors, sum, maxSum, pct, knownCount: known.length };
+    let pct = maxSum > 0 ? Math.round(sum / maxSum * 100) : null;
+    /* Sturm ist ein Ausschlusskriterium, kein Abzug – wie in der Spotbewertung.
+       Vorher konnten 60 km/h zu "50 % – mäßig" führen, weil der Wind-Faktor an
+       Fließgewässern (mit Pegel) gar nicht bewertet wurde. */
+    let sturm = false;
+    if (state.WX && typeof state.WX.wind === 'number' && state.WX.wind >= 35) {
+        sturm = true;
+        if (pct != null)
+            pct = Math.min(pct, 15);
+        factors.push({ name: 'Sturm', pts: 0, max: 2, txt: 'Sturm (' + Math.round(state.WX.wind) + ' km/h) – Angeln ist heute unverantwortlich' });
+    }
+    return { factors, sum, maxSum, pct, knownCount: known.length, sturm };
 }
 export function scoreAmpel(pct) {
     if (pct == null)
@@ -489,12 +507,15 @@ export function openScore() {
     const r = computeScore();
     const a = scoreAmpel(r.pct);
     let h = '';
+    /* Sturm zuerst und unübersehbar – vor jeder Prozentzahl. */
+    if (r.sturm)
+        h += '<div class="rate-sturm">⚠ Sturm – Angeln ist heute unverantwortlich. Der Wert unten ist gedeckelt.</div>';
     /* Kopf: große Ampel */
     h += '<div style="text-align:center;padding:8px 0 14px">';
     h += '<div style="font-size:34px;font-weight:900;color:' + a.color + ';line-height:1;font-family:\'Lato\',sans-serif">' + (r.pct != null ? r.pct + '%' : '–') + '</div>';
     h += '<div style="font-size:16px;font-weight:700;color:' + a.color + ';margin-top:3px">' + a.emoji + ' ' + a.label + '</div>';
-    if (r.knownCount < 4)
-        h += '<div style="font-size:11px;color:var(--muted);margin-top:4px">' + r.knownCount + ' von 4 Faktoren mit Daten – lade Wetter/Pegel für ein volles Bild</div>';
+    if (r.knownCount < r.factors.length)
+        h += '<div style="font-size:11px;color:var(--muted);margin-top:4px">' + r.knownCount + ' von ' + r.factors.length + ' Faktoren mit Daten – lade Wetter/Pegel für ein volles Bild</div>';
     h += '</div>';
     /* Faktoren */
     h += '<div style="display:flex;flex-direction:column;gap:8px">';
