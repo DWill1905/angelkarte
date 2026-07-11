@@ -148,6 +148,40 @@ describe('Planer-Seite: Fisch- und Gewässerfilter', () => {
   });
 });
 
+describe('Nachtaktive Arten werden tagsüber nicht empfohlen', () => {
+  afterEach(() => { app.state.fishSel.length = 0; });
+
+  test('Aal-Bewertung ist mittags niedrig und nachts hoch', async () => {
+    await loadRegion(ctx, 'mainz');
+    const spot = app.state.SPOTS.find((s) => (s.arten || []).includes('Aal') && s.cat !== 'sperr' && !s.my);
+    assert.ok(spot, 'kein Aal-Gewässer in Mainz');
+    const tag = new Date(Date.UTC(2026, 6, 15, 12, 0));    // ~14 Uhr MESZ – heller Tag
+    const nacht = new Date(Date.UTC(2026, 6, 15, 23, 30)); // ~01:30 MESZ – Nacht
+    const bTag = app.bewerteSpot(spot, 'Aal', tag);
+    const bNacht = app.bewerteSpot(spot, 'Aal', nacht);
+    assert.ok(bNacht.prozent > bTag.prozent, `Nacht ${bNacht.prozent} % muss über Tag ${bTag.prozent} % liegen`);
+    const grundTag = (bTag.gruende || []).map((g) => g.text).join(' | ');
+    assert.match(grundTag, /nachtaktive Art|Mitten am Tag/, 'Tages-Bewertung benennt die Nachtaktivität nicht');
+  });
+
+  test('Filter auf Aal bringt mittags nur eine niedrige Chance', async () => {
+    await loadRegion(ctx, 'mainz');
+    const tag = new Date(Date.UTC(2026, 6, 15, 12, 0));
+    const e = app.empfehlung(tag, { fisch: ['Aal'] });
+    if (e) assert.ok(e.chance <= 30, `Aal mittags sollte niedrig sein, war ${e.chance} %`);
+  });
+
+  test('nachtaktiv wirkt auch gegen ein laufendes Solunar-Fenster', async () => {
+    /* Ein Tageslicht-Solunarfenster darf Aal nicht auf „ja" heben. */
+    await loadRegion(ctx, 'mainz');
+    const spot = app.state.SPOTS.find((s) => (s.arten || []).includes('Aal') && s.cat !== 'sperr' && !s.my);
+    const tag = new Date(Date.UTC(2026, 6, 15, 12, 0));
+    const b = app.bewerteSpot(spot, 'Aal', tag);
+    const zeit = (b.gruende || []).find((g) => /Tag|nachtaktive|Beißfenster|Dämmerung/.test(g.text || ''));
+    assert.ok(zeit && zeit.status !== 'ja', 'Zeit-Achse steht mittags auf „ja" trotz Nachtaktivität');
+  });
+});
+
 describe('Die Empfehlung ist konkret und aus den Daten', () => {
   test('nennt Zeit, Ort, Fisch, Köder und Jigkopf in einem Satz', async () => {
     await loadRegion(ctx, 'mecklenburg');

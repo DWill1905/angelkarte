@@ -54,6 +54,8 @@ interface ArtProfil {
   hoch: number[];
   /** Beißt vor allem in der Dämmerung/Nacht? */
   daemmerung: boolean;
+  /** Strikt nachtaktiv – beißt bei hellem Tageslicht kaum, auch nicht im Solunar-Fenster. */
+  nacht?: boolean;
   /** Profitiert von trübem Wasser / Wellen? */
   truebung: boolean;
 }
@@ -62,8 +64,8 @@ const PROFIL: Record<string, ArtProfil> = {
   Hecht: { wasser: ['see-flach', 'see-tief', 'fluss'], hoch: [3, 4, 9, 10, 11], daemmerung: false, truebung: false },
   Zander: { wasser: ['fluss', 'kanal', 'see-tief'], hoch: [6, 7, 8, 9, 10, 11, 12], daemmerung: true, truebung: true },
   Barsch: { wasser: ['see-flach', 'see-tief', 'fluss', 'kanal'], hoch: [8, 9, 10, 11], daemmerung: false, truebung: false },
-  Wels: { wasser: ['fluss', 'see-tief'], hoch: [6, 7, 8], daemmerung: true, truebung: true },
-  Aal: { wasser: ['fluss', 'kanal', 'see-flach'], hoch: [5, 6, 7, 8], daemmerung: true, truebung: true },
+  Wels: { wasser: ['fluss', 'see-tief'], hoch: [6, 7, 8], daemmerung: true, truebung: true, nacht: true },
+  Aal: { wasser: ['fluss', 'kanal', 'see-flach'], hoch: [5, 6, 7, 8], daemmerung: true, truebung: true, nacht: true },
   Rapfen: { wasser: ['fluss'], hoch: [5, 6, 7, 8], daemmerung: false, truebung: false },
   Bachforelle: { wasser: ['fluss'], hoch: [4, 5, 6, 9], daemmerung: false, truebung: false },
   Karpfen: { wasser: ['see-flach', 'see-tief'], hoch: [5, 6, 7, 8, 9], daemmerung: false, truebung: false },
@@ -74,10 +76,26 @@ const PROFIL: Record<string, ArtProfil> = {
 /* ---------- Zeitfenster ---------- */
 
 /** Liegt „jetzt“ oder der kommende Abend in einem Beißfenster? */
-function zeitBewertung(lat: number, lng: number, jetzt: Date, daemmerungsfisch: boolean): { punkte: number; text: string; status: Bewertbar } {
+function zeitBewertung(lat: number, lng: number, jetzt: Date, daemmerungsfisch: boolean, nachtfisch = false): { punkte: number; text: string; status: Bewertbar; tagsperre?: boolean } {
   const st = sunTimes(lat, lng, jetzt);
   const fenster = (solunar(lat, lng, jetzt) || []).map((f: any) => ({ ...f, from: new Date(f.from), to: new Date(f.to) }));
   const t = jetzt.getTime();
+
+  /* Nachtaktive Arten (Aal, Wels): heller Tag ist tote Zeit – das gilt auch, wenn gerade ein
+     Solunar-Fenster läuft. Nur Dämmerung und Nacht zählen. Deshalb VOR der Fensterprüfung. */
+  if (nachtfisch && st && st.rise && st.set) {
+    const puffer = 75 * 60000; /* Kerntag = ab gut 1 h nach Sonnenaufgang bis gut 1 h vor -untergang */
+    const hellerTag = t > st.rise.getTime() + puffer && t < st.set.getTime() - puffer;
+    if (hellerTag) {
+      return { punkte: 0.1, text: 'Mitten am Tag – nachtaktive Art, jetzt kaum Bisse (Dämmerung/Nacht abwarten)', status: 'nein', tagsperre: true };
+    }
+    const dusk = (st.dusk || st.set).getTime();
+    const dawn = (st.dawn || st.rise).getTime();
+    if (t >= dusk || t <= dawn) {
+      return { punkte: 0.95, text: 'Nacht – Prime Time für nachtaktive Arten', status: 'ja' };
+    }
+    /* sonst: Dämmerungsübergang → fällt unten in die Dämmerungs-Logik */
+  }
 
   const laeuft = fenster.find((f: any) => t >= f.from.getTime() && t <= f.to.getTime());
   if (laeuft) {
@@ -146,7 +164,7 @@ export function bewerteSpot(s: Spot, art: string, jetzt: Date = new Date(), hots
   }
 
   /* 2) Beißzeit (Gewicht 2) */
-  const z = zeitBewertung(lat, lng, jetzt, p?.daemmerung ?? false);
+  const z = zeitBewertung(lat, lng, jetzt, p?.daemmerung ?? false, p?.nacht ?? false);
   add(z.status, z.text, z.punkte * 2, 2);
 
   /* 3) Luftdruck (Gewicht 1.5) */
@@ -235,6 +253,10 @@ export function bewerteSpot(s: Spot, art: string, jetzt: Date = new Date(), hots
     gesperrt = 'sturm';
     prozent = Math.min(prozent, 15);
   }
+
+  /* Tages-Deckel: eine strikt nachtaktive Art (Aal, Wels) bei hellem Tageslicht ist keine
+     ehrliche Empfehlung – egal wie gut Saison/Gewässer sind. Analog zum Sturm-Deckel. */
+  if (z.tagsperre) prozent = Math.min(prozent, 20);
 
   const sterne = moeglich > 0 ? sterneAus(prozent, !!gesperrt) : 0;
 
