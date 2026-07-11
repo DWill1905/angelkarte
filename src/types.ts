@@ -181,6 +181,8 @@ export interface Wetter {
   trendVal: number;
   /** Wassertemperatur, wird ggf. von PEGELONLINE nachgetragen. */
   wt?: number;
+  /** WMO weather_code (0–1 klar, 2 heiter, 3 bedeckt, 45/48 Nebel, 51–82 Regen, 95+ Gewitter). */
+  code?: number;
 }
 
 /** Nächste Pegelstation (PEGELONLINE). */

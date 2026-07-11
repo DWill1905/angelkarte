@@ -27,7 +27,7 @@ export async function loadWeather(){
     }
     const dirs=['N','NO','O','SO','S','SW','W','NW'];
     const dir=dirs[Math.round((c.wind_direction_10m||0)/45)%8];
-    state.WX={temp:c.temperature_2m,wind:c.wind_speed_10m,dirDeg:c.wind_direction_10m||0,dir,press:c.surface_pressure,trendVal};
+    state.WX={temp:c.temperature_2m,wind:c.wind_speed_10m,dirDeg:c.wind_direction_10m||0,dir,press:c.surface_pressure,trendVal,code:c.weather_code};
     wxChipSetzen();
     /* Gewitter-/Sturmwarnung: WMO-Codes 95/96/99 = Gewitter, Böen > 60 km/h */
     checkStorm(d,c);

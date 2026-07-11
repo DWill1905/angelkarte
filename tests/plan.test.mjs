@@ -148,6 +148,51 @@ describe('Planer-Seite: Fisch- und Gewässerfilter', () => {
   });
 });
 
+describe('Wetter-dynamische, artspezifische Bewertung', () => {
+  afterEach(() => { app.state.fishSel.length = 0; });
+  const TAG = () => new Date(Date.UTC(2026, 6, 15, 12, 0)); // heller Tag
+
+  test('Zander (lichtscheu): bedeckt schlägt grelle Flaute', async () => {
+    await loadRegion(ctx, 'mainz');
+    const spot = app.state.SPOTS.find((s) => (s.arten || []).includes('Zander') && s.cat !== 'sperr' && !s.my);
+    app.state.PEGEL = { value: 200, station: 'X', dist: 3, wt: 18 };
+    app.state.WX = { temp: 22, wind: 3, dirDeg: 200, dir: 'SW', press: 1015, trendVal: 0, code: 0 }; // klar, windstill
+    const klar = app.bewerteSpot(spot, 'Zander', TAG()).prozent;
+    app.state.WX = { temp: 22, wind: 3, dirDeg: 200, dir: 'SW', press: 1015, trendVal: 0, code: 3 }; // bedeckt
+    const bedeckt = app.bewerteSpot(spot, 'Zander', TAG()).prozent;
+    assert.ok(bedeckt > klar, `bedeckt ${bedeckt} % muss über klar+windstill ${klar} % liegen (Zander lichtscheu)`);
+  });
+
+  test('Barsch (Sichträuber): Sonne + Kräuselung ist top', async () => {
+    await loadRegion(ctx, 'mainz');
+    const spot = app.state.SPOTS.find((s) => (s.arten || []).includes('Barsch') && s.cat !== 'sperr' && !s.my);
+    app.state.PEGEL = { value: 200, station: 'X', dist: 3, wt: 16 };
+    app.state.WX = { temp: 18, wind: 12, dirDeg: 200, dir: 'SW', press: 1015, trendVal: 0, code: 1 }; // sonnig + Welle
+    const sicht = app.bewerteSpot(spot, 'Barsch', TAG()).prozent;
+    app.state.WX = { temp: 18, wind: 12, dirDeg: 200, dir: 'SW', press: 1015, trendVal: 0, code: 63 }; // Dauerregen
+    const regen = app.bewerteSpot(spot, 'Barsch', TAG()).prozent;
+    assert.ok(sicht >= regen, `Sichträuber bei Sonne+Welle (${sicht} %) darf nicht schlechter sein als Dauerregen (${regen} %)`);
+  });
+
+  test('weather_code fließt als Licht-Achse in die Gründe ein', async () => {
+    await loadRegion(ctx, 'mainz');
+    const spot = app.state.SPOTS.find((s) => (s.arten || []).includes('Zander') && s.cat !== 'sperr' && !s.my);
+    app.state.PEGEL = { value: 200, station: 'X', dist: 3, wt: 18 };
+    app.state.WX = { temp: 22, wind: 3, dirDeg: 200, dir: 'SW', press: 1015, trendVal: 0, code: 3 };
+    const b = app.bewerteSpot(spot, 'Zander', TAG());
+    assert.ok(b.gruende.some((g) => /Licht|bedeckt|Welle/.test(g.text)), 'Licht-Achse fehlt in den Gründen');
+  });
+
+  test('druckempfindlicher Zander: stabiler Druck ist ideal', async () => {
+    await loadRegion(ctx, 'mainz');
+    const spot = app.state.SPOTS.find((s) => (s.arten || []).includes('Zander') && s.cat !== 'sperr' && !s.my);
+    app.state.PEGEL = { value: 200, station: 'X', dist: 3, wt: 18 };
+    app.state.WX = { temp: 22, wind: 10, dirDeg: 200, dir: 'SW', press: 1016, trendVal: 0, code: 3 };
+    const b = app.bewerteSpot(spot, 'Zander', TAG());
+    assert.ok(b.gruende.some((g) => /Luftdruck stabil.*empfindlich/.test(g.text)), 'kein artspezifischer Druck-Grund für Zander');
+  });
+});
+
 describe('Nachtaktive Arten werden tagsüber nicht empfohlen', () => {
   afterEach(() => { app.state.fishSel.length = 0; });
 

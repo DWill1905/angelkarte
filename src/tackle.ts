@@ -39,7 +39,7 @@ export const WT_OPT: Record<string, [number, number]> = {
   Zander: [10, 22],
   Barsch: [8, 22],
   Wels: [18, 26],
-  Aal: [16, 25],
+  Aal: [14, 24],
   Rapfen: [14, 24],
   Karpfen: [18, 26],
   Schleie: [18, 26],

@@ -14,17 +14,26 @@ import { hhmm, inSchonzeit, solunar, sunTimes } from './astro.js';
 import { WT_OPT, wasserTyp } from './tackle.js';
 import { istAuflandig } from './geo.js';
 import { hotspotAktiv } from './saison.js';
+/* Quellen: Blinker, simfisch, zanderfang, outdoorverliebt u. a. (Recherche Juli 2026).
+   Kernaussagen: Zander lichtscheu → Trübung/Wolken/Welle helfen; Aal/Wels wärmeliebend & nachtaktiv,
+   lieben schwül-bedeckte Lagen; Barsch/Forelle/Rapfen/Döbel Sichträuber; Zander/Barsch druckempfindlich. */
 const PROFIL = {
-    Hecht: { wasser: ['see-flach', 'see-tief', 'fluss'], hoch: [3, 4, 9, 10, 11], daemmerung: false, truebung: false },
-    Zander: { wasser: ['fluss', 'kanal', 'see-tief'], hoch: [6, 7, 8, 9, 10, 11, 12], daemmerung: true, truebung: true },
-    Barsch: { wasser: ['see-flach', 'see-tief', 'fluss', 'kanal'], hoch: [8, 9, 10, 11], daemmerung: false, truebung: false },
-    Wels: { wasser: ['fluss', 'see-tief'], hoch: [6, 7, 8], daemmerung: true, truebung: true, nacht: true },
-    Aal: { wasser: ['fluss', 'kanal', 'see-flach'], hoch: [5, 6, 7, 8], daemmerung: true, truebung: true, nacht: true },
-    Rapfen: { wasser: ['fluss'], hoch: [5, 6, 7, 8], daemmerung: false, truebung: false },
-    Bachforelle: { wasser: ['fluss'], hoch: [4, 5, 6, 9], daemmerung: false, truebung: false },
-    Karpfen: { wasser: ['see-flach', 'see-tief'], hoch: [5, 6, 7, 8, 9], daemmerung: false, truebung: false },
-    Schleie: { wasser: ['see-flach'], hoch: [5, 6, 7], daemmerung: false, truebung: false },
-    Barbe: { wasser: ['fluss'], hoch: [6, 7, 8, 9], daemmerung: false, truebung: false },
+    Hecht: { wasser: ['see-flach', 'see-tief', 'fluss'], hoch: [3, 4, 5, 9, 10, 11], daemmerung: false, licht: 'sicht' },
+    Zander: { wasser: ['fluss', 'kanal', 'see-tief'], hoch: [6, 7, 8, 9, 10, 11, 12], daemmerung: true, truebung: true, licht: 'scheu', druckSensibel: true },
+    Barsch: { wasser: ['see-flach', 'see-tief', 'fluss', 'kanal'], hoch: [5, 8, 9, 10, 11], daemmerung: false, licht: 'sicht', druckSensibel: true },
+    Wels: { wasser: ['fluss', 'see-tief'], hoch: [5, 6, 7, 8, 9], daemmerung: true, truebung: true, nacht: true, warm: true },
+    Aal: { wasser: ['fluss', 'kanal', 'see-flach'], hoch: [5, 6, 7, 8, 9], daemmerung: true, truebung: true, nacht: true, warm: true },
+    Rapfen: { wasser: ['fluss'], hoch: [5, 6, 7, 8], daemmerung: false, licht: 'sicht' },
+    Bachforelle: { wasser: ['fluss'], hoch: [4, 5, 6, 9], daemmerung: false, licht: 'sicht', druckSensibel: true },
+    Regenbogenforelle: { wasser: ['fluss', 'see-tief'], hoch: [4, 5, 6, 9, 10], daemmerung: false, licht: 'sicht', druckSensibel: true },
+    Äsche: { wasser: ['fluss'], hoch: [5, 6, 7, 8], daemmerung: false, licht: 'sicht' },
+    Karpfen: { wasser: ['see-flach', 'see-tief', 'kanal'], hoch: [5, 6, 7, 8, 9], daemmerung: false, truebung: true, warm: true },
+    Schleie: { wasser: ['see-flach'], hoch: [5, 6, 7], daemmerung: true, truebung: true, warm: true },
+    Brachse: { wasser: ['see-flach', 'see-tief', 'fluss', 'kanal'], hoch: [5, 6, 7, 8], daemmerung: true, truebung: true, warm: true },
+    Barbe: { wasser: ['fluss'], hoch: [6, 7, 8, 9], daemmerung: false, truebung: true, warm: true },
+    Döbel: { wasser: ['fluss'], hoch: [5, 6, 7, 8, 9], daemmerung: false, licht: 'sicht' },
+    Rotauge: { wasser: ['see-flach', 'see-tief', 'fluss', 'kanal'], hoch: [4, 5, 6, 7, 8, 9, 10], daemmerung: false },
+    Quappe: { wasser: ['fluss', 'see-tief'], hoch: [11, 12, 1, 2], daemmerung: true, nacht: true },
 };
 /* ---------- Zeitfenster ---------- */
 /** Liegt „jetzt“ oder der kommende Abend in einem Beißfenster? */
@@ -73,6 +82,47 @@ function zeitBewertung(lat, lng, jetzt, daemmerungsfisch, nachtfisch = false) {
     return { punkte: 0.15, text: 'Aktuell weder Beißfenster noch Dämmerung', status: 'nein' };
 }
 /* ---------- Die Bewertung ---------- */
+/** Licht- und Bewölkungslage artspezifisch bewerten (nutzt weather_code + Wind + Trübungsprofil).
+    Lichtscheue Räuber (Zander) mögen gedämpftes Licht, Sichträuber (Barsch, Forelle …) klareres. */
+function lichtBewertung(lat, lng, jetzt, wx, art, p) {
+    const G = 1.5;
+    if (!wx)
+        return { status: 'unbekannt', text: 'Bewölkung/Licht unbekannt (offline?)', erreicht: 0, moeglich: 0 };
+    const st = sunTimes(lat, lng, jetzt);
+    const t = jetzt.getTime();
+    const hell = !!(st && st.rise && st.set && t > st.rise.getTime() && t < st.set.getTime());
+    if (!hell)
+        return { status: 'ja', text: 'Dunkelheit – Licht ist kein limitierender Faktor', erreicht: G, moeglich: G };
+    const code = wx.code;
+    const sonnig = code == null || code <= 1;
+    const bedeckt = code === 3 || code === 45 || code === 48;
+    const regen = code != null && code >= 51 && code <= 82;
+    const chop = wx.wind >= 8 && wx.wind < 30;
+    const flau = wx.wind < 4;
+    const wenigLicht = bedeckt || regen || chop; /* echte Bedingungen, NICHT das Artprofil */
+    if (p?.licht === 'scheu') {
+        if (wenigLicht)
+            return { status: 'ja', text: `Gedämpftes Licht (bedeckt/Welle/Regen) – ideal für den lichtscheuen ${art}`, erreicht: G, moeglich: G };
+        if (sonnig && flau)
+            return { status: 'nein', text: `Grelles Licht auf spiegelglattem Wasser – ${art} ist lichtscheu und steht tief`, erreicht: 0.3, moeglich: G };
+        return { status: 'ja', text: `Wechselndes Licht – ${art} jagt, wenn Wolken oder Wellen es brechen`, erreicht: 1, moeglich: G };
+    }
+    if (p?.licht === 'sicht') {
+        if (regen && bedeckt)
+            return { status: 'nein', text: `Trüb und dunkel – der Sichträuber ${art} findet die Beute schlechter`, erreicht: 0.6, moeglich: G };
+        if ((sonnig || code === 2) && chop)
+            return { status: 'ja', text: `Gutes Licht mit Kräuselung – perfekt für den Sichträuber ${art}`, erreicht: G, moeglich: G };
+        if (sonnig && flau)
+            return { status: 'nein', text: `Spiegelglatt und grell – Sichträuber wie ${art} werden scheu`, erreicht: 0.6, moeglich: G };
+        return { status: 'ja', text: `Solides Licht für den Sichträuber ${art}`, erreicht: 1.1, moeglich: G };
+    }
+    if (p?.warm || p?.truebung) {
+        if (bedeckt || regen || chop)
+            return { status: 'ja', text: `Bedeckt, Regen oder Welle – angenehm für ${art}`, erreicht: G, moeglich: G };
+        return { status: 'ja', text: `Neutrale Lichtlage für ${art}`, erreicht: 1, moeglich: G };
+    }
+    return { status: 'ja', text: `Licht spielt für ${art} eine untergeordnete Rolle`, erreicht: 1, moeglich: G };
+}
 export function bewerteSpot(s, art, jetzt = new Date(), hotspot = null) {
     const gruende = [];
     const schon = state.SCHON.find((x) => x.fisch === art);
@@ -110,18 +160,24 @@ export function bewerteSpot(s, art, jetzt = new Date(), hotspot = null) {
     /* 2) Beißzeit (Gewicht 2) */
     const z = zeitBewertung(lat, lng, jetzt, p?.daemmerung ?? false, p?.nacht ?? false);
     add(z.status, z.text, z.punkte * 2, 2);
-    /* 3) Luftdruck (Gewicht 1.5) */
+    /* 3) Luftdruck (Gewicht 1.5) – artspezifisch: Zander/Barsch (geschlossene Schwimmblase)
+       reagieren empfindlich auf abrupte Wechsel; wärmeliebende Arten mögen schwüle Tiefdrucklagen. */
     if (!wx || typeof wx.trendVal !== 'number') {
         add('unbekannt', 'Luftdruck unbekannt (offline?)', 0, 0);
     }
     else if (wx.trendVal <= -1.5) {
-        add('ja', `Luftdruck fällt (${wx.trendVal.toFixed(1)} hPa/3 h) – die stärkste Phase`, 1.5, 1.5);
+        if (p?.warm)
+            add('ja', `Luftdruck fällt (${wx.trendVal.toFixed(1)} hPa/3 h) – schwül vor der Front, top für ${art}`, 1.5, 1.5);
+        else if (p?.druckSensibel && wx.trendVal <= -3)
+            add('ja', `Luftdruck fällt schnell (${wx.trendVal.toFixed(1)} hPa/3 h) – ${art} reagiert empfindlich, oft zickig`, 0.9, 1.5);
+        else
+            add('ja', `Luftdruck fällt (${wx.trendVal.toFixed(1)} hPa/3 h) – die stärkste Phase`, 1.5, 1.5);
     }
     else if (wx.trendVal >= 1.5) {
-        add('nein', 'Luftdruck steigt stark – Fische oft zurückhaltend', 0.3, 1.5);
+        add('nein', p?.druckSensibel ? `Luftdruck steigt stark – der empfindliche ${art} ist oft zurückhaltend` : 'Luftdruck steigt stark – Fische oft zurückhaltend', p?.druckSensibel ? 0.2 : 0.4, 1.5);
     }
     else {
-        add('ja', 'Luftdruck stabil – solide Bedingungen', 1, 1.5);
+        add('ja', p?.druckSensibel ? `Luftdruck stabil – ideal für den druckempfindlichen ${art}` : 'Luftdruck stabil – solide Bedingungen', p?.druckSensibel ? 1.5 : 1, 1.5);
     }
     /* 4) Wind (Gewicht 1.5) */
     if (!wx) {
@@ -141,6 +197,11 @@ export function bewerteSpot(s, art, jetzt = new Date(), hotspot = null) {
             add('nein', 'Windstille – blankes Wasser, Fische scheu', 0.5, 1.5);
         else
             add('ja', `Wind ${Math.round(wx.wind)} km/h aus ${wx.dir}`, 1, 1.5);
+    }
+    /* 4b) Licht & Bewölkung (Gewicht 1.5) – artspezifisch, nutzt den weather_code der Wetter-API. */
+    {
+        const li = lichtBewertung(lat, lng, jetzt, wx, art, p);
+        add(li.status, li.text, li.erreicht, li.moeglich);
     }
     /* 5) Wasserstand bzw. Wellenlage (Gewicht 1.5) */
     const fliess = wasser === 'fluss' || wasser === 'kanal';
