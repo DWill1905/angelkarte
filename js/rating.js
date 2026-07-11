@@ -40,6 +40,30 @@ export function artZeitprofil(art) {
     const p = PROFIL[art];
     return { nacht: !!p?.nacht, daemmerung: !!p?.daemmerung };
 }
+export function stroemungsLage() {
+    const pegel = state.PEGEL;
+    if (!pegel)
+        return null;
+    const warn = state.REGION?.pegel?.warnAb;
+    const hoch = warn != null && pegel.value >= warn;
+    const ratio = pegel.abfluss != null && pegel.abflussMittel && pegel.abflussMittel > 0 ? pegel.abfluss / pegel.abflussMittel : null;
+    const abflussSteigt = pegel.abflussTrend != null && pegel.abflussTrend > Math.max(20, (pegel.abfluss || 0) * 0.05);
+    const levelSteigt = typeof pegel.trend === 'number' && pegel.trend >= 25;
+    const steigt = abflussSteigt || levelSteigt;
+    let stark;
+    let wenig;
+    if (ratio != null) {
+        stark = hoch || ratio >= 1.5; // ≥ 150 % des Mittels = kräftig
+        wenig = !hoch && ratio <= 0.7; // ≤ 70 % = Niedrigwasser
+    }
+    else {
+        stark = hoch || steigt; // ohne MQ: grobe Schwelle wie bisher
+        wenig = false;
+    }
+    const qt = pegel.abfluss != null ? `, ${Math.round(pegel.abfluss)} m³/s` : '';
+    const text = ratio != null ? `${Math.round(ratio * 100)} % des Mittels${qt}` : `${pegel.value} cm${qt}`;
+    return { stark, wenig, steigt, hoch, ratio, text };
+}
 /* ---------- Zeitfenster ---------- */
 /** Liegt „jetzt“ oder der kommende Abend in einem Beißfenster? */
 function zeitBewertung(lat, lng, jetzt, daemmerungsfisch, nachtfisch = false) {
@@ -245,37 +269,39 @@ export function bewerteSpot(s, art, jetzt = new Date(), hotspot = null) {
     /* 5) Strömung/Wasserstand (Fluss) bzw. Wellenlage (See) – Gewicht 1.5, artspezifisch. */
     const fliess = wasser === 'fluss' || wasser === 'kanal';
     if (fliess) {
-        if (!pegel) {
+        const lage = stroemungsLage();
+        if (!lage) {
             add('unbekannt', 'Kein Pegel in Reichweite', 0, 0);
         }
         else {
-            const warn = state.REGION?.pegel?.warnAb;
-            const hoch = warn != null && pegel.value >= warn;
-            const abflussSteigt = pegel.abflussTrend != null && pegel.abflussTrend > Math.max(20, (pegel.abfluss || 0) * 0.05);
-            const steigt = (typeof pegel.trend === 'number' && pegel.trend >= 25) || abflussSteigt;
-            const stark = hoch || steigt;
             const pref = p?.stroemung;
-            const qt = pegel.abfluss != null ? `, ${Math.round(pegel.abfluss)} m³/s` : '';
-            if (hoch && wasser === 'kanal') {
+            const rt = ` (${lage.text})`;
+            if (lage.hoch && wasser === 'kanal') {
                 add('ja', 'Hochwasser im Hauptstrom – der Kanal ist die ruhige Zuflucht', 1.5, 1.5);
             }
-            else if (hoch && pref !== 'liebt') {
-                add('nein', `Hochwasser (${pegel.value} cm${qt}) – Hauptstrom zu stark, nur Ränder & Buhnenkehrwasser`, pref === 'meidet' ? 0 : 0.4, 1.5);
+            else if (lage.hoch && pref !== 'liebt') {
+                add('nein', `Hochwasser${rt} – Hauptstrom zu stark, nur Ränder & Buhnenkehrwasser`, pref === 'meidet' ? 0 : 0.4, 1.5);
             }
-            else if (stark && pref === 'liebt') {
-                add('ja', `Kräftige Strömung (${pegel.value} cm${qt}) – ${art} steht genau im Zug`, 1.5, 1.5);
+            else if (lage.stark && pref === 'liebt') {
+                add('ja', `Kräftige Strömung${rt} – ${art} steht genau im Zug`, 1.5, 1.5);
             }
-            else if (stark && pref === 'meidet') {
-                add('nein', `Viel Strömung (${pegel.value} cm${qt}) – ${art} meidet den Zug, sucht ruhige Buchten`, 0.4, 1.5);
+            else if (lage.stark && pref === 'meidet') {
+                add('nein', `Viel Strömung${rt} – ${art} meidet den Zug, sucht ruhige Buchten`, 0.4, 1.5);
             }
-            else if (steigt) {
-                add('nein', `Pegel/Strömung steigt (+${pegel.trend ?? '?'} cm/24 h${qt}) – Fische orientieren sich neu`, 0.5, 1.5);
+            else if (lage.steigt && !lage.stark) {
+                add('nein', `Strömung nimmt zu${rt} – Fische orientieren sich neu`, 0.5, 1.5);
+            }
+            else if (lage.wenig && pref === 'liebt') {
+                add('nein', `Wenig Zug${rt} – ${art} sucht die letzten Strömungskanten`, 0.5, 1.5);
+            }
+            else if (lage.wenig) {
+                add('ja', `Niedrigwasser${rt} – Fische stehen konzentriert, ruhige Lage`, 1.2, 1.5);
             }
             else if (pref === 'liebt') {
-                add('ja', `Solide Strömung (${pegel.value} cm${qt}) – gute Lage für ${art}`, 1.5, 1.5);
+                add('ja', `Solide Strömung${rt} – gute Lage für ${art}`, 1.5, 1.5);
             }
             else {
-                add('ja', `Wasserstand gut (${pegel.value} cm${qt}, Pegel ${pegel.station})`, 1.5, 1.5);
+                add('ja', `Wasserstand gut${rt}, Pegel ${pegel.station}`, 1.5, 1.5);
             }
         }
     }

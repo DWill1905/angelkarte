@@ -148,6 +148,59 @@ describe('Planer-Seite: Fisch- und Gewässerfilter', () => {
   });
 });
 
+describe('Strömung relativ zum Mittel (Q/MQ)', () => {
+  afterEach(() => { app.state.fishSel.length = 0; });
+  const MITTAG = () => new Date(Date.UTC(2026, 6, 15, 12, 0));
+  const flussSpot = () => app.state.SPOTS.find((s) => s.wasser === 'fluss' && s.cat !== 'sperr' && !s.my && (s.arten || []).includes('Zander'));
+
+  test('Q = 150 % des Mittels → starke Strömung', async () => {
+    await loadRegion(ctx, 'mainz');
+    app.state.WX = { temp: 20, wind: 8, dirDeg: 200, dir: 'SW', press: 1015, trendVal: 0, code: 3 };
+    app.state.PEGEL = { value: 250, station: 'Mainz', dist: 3, wt: 18, abfluss: 3000, abflussMittel: 2000 };
+    const barbe = (app.bewerteSpot(flussSpot(), 'Barbe', MITTAG()).gruende || []).find((x) => /Strömung|Zug|Mittels/.test(x.text));
+    assert.ok(barbe && barbe.status === 'ja', 'starke Strömung sollte Barbe (liebt Strömung) positiv werten');
+    assert.match(barbe.text, /150 % des Mittels/);
+  });
+
+  test('Q = 60 % des Mittels → Niedrigwasser', async () => {
+    await loadRegion(ctx, 'mainz');
+    app.state.WX = { temp: 20, wind: 8, dirDeg: 200, dir: 'SW', press: 1015, trendVal: 0, code: 3 };
+    app.state.PEGEL = { value: 150, station: 'Mainz', dist: 3, wt: 18, abfluss: 1200, abflussMittel: 2000 };
+    const e = app.empfehlung(MITTAG(), { gewaesser: [flussSpot().name] });
+    assert.match(e.stroemung, /Wenig Strömung \(60 % des Mittels/);
+  });
+
+  test('Blei-Hinweis nennt das Verhältnis zum Mittel', async () => {
+    await loadRegion(ctx, 'mainz');
+    app.state.WX = { temp: 20, wind: 8, dirDeg: 200, dir: 'SW', press: 1015, trendVal: 0, code: 3 };
+    app.state.PEGEL = { value: 250, station: 'Mainz', dist: 3, wt: 18, abfluss: 3200, abflussMittel: 2000 };
+    const e = app.empfehlung(MITTAG(), { gewaesser: [flussSpot().name] });
+    assert.match(e.stroemung, /des Mittels/);
+    assert.match(e.stroemung, /30–50|40–80/);
+  });
+
+  test('Niedrigwasser → leichteres Blei', async () => {
+    await loadRegion(ctx, 'mainz');
+    app.state.WX = { temp: 20, wind: 8, dirDeg: 200, dir: 'SW', press: 1015, trendVal: 0, code: 3 };
+    app.state.PEGEL = { value: 150, station: 'Mainz', dist: 3, wt: 18, abfluss: 1200, abflussMittel: 2000 };
+    const e = app.empfehlung(MITTAG(), { gewaesser: [flussSpot().name] });
+    assert.match(e.stroemung, /Wenig Strömung|7–15 g/);
+  });
+
+  test('strömungsliebende Art profitiert bei 150 % des Mittels, meidende verliert', async () => {
+    await loadRegion(ctx, 'mainz');
+    app.state.WX = { temp: 20, wind: 8, dirDeg: 200, dir: 'SW', press: 1015, trendVal: 0, code: 3 };
+    app.state.PEGEL = { value: 250, station: 'Mainz', dist: 3, wt: 18, abfluss: 3200, abflussMittel: 2000 };
+    const spot = flussSpot();
+    const g = (t) => (t.gruende || []).find((x) => /Strömung|Zug|Mittels/.test(x.text));
+    const barbe = g(app.bewerteSpot(spot, 'Barbe', MITTAG()));
+    const brachse = g(app.bewerteSpot(spot, 'Brachse', MITTAG()));
+    assert.ok(barbe && barbe.status === 'ja', 'Barbe sollte profitieren');
+    assert.ok(brachse && brachse.status === 'nein', 'Brachse sollte verlieren');
+    assert.match(barbe.text, /des Mittels/);
+  });
+});
+
 describe('Konfidenz / Datenbasis', () => {
   afterEach(() => { app.state.fishSel.length = 0; });
   const MITTAG = () => new Date(Date.UTC(2026, 6, 15, 12, 0));

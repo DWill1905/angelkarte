@@ -200,6 +200,8 @@ export interface Pegel {
   abfluss?: number;
   /** Abfluss-Trend der letzten 24 h in m³/s (nachgetragen). */
   abflussTrend?: number;
+  /** Näherung des mittleren Abflusses (Median der letzten ~30 Tage) als Bezugsgröße für „viel/wenig". */
+  abflussMittel?: number;
 }
 
 /** Automatisch mitgeloggter Kontext eines Fangs. */

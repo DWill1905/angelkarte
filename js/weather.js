@@ -148,12 +148,19 @@ export async function loadPegel(ctr, el) {
                 state.PEGEL.abfluss = q.value;
                 let qtxt = ' · ' + Math.round(q.value) + ' m³/s';
                 try {
-                    const qh = await (await fetch(base + '/' + s0.uuid + '/Q/measurements.json?start=P1D')).json();
-                    if (Array.isArray(qh) && qh.length > 1) {
-                        const dq = Math.round(q.value - qh[0].value);
-                        state.PEGEL.abflussTrend = dq;
-                        if (Math.abs(dq) >= Math.max(20, q.value * 0.05))
-                            qtxt += ' (' + (dq > 0 ? '+' : '') + dq + '/24h' + (dq > 0 ? ' – mehr Strömung' : ' – weniger Strömung') + ')';
+                    /* 30-Tage-Verlauf: Median als MQ-Näherung (robust gegen Spitzen) + 24-h-Trend aus derselben Reihe. */
+                    const qh = await (await fetch(base + '/' + s0.uuid + '/Q/measurements.json?start=P30D')).json();
+                    const vals = Array.isArray(qh) ? qh.map((x) => x.value).filter((v) => typeof v === 'number') : [];
+                    if (vals.length >= 20) {
+                        const sorted = [...vals].sort((a, b) => a - b);
+                        const med = sorted[Math.floor(sorted.length / 2)];
+                        state.PEGEL.abflussMittel = Math.round(med);
+                        const proTag = Math.max(1, Math.round(vals.length / 30));
+                        const vor24h = vals[Math.max(0, vals.length - 1 - proTag)];
+                        state.PEGEL.abflussTrend = Math.round(q.value - vor24h);
+                        const ratio = med > 0 ? q.value / med : null;
+                        if (ratio != null)
+                            qtxt += ' (' + Math.round(ratio * 100) + ' % des Mittels' + (ratio >= 1.5 ? ' – kräftig' : ratio <= 0.7 ? ' – wenig' : '') + ')';
                     }
                 }
                 catch (e) { }

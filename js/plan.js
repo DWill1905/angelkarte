@@ -16,7 +16,7 @@
 import { state } from './state.js';
 import { hhmm, inSchonzeit, solunar, sunTimes } from './astro.js';
 import { WT_OPT, tackleFor, wasserTyp } from './tackle.js';
-import { bewerteSpot, sterneAus, sterneText, artZeitprofil } from './rating.js';
+import { bewerteSpot, sterneAus, sterneText, artZeitprofil, stroemungsLage } from './rating.js';
 import { jahreszeit } from './saison.js';
 import { fischArtenFor, FISH } from './data.js';
 /* Geometrie liegt in geo.ts – hier nur re-exportiert, damit bestehende Aufrufer bleiben können. */
@@ -226,25 +226,26 @@ function besteJeOrt(liste) {
     const gesehen = new Set();
     return liste.filter((k) => (gesehen.has(k.ort) ? false : (gesehen.add(k.ort), true)));
 }
-/** Strömungs- und bleiabhängige Empfehlung fürs Fließgewässer (nutzt Pegelstand + Abfluss). */
+/** Strömungs- und bleiabhängige Empfehlung fürs Fließgewässer (nutzt Q/MQ bzw. Pegelstand). */
 function stroemungBlei(s) {
     const w = wasserTyp(s);
     if (w !== 'fluss' && w !== 'kanal')
         return null; /* Strömung nur im Fließgewässer relevant */
-    const pegel = state.PEGEL;
-    const warn = state.REGION?.pegel?.warnAb;
-    const hoch = !!(pegel && warn != null && pegel.value >= warn);
-    const abflussSteigt = !!(pegel && pegel.abflussTrend != null && pegel.abflussTrend > Math.max(20, (pegel.abfluss || 0) * 0.05));
-    const steigt = !!(pegel && ((pegel.trend ?? 0) >= 25 || abflussSteigt));
+    const lage = stroemungsLage();
+    if (!lage)
+        return null;
     const tief = (s.tiefe ?? 0) >= 6;
-    const q = pegel?.abfluss != null ? ` (${Math.round(pegel.abfluss)} m³/s)` : '';
-    if (hoch) {
-        return `Strömung stark, Hochwasser${q}: 40–80 g Blei – oder auf Grundmontage mit Krallenblei wechseln und die ruhigen Ränder & das Buhnenkehrwasser befischen.`;
+    const bez = ` (${lage.text})`;
+    if (lage.hoch) {
+        return `Strömung stark, Hochwasser${bez}: 40–80 g Blei – oder auf Grundmontage mit Krallenblei wechseln und die ruhigen Ränder & das Buhnenkehrwasser befischen.`;
     }
-    if (steigt) {
-        return `Strömung erhöht${q}: oberes Bleiende, ~30–50 g${tief ? ' (hier tief – eher 40–50 g)' : ''}, sonst kein Grundkontakt. Faustregel: leichtester Kopf, der in 5–8 s auftippt.`;
+    if (lage.stark || lage.steigt) {
+        return `Strömung erhöht${bez}: oberes Bleiende, ~30–50 g${tief ? ' (hier tief – eher 40–50 g)' : ''}, sonst kein Grundkontakt. Faustregel: leichtester Kopf, der in 5–8 s auftippt.`;
     }
-    return `Strömung normal${q}: leichtester Jigkopf mit Grundkontakt in 5–8 s – Buhnenfeld ~10–21 g, Hauptstrom ~21–40 g${tief ? ', in der Tiefe eher schwerer' : ''}.`;
+    if (lage.wenig) {
+        return `Wenig Strömung${bez}: leicht fischen – ~7–15 g reichen für Grundkontakt, feiner anbieten.`;
+    }
+    return `Strömung normal${bez}: leichtester Jigkopf mit Grundkontakt in 5–8 s – Buhnenfeld ~10–21 g, Hauptstrom ~21–40 g${tief ? ', in der Tiefe eher schwerer' : ''}.`;
 }
 export function empfehlung(jetzt = new Date(), filter = {}) {
     const liste = kandidaten(jetzt, filter);
