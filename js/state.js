@@ -1,7 +1,7 @@
 export const state = {
     REGIONS: [], REGION: null, SPOTS: [], SCHON: [],
     loadToken: 0,
-    fishSel: null, uferOnly: false,
+    fishSel: [], uferOnly: false,
     active: {},
     userPos: null, userMarker: null,
     uidLast: 0,

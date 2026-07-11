@@ -11,6 +11,33 @@ export const CATS: Record<string, CatInfo> = {
   sperr:{label:'Gesperrt/eingeschränkt',color:'#8a93a0'}
 };
 
+/* Zielfisch-Filter: Chip-ID → tatsächliche Artennamen in Spot.arten.
+   Liegt hier (nicht in map.ts), damit auch der „Heute"-Planer (plan.ts) den aktiven
+   Filter auflösen kann, ohne map.ts zu importieren (sonst Zirkelimport map→tools→plan→map). */
+export const FISH: Array<{ id: string; match: string[] }> = [
+  {id:'Hecht',match:['Hecht']},
+  {id:'Zander',match:['Zander']},
+  {id:'Barsch',match:['Barsch']},
+  {id:'Forelle',match:['Bachforelle','Regenbogenforelle']},
+  {id:'Äsche',match:['Äsche']},
+  {id:'Döbel',match:['Döbel']},
+  {id:'Karpfen',match:['Karpfen']},
+  {id:'Schleie',match:['Schleie']},
+  {id:'Aal',match:['Aal']},
+  {id:'Rapfen',match:['Rapfen']},
+  {id:'Wels',match:['Wels']},
+  {id:'Brachse',match:['Brachse']}
+];
+
+/** Vereinigt die Artennamen aller ausgewählten Zielfisch-Chips.
+    Leere Auswahl → leeres Array (= kein Zielfisch-Filter aktiv). */
+export function fischArtenFor(ids: string[]): string[] {
+  if(!ids || !ids.length) return [];
+  const out = new Set<string>();
+  for(const f of FISH) if(ids.includes(f.id)) for(const a of f.match) out.add(a);
+  return [...out];
+}
+
 export const SPOTS_SN: Spot[] = [
   {
     name:'Talsperre Saidenbach',zugang:'ufer',

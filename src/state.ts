@@ -5,7 +5,7 @@ import type { AppState, Storage } from './types';
 export const state: AppState = {
   REGIONS: [], REGION: null, SPOTS: [], SCHON: [],
   loadToken: 0,
-  fishSel: null, uferOnly: false,
+  fishSel: [], uferOnly: false,
   active: {},
   userPos: null, userMarker: null,
   uidLast: 0,

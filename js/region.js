@@ -64,7 +64,7 @@ export async function loadRegion(r) {
         checkFang(); /* Maßcheck an neue Region anpassen */
     if (typeof sunLine === 'function')
         sunLine();
-    state.fishSel = null;
+    state.fishSel.length = 0;
     syncFishChips();
     applyFilters();
     sperrWarnung(); /* Warnung für die neue Region neu bewerten */
