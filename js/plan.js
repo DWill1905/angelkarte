@@ -18,6 +18,7 @@ import { hhmm, inSchonzeit, solunar, sunTimes, haversine } from './astro.js';
 import { WT_OPT, tackleFor } from './tackle.js';
 import { bewerteSpot, sterneAus, sterneText } from './rating.js';
 import { jahreszeit } from './saison.js';
+import { fischArtenFor } from './data.js';
 /* Geometrie liegt in geo.ts – hier nur re-exportiert, damit bestehende Aufrufer bleiben können. */
 export { peilung, himmelsrichtung, winkelDiff, istAuflandig } from './geo.js';
 /** Wählt die aussichtsreichste, NICHT geschonte Art eines Spots.
@@ -88,10 +89,20 @@ const RAUB = ['Zander', 'Hecht', 'Wels', 'Barsch', 'Rapfen', 'Bachforelle', 'Aal
 /** Alle Paare aus beangelbarem Ort und erlaubter Zielart bewerten. */
 export function kandidaten(jetzt = new Date()) {
     const out = [];
-    state.SPOTS.filter((s) => s.cat !== 'sperr' && s.cat !== 'info' && !s.my).forEach((s) => {
+    /* Aktiver Zielfisch-Filter (Mehrfachauswahl). Leer = kein Filter → alle Arten wie bisher.
+       Ist er gesetzt, empfiehlt der Planer NUR gefilterte Gewässer und NUR die gewählten Arten –
+       „auf Hecht filtern" heißt dann auch: Startpunkt auf Hecht, nicht auf Zander. */
+    const nurArten = fischArtenFor(state.fishSel);
+    state.SPOTS
+        .filter((s) => s.cat !== 'sperr' && s.cat !== 'info' && !s.my)
+        .filter((s) => !nurArten.length || (s.arten || []).some((a) => nurArten.includes(a)))
+        .forEach((s) => {
         const orte = (s.hotspots || []).length ? [...s.hotspots] : [null];
-        /* Nur Arten mit Schonzeit-/Maßdaten – die Rechtslage muss bekannt sein. */
-        const arten = (s.arten || []).filter((a) => state.SCHON.some((x) => x.fisch === a));
+        /* Nur Arten mit Schonzeit-/Maßdaten – die Rechtslage muss bekannt sein.
+           Bei aktivem Filter zusätzlich auf die gewählten Zielfische eingegrenzt. */
+        const arten = (s.arten || [])
+            .filter((a) => state.SCHON.some((x) => x.fisch === a))
+            .filter((a) => !nurArten.length || nurArten.includes(a));
         orte.forEach((h) => {
             arten.forEach((art) => {
                 const b = bewerteSpot(s, art, jetzt, h);
@@ -247,8 +258,13 @@ export function openPlan() {
     dlg.hidden = false;
     const e = empfehlung();
     if (!e) {
-        body.innerHTML = '<p>Für diese Region kann ich gerade keinen Startpunkt empfehlen – '
-            + 'vermutlich sind alle Zielarten geschont oder es fehlen Spot-Daten.</p>';
+        const gefiltert = state.fishSel.length;
+        body.innerHTML = gefiltert
+            ? '<p>Für den aktiven Zielfisch-Filter (<b>' + esc(state.fishSel.join(', ')) + '</b>) '
+                + 'kann ich in dieser Region keinen Startpunkt empfehlen – kein passendes Gewässer, '
+                + 'oder die gewählte(n) Art(en) sind gerade geschont. Filter oben lösen oder erweitern.</p>'
+            : '<p>Für diese Region kann ich gerade keinen Startpunkt empfehlen – '
+                + 'vermutlich sind alle Zielarten geschont oder es fehlen Spot-Daten.</p>';
         if (go)
             go.hidden = true;
         return;

@@ -2,7 +2,7 @@
 
    Die Empfehlung darf nie: eine geschonte Art nennen, in eine Sperrzone schicken,
    einen Ort erfinden oder fehlende Signale verschweigen. Genau das wird hier geprüft. */
-import { test, describe, before, after, beforeEach } from 'node:test';
+import { test, describe, before, after, beforeEach, afterEach } from 'node:test';
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -48,6 +48,57 @@ describe('Geometrie: Peilung und Wind', () => {
 
   test('istAuflandig liefert null ohne Koordinaten', () => {
     assert.equal(istAuflandig({ lat: undefined }, { lat: 53, lng: 13 }, 225), null);
+  });
+});
+
+describe('Zielfisch-Filter steuert die Empfehlung (Mehrfachauswahl)', () => {
+  /* Filter nie zwischen den Tests hängen lassen – andere Blöcke erwarten "kein Filter". */
+  afterEach(() => { app.state.fishSel.length = 0; });
+
+  test('Filter auf Hecht: Planer empfiehlt nur Hecht-Gewässer und Zielfisch Hecht', async () => {
+    await loadRegion(ctx, 'mecklenburg');
+    SOMMER_MV();
+    app.state.fishSel.length = 0; app.state.fishSel.push('Hecht');
+    const liste = app.kandidaten();
+    assert.ok(liste.length, 'kein Kandidat trotz Hechtbestand');
+    /* Kein Kandidat mit anderer Zielart – "auf Hecht" heißt auch: nicht auf Zander. */
+    assert.ok(liste.every((k) => k.art === 'Hecht'), 'Fremdart trotz Hecht-Filter empfohlen');
+    /* Jeder empfohlene Spot führt tatsächlich Hecht. */
+    assert.ok(liste.every((k) => (k.spot.arten || []).includes('Hecht')), 'Gewässer ohne Hecht empfohlen');
+    const e = app.empfehlung();
+    assert.equal(e.kandidat.art, 'Hecht');
+    assert.match(e.satz, /auf Hecht/);
+  });
+
+  test('Mehrfachauswahl Hecht+Zander: nur diese Arten, Vereinigung der Gewässer', async () => {
+    await loadRegion(ctx, 'mecklenburg');
+    SOMMER_MV();
+    app.state.fishSel.length = 0; app.state.fishSel.push('Hecht', 'Zander');
+    const liste = app.kandidaten();
+    assert.ok(liste.length, 'kein Kandidat für Hecht/Zander');
+    assert.ok(liste.every((k) => k.art === 'Hecht' || k.art === 'Zander'), 'Art außerhalb der Auswahl');
+    /* jeder Spot führt mindestens eine der beiden gewählten Arten */
+    assert.ok(liste.every((k) => (k.spot.arten || []).some((a) => a === 'Hecht' || a === 'Zander')));
+  });
+
+  test('ohne Filter bleibt die Auswahl breiter als mit Hecht-Filter', async () => {
+    await loadRegion(ctx, 'mecklenburg');
+    SOMMER_MV();
+    app.state.fishSel.length = 0;
+    const alleArten = new Set(app.kandidaten().map((k) => k.art));
+    app.state.fishSel.push('Hecht');
+    const nurHecht = new Set(app.kandidaten().map((k) => k.art));
+    assert.ok(alleArten.size >= nurHecht.size);
+    assert.deepEqual([...nurHecht], ['Hecht']);
+  });
+
+  test('Filter auf eine in der Region fehlende Art: keine Empfehlung statt falscher Art', async () => {
+    await loadRegion(ctx, 'mecklenburg');
+    SOMMER_MV();
+    app.state.fishSel.length = 0; app.state.fishSel.push('Äsche');
+    const liste = app.kandidaten();
+    /* Entweder gar kein Kandidat – oder, falls doch Äsche vorkommt, nur Äsche. Nie ein Ersatzfisch. */
+    assert.ok(liste.every((k) => k.art === 'Äsche'));
   });
 });
 

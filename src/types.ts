@@ -248,7 +248,7 @@ export interface AppState {
   SPOTS: Spot[];
   SCHON: Schonzeit[];
   loadToken: number;
-  fishSel: string | null;
+  fishSel: string[]; /* Mehrfachauswahl: aktive Zielfisch-Chip-IDs, leer = kein Filter */
   uferOnly: boolean;
   active: Record<string, boolean>;
   userPos: [number, number] | null;

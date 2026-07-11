@@ -42,7 +42,7 @@ export async function loadRegion(r){
   buildMarkers(); buildChips(); buildBanner(); buildSchonUI(); buildRegeln(); buildFbOptions();
   if(typeof checkFang==='function') checkFang(); /* Maßcheck an neue Region anpassen */
   if(typeof sunLine==='function') sunLine();
-  state.fishSel=null; syncFishChips(); applyFilters();
+  state.fishSel.length=0; syncFishChips(); applyFilters();
   sperrWarnung(); /* Warnung für die neue Region neu bewerten */
   schilfAus(); /* Schilfflächen der alten Region entfernen – sie liegen sonst über der neuen Karte */
   buildSaisonBar();

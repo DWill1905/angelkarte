@@ -52,7 +52,7 @@ export function kbHtml() {
         else if (wt >= 20)
             se = 'sommer';
     }
-    const fische = state.fishSel ? [state.fishSel === 'Forelle' ? 'Forelle' : state.fishSel] : ['Hecht', 'Zander', 'Barsch'];
+    const fische = state.fishSel.length ? state.fishSel.slice() : ['Hecht', 'Zander', 'Barsch'];
     const bekannt = fische.filter(f => KB[f]), unbekannt = fische.filter(f => !KB[f]);
     const seName = { fruehjahr: 'Frühjahr', sommer: 'Sommer', herbst: 'Herbst', winter: 'Winter' }[se];
     let h = '<p style="color:var(--muted);margin-bottom:10px">Phase: <b>' + seName + '</b>'

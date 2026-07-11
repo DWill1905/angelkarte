@@ -4,7 +4,7 @@ import { tackleHtml } from './tackle.js';
 import { ratingHtml } from './rating.js';
 import { fokusFor, hotspotAktiv, istKante, spotImFokus } from './saison.js';
 import { haversine } from './astro.js';
-import { CATS } from './data.js';
+import { CATS, FISH, fischArtenFor } from './data.js';
 import { openTools } from './tools.js';
 import { sunLine } from './ui.js';
 import { ICON, esc } from './util.js';
@@ -64,20 +64,6 @@ export function popupHtml(s) {
       ${s.my ? '<button class="pop-btn" style="background:#4a201a;color:#f0b6a8" onclick="delMySpot(' + s.myId + ')">Löschen</button>' : ''}
     </div>`;
 }
-export const FISH = [
-    { id: 'Hecht', match: ['Hecht'] },
-    { id: 'Zander', match: ['Zander'] },
-    { id: 'Barsch', match: ['Barsch'] },
-    { id: 'Forelle', match: ['Bachforelle', 'Regenbogenforelle'] },
-    { id: 'Äsche', match: ['Äsche'] },
-    { id: 'Döbel', match: ['Döbel'] },
-    { id: 'Karpfen', match: ['Karpfen'] },
-    { id: 'Schleie', match: ['Schleie'] },
-    { id: 'Aal', match: ['Aal'] },
-    { id: 'Rapfen', match: ['Rapfen'] },
-    { id: 'Wels', match: ['Wels'] },
-    { id: 'Brachse', match: ['Brachse'] }
-];
 Object.assign(state.active, Object.fromEntries(Object.keys(CATS).map(k => [k, true])));
 export function spotVisible(s) {
     if (!state.active[s.cat])
@@ -85,10 +71,11 @@ export function spotVisible(s) {
     /* Ufer-Filter: reine Bootsseen ausblenden (Sperr-/Info-Spots & eigene Spots bleiben sichtbar) */
     if (state.uferOnly && s.zugang === 'boot')
         return false;
-    if (!state.fishSel)
-        return true;
-    const f = FISH.find(x => x.id === state.fishSel);
-    return s.arten.some(a => f.match.includes(a));
+    if (!state.fishSel.length)
+        return true; /* kein Zielfisch-Filter aktiv */
+    /* Mehrfachauswahl: Spot bleibt sichtbar, wenn er MINDESTENS eine gewählte Art führt (ODER-Logik). */
+    const arten = fischArtenFor(state.fishSel);
+    return s.arten.some(a => arten.includes(a));
 }
 export function applyFilters() {
     state.SPOTS.forEach(s => {
@@ -169,16 +156,25 @@ export function buildChips() {
         chipsEl.appendChild(b);
     });
 }
-/* Zielfisch-Chips (Einfachauswahl) */
+/* Zielfisch-Chips (Mehrfachauswahl) */
 export const fishEl = byId('fishChips');
 export function fishChip(label, id) {
     const b = document.createElement('button');
     b.className = 'chip';
     b.dataset.fish = id || '';
     b.textContent = label;
-    b.setAttribute('aria-pressed', String(id === state.fishSel));
+    b.setAttribute('aria-pressed', String(!!id && state.fishSel.includes(id)));
     b.onclick = () => {
-        state.fishSel = (id === state.fishSel) ? null : id; /* erneutes Tippen hebt Filter auf */
+        if (!id) {
+            state.fishSel.length = 0;
+        } /* „Alle" leert die Auswahl */
+        else {
+            const i = state.fishSel.indexOf(id);
+            if (i >= 0)
+                state.fishSel.splice(i, 1); /* erneutes Tippen entfernt nur diesen Fisch */
+            else
+                state.fishSel.push(id);
+        }
         syncFishChips();
         applyFilters();
     };
@@ -186,14 +182,15 @@ export function fishChip(label, id) {
 }
 export function syncFishChips() {
     fishEl.querySelectorAll('.chip[data-fish]').forEach((x) => {
-        const on = (x.dataset.fish || null) === state.fishSel || (!state.fishSel && x.dataset.fish === '');
+        const id = x.dataset.fish || '';
+        const on = id ? state.fishSel.includes(id) : state.fishSel.length === 0; /* „Alle" = nichts gewählt */
         x.classList.toggle('on', on);
         x.setAttribute('aria-pressed', String(on));
     });
 }
 export const allChip = fishChip('Alle', null);
 allChip.classList.add('on');
-allChip.onclick = () => { state.fishSel = null; syncFishChips(); applyFilters(); };
+allChip.onclick = () => { state.fishSel.length = 0; syncFishChips(); applyFilters(); };
 fishEl.appendChild(allChip);
 FISH.forEach(f => fishEl.appendChild(fishChip(f.id, f.id)));
 export const uferBtn = document.createElement('button');
