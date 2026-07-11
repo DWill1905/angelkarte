@@ -118,6 +118,23 @@ export async function loadPegel(ctr,el){
         }catch(e){}
       }
     }catch(e){}
+    /* Abfluss (Q) = echte Strömungsgröße, wenn die Station ihn führt */
+    try{
+      const q=await (await fetch(base+'/'+s0.uuid+'/Q/currentmeasurement.json')).json();
+      if(q&&typeof q.value!=='undefined'){
+        state.PEGEL.abfluss=q.value;
+        let qtxt=' · '+Math.round(q.value)+' m³/s';
+        try{
+          const qh=await (await fetch(base+'/'+s0.uuid+'/Q/measurements.json?start=P1D')).json();
+          if(Array.isArray(qh)&&qh.length>1){
+            const dq=Math.round(q.value-qh[0].value);
+            state.PEGEL.abflussTrend=dq;
+            if(Math.abs(dq)>=Math.max(20,q.value*0.05)) qtxt+=' ('+(dq>0?'+':'')+dq+'/24h'+(dq>0?' – mehr Strömung':' – weniger Strömung')+')';
+          }
+        }catch(e){}
+        txt+=qtxt;
+      }
+    }catch(e){}
     /* Regionsschwelle (z.B. Rhein: Buhnen ab ~400 cm überspült) */
     if(state.REGION&&state.REGION.pegel&&m.value>=state.REGION.pegel.warnAb) txt+=' · ⚠ '+state.REGION.pegel.text;
     el.innerHTML+=txt;

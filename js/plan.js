@@ -15,7 +15,7 @@
    nachvollziehbare Vorauswahl – die Entscheidung trifft der Angler. */
 import { state } from './state.js';
 import { hhmm, inSchonzeit, solunar, sunTimes } from './astro.js';
-import { WT_OPT, tackleFor } from './tackle.js';
+import { WT_OPT, tackleFor, wasserTyp } from './tackle.js';
 import { bewerteSpot, sterneAus, sterneText, artZeitprofil } from './rating.js';
 import { jahreszeit } from './saison.js';
 import { fischArtenFor, FISH } from './data.js';
@@ -226,6 +226,26 @@ function besteJeOrt(liste) {
     const gesehen = new Set();
     return liste.filter((k) => (gesehen.has(k.ort) ? false : (gesehen.add(k.ort), true)));
 }
+/** Strömungs- und bleiabhängige Empfehlung fürs Fließgewässer (nutzt Pegelstand + Abfluss). */
+function stroemungBlei(s) {
+    const w = wasserTyp(s);
+    if (w !== 'fluss' && w !== 'kanal')
+        return null; /* Strömung nur im Fließgewässer relevant */
+    const pegel = state.PEGEL;
+    const warn = state.REGION?.pegel?.warnAb;
+    const hoch = !!(pegel && warn != null && pegel.value >= warn);
+    const abflussSteigt = !!(pegel && pegel.abflussTrend != null && pegel.abflussTrend > Math.max(20, (pegel.abfluss || 0) * 0.05));
+    const steigt = !!(pegel && ((pegel.trend ?? 0) >= 25 || abflussSteigt));
+    const tief = (s.tiefe ?? 0) >= 6;
+    const q = pegel?.abfluss != null ? ` (${Math.round(pegel.abfluss)} m³/s)` : '';
+    if (hoch) {
+        return `Strömung stark, Hochwasser${q}: 40–80 g Blei – oder auf Grundmontage mit Krallenblei wechseln und die ruhigen Ränder & das Buhnenkehrwasser befischen.`;
+    }
+    if (steigt) {
+        return `Strömung erhöht${q}: oberes Bleiende, ~30–50 g${tief ? ' (hier tief – eher 40–50 g)' : ''}, sonst kein Grundkontakt. Faustregel: leichtester Kopf, der in 5–8 s auftippt.`;
+    }
+    return `Strömung normal${q}: leichtester Jigkopf mit Grundkontakt in 5–8 s – Buhnenfeld ~10–21 g, Hauptstrom ~21–40 g${tief ? ', in der Tiefe eher schwerer' : ''}.`;
+}
 export function empfehlung(jetzt = new Date(), filter = {}) {
     const liste = kandidaten(jetzt, filter);
     if (!liste.length)
@@ -283,6 +303,7 @@ export function empfehlung(jetzt = new Date(), filter = {}) {
         luecken.unshift('Sturm ab 35 km/h – Angeln ist heute unverantwortlich (Wellen, Blitzschlag).');
     return {
         satz, massHinweis, kandidat: k, zeit, zielfisch: zf, koeder, jig,
+        stroemung: stroemungBlei(k.spot),
         faktoren: k.faktoren, chance: k.basis, chanceFenster, sterne: sterneAus(k.basis, sturm),
         gesperrt: sturm ? 'sturm' : undefined,
         luecken, alternativen: besteJeOrt(liste.filter((x) => x.ort !== k.ort)).slice(0, 3),
@@ -378,6 +399,8 @@ function renderPlanBody(e) {
     }
     if (e.massHinweis)
         h += '<div class="plan-mass">⚖ ' + esc(e.massHinweis) + '</div>';
+    if (e.stroemung)
+        h += '<div class="plan-mass">🌊 ' + esc(e.stroemung) + '</div>';
     h += '<div class="plan-sec"><h4>Warum dort</h4>'
         + fak.map((f) => '<div class="plan-f ' + (f.punkte >= 0 ? 'pos' : 'neg') + '">'
             + '<span class="pt">' + (f.punkte > 0 ? '+' : '') + f.punkte + '</span>'

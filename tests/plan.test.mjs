@@ -148,6 +148,51 @@ describe('Planer-Seite: Fisch- und Gewässerfilter', () => {
   });
 });
 
+describe('Strömung & Blei', () => {
+  afterEach(() => { app.state.fishSel.length = 0; });
+  const MITTAG = () => new Date(Date.UTC(2026, 6, 15, 12, 0));
+  const flussSpot = () => app.state.SPOTS.find((s) => s.wasser === 'fluss' && s.cat !== 'sperr' && !s.my && (s.arten || []).includes('Zander'));
+
+  test('Hochwasser → schweres Blei bzw. Ränder', async () => {
+    await loadRegion(ctx, 'mainz');
+    app.state.WX = { temp: 20, wind: 8, dirDeg: 200, dir: 'SW', press: 1015, trendVal: 0, code: 3 };
+    app.state.PEGEL = { value: 460, station: 'Mainz', dist: 3, wt: 16, abfluss: 3200 }; // > warnAb 400
+    const e = app.empfehlung(MITTAG(), { gewaesser: [flussSpot().name] });
+    assert.ok(e && e.stroemung, 'kein Strömungshinweis');
+    assert.match(e.stroemung, /Hochwasser|40–80|Ränder/);
+  });
+
+  test('normaler Pegel → leichtester Kopf mit Grundkontakt in 5–8 s, Abfluss sichtbar', async () => {
+    await loadRegion(ctx, 'mainz');
+    app.state.WX = { temp: 20, wind: 8, dirDeg: 200, dir: 'SW', press: 1015, trendVal: 0, code: 3 };
+    app.state.PEGEL = { value: 200, station: 'Mainz', dist: 3, wt: 16, abfluss: 1400 };
+    const e = app.empfehlung(MITTAG(), { gewaesser: [flussSpot().name] });
+    assert.match(e.stroemung, /5–8 s/);
+    assert.match(e.stroemung, /m³\/s/);
+  });
+
+  test('stehendes Gewässer bekommt keinen Strömungshinweis', async () => {
+    await loadRegion(ctx, 'mecklenburg');
+    app.state.WX = { temp: 20, wind: 8, dirDeg: 200, dir: 'SW', press: 1015, trendVal: 0, code: 3 };
+    app.state.PEGEL = { value: 200, station: 'X', dist: 3, wt: 18 };
+    const seeSpot = app.state.SPOTS.find((s) => (s.wasser === 'see-flach' || s.wasser === 'see-tief') && s.cat !== 'sperr' && !s.my && (s.arten || []).length);
+    const e = app.empfehlung(MITTAG(), { gewaesser: [seeSpot.name] });
+    assert.equal(e.stroemung, null);
+  });
+
+  test('strömungsliebende Art profitiert, meidende verliert (viel Zug)', async () => {
+    await loadRegion(ctx, 'mainz');
+    app.state.WX = { temp: 20, wind: 8, dirDeg: 200, dir: 'SW', press: 1015, trendVal: 0, code: 3 };
+    app.state.PEGEL = { value: 460, station: 'Mainz', dist: 3, wt: 18, abfluss: 3200 };
+    const spot = flussSpot();
+    const g = (t) => (t.gruende || []).find((x) => /Strömung|Zug|Hochwasser|Ränder/.test(x.text));
+    const barbe = g(app.bewerteSpot(spot, 'Barbe', MITTAG()));
+    const brachse = g(app.bewerteSpot(spot, 'Brachse', MITTAG()));
+    assert.ok(barbe && barbe.status === 'ja', 'Barbe (liebt Strömung) sollte positiv gewertet werden');
+    assert.ok(brachse && brachse.status === 'nein', 'Brachse (meidet Strömung) sollte negativ gewertet werden');
+  });
+});
+
 describe('Empfehlung: Startfenster, Köder & Begründung', () => {
   afterEach(() => { app.state.fishSel.length = 0; });
   const MITTAG = () => new Date(Date.UTC(2026, 6, 15, 12, 0));

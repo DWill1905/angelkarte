@@ -23,16 +23,16 @@ const PROFIL = {
     Barsch: { wasser: ['see-flach', 'see-tief', 'fluss', 'kanal'], hoch: [5, 8, 9, 10, 11], daemmerung: false, licht: 'sicht', druckSensibel: true },
     Wels: { wasser: ['fluss', 'see-tief'], hoch: [5, 6, 7, 8, 9], daemmerung: true, truebung: true, nacht: true, warm: true },
     Aal: { wasser: ['fluss', 'kanal', 'see-flach'], hoch: [5, 6, 7, 8, 9], daemmerung: true, truebung: true, nacht: true, warm: true },
-    Rapfen: { wasser: ['fluss'], hoch: [5, 6, 7, 8], daemmerung: false, licht: 'sicht' },
-    Bachforelle: { wasser: ['fluss'], hoch: [4, 5, 6, 9], daemmerung: false, licht: 'sicht', druckSensibel: true },
+    Rapfen: { wasser: ['fluss'], hoch: [5, 6, 7, 8], daemmerung: false, licht: 'sicht', stroemung: 'liebt' },
+    Bachforelle: { wasser: ['fluss'], hoch: [4, 5, 6, 9], daemmerung: false, licht: 'sicht', druckSensibel: true, stroemung: 'liebt' },
     Regenbogenforelle: { wasser: ['fluss', 'see-tief'], hoch: [4, 5, 6, 9, 10], daemmerung: false, licht: 'sicht', druckSensibel: true },
-    Äsche: { wasser: ['fluss'], hoch: [5, 6, 7, 8], daemmerung: false, licht: 'sicht' },
-    Karpfen: { wasser: ['see-flach', 'see-tief', 'kanal'], hoch: [5, 6, 7, 8, 9], daemmerung: false, truebung: true, warm: true },
-    Schleie: { wasser: ['see-flach'], hoch: [5, 6, 7], daemmerung: true, truebung: true, warm: true },
-    Brachse: { wasser: ['see-flach', 'see-tief', 'fluss', 'kanal'], hoch: [5, 6, 7, 8], daemmerung: true, truebung: true, warm: true },
-    Barbe: { wasser: ['fluss'], hoch: [6, 7, 8, 9], daemmerung: false, truebung: true, warm: true },
-    Döbel: { wasser: ['fluss'], hoch: [5, 6, 7, 8, 9], daemmerung: false, licht: 'sicht' },
-    Rotauge: { wasser: ['see-flach', 'see-tief', 'fluss', 'kanal'], hoch: [4, 5, 6, 7, 8, 9, 10], daemmerung: false },
+    Äsche: { wasser: ['fluss'], hoch: [5, 6, 7, 8], daemmerung: false, licht: 'sicht', stroemung: 'liebt' },
+    Karpfen: { wasser: ['see-flach', 'see-tief', 'kanal'], hoch: [5, 6, 7, 8, 9], daemmerung: false, truebung: true, warm: true, stroemung: 'meidet' },
+    Schleie: { wasser: ['see-flach'], hoch: [5, 6, 7], daemmerung: true, truebung: true, warm: true, stroemung: 'meidet' },
+    Brachse: { wasser: ['see-flach', 'see-tief', 'fluss', 'kanal'], hoch: [5, 6, 7, 8], daemmerung: true, truebung: true, warm: true, stroemung: 'meidet' },
+    Barbe: { wasser: ['fluss'], hoch: [6, 7, 8, 9], daemmerung: false, truebung: true, warm: true, stroemung: 'liebt' },
+    Döbel: { wasser: ['fluss'], hoch: [5, 6, 7, 8, 9], daemmerung: false, licht: 'sicht', stroemung: 'liebt' },
+    Rotauge: { wasser: ['see-flach', 'see-tief', 'fluss', 'kanal'], hoch: [4, 5, 6, 7, 8, 9, 10], daemmerung: false, stroemung: 'meidet' },
     Quappe: { wasser: ['fluss', 'see-tief'], hoch: [11, 12, 1, 2], daemmerung: true, nacht: true },
 };
 /** Zeitprofil einer Art (aus PROFIL) für die art-spezifische Startzeit-Empfehlung im Planer. */
@@ -242,7 +242,7 @@ export function bewerteSpot(s, art, jetzt = new Date(), hotspot = null) {
         const li = lichtBewertung(lat, lng, jetzt, wx, art, p);
         add(li.status, li.text, li.erreicht, li.moeglich);
     }
-    /* 5) Wasserstand bzw. Wellenlage (Gewicht 1.5) */
+    /* 5) Strömung/Wasserstand (Fluss) bzw. Wellenlage (See) – Gewicht 1.5, artspezifisch. */
     const fliess = wasser === 'fluss' || wasser === 'kanal';
     if (fliess) {
         if (!pegel) {
@@ -251,15 +251,32 @@ export function bewerteSpot(s, art, jetzt = new Date(), hotspot = null) {
         else {
             const warn = state.REGION?.pegel?.warnAb;
             const hoch = warn != null && pegel.value >= warn;
-            const steigt = typeof pegel.trend === 'number' && pegel.trend >= 25;
-            if (hoch && wasser === 'fluss')
-                add('nein', `Hochwasser (${pegel.value} cm) – Buhnen überspült`, 0, 1.5);
-            else if (hoch && wasser === 'kanal')
-                add('ja', `Hochwasser im Hauptstrom – hier ist die Zuflucht`, 1.5, 1.5);
-            else if (steigt)
-                add('nein', `Pegel steigt stark (+${pegel.trend} cm/24 h) – Fische orientieren sich neu`, 0.5, 1.5);
-            else
-                add('ja', `Wasserstand gut (${pegel.value} cm, Pegel ${pegel.station})`, 1.5, 1.5);
+            const abflussSteigt = pegel.abflussTrend != null && pegel.abflussTrend > Math.max(20, (pegel.abfluss || 0) * 0.05);
+            const steigt = (typeof pegel.trend === 'number' && pegel.trend >= 25) || abflussSteigt;
+            const stark = hoch || steigt;
+            const pref = p?.stroemung;
+            const qt = pegel.abfluss != null ? `, ${Math.round(pegel.abfluss)} m³/s` : '';
+            if (hoch && wasser === 'kanal') {
+                add('ja', 'Hochwasser im Hauptstrom – der Kanal ist die ruhige Zuflucht', 1.5, 1.5);
+            }
+            else if (hoch && pref !== 'liebt') {
+                add('nein', `Hochwasser (${pegel.value} cm${qt}) – Hauptstrom zu stark, nur Ränder & Buhnenkehrwasser`, pref === 'meidet' ? 0 : 0.4, 1.5);
+            }
+            else if (stark && pref === 'liebt') {
+                add('ja', `Kräftige Strömung (${pegel.value} cm${qt}) – ${art} steht genau im Zug`, 1.5, 1.5);
+            }
+            else if (stark && pref === 'meidet') {
+                add('nein', `Viel Strömung (${pegel.value} cm${qt}) – ${art} meidet den Zug, sucht ruhige Buchten`, 0.4, 1.5);
+            }
+            else if (steigt) {
+                add('nein', `Pegel/Strömung steigt (+${pegel.trend ?? '?'} cm/24 h${qt}) – Fische orientieren sich neu`, 0.5, 1.5);
+            }
+            else if (pref === 'liebt') {
+                add('ja', `Solide Strömung (${pegel.value} cm${qt}) – gute Lage für ${art}`, 1.5, 1.5);
+            }
+            else {
+                add('ja', `Wasserstand gut (${pegel.value} cm${qt}, Pegel ${pegel.station})`, 1.5, 1.5);
+            }
         }
     }
     else if (!wx) {

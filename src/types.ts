@@ -196,6 +196,10 @@ export interface Pegel {
   wt?: number;
   /** Wassertemperatur-Trend in °C über ~3 Tage (nachgetragen, wenn die Station WT-Historie liefert). */
   wtTrend?: number;
+  /** Abfluss in m³/s (Strömungsgröße), wenn die Station Q liefert. */
+  abfluss?: number;
+  /** Abfluss-Trend der letzten 24 h in m³/s (nachgetragen). */
+  abflussTrend?: number;
 }
 
 /** Automatisch mitgeloggter Kontext eines Fangs. */
