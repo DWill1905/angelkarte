@@ -14,7 +14,7 @@
    Die Gewichte stehen offen im Code. Das ist kein Orakel, sondern eine
    nachvollziehbare Vorauswahl – die Entscheidung trifft der Angler. */
 import { state } from './state.js';
-import { hhmm, inSchonzeit, solunar, sunTimes, haversine } from './astro.js';
+import { hhmm, inSchonzeit, solunar, sunTimes } from './astro.js';
 import { WT_OPT, tackleFor } from './tackle.js';
 import { bewerteSpot, sterneAus, sterneText } from './rating.js';
 import { jahreszeit } from './saison.js';
@@ -125,21 +125,8 @@ export function kandidaten(jetzt = new Date()) {
                     p += 3;
                     faktoren.push({ text: art + ' ist ein Raubfisch – dein Schwerpunkt', punkte: 3 });
                 }
-                if (state.userPos && typeof s.lat === 'number') {
-                    const d = haversine(state.userPos[0], state.userPos[1], h?.lat ?? s.lat, h?.lng ?? s.lng);
-                    if (d <= 10) {
-                        p += 8;
-                        faktoren.push({ text: `nur ${d.toFixed(1)} km von dir entfernt`, punkte: 8 });
-                    }
-                    else if (d <= 30) {
-                        p += 3;
-                        faktoren.push({ text: `${d.toFixed(0)} km entfernt`, punkte: 3 });
-                    }
-                    else {
-                        p -= 5;
-                        faktoren.push({ text: `${d.toFixed(0)} km entfernt – lohnt eher als Tagestour`, punkte: -5 });
-                    }
-                }
+                /* Kein Entfernungs-/Standortfaktor: alle Gewässer der Region werden gleich bewertet,
+                   die Nähe zum Standort fließt bewusst NICHT ins Ranking ein. */
                 const lat = h?.lat ?? s.lat;
                 const lng = h?.lng ?? s.lng;
                 if (typeof lat !== 'number' || typeof lng !== 'number')
@@ -216,8 +203,6 @@ export function empfehlung(jetzt = new Date()) {
         luecken.push('Kein Wetter verfügbar (offline?) – Wind und Luftdruck fließen nicht ein.');
     if (!state.PEGEL)
         luecken.push('Kein Pegel/Wassertemperatur in Reichweite – Zielfischwahl beruht nur auf Bestand und Saison.');
-    if (!state.userPos)
-        luecken.push('Kein Standort freigegeben – die Entfernung wurde nicht berücksichtigt.');
     if (k.spot.zugang === 'boot')
         luecken.push('Dieses Gewässer ist praktisch nur vom Boot zu beangeln.');
     if (k.spot.verif === 'C')

@@ -186,12 +186,17 @@ describe('Ehrlichkeit über fehlende Signale', () => {
     assert.ok(e.luecken.some((l) => /Pegel|Wassertemperatur/i.test(l)));
   });
 
-  test('ohne Standort wird die Entfernung nicht vorgetäuscht', async () => {
+  test('der Standort beeinflusst die Empfehlung nicht', async () => {
     await loadRegion(ctx, 'elbe');
     app.state.userPos = null;
-    const e = app.empfehlung();
-    assert.ok(e.luecken.some((l) => /Standort/i.test(l)));
-    assert.ok(!e.faktoren.some((f) => /km/.test(f.text)), 'Entfernungsfaktor ohne Standort!');
+    const ohne = app.empfehlung();
+    app.state.userPos = [52.15, 11.67];
+    const mit = app.empfehlung();
+    app.state.userPos = null;
+    assert.equal(ohne.kandidat.ort, mit.kandidat.ort, 'Standort verändert die Ortswahl');
+    assert.ok(!ohne.faktoren.some((f) => /km/.test(f.text)) && !mit.faktoren.some((f) => /km/.test(f.text)),
+      'Entfernungsfaktor im Ranking – Standort darf nicht einfließen');
+    assert.ok(!mit.luecken.some((l) => /Standort/i.test(l)), 'Standort-Lücke, obwohl der Standort keine Rolle spielt');
   });
 
   test('ein Bootssee wird als solcher gekennzeichnet', async () => {
@@ -268,6 +273,7 @@ describe('Darstellung', () => {
   test('der Dialog zeigt Satz, Begründung und Lücken', async () => {
     await loadRegion(ctx, 'mecklenburg');
     SOMMER_MV();
+    app.state.PEGEL = null; /* echte Lücke erzwingen (kein Pegel) – die Standort-Lücke gibt es nicht mehr */
     app.openPlan();
     const body = doc.getElementById('planBody').innerHTML;
     assert.match(body, /plan-satz/);
