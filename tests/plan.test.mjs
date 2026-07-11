@@ -102,6 +102,52 @@ describe('Zielfisch-Filter steuert die Empfehlung (Mehrfachauswahl)', () => {
   });
 });
 
+describe('Planer-Seite: Fisch- und Gewässerfilter', () => {
+  afterEach(() => { app.state.fishSel.length = 0; });
+
+  test('Gewässerfilter schränkt auf die gewählten Spots ein', async () => {
+    await loadRegion(ctx, 'mainz');
+    const name = 'Industriehafen Mombach – Hafenausfahrt';
+    const liste = app.kandidaten(new Date(), { gewaesser: [name] });
+    assert.ok(liste.length, 'kein Kandidat für das gewählte Gewässer');
+    assert.ok(liste.every((k) => k.spot.name === name), 'Fremdgewässer trotz Gewässerfilter');
+  });
+
+  test('Seiten-Fischfilter ist unabhängig vom Kartenfilter', async () => {
+    await loadRegion(ctx, 'mainz');
+    app.state.fishSel.length = 0; app.state.fishSel.push('Zander'); // Karte: Zander
+    const e = app.empfehlung(new Date(), { fisch: ['Hecht'] });     // Seite: Hecht
+    assert.ok(e, 'keine Empfehlung');
+    assert.equal(e.kandidat.art, 'Hecht');
+  });
+
+  test('leerer Seiten-Fischfilter = alle Arten, nicht der Kartenfilter', async () => {
+    await loadRegion(ctx, 'mainz');
+    app.state.fishSel.length = 0; app.state.fishSel.push('Hecht');
+    const arten = new Set(app.kandidaten(new Date(), { fisch: [] }).map((k) => k.art));
+    assert.ok(arten.size > 1, 'leerer Seitenfilter darf nicht auf den Kartenfilter zurückfallen');
+  });
+
+  test('Kombination Fisch + Gewässer greift zusammen', async () => {
+    await loadRegion(ctx, 'mainz');
+    const name = 'Industriehafen Mombach – Hafenausfahrt'; // führt Zander, keinen Hecht
+    const zander = app.kandidaten(new Date(), { fisch: ['Zander'], gewaesser: [name] });
+    assert.ok(zander.every((k) => k.spot.name === name && k.art === 'Zander'));
+    const hecht = app.kandidaten(new Date(), { fisch: ['Hecht'], gewaesser: [name] });
+    assert.equal(hecht.length, 0, 'Hecht an einem Nicht-Hecht-Gewässer darf nichts liefern');
+  });
+
+  test('openPlan baut Fisch- und Gewässer-Chips', async () => {
+    await loadRegion(ctx, 'mainz');
+    app.openPlan();
+    const fish = doc.getElementById('planFishChips');
+    const gew = doc.getElementById('planGewChips');
+    assert.ok(fish && fish.querySelectorAll('.chip').length > 1, 'keine Fisch-Chips');
+    assert.ok(gew && gew.querySelectorAll('.chip').length > 1, 'keine Gewässer-Chips');
+    const c = doc.getElementById('planClose'); if (c && c.click) c.click();
+  });
+});
+
 describe('Die Empfehlung ist konkret und aus den Daten', () => {
   test('nennt Zeit, Ort, Fisch, Köder und Jigkopf in einem Satz', async () => {
     await loadRegion(ctx, 'mecklenburg');

@@ -18,7 +18,7 @@ import { hhmm, inSchonzeit, solunar, sunTimes } from './astro.js';
 import { WT_OPT, tackleFor } from './tackle.js';
 import { bewerteSpot, sterneAus, sterneText } from './rating.js';
 import { jahreszeit } from './saison.js';
-import { fischArtenFor } from './data.js';
+import { fischArtenFor, FISH } from './data.js';
 import type { Hotspot, Spot } from './types';
 
 /* Geometrie liegt in geo.ts – hier nur re-exportiert, damit bestehende Aufrufer bleiben können. */
@@ -131,17 +131,24 @@ export interface Kandidat {
 
 const RAUB = ['Zander', 'Hecht', 'Wels', 'Barsch', 'Rapfen', 'Bachforelle', 'Aal'];
 
+/** Optionaler Filter für den Planer. Wird kein `fisch` übergeben (undefined), gilt der
+    globale Kartenfilter `state.fishSel`; ein übergebenes (auch leeres) Array hat Vorrang.
+    `gewaesser` schränkt auf einzelne Gewässer (Spot-Namen) ein; leer/undefiniert = alle. */
+export interface PlanFilter { fisch?: string[] | null; gewaesser?: string[] | null; }
+
 /** Alle Paare aus beangelbarem Ort und erlaubter Zielart bewerten. */
-export function kandidaten(jetzt: Date = new Date()): Kandidat[] {
+export function kandidaten(jetzt: Date = new Date(), filter: PlanFilter = {}): Kandidat[] {
   const out: Kandidat[] = [];
 
-  /* Aktiver Zielfisch-Filter (Mehrfachauswahl). Leer = kein Filter → alle Arten wie bisher.
-     Ist er gesetzt, empfiehlt der Planer NUR gefilterte Gewässer und NUR die gewählten Arten –
-     „auf Hecht filtern" heißt dann auch: Startpunkt auf Hecht, nicht auf Zander. */
-  const nurArten = fischArtenFor(state.fishSel);
+  /* Zielfisch: expliziter Planer-Filter schlägt den Kartenfilter; sonst state.fishSel. */
+  const fishIds = filter.fisch != null ? filter.fisch : state.fishSel;
+  const nurArten = fischArtenFor(fishIds);
+  /* Gewässer-Filter (Spot-Namen). Leer = keine Einschränkung. */
+  const gew = filter.gewaesser && filter.gewaesser.length ? filter.gewaesser : null;
 
   state.SPOTS
     .filter((s) => s.cat !== 'sperr' && s.cat !== 'info' && !s.my)
+    .filter((s) => !gew || gew.includes(s.name))
     .filter((s) => !nurArten.length || (s.arten || []).some((a) => nurArten.includes(a)))
     .forEach((s) => {
     const orte: Array<Hotspot | null> = (s.hotspots || []).length ? [...(s.hotspots as Hotspot[])] : [null];
@@ -251,8 +258,8 @@ function besteJeOrt(liste: Kandidat[]): Kandidat[] {
   return liste.filter((k) => (gesehen.has(k.ort) ? false : (gesehen.add(k.ort), true)));
 }
 
-export function empfehlung(jetzt: Date = new Date()): Empfehlung | null {
-  const liste = kandidaten(jetzt);
+export function empfehlung(jetzt: Date = new Date(), filter: PlanFilter = {}): Empfehlung | null {
+  const liste = kandidaten(jetzt, filter);
   if (!liste.length) return null;
   const k = liste[0];
 
@@ -304,38 +311,83 @@ export function empfehlung(jetzt: Date = new Date()): Empfehlung | null {
 }
 
 
-/* ---------- Darstellung ---------- */
+/* ---------- Darstellung: eigene Planer-Seite mit Fisch- & Gewässerfilter ---------- */
 import { byId } from './dom.js';
 import { esc } from './util.js';
 
 let letzterKandidat: Kandidat | null = null;
+/* Seiten-lokale Auswahl (verändert NICHT den Kartenfilter). Leer = „alle". */
+const planFisch: string[] = [];
+const planGew: string[] = [];
 
-export function openPlan(): void {
-  const dlg = byId('planDlg');
-  const body = byId('planBody');
-  const go = byId('planGo');
-  if (!dlg || !body) return;
-  dlg.hidden = false;
+/** Beangelbare Gewässer (Spot-Namen) der aktuellen Region, ohne Sperr/Info/eigene. */
+function beangelbareGewaesser(): string[] {
+  return state.SPOTS
+    .filter((s) => s.cat !== 'sperr' && s.cat !== 'info' && !s.my && !!s.name)
+    .map((s) => s.name)
+    .filter((n, i, a) => a.indexOf(n) === i);
+}
 
-  const e = empfehlung();
-  if (!e) {
-    const gefiltert = state.fishSel.length;
-    body.innerHTML = gefiltert
-      ? '<p>Für den aktiven Zielfisch-Filter (<b>' + esc(state.fishSel.join(', ')) + '</b>) '
-        + 'kann ich in dieser Region keinen Startpunkt empfehlen – kein passendes Gewässer, '
-        + 'oder die gewählte(n) Art(en) sind gerade geschont. Filter oben lösen oder erweitern.</p>'
-      : '<p>Für diese Region kann ich gerade keinen Startpunkt empfehlen – '
-        + 'vermutlich sind alle Zielarten geschont oder es fehlen Spot-Daten.</p>';
-    if (go) go.hidden = true;
-    return;
+/** Zielfisch-IDs, die in der Region tatsächlich vorkommen (keine leeren Chips anbieten). */
+function regionFischIds(): string[] {
+  const arten = new Set<string>();
+  state.SPOTS
+    .filter((s) => s.cat !== 'sperr' && s.cat !== 'info' && !s.my)
+    .forEach((s) => (s.arten || []).forEach((a) => arten.add(a)));
+  return FISH.filter((f) => f.match.some((m) => arten.has(m))).map((f) => f.id);
+}
+
+function mkChip(label: string, on: boolean, onClick: () => void): HTMLButtonElement {
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.className = 'chip' + (on ? ' on' : '');
+  b.setAttribute('aria-pressed', String(on));
+  b.textContent = label;
+  b.onclick = onClick;
+  return b;
+}
+
+function buildPlanFilter(): void {
+  const fishBox = byId('planFishChips');
+  if (fishBox) {
+    fishBox.innerHTML = '';
+    fishBox.appendChild(mkChip('Alle', planFisch.length === 0, () => { planFisch.length = 0; buildPlanFilter(); rerenderPlan(); }));
+    regionFischIds().forEach((id) => {
+      fishBox.appendChild(mkChip(id, planFisch.includes(id), () => {
+        const i = planFisch.indexOf(id);
+        if (i >= 0) planFisch.splice(i, 1); else planFisch.push(id);
+        buildPlanFilter(); rerenderPlan();
+      }));
+    });
   }
-  letzterKandidat = e.kandidat;
+  const gewBox = byId('planGewChips');
+  if (gewBox) {
+    gewBox.innerHTML = '';
+    gewBox.appendChild(mkChip('Alle Gewässer', planGew.length === 0, () => { planGew.length = 0; buildPlanFilter(); rerenderPlan(); }));
+    beangelbareGewaesser().forEach((name) => {
+      gewBox.appendChild(mkChip(name, planGew.includes(name), () => {
+        const i = planGew.indexOf(name);
+        if (i >= 0) planGew.splice(i, 1); else planGew.push(name);
+        buildPlanFilter(); rerenderPlan();
+      }));
+    });
+  }
+}
 
+function leerText(): string {
+  const teile: string[] = [];
+  if (planFisch.length) teile.push('Zielfisch <b>' + esc(planFisch.join(', ')) + '</b>');
+  if (planGew.length) teile.push('Gewässer <b>' + esc(planGew.join(', ')) + '</b>');
+  const suffix = teile.length ? ' für ' + teile.join(' und ') : '';
+  return '<p style="color:var(--muted)">Kein Startpunkt' + suffix + ' empfehlbar – '
+    + 'keine passende Kombination, oder die Art ist gerade geschont. Filter oben lösen oder erweitern.</p>';
+}
+
+function renderPlanBody(e: Empfehlung): string {
   const fak = [...e.faktoren].sort((a, b) => b.punkte - a.punkte);
   let h = '';
   if (e.gesperrt === 'sturm') h += '<div class="rate-sturm">⚠ Sturm – Angeln ist heute unverantwortlich.</div>';
   h += '<div class="plan-satz">' + esc(e.satz) + '</div>';
-  /* Dieselbe Zahl wie „Chancen heute" im Popup – zwei Werte für dasselbe wären verwirrend. */
   h += '<div class="plan-chance"><span class="plan-sterne">' + sterneText(e.sterne) + '</span>'
     + '<span class="plan-proz">' + e.chance + ' %</span>'
     + '<span class="plan-basis">Chance für ' + esc(e.kandidat.art) + ' an diesem Ort – dieselbe Zahl wie im Popup</span></div>';
@@ -352,38 +404,62 @@ export function openPlan(): void {
     h += '<div class="plan-sec"><h4>Warum dieser Fisch</h4><div style="font-size:12.5px">'
       + esc(e.zielfisch.art) + ' – ' + esc(e.zielfisch.grund) + '</div></div>';
   }
-
   if (e.luecken.length) {
     h += '<div class="plan-sec"><h4>Was ich nicht weiß</h4>'
       + e.luecken.map((l) => '<div class="plan-luecke">' + esc(l) + '</div>').join('')
       + '</div>';
   }
-
   if (e.alternativen.length) {
     h += '<div class="plan-sec"><h4>Alternativen</h4>'
       + e.alternativen.map((a) => '<div class="plan-alt">' + esc(a.ort) + ' · ' + esc(a.art) + ' <b>' + a.basis + ' %</b></div>').join('')
       + '</div>';
   }
-
   h += '<div class="verif" style="margin-top:12px">Eine begründete Vorauswahl aus Saison, Wind, Luftdruck, '
     + 'Pegel, Wassertemperatur und deinen Spot-Daten – kein Orakel. Die Gewichte stehen offen im Quelltext. '
     + 'Am Wasser entscheidest du.</div>';
+  return h;
+}
 
-  body.innerHTML = h;
-
-  if (go) {
-    go.hidden = false;
-    go.onclick = () => {
-      dlg.hidden = true;
-      if (letzterKandidat && state.map) {
-        state.map.flyTo([letzterKandidat.lat, letzterKandidat.lng], 14, { duration: 0.7 });
-        const m = letzterKandidat.hotspot
-          ? (letzterKandidat.spot.hotMarkers || [])[(letzterKandidat.spot.hotspots || []).indexOf(letzterKandidat.hotspot)]
-          : letzterKandidat.spot.marker;
-        if (m && typeof m.openPopup === 'function') setTimeout(() => m.openPopup(), 750);
-      }
-    };
+function goToKandidat(): void {
+  const dlg = byId('planDlg');
+  if (dlg) dlg.hidden = true;
+  if (letzterKandidat && state.map) {
+    state.map.flyTo([letzterKandidat.lat, letzterKandidat.lng], 14, { duration: 0.7 });
+    const m = letzterKandidat.hotspot
+      ? (letzterKandidat.spot.hotMarkers || [])[(letzterKandidat.spot.hotspots || []).indexOf(letzterKandidat.hotspot)]
+      : letzterKandidat.spot.marker;
+    if (m && typeof m.openPopup === 'function') setTimeout(() => m.openPopup(), 750);
   }
+}
+
+/** Empfehlung mit den aktuellen Seiten-Filtern neu berechnen und anzeigen. */
+function rerenderPlan(): void {
+  const body = byId('planBody');
+  const go = byId('planGo');
+  if (!body) return;
+  const e = empfehlung(new Date(), { fisch: planFisch, gewaesser: planGew });
+  if (!e) {
+    body.innerHTML = leerText();
+    letzterKandidat = null;
+    if (go) go.hidden = true;
+    return;
+  }
+  letzterKandidat = e.kandidat;
+  body.innerHTML = renderPlanBody(e);
+  if (go) { go.hidden = false; go.onclick = goToKandidat; }
+}
+
+export function openPlan(): void {
+  const dlg = byId('planDlg');
+  if (!dlg) return;
+  /* Beim Öffnen die Fisch-Auswahl aus dem Kartenfilter vorbelegen; Gewässer offen (alle). */
+  planFisch.length = 0; state.fishSel.forEach((id) => planFisch.push(id));
+  planGew.length = 0;
+  buildPlanFilter();
+  rerenderPlan();
+  dlg.hidden = false;
+  const bodyEl = byId('planBody');
+  if (bodyEl) bodyEl.scrollTop = 0;
 }
 
 const planDlg = byId('planDlg');

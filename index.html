@@ -413,6 +413,25 @@
   .mydlg-btns{display:flex;gap:8px;margin-top:14px}
   .mydlg-btns button{flex:1;border:0;border-radius:8px;padding:11px;font-size:14px;font-weight:700;cursor:pointer;background:var(--forelle);color:#3a2f10}
   .mydlg-btns .ghost{background:var(--panel-2);color:var(--text);border:1px solid var(--line)}
+
+  /* „Heute würde ich hier anfangen" als eigene, vollflächige Seite */
+  #planDlg{align-items:stretch;padding:0}
+  .plan-card{background:var(--panel);width:100%;max-width:520px;margin:0 auto;height:100dvh;
+    display:flex;flex-direction:column;border-left:1px solid var(--line);border-right:1px solid var(--line)}
+  .plan-head{display:flex;align-items:center;gap:8px;padding:14px 16px 10px}
+  .plan-head h3{flex:1;margin:0;font-family:"Lato","Segoe UI",Calibri,sans-serif;font-weight:700;font-size:17px;color:#f4faf9}
+  .plan-head h3 .ic{width:1em;height:1em;vertical-align:-.1em;margin-right:5px;color:var(--dusk)}
+  .plan-x{background:none;border:0;color:var(--muted);font-size:20px;line-height:1;cursor:pointer;padding:4px 8px;border-radius:8px}
+  .plan-x:hover{background:rgba(22,50,60,.5);color:var(--text)}
+  .plan-filterbar{padding:0 12px 10px;border-bottom:1px solid var(--line)}
+  .plan-flabel{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700;margin:8px 2px 5px}
+  .plan-chips{flex-wrap:wrap;overflow-x:visible;padding:2px 0;background:transparent}
+  .plan-gew{max-height:104px;overflow-y:auto}
+  .plan-body{flex:1;overflow-y:auto;padding:12px 16px;font-size:13px;line-height:1.55}
+  .plan-foot{padding:10px 14px;border-top:1px solid var(--line)}
+  .plan-foot button{width:100%;border:1px solid var(--line);border-radius:8px;padding:11px;font-size:14px;font-weight:700;
+    cursor:pointer;background:var(--panel-2);color:var(--text)}
+  .plan-foot button[hidden]{display:none}
   footer{grid-row:6;background:rgba(42,89,102,.85);border-top:1px solid var(--shoal);
     padding:6px 14px calc(6px + env(safe-area-inset-bottom));font-size:10px;color:var(--muted)}
   footer a{color:var(--dusk)}
@@ -652,10 +671,19 @@
 </div>
 
 <div class="mydlg-wrap" id="planDlg" hidden>
-  <div class="mydlg">
-    <h3 data-ic="target">Heute würde ich hier anfangen</h3>
-    <div id="planBody" style="font-size:13px;line-height:1.55;max-height:66dvh;overflow-y:auto"></div>
-    <div class="mydlg-btns"><button id="planGo" class="ghost" hidden>Auf der Karte zeigen</button><button id="planClose">Schließen</button></div>
+  <div class="plan-card">
+    <div class="plan-head">
+      <h3 data-ic="target">Heute würde ich hier anfangen</h3>
+      <button id="planClose" class="plan-x" type="button" aria-label="Schließen">✕</button>
+    </div>
+    <div class="plan-filterbar">
+      <div class="plan-flabel">Zielfisch</div>
+      <div class="chips sub plan-chips" id="planFishChips"></div>
+      <div class="plan-flabel">Gewässer der Region</div>
+      <div class="chips sub plan-chips plan-gew" id="planGewChips"></div>
+    </div>
+    <div id="planBody" class="plan-body"></div>
+    <div class="plan-foot"><button id="planGo" class="ghost" hidden>Auf der Karte zeigen</button></div>
   </div>
 </div>
 
