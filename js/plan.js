@@ -165,7 +165,7 @@ export function kandidaten(jetzt = new Date(), filter = {}) {
                     p = Math.min(p, 15);
                 out.push({
                     spot: s, hotspot: h, art, basis: b.prozent, punkte: Math.max(0, Math.min(100, p)),
-                    faktoren, gesperrt: b.gesperrt,
+                    faktoren, bewertet: b.bewertet, gesamt: b.gesamt, gesperrt: b.gesperrt,
                     ort: h ? `${h.name} (${s.name})` : s.name,
                     lat, lng,
                 });
@@ -392,7 +392,11 @@ function renderPlanBody(e) {
     h += '<div class="plan-satz">' + esc(e.satz) + '</div>';
     h += '<div class="plan-chance"><span class="plan-sterne">' + sterneText(e.sterne) + '</span>'
         + '<span class="plan-proz">' + e.chance + ' %</span>'
-        + '<span class="plan-basis">Chance JETZT für ' + esc(e.kandidat.art) + ' – gleiche Zahl wie im Popup</span></div>';
+        + '<span class="plan-basis">Chance JETZT für ' + esc(e.kandidat.art) + ' · Datenbasis '
+        + e.kandidat.bewertet + '/' + e.kandidat.gesamt + ' Signale</span></div>';
+    if (e.kandidat.gesamt && e.kandidat.bewertet / e.kandidat.gesamt < 0.8) {
+        h += '<div class="plan-luecke">⚠ Dünne Datenlage – die Chance ist bewusst zur Mitte gedämpft; was fehlt, steht unter „Was ich nicht weiß".</div>';
+    }
     if (e.chanceFenster > e.chance + 4) {
         h += '<div class="plan-fenster">☾ Bestes Fenster heute: ' + esc(e.zeit.label) + ' ~' + hhmm(e.zeit.von)
             + ' Uhr → dann eher <b>~' + e.chanceFenster + ' %</b></div>';

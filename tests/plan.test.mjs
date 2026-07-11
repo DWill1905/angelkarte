@@ -148,6 +148,47 @@ describe('Planer-Seite: Fisch- und Gewässerfilter', () => {
   });
 });
 
+describe('Konfidenz / Datenbasis', () => {
+  afterEach(() => { app.state.fishSel.length = 0; });
+  const MITTAG = () => new Date(Date.UTC(2026, 6, 15, 12, 0));
+  const spotZander = () => app.state.SPOTS.find((s) => (s.arten || []).includes('Zander') && s.cat !== 'sperr' && !s.my);
+  const voll = () => { app.state.WX = { temp: 20, wind: 10, dirDeg: 200, dir: 'SW', press: 1015, trendVal: 0, code: 3 }; app.state.PEGEL = { value: 200, station: 'X', dist: 3, wt: 18 }; };
+
+  test('volle Datenlage: hohe Konfidenz, keine Dämpfung', async () => {
+    await loadRegion(ctx, 'mainz'); voll();
+    const b = app.bewerteSpot(spotZander(), 'Zander', MITTAG());
+    const moeglich = b.gruende.reduce((n, g) => n + g.moeglich, 0);
+    const erreicht = b.gruende.reduce((n, g) => n + g.erreicht, 0);
+    assert.ok(b.konfidenz >= 0.8, `Konfidenz zu niedrig: ${b.konfidenz}`);
+    assert.equal(b.prozent, Math.round((erreicht / moeglich) * 100));
+  });
+
+  test('dünne Datenlage zieht die Chance zur Mitte', async () => {
+    await loadRegion(ctx, 'mainz');
+    app.state.WX = null; app.state.PEGEL = null;
+    const b = app.bewerteSpot(spotZander(), 'Zander', MITTAG());
+    const moeglich = b.gruende.reduce((n, g) => n + g.moeglich, 0);
+    const erreicht = b.gruende.reduce((n, g) => n + g.erreicht, 0);
+    const roh = Math.round((erreicht / moeglich) * 100);
+    assert.ok(b.konfidenz < 0.8, `Datenlage sollte dünn sein: ${b.konfidenz}`);
+    assert.ok(Math.abs(b.prozent - 50) <= Math.abs(roh - 50), `gedämpft ${b.prozent} muss näher an 50 liegen als roh ${roh}`);
+  });
+
+  test('Empfehlung trägt die Datenbasis', async () => {
+    await loadRegion(ctx, 'mainz'); voll();
+    const e = app.empfehlung(MITTAG(), { fisch: ['Zander'] });
+    assert.ok(e.kandidat.gesamt > 0 && e.kandidat.bewertet <= e.kandidat.gesamt, 'Datenbasis fehlt am Kandidaten');
+  });
+
+  test('Sturm-Deckel wird NICHT nach oben gedämpft', async () => {
+    await loadRegion(ctx, 'mainz');
+    app.state.WX = { temp: 18, wind: 45, dirDeg: 200, dir: 'SW', press: 1010, trendVal: 0, code: 3 }; // Sturm
+    app.state.PEGEL = null; // dünn – ohne Schutz würde zur Mitte hochgezogen
+    const b = app.bewerteSpot(spotZander(), 'Zander', MITTAG());
+    assert.ok(b.prozent <= 15, `Sturm-Chance ${b.prozent} darf nicht über 15 hochgedämpft werden`);
+  });
+});
+
 describe('Strömung & Blei', () => {
   afterEach(() => { app.state.fishSel.length = 0; });
   const MITTAG = () => new Date(Date.UTC(2026, 6, 15, 12, 0));

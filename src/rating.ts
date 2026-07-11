@@ -39,6 +39,8 @@ export interface Bewertung {
   /** Wie viele Faktoren konnten überhaupt bewertet werden? */
   bewertet: number;
   gesamt: number;
+  /** Datenbasis 0–1 (bewertet/gesamt) – wie belastbar die Prozentzahl ist. */
+  konfidenz: number;
   /** Geschont? Dann ist die Bewertung gesperrt. */
   geschont: boolean;
   /** Kurzhinweis zu Maß/Entnahmefenster. */
@@ -219,7 +221,7 @@ export function bewerteSpot(s: Spot, art: string, jetzt: Date = new Date(), hots
 
   if (geschont) {
     return {
-      art, prozent: 0, sterne: 0, geschont, mass, gesperrt: 'schonzeit', bewertet: 1, gesamt: 1,
+      art, prozent: 0, sterne: 0, geschont, mass, gesperrt: 'schonzeit', bewertet: 1, gesamt: 1, konfidenz: 1,
       gruende: [{ status: 'nein', text: `Schonzeit – ${art} darf jetzt nicht entnommen werden`, erreicht: 0, moeglich: 1 }],
     };
   }
@@ -374,12 +376,23 @@ export function bewerteSpot(s: Spot, art: string, jetzt: Date = new Date(), hots
      ehrliche Empfehlung – egal wie gut Saison/Gewässer sind. Analog zum Sturm-Deckel. */
   if (z.tagsperre) prozent = Math.min(prozent, 20);
 
+  /* Konfidenz: Anteil der Faktoren, die überhaupt Daten hatten. */
+  const bewertet = gruende.filter((g) => g.status !== 'unbekannt').length;
+  const gesamt = gruende.length;
+  const konfidenz = gesamt ? bewertet / gesamt : 0;
+
+  /* Ehrlichkeits-Dämpfung: bei dünner Datenlage (< 80 % Abdeckung) die Zahl zur Mitte (50)
+     ziehen – zwei gute Signale sind keine 95 %. Harte Deckel (Sturm/Tagsperre) bleiben unberührt. */
+  if (!gesperrt && !z.tagsperre && konfidenz < 0.8) {
+    const faktor = 0.6 + 0.5 * konfidenz; // 0.8→1.0, 0.5→0.85, 0.3→0.75
+    prozent = Math.round(50 + (prozent - 50) * faktor);
+  }
+
   const sterne = moeglich > 0 ? sterneAus(prozent, !!gesperrt) : 0;
 
   return {
     art, prozent, sterne, gruende, geschont, mass, gesperrt,
-    bewertet: gruende.filter((g) => g.status !== 'unbekannt').length,
-    gesamt: gruende.length,
+    bewertet, gesamt, konfidenz,
   };
 }
 
@@ -437,7 +450,7 @@ export function ratingHtml(s: Spot, hotspot: Hotspot | null = null): string {
       `<div class="rate-g ${g.status}">${IKON[g.status]} ${esc(g.text)}</div>`).join('');
     const mass = b.mass ? `<div class="rate-mass">⚖ ${esc(b.mass)}</div>` : '';
     const unklar = b.bewertet < b.gesamt
-      ? `<div class="rate-hinweis">${b.bewertet} von ${b.gesamt} Faktoren konnten bewertet werden – der Prozentwert bezieht sich nur auf diese.</div>`
+      ? `<div class="rate-hinweis">Datenbasis ${b.bewertet}/${b.gesamt} Signale${b.konfidenz < 0.8 ? ' – dünn, der Wert ist zur Mitte gedämpft' : ' – Wert bezieht sich nur auf diese'}.</div>`
       : '';
     return `<details class="rate-art-block"${offen ? ' open' : ''}>${kopf}
       <div class="rate-body">${gruende}${mass}${unklar}</div></details>`;

@@ -112,14 +112,19 @@ describe('Unbekannte Faktoren werden nicht als erfüllt gewertet', () => {
     assert.ok(b.bewertet < b.gesamt, 'bewertet muss kleiner als gesamt sein');
   });
 
-  test('der Prozentwert bezieht sich nur auf bewertbare Faktoren', async () => {
+  test('der Prozentwert bezieht sich nur auf bewertbare Faktoren (dünn → gedämpft)', async () => {
     await loadRegion(ctx, 'mecklenburg');
     app.state.WX = null;
     app.state.PEGEL = null;
     const b = app.bewerteSpot(spotVon('Woblitzsee'), 'Hecht');
     const moeglich = b.gruende.reduce((n, g) => n + g.moeglich, 0);
     const erreicht = b.gruende.reduce((n, g) => n + g.erreicht, 0);
-    assert.equal(b.prozent, Math.round((erreicht / moeglich) * 100));
+    const roh = Math.round((erreicht / moeglich) * 100);
+    // Unbekannte Faktoren zählen nicht in moeglich (blähen den Nenner nicht auf).
+    assert.ok(b.gruende.some((g) => g.status === 'unbekannt' && g.moeglich === 0), 'Unbekannte müssen moeglich 0 haben');
+    // Dünne Datenlage → Zahl zur Mitte gedämpft, nicht der rohe Anteil.
+    assert.ok(b.konfidenz < 0.8, `Datenlage sollte dünn sein, war ${b.konfidenz}`);
+    assert.ok(Math.abs(b.prozent - 50) <= Math.abs(roh - 50), `gedämpft ${b.prozent} muss näher an 50 liegen als roh ${roh}`);
   });
 
   test('fehlende Daten machen die Bewertung nicht besser', async () => {
