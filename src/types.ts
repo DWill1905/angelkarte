@@ -194,6 +194,8 @@ export interface Pegel {
   /** Pegeländerung der letzten 24 h in cm (nachgetragen). */
   trend?: number;
   wt?: number;
+  /** Wassertemperatur-Trend in °C über ~3 Tage (nachgetragen, wenn die Station WT-Historie liefert). */
+  wtTrend?: number;
 }
 
 /** Automatisch mitgeloggter Kontext eines Fangs. */

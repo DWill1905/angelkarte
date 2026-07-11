@@ -82,6 +82,35 @@ function zeitBewertung(lat, lng, jetzt, daemmerungsfisch, nachtfisch = false) {
     return { punkte: 0.15, text: 'Aktuell weder Beißfenster noch Dämmerung', status: 'nein' };
 }
 /* ---------- Die Bewertung ---------- */
+/** Wassertemperatur-Trend über ~3 Tage. Erwärmung aktiviert (v. a. im Frühjahr / Richtung Optimum),
+    ein schneller Kälteeinbruch bremst – besonders wärmeliebende Arten (Wels, Aal, Zander). */
+function wtTrendBewertung(art, wt, wtTrend, p) {
+    const G = 1;
+    if (wtTrend == null || wt == null)
+        return { status: 'unbekannt', text: 'Wassertemperatur-Trend unbekannt (keine Historie)', erreicht: 0, moeglich: 0 };
+    const opt = WT_OPT[art];
+    const lbl = `${wtTrend > 0 ? '+' : ''}${wtTrend} °C/3 T`;
+    if (wtTrend <= -2.5) {
+        return { status: 'nein', text: `Kälteeinbruch (${lbl}) – ${art} fährt den Stoffwechsel runter`, erreicht: p?.warm ? 0.1 : 0.25, moeglich: G };
+    }
+    if (Math.abs(wtTrend) < 1.5) {
+        return { status: 'ja', text: `Wassertemperatur stabil (${lbl})`, erreicht: 0.8, moeglich: G };
+    }
+    let richtungOptimum = null;
+    if (opt) {
+        if (wt < opt[0])
+            richtungOptimum = wtTrend > 0; // zu kalt → Erwärmung gut
+        else if (wt > opt[1])
+            richtungOptimum = wtTrend < 0; // zu warm → Abkühlung gut
+    }
+    if (richtungOptimum === true)
+        return { status: 'ja', text: `Wasser bewegt sich Richtung Optimum (${lbl}) – aktiviert ${art}`, erreicht: G, moeglich: G };
+    if (richtungOptimum === false)
+        return { status: 'nein', text: `Temperatur entfernt sich vom Optimum (${lbl}) – ${art} wird träge`, erreicht: 0.3, moeglich: G };
+    if (wtTrend > 0)
+        return { status: 'ja', text: `Wasser erwärmt sich im Optimum (${lbl}) – Fressphase für ${art}`, erreicht: G, moeglich: G };
+    return { status: p?.warm ? 'nein' : 'ja', text: `Leichte Abkühlung (${lbl})${p?.warm ? ` – ${art} reagiert empfindlich` : ''}`, erreicht: p?.warm ? 0.5 : 0.8, moeglich: G };
+}
 /** Licht- und Bewölkungslage artspezifisch bewerten (nutzt weather_code + Wind + Trübungsprofil).
     Lichtscheue Räuber (Zander) mögen gedämpftes Licht, Sichträuber (Barsch, Forelle …) klareres. */
 function lichtBewertung(lat, lng, jetzt, wx, art, p) {
@@ -156,6 +185,11 @@ export function bewerteSpot(s, art, jetzt = new Date(), hotspot = null) {
     }
     else {
         add('nein', `${Math.round(wt)} °C – über dem Optimum, tiefe Zonen suchen`, 0.6, 2);
+    }
+    /* 1b) Wassertemperatur-Trend (Gewicht 1) – Erwärmung aktiviert, Kälteeinbruch bremst. */
+    {
+        const zt = wtTrendBewertung(art, wt, pegel?.wtTrend ?? null, p);
+        add(zt.status, zt.text, zt.erreicht, zt.moeglich);
     }
     /* 2) Beißzeit (Gewicht 2) */
     const z = zeitBewertung(lat, lng, jetzt, p?.daemmerung ?? false, p?.nacht ?? false);

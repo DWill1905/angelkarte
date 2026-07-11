@@ -148,6 +148,42 @@ describe('Planer-Seite: Fisch- und Gewässerfilter', () => {
   });
 });
 
+describe('Wassertemperatur-Trend', () => {
+  afterEach(() => { app.state.fishSel.length = 0; });
+  const TAG = () => new Date(Date.UTC(2026, 6, 15, 12, 0));
+  const setWx = () => { app.state.WX = { temp: 18, wind: 10, dirDeg: 200, dir: 'SW', press: 1015, trendVal: 0, code: 3 }; };
+
+  test('Erwärmung schlägt Abkühlung (Zander unter dem Optimum)', async () => {
+    await loadRegion(ctx, 'mainz'); setWx();
+    const spot = app.state.SPOTS.find((s) => (s.arten || []).includes('Zander') && s.cat !== 'sperr' && !s.my);
+    app.state.PEGEL = { value: 200, station: 'X', dist: 3, wt: 9, wtTrend: 2 };  // kalt, erwärmt sich
+    const warm = app.bewerteSpot(spot, 'Zander', TAG()).prozent;
+    app.state.PEGEL = { value: 200, station: 'X', dist: 3, wt: 9, wtTrend: -2 }; // kalt, kühlt weiter ab
+    const kalt = app.bewerteSpot(spot, 'Zander', TAG()).prozent;
+    assert.ok(warm > kalt, `Erwärmung ${warm} % muss über Abkühlung ${kalt} % liegen`);
+  });
+
+  test('Kälteeinbruch bremst den wärmeliebenden Wels', async () => {
+    await loadRegion(ctx, 'mainz'); setWx();
+    const spot = app.state.SPOTS.find((s) => (s.arten || []).includes('Wels') && s.cat !== 'sperr' && !s.my);
+    const nacht = new Date(Date.UTC(2026, 6, 15, 23, 30)); // Wels ist tagsüber gedeckelt
+    app.state.PEGEL = { value: 200, station: 'X', dist: 3, wt: 20, wtTrend: 0 };
+    const stabil = app.bewerteSpot(spot, 'Wels', nacht).prozent;
+    app.state.PEGEL = { value: 200, station: 'X', dist: 3, wt: 20, wtTrend: -3 };
+    const b = app.bewerteSpot(spot, 'Wels', nacht);
+    assert.ok(b.prozent < stabil, `Kälteeinbruch ${b.prozent} % muss unter stabil ${stabil} % liegen`);
+    assert.match(b.gruende.map((g) => g.text).join(' | '), /Kälteeinbruch/);
+  });
+
+  test('ohne Historie bleibt der Trend neutral (unbekannt, kein Effekt)', async () => {
+    await loadRegion(ctx, 'mainz'); setWx();
+    const spot = app.state.SPOTS.find((s) => (s.arten || []).includes('Zander') && s.cat !== 'sperr' && !s.my);
+    app.state.PEGEL = { value: 200, station: 'X', dist: 3, wt: 18 }; // kein wtTrend
+    const b = app.bewerteSpot(spot, 'Zander', TAG());
+    assert.ok(b.gruende.some((g) => /Trend unbekannt/.test(g.text)), 'Trend-Achse müsste unbekannt sein');
+  });
+});
+
 describe('Wetter-dynamische, artspezifische Bewertung', () => {
   afterEach(() => { app.state.fishSel.length = 0; });
   const TAG = () => new Date(Date.UTC(2026, 6, 15, 12, 0)); // heller Tag

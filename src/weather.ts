@@ -96,13 +96,26 @@ export async function loadPegel(ctr,el){
         if(d>=25) txt+=' – steigt &amp; trübt: Räuber ans Ufer gedrückt!';
       }
     }catch(e){}
-    /* Wassertemperatur, wenn die Station sie liefert */
+    /* Wassertemperatur + Trend, wenn die Station sie liefert */
     try{
       const wt=await (await fetch(base+'/'+s0.uuid+'/WT/currentmeasurement.json')).json();
       if(wt&&typeof wt.value!=='undefined'){
         state.PEGEL.wt=wt.value;
         if(state.WX) state.WX.wt=wt.value;
         txt+=' · Wasser '+Math.round(wt.value)+'°C'+(wt.value>=25?' ⚠ Hitzestress – C&R vermeiden, Drill kurz halten!':'');
+        /* Trend über ~3 Tage: Mittel des jüngsten Tages minus Mittel des ältesten Tages
+           glättet die Tag-/Nacht-Schwankung heraus, die einen Punkt-zu-Punkt-Vergleich verfälschen würde. */
+        try{
+          const wtHist=await (await fetch(base+'/'+s0.uuid+'/WT/measurements.json?start=P3D')).json();
+          const vals=Array.isArray(wtHist)?wtHist.map((x)=>x.value).filter((v)=>typeof v==='number'):[];
+          if(vals.length>=12){
+            const n=vals.length, drittel=Math.max(1,Math.floor(n/3));
+            const avg=(arr)=>arr.reduce((a,b)=>a+b,0)/arr.length;
+            const dTrend=Math.round((avg(vals.slice(n-drittel))-avg(vals.slice(0,drittel)))*10)/10;
+            state.PEGEL.wtTrend=dTrend;
+            if(Math.abs(dTrend)>=1) txt+=' ('+(dTrend>0?'+':'')+dTrend+'°C/3T'+(dTrend<=-1.5?' – Kälteeinbruch':dTrend>=1.5?' – Erwärmung':'')+')';
+          }
+        }catch(e){}
       }
     }catch(e){}
     /* Regionsschwelle (z.B. Rhein: Buhnen ab ~400 cm überspült) */
