@@ -89,6 +89,12 @@ const PROFIL: Record<string, ArtProfil> = {
   Quappe:           { wasser: ['fluss', 'see-tief'], hoch: [11, 12, 1, 2], daemmerung: true, nacht: true },
 };
 
+/** Zeitprofil einer Art (aus PROFIL) für die art-spezifische Startzeit-Empfehlung im Planer. */
+export function artZeitprofil(art: string): { nacht: boolean; daemmerung: boolean } {
+  const p = PROFIL[art];
+  return { nacht: !!p?.nacht, daemmerung: !!p?.daemmerung };
+}
+
 /* ---------- Zeitfenster ---------- */
 
 /** Liegt „jetzt“ oder der kommende Abend in einem Beißfenster? */

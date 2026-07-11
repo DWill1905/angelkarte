@@ -148,6 +148,56 @@ describe('Planer-Seite: Fisch- und Gewässerfilter', () => {
   });
 });
 
+describe('Empfehlung: Startfenster, Köder & Begründung', () => {
+  afterEach(() => { app.state.fishSel.length = 0; });
+  const MITTAG = () => new Date(Date.UTC(2026, 6, 15, 12, 0));
+
+  test('nachtaktive Art bekommt die Nacht als Startfenster (kein Mittagsfenster)', () => {
+    const z = app.startzeitFor(50.0, 8.3, MITTAG(), { nacht: true });
+    assert.equal(z.label, 'Nacht');
+    assert.ok(z.von.getTime() > MITTAG().getTime(), 'Startzeit sollte in der Abenddämmerung/Nacht liegen');
+  });
+
+  test('dämmerungsbetonte Art bekommt die Abenddämmerung', () => {
+    const z = app.startzeitFor(50.0, 8.3, MITTAG(), { daemmerung: true });
+    assert.equal(z.label, 'Abenddämmerung');
+  });
+
+  test('bestes Fenster heute liegt nicht unter der Chance jetzt', async () => {
+    await loadRegion(ctx, 'mainz');
+    app.state.PEGEL = { value: 200, station: 'X', dist: 3, wt: 19 };
+    app.state.WX = { temp: 24, wind: 2, dirDeg: 200, dir: 'SW', press: 1015, trendVal: 0, code: 0 }; // klar+windstill
+    const e = app.empfehlung(MITTAG(), { fisch: ['Zander'] });
+    assert.ok(e, 'keine Empfehlung');
+    assert.ok(e.chanceFenster >= e.chance, `Fenster ${e.chanceFenster} darf nicht unter jetzt ${e.chance} liegen`);
+    assert.match(e.zeit.label + ' ' + e.zeit.grund, /dämmerung|nacht/i);
+  });
+
+  test('trübes Wasser → Schock-/UV-Farbe im Köder', async () => {
+    await loadRegion(ctx, 'mainz');
+    app.state.PEGEL = { value: 200, station: 'X', dist: 3, wt: 19 };
+    app.state.WX = { temp: 22, wind: 10, dirDeg: 200, dir: 'SW', press: 1015, trendVal: 0, code: 63 }; // Regen
+    const e = app.empfehlung(MITTAG(), { fisch: ['Zander'] });
+    assert.match(e.koeder, /Schockfarbe|UV/);
+  });
+
+  test('klares, helles Wasser → natürliches Dekor', async () => {
+    await loadRegion(ctx, 'mainz');
+    app.state.PEGEL = { value: 200, station: 'X', dist: 3, wt: 19 };
+    app.state.WX = { temp: 22, wind: 2, dirDeg: 200, dir: 'SW', press: 1020, trendVal: 0, code: 0 }; // klar+windstill
+    const e = app.empfehlung(MITTAG(), { fisch: ['Zander'] });
+    assert.match(e.koeder, /natürlich/i);
+  });
+
+  test('Zielfisch-Begründung nennt neben der Temperatur einen echten Treiber', async () => {
+    await loadRegion(ctx, 'mainz');
+    app.state.PEGEL = { value: 200, station: 'X', dist: 3, wt: 19 };
+    app.state.WX = { temp: 22, wind: 10, dirDeg: 200, dir: 'SW', press: 1015, trendVal: 0, code: 3 }; // bedeckt
+    const e = app.empfehlung(MITTAG(), { fisch: ['Zander'] });
+    assert.match(e.zielfisch.grund, /dazu:/);
+  });
+});
+
 describe('Wassertemperatur-Trend', () => {
   afterEach(() => { app.state.fishSel.length = 0; });
   const TAG = () => new Date(Date.UTC(2026, 6, 15, 12, 0));
@@ -408,7 +458,8 @@ describe('Die Signale wirken tatsächlich', () => {
     await loadRegion(ctx, 'elbe');
     app.state.WX = { temp: 6, wind: 5, dirDeg: 0, dir: 'N', press: 1015, trendVal: 0 };
     app.state.PEGEL = { value: 180, station: 'MD', dist: 2, wt: 7 };
-    const e = app.empfehlung();
+    const mittag = new Date(Date.UTC(2026, 6, 15, 12, 0)); // fest: Temperatur-Logik, nicht Tageszeit
+    const e = app.empfehlung(mittag);
     assert.equal(e.zielfisch.art, 'Hecht', 'Bei 7 °C ist Zander träge, Hecht aktiv');
     assert.match(e.zielfisch.grund, /optimum/i);
   });

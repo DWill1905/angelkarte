@@ -35,6 +35,11 @@ const PROFIL = {
     Rotauge: { wasser: ['see-flach', 'see-tief', 'fluss', 'kanal'], hoch: [4, 5, 6, 7, 8, 9, 10], daemmerung: false },
     Quappe: { wasser: ['fluss', 'see-tief'], hoch: [11, 12, 1, 2], daemmerung: true, nacht: true },
 };
+/** Zeitprofil einer Art (aus PROFIL) für die art-spezifische Startzeit-Empfehlung im Planer. */
+export function artZeitprofil(art) {
+    const p = PROFIL[art];
+    return { nacht: !!p?.nacht, daemmerung: !!p?.daemmerung };
+}
 /* ---------- Zeitfenster ---------- */
 /** Liegt „jetzt“ oder der kommende Abend in einem Beißfenster? */
 function zeitBewertung(lat, lng, jetzt, daemmerungsfisch, nachtfisch = false) {

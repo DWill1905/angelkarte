@@ -16,7 +16,7 @@
 import { state } from './state.js';
 import { hhmm, inSchonzeit, solunar, sunTimes } from './astro.js';
 import { WT_OPT, tackleFor } from './tackle.js';
-import { bewerteSpot, sterneAus, sterneText } from './rating.js';
+import { bewerteSpot, sterneAus, sterneText, artZeitprofil } from './rating.js';
 import { jahreszeit } from './saison.js';
 import { fischArtenFor, FISH } from './data.js';
 /* Geometrie liegt in geo.ts – hier nur re-exportiert, damit bestehende Aufrufer bleiben können. */
@@ -58,15 +58,43 @@ export function zielfischFor(s, wt) {
     }).sort((a, b) => b.punkte - a.punkte);
     return { art: bewertet[0].art, grund: bewertet[0].grund };
 }
-/** Bestes Zeitfenster ab jetzt: Major-Solunar vor Minor vor Dämmerung. */
-export function startzeitFor(lat, lng, jetzt = new Date()) {
+/** Bestes Zeitfenster ab jetzt – art-spezifisch:
+    nachtaktiv → Nacht (kein mittägliches Solunar), dämmerungsbetont → Abenddämmerung,
+    sonst Major-Solunar vor Minor vor Dämmerung. */
+export function startzeitFor(lat, lng, jetzt = new Date(), opts = {}) {
+    const st = sunTimes(lat, lng, jetzt);
+    const dusk = st.dusk || st.set;
+    const dawn = st.dawn || st.rise;
+    const t = jetzt.getTime();
+    /* Nachtaktive Arten: die Nacht ist das Fenster – egal welches Solunar mittags läuft. */
+    if (opts.nacht) {
+        const istNacht = t >= dusk.getTime() || t <= dawn.getTime();
+        const von = istNacht ? jetzt : dusk;
+        return {
+            von,
+            bis: dawn.getTime() > von.getTime() ? dawn : null,
+            label: 'Nacht',
+            grund: istNacht
+                ? 'Die Nacht läuft – Prime Time für nachtaktive Arten'
+                : `Ab der Abenddämmerung (${hhmm(dusk)}) – tagsüber beißt diese Art kaum`,
+        };
+    }
+    /* Dämmerungsbetonte Arten: die kommende Abenddämmerung ist das Kernfenster. */
+    if (opts.daemmerung && dusk.getTime() > t) {
+        return {
+            von: dusk,
+            bis: null,
+            label: 'Abenddämmerung',
+            grund: `Abenddämmerung (${hhmm(dusk)}) – die verlässlichste Beißzeit für diese Art`,
+        };
+    }
     const fenster = (solunar(lat, lng, jetzt) || [])
         .map((f) => ({ ...f, from: new Date(f.from), to: new Date(f.to) }))
-        .filter((f) => f.to.getTime() > jetzt.getTime())
+        .filter((f) => f.to.getTime() > t)
         .sort((a, b) => (a.type === b.type ? a.from - b.from : a.type === 'major' ? -1 : 1));
     if (fenster.length) {
         const f = fenster[0];
-        const laeuft = f.from.getTime() <= jetzt.getTime();
+        const laeuft = f.from.getTime() <= t;
         return {
             von: laeuft ? jetzt : f.from,
             bis: f.to,
@@ -76,10 +104,9 @@ export function startzeitFor(lat, lng, jetzt = new Date()) {
                 : `${f.type === 'major' ? 'Starkes Major' : 'Minor'}-Fenster ${hhmm(f.from)}–${hhmm(f.to)}`,
         };
     }
-    const st = sunTimes(lat, lng, jetzt);
-    const abend = st.dusk || st.set;
+    const abend = dusk;
     return {
-        von: abend > jetzt ? abend : st.dawn || st.rise,
+        von: abend > jetzt ? abend : dawn,
         bis: null,
         label: 'Dämmerung',
         grund: 'Kein Solunar-Fenster mehr heute – die Dämmerung bleibt die verlässlichste Beißzeit',
@@ -150,18 +177,37 @@ export function kandidaten(jetzt = new Date(), filter = {}) {
         || (RAUB.includes(b.art) ? 1 : 0) - (RAUB.includes(a.art) ? 1 : 0)
         || a.ort.localeCompare(b.ort));
 }
-/** Wählt aus der Tackle-Empfehlung den passenden Köder und die Saisonfarbe. */
+/** Köderfarbe nach echten Bedingungen (Trübung/Licht) – überschreibt die Saisonfarbe,
+    wenn die Lage eindeutig ist. Recherche: klar → natürlich, trüb/dunkel → Schock/Kontrast. */
+function dynamischeFarbe() {
+    const wx = state.WX;
+    const pegel = state.PEGEL;
+    const code = wx?.code;
+    const truebe = (pegel?.trend != null && pegel.trend >= 20) /* Pegel steigt stark → getrübt */
+        || (code != null && code >= 51 && code <= 82); /* Regen */
+    const bedeckt = code === 3 || code === 45 || code === 48;
+    const grell = (code == null || code <= 1) && (wx?.wind ?? 0) < 6; /* klar + windstill */
+    if (truebe)
+        return 'Schockfarbe/UV-grell bei trübem Wasser';
+    if (bedeckt)
+        return 'Kontrastfarbe dunkel/UV bei bedecktem Himmel';
+    if (grell)
+        return 'natürliches Dekor bei klarem, hellem Wasser';
+    return '';
+}
+/** Wählt aus der Tackle-Empfehlung den passenden Köder und die Farbe (dynamisch vor saisonal). */
 function koederSatz(s, art) {
     const { t } = tackleFor(s);
     const jz = jahreszeit();
-    const farbe = t.farben[jz].split(/[–;(,]/)[0].trim();
+    const saisonFarbe = t.farben[jz].split(/[–;(,]/)[0].trim();
+    const farbe = dynamischeFarbe() || saisonFarbe;
     /* Kein Kunstköder-Setup für Fried- und Grundfische. */
     if (art && FRIEDFISCH[art])
         return { koeder: FRIEDFISCH[art], jig: null };
     const groesse = art === 'Barsch' ? '6–8 cm' : art === 'Wels' ? '15–25 cm' : art === 'Hecht' ? '12–19 cm' : '10–14 cm';
     const jigMatch = /(\d+\s*[–-]\s*\d+\s*g|\d+\s*g)/.exec(t.jig);
     const jig = jigMatch ? jigMatch[1].replace(/\s+/g, '') : '10–21g';
-    return { koeder: `${groesse.replace(" ", "-")}-Gummifisch (${farbe})`, jig };
+    return { koeder: `${groesse.replace(' ', '-')}-Gummifisch (${farbe})`, jig };
 }
 /** Friedfische bekommen keinen Gummifisch am Jigkopf. */
 const FRIEDFISCH = {
@@ -185,9 +231,14 @@ export function empfehlung(jetzt = new Date(), filter = {}) {
     if (!liste.length)
         return null;
     const k = liste[0];
-    const zeit = startzeitFor(k.lat, k.lng, jetzt);
+    const zp = artZeitprofil(k.art);
+    const zeit = startzeitFor(k.lat, k.lng, jetzt, zp);
+    /* Chance zum empfohlenen Startfenster (Dämmerung/Nacht liegt oft deutlich über „jetzt"). */
+    const chanceFenster = zeit.von.getTime() > jetzt.getTime() + 30 * 60000
+        ? bewerteSpot(k.spot, k.art, zeit.von, k.hotspot).prozent
+        : k.basis;
     const wt = state.PEGEL?.wt ?? state.WX?.wt ?? null;
-    /* Begründung für den Zielfisch aus dem Temperaturprofil. */
+    /* Begründung für den Zielfisch: Temperatur plus der stärkste tatsächliche Aktivitätstreiber. */
     const opt = WT_OPT[k.art];
     let grund = 'im Bestand und aktuell nicht geschont';
     if (opt && wt != null) {
@@ -198,6 +249,11 @@ export function empfehlung(jetzt = new Date(), filter = {}) {
         else
             grund = `${Math.round(wt)} °C über dem Optimum – tiefe Zonen suchen`;
     }
+    const treiber = k.faktoren
+        .filter((f) => f.punkte > 0 && !/°C|Optimum|Raubfisch|Schwerpunkt|passt zu diesem Gewässer|^„/.test(f.text))
+        .sort((a, b) => b.punkte - a.punkte)[0];
+    if (treiber)
+        grund += ` – dazu: ${treiber.text}`;
     const zf = { art: k.art, grund };
     const { koeder, jig } = koederSatz(k.spot, k.art);
     const luecken = [];
@@ -227,7 +283,7 @@ export function empfehlung(jetzt = new Date(), filter = {}) {
         luecken.unshift('Sturm ab 35 km/h – Angeln ist heute unverantwortlich (Wellen, Blitzschlag).');
     return {
         satz, massHinweis, kandidat: k, zeit, zielfisch: zf, koeder, jig,
-        faktoren: k.faktoren, chance: k.basis, sterne: sterneAus(k.basis, sturm),
+        faktoren: k.faktoren, chance: k.basis, chanceFenster, sterne: sterneAus(k.basis, sturm),
         gesperrt: sturm ? 'sturm' : undefined,
         luecken, alternativen: besteJeOrt(liste.filter((x) => x.ort !== k.ort)).slice(0, 3),
     };
@@ -315,7 +371,11 @@ function renderPlanBody(e) {
     h += '<div class="plan-satz">' + esc(e.satz) + '</div>';
     h += '<div class="plan-chance"><span class="plan-sterne">' + sterneText(e.sterne) + '</span>'
         + '<span class="plan-proz">' + e.chance + ' %</span>'
-        + '<span class="plan-basis">Chance für ' + esc(e.kandidat.art) + ' an diesem Ort – dieselbe Zahl wie im Popup</span></div>';
+        + '<span class="plan-basis">Chance JETZT für ' + esc(e.kandidat.art) + ' – gleiche Zahl wie im Popup</span></div>';
+    if (e.chanceFenster > e.chance + 4) {
+        h += '<div class="plan-fenster">☾ Bestes Fenster heute: ' + esc(e.zeit.label) + ' ~' + hhmm(e.zeit.von)
+            + ' Uhr → dann eher <b>~' + e.chanceFenster + ' %</b></div>';
+    }
     if (e.massHinweis)
         h += '<div class="plan-mass">⚖ ' + esc(e.massHinweis) + '</div>';
     h += '<div class="plan-sec"><h4>Warum dort</h4>'
