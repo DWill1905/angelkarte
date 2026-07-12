@@ -126,6 +126,21 @@ function dimFishChips() {
     });
 }
 export const LINECOL = { gelb: '#e8b93c', gruen: '#6fae6f', allg: '#7d9bc9', sperr: '#c94f3d' };
+/* Einklappbare Karten-Legende: erklärt die Pin-Farben (nur die in der Region vorhandenen Kategorien)
+   und die Cluster. Farben stammen aus CATS – eine Quelle. */
+export function buildLegend() {
+    const el = byId('legBody');
+    if (!el)
+        return;
+    const present = [...new Set(state.SPOTS.map(s => s.cat))].filter(c => CATS[c]);
+    el.innerHTML = present.map(c => `<div class="leg-row"><span class="leg-dot" style="background:${CATS[c].color}"></span>${esc(CATS[c].label)}</div>`).join('')
+        + '<div class="leg-row"><span class="leg-cluster">5</span>mehrere Spots – reinzoomen</div>';
+}
+(function () {
+    const t = byId('legToggle'), b = byId('legBody');
+    if (t && b)
+        t.onclick = () => { const open = b.hidden; b.hidden = !open; t.setAttribute('aria-expanded', String(open)); };
+})();
 export function hotPopup(parent, h) {
     return `<span class="pop-cat" style="background:${CATS[parent.cat].color}">Hotspot</span>
     <div class="pop-title">${h.name}</div>

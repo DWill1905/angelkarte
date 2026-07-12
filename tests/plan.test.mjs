@@ -166,6 +166,19 @@ describe('Filter-Verknüpfung: Fisch-Chips grauen aus', () => {
   });
 });
 
+describe('Karten-Legende', () => {
+  test('listet die vorhandenen Kategorien + Cluster, lässt sich öffnen', async () => {
+    await loadRegion(ctx, 'mainz');
+    const body = doc.getElementById('legBody');
+    const toggle = doc.getElementById('legToggle');
+    assert.ok(body.querySelectorAll('.leg-row').length >= 2, 'zu wenige Legenden-Einträge');
+    assert.ok(body.querySelector('.leg-cluster'), 'Cluster-Erklärung fehlt');
+    assert.equal(body.hidden, true, 'Legende sollte eingeklappt starten');
+    toggle.onclick();
+    assert.equal(body.hidden, false, 'Legende öffnet nicht');
+  });
+});
+
 describe('Strömung relativ zum Mittel (Q/MQ)', () => {
   afterEach(() => { app.state.fishSel.length = 0; });
   const MITTAG = () => new Date(Date.UTC(2026, 6, 15, 12, 0));

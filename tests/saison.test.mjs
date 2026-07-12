@@ -127,20 +127,21 @@ describe('istKante – Tiefenkanten-Erkennung', () => {
 describe('Saison-Leiste im UI', () => {
   test('Leiste nennt Jahreszeit und Fokus', async () => {
     await loadRegion(ctx, 'mecklenburg');
-    const bar = doc.getElementById('saisonBar');
+    const tip = doc.getElementById('saisonTip');
+    const body = doc.getElementById('saisonBody');
     const f = fokusFor();
-    assert.ok(bar.textContent.includes(f.titel.split(' – ')[0]), 'Jahreszeit fehlt');
-    assert.ok(bar.querySelector('.saison-i'), 'Info-Icon zur Erklärung fehlt');
+    assert.ok(tip.querySelector('svg'), 'Saison-Icon im Header fehlt');
+    assert.ok(body.textContent.includes(f.titel.split(' – ')[0]), 'Jahreszeit fehlt im Tipp');
   });
 
   test('Erklärung ist zugeklappt und lässt sich öffnen', async () => {
     await loadRegion(ctx, 'mecklenburg');
     const info = doc.getElementById('saisonInfo');
-    const bar = doc.getElementById('saisonBar');
-    assert.equal(info.hidden, true, 'Erklärung sollte zunächst zu sein');
-    bar.onclick();
+    const tip = doc.getElementById('saisonTip');
+    assert.equal(info.hidden, true, 'Tipp sollte zunächst zu sein');
+    tip.onclick();
     assert.equal(info.hidden, false);
-    bar.onclick();
+    tip.onclick();
     assert.equal(info.hidden, true);
   });
 
@@ -185,7 +186,7 @@ describe('Schilf-Layer (OpenStreetMap)', () => {
     assert.match(status, /nicht abrufbar/i);
     assert.ok(!/kein Schilf|wächst kein/i.test(status),
       'Ein Netzfehler darf nicht als "hier wächst kein Schilf" verkauft werden');
-    assert.ok(c.document.getElementById('saisonBar'), 'Karte steht weiterhin');
+    assert.ok(c.document.getElementById('map'), 'Karte steht weiterhin');
     c.close();
   });
 

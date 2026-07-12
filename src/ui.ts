@@ -51,9 +51,9 @@ qsa<HTMLElement>('.tab').forEach(t=>{
    der Hotspots und des Gewässercharakters. Es werden KEINE Krautfelder oder
    Tiefenkanten als Flächen gezeichnet; dafür gibt es keine belastbaren Daten. */
 export function buildSaisonBar(): void {
-  const bar = byId('saisonBar');
+  const tip = byId('saisonTip');
   const info = byId('saisonInfo');
-  if (!bar || !info) return;
+  if (!tip || !info) return;
   const f = fokusFor();
   const ICONS: Record<string, string> = { fruehjahr: 'waves', sommer: 'sun', herbst: 'wind', winter: 'moon' };
 
@@ -61,13 +61,17 @@ export function buildSaisonBar(): void {
   const gesamt = state.SPOTS.reduce((n, s) => n + (s.hotspots || []).length, 0);
   const fokusSpots = state.SPOTS.filter((s) => spotImFokus(s, f)).length;
 
-  bar.innerHTML = ICON(ICONS[f.jahreszeit] || 'sun')
-    + '<span class="jz">' + esc(f.titel) + '</span>'
-    + '<span style="color:var(--muted)">' + esc(f.betont) + '</span>'
-    + '<span class="saison-i" title="Was heißt das?" aria-label="Erklärung anzeigen">i</span>';
+  /* Header-Icon spiegelt die Jahreszeit und öffnet den Tipp als Overlay. */
+  tip.innerHTML = ICON(ICONS[f.jahreszeit] || 'sun');
+  tip.title = 'Gewässer-Tipp: ' + f.titel;
 
   const body = byId('saisonBody') || info;
-  body.innerHTML = '<div>' + esc(f.hinweis) + '</div>'
+  body.innerHTML = '<div style="display:flex;align-items:center;gap:7px;margin-bottom:7px">'
+    + '<span class="jz">' + esc(f.titel) + '</span>'
+    + '<span style="color:var(--muted);flex:1">' + esc(f.betont) + '</span>'
+    + '<button type="button" id="saisonClose" aria-label="Schließen" style="background:none;border:0;color:var(--muted);font-size:17px;line-height:1;cursor:pointer;padding:0 2px">×</button>'
+    + '</div>'
+    + '<div>' + esc(f.hinweis) + '</div>'
     + '<div style="margin-top:6px"><b>Auf der Karte:</b> '
     + (gesamt ? aktive + ' von ' + gesamt + ' Hotspots sind jetzt in Saison (die übrigen sind gedimmt). ' : '')
     + (fokusSpots ? fokusSpots + ' Gewässer passen zum Jahreszeit-Fokus und sind hervorgehoben.' : 'Kein Gewässer dieser Region passt zum aktuellen Fokus.')
@@ -76,9 +80,8 @@ export function buildSaisonBar(): void {
     + 'Krautfelder und Tiefenkanten werden <b>nicht</b> eingezeichnet – dafür gibt es keine verlässlichen Daten. '
     + 'Die genaue Kante findest du mit Echolot, das Kraut mit der Polbrille.</div>';
 
-  bar.onclick = () => {
-    const offen = !info.hidden;
-    info.hidden = offen;
-    bar.setAttribute('aria-expanded', String(!offen));
-  };
+  const setzen = (offen: boolean) => { info.hidden = !offen; tip.setAttribute('aria-expanded', String(offen)); };
+  tip.onclick = () => setzen(info.hidden);
+  const close = byId('saisonClose');
+  if (close) (close as HTMLElement).onclick = () => setzen(false);
 }

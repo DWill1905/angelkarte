@@ -301,7 +301,7 @@ describe('Header entschlackt: Wetter im eigenen Dialog', () => {
   });
 
   test('der Header lässt rechts Platz für den Chip', () => {
-    assert.match(css, /header\{[^}]*padding-right:104px/,
+    assert.match(css, /header\{[^}]*padding-right:136px/,
       'Sonst läuft der Titel unter den Chip');
   });
 
