@@ -272,4 +272,6 @@ export interface AppState {
   fbSaving: boolean;
   trip: TripEintrag[];
   map: any;
+  /** Leaflet.markercluster-Gruppe für die Spot-Marker (null, wenn Plugin nicht geladen). */
+  cluster?: any;
 }

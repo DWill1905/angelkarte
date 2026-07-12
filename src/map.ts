@@ -16,6 +16,13 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
 }).addTo(state.map);
 L.control.scale({imperial:false}).addTo(state.map);
 
+/* Marker-Clustering (Leaflet.markercluster): bündelt dicht stehende Spots zu einer Zahl,
+   bricht beim Reinzoomen auf. Fällt sauber zurück auf die Karte, wenn das Plugin fehlt. */
+state.cluster = (typeof (L as any).markerClusterGroup === 'function')
+  ? (L as any).markerClusterGroup({ maxClusterRadius: 48, showCoverageOnHover: false, spiderfyOnMaxZoom: true, disableClusteringAtZoom: 13 })
+  : null;
+if (state.cluster) state.cluster.addTo(state.map);
+
 export function pinIcon(cat: string, fokus = false){
   const c=CATS[cat].color;
   return L.divIcon({className:''+(fokus?' pin-fokus':''),iconSize:[28,40],iconAnchor:[14,38],popupAnchor:[0,-34],
@@ -80,16 +87,28 @@ export function spotVisible(s: Spot): boolean {
   return s.arten.some(a=>arten.includes(a));
 }
 export function applyFilters(){
+  const cl = state.cluster;
+  const zeige = (m: any)=>{ if(cl){ if(!cl.hasLayer(m)) cl.addLayer(m); } else if(!state.map.hasLayer(m)) m.addTo(state.map); };
+  const verstecke = (m: any)=>{ if(cl){ if(cl.hasLayer(m)) cl.removeLayer(m); } else if(state.map.hasLayer(m)) m.remove(); };
   state.SPOTS.forEach(s=>{
     const v=spotVisible(s);
-    if(v&&!state.map.hasLayer(s.marker)) s.marker.addTo(state.map);
-    else if(!v&&state.map.hasLayer(s.marker)) s.marker.remove();
-    (s.hotMarkers||[]).forEach(m=>{
-      if(v&&!state.map.hasLayer(m)) m.addTo(state.map);
-      else if(!v&&state.map.hasLayer(m)) m.remove();
-    });
+    if(v) zeige(s.marker); else verstecke(s.marker);
+    (s.hotMarkers||[]).forEach(m=> v?zeige(m):verstecke(m));
   });
+  dimFishChips();
   renderList();
+}
+
+/* Fisch-Chips ausgrauen, für die es unter dem aktuellen Kategorie-/Ufer-Filter kein sichtbares
+   Gewässer gibt (z.B. „Hecht", wenn nur „Friedfisch" aktiv ist). Rein visuell, bleibt klickbar. */
+function dimFishChips(){
+  fishEl.querySelectorAll('.chip[data-fish]').forEach((x: HTMLElement)=>{
+    const id=x.dataset.fish||'';
+    if(!id){ x.classList.remove('dim'); return; } /* „Alle" nie ausgrauen */
+    const arten=fischArtenFor([id]);
+    const da=state.SPOTS.some(s=> state.active[s.cat] && !(state.uferOnly && s.zugang==='boot') && (s.arten||[]).some(a=>arten.includes(a)));
+    x.classList.toggle('dim', !da);
+  });
 }
 
 export const LINECOL={gelb:'#e8b93c',gruen:'#6fae6f',allg:'#7d9bc9',sperr:'#c94f3d'};

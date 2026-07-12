@@ -41,9 +41,15 @@ export async function loadRegion(r) {
     const myToken = ++state.loadToken;
     if (state.REGION)
         state.SPOTS.forEach(sp => {
-            if (sp.marker && state.map.hasLayer(sp.marker))
-                state.map.removeLayer(sp.marker);
-            (sp.hotMarkers || []).forEach(m => { if (state.map.hasLayer(m))
+            if (sp.marker) {
+                if (state.cluster)
+                    state.cluster.removeLayer(sp.marker);
+                else if (state.map.hasLayer(sp.marker))
+                    state.map.removeLayer(sp.marker);
+            }
+            (sp.hotMarkers || []).forEach(m => { if (state.cluster)
+                state.cluster.removeLayer(m);
+            else if (state.map.hasLayer(m))
                 state.map.removeLayer(m); });
         });
     state.REGION = r;

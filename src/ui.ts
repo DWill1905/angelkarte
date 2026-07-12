@@ -64,7 +64,7 @@ export function buildSaisonBar(): void {
   bar.innerHTML = ICON(ICONS[f.jahreszeit] || 'sun')
     + '<span class="jz">' + esc(f.titel) + '</span>'
     + '<span style="color:var(--muted)">' + esc(f.betont) + '</span>'
-    + '<span class="arrow">Was heißt das?</span>';
+    + '<span class="saison-i" title="Was heißt das?" aria-label="Erklärung anzeigen">i</span>';
 
   const body = byId('saisonBody') || info;
   body.innerHTML = '<div>' + esc(f.hinweis) + '</div>'

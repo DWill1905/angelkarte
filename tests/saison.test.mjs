@@ -130,7 +130,7 @@ describe('Saison-Leiste im UI', () => {
     const bar = doc.getElementById('saisonBar');
     const f = fokusFor();
     assert.ok(bar.textContent.includes(f.titel.split(' – ')[0]), 'Jahreszeit fehlt');
-    assert.ok(bar.textContent.includes('Was heißt das?'));
+    assert.ok(bar.querySelector('.saison-i'), 'Info-Icon zur Erklärung fehlt');
   });
 
   test('Erklärung ist zugeklappt und lässt sich öffnen', async () => {

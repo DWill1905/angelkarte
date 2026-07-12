@@ -1,7 +1,7 @@
 /* Angelkarte Service Worker – Offline-Modus
    Shell + Daten: stale-while-revalidate · OSM-Tiles: cache-first (max. 600)
    API-Aufrufe (Wetter, Pegel, Anthropic): immer Netz */
-const CACHE='angelkarte-shell-v54';
+const CACHE='angelkarte-shell-v55';
 const TILES='angelkarte-tiles-v1';
 const SHELL=[
   './','index.html','manifest.json',
@@ -12,7 +12,10 @@ const SHELL=[
   /* Regionsdaten */
   'data/regionen.json','data/erzgebirge.json','data/elbe.json','data/main.json','data/mecklenburg.json','data/mainz.json','data/giessen.json',
   'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css',
-  'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js'
+  'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.min.css',
+  'https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.min.css',
+  'https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.min.js'
 ];
 
 self.addEventListener('install',e=>{

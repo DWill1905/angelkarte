@@ -228,6 +228,7 @@ export const SCHON_SN: Schonzeit[] = [
   {fisch:'Bachforelle', von:[10,1], bis:[4,30], mm:'28 cm'},
   {fisch:'Regenbogenforelle', von:[10,1], bis:[4,30], mm:'25 cm (nur Fließgewässer)'},
   {fisch:'Karpfen', von:null, bis:null, mm:'40 cm'},
+  {fisch:'Schleie', von:null, bis:null, mm:'25 cm (keine Schonzeit in SN)'},
   {fisch:'Aal', von:null, bis:null, mm:'50 cm'},
   {fisch:'Barsch', von:null, bis:null, mm:'– (LVSA: max. 10/Tag)'}
 ];
