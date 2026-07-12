@@ -115,12 +115,14 @@ function dimFishChips() {
     fishEl.querySelectorAll('.chip[data-fish]').forEach((x) => {
         const id = x.dataset.fish || '';
         if (!id) {
-            x.classList.remove('dim');
+            x.classList.remove('gone', 'dim');
             return;
-        } /* „Alle" nie ausgrauen */
+        } /* „Alle" nie ausblenden */
         const arten = fischArtenFor([id]);
         const da = state.SPOTS.some(s => state.active[s.cat] && !(state.uferOnly && s.zugang === 'boot') && (s.arten || []).some(a => arten.includes(a)));
-        x.classList.toggle('dim', !da);
+        const sel = state.fishSel.includes(id);
+        x.classList.toggle('gone', !da && !sel); /* passt nicht zur Kategorie & nicht gewählt → ausblenden */
+        x.classList.toggle('dim', !da && sel); /* gewählt, aber jetzt inkompatibel → dimmen (bleibt abwählbar) */
     });
 }
 export const LINECOL = { gelb: '#e8b93c', gruen: '#6fae6f', allg: '#7d9bc9', sperr: '#c94f3d' };

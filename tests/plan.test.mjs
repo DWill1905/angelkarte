@@ -151,18 +151,18 @@ describe('Planer-Seite: Fisch- und Gewässerfilter', () => {
 describe('Filter-Verknüpfung: Fisch-Chips grauen aus', () => {
   afterEach(() => { app.state.fishSel.length = 0; });
 
-  test('Chips ohne sichtbares Gewässer werden gedimmt, sonst nicht', async () => {
+  test('inkompatible Fisch-Chips werden ausgeblendet, passende bleiben', async () => {
     await loadRegion(ctx, 'mainz');
     const alle = () => doc.querySelector('#fishChips .chip[data-fish=""]'); // „Alle" triggert applyFilters
     Object.keys(app.state.active).forEach((k) => { app.state.active[k] = false; }); // alle Kategorien aus
     alle().click();
     const chips = [...doc.querySelectorAll('#fishChips .chip[data-fish]')].filter((c) => c.dataset.fish);
     assert.ok(chips.length > 0, 'keine Fisch-Chips gefunden');
-    assert.ok(chips.every((c) => c.classList.contains('dim')), 'nicht alle Chips gedimmt, obwohl nichts sichtbar');
+    assert.ok(chips.every((c) => c.classList.contains('gone')), 'nicht alle Chips ausgeblendet, obwohl nichts sichtbar');
     Object.keys(app.state.active).forEach((k) => { app.state.active[k] = true; }); // alle an
     alle().click();
     const hecht = doc.querySelector('#fishChips .chip[data-fish="Hecht"]');
-    assert.ok(hecht && !hecht.classList.contains('dim'), 'Hecht sollte bei allen Kategorien aktiv sein');
+    assert.ok(hecht && !hecht.classList.contains('gone') && !hecht.classList.contains('dim'), 'Hecht sollte bei allen Kategorien sichtbar sein');
   });
 });
 

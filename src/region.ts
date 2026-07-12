@@ -38,7 +38,6 @@ export async function loadRegion(r){
   if(myToken!==state.loadToken) return; /* zwischenzeitlich weitergeschaltet */
   state.SPOTS=r.spots.concat(mine.map(mySpotObj));
   byId('footRegion').innerHTML=r.fusszeile||'';
-  byId('appTitle').innerHTML='Angelrevier '+(r.kurz||r.name)+' <span class="tilde">~</span>';
   buildMarkers(); buildChips(); buildBanner(); buildSchonUI(); buildRegeln(); buildFbOptions();
   if(typeof checkFang==='function') checkFang(); /* Maßcheck an neue Region anpassen */
   if(typeof sunLine==='function') sunLine();

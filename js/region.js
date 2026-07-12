@@ -59,7 +59,6 @@ export async function loadRegion(r) {
         return; /* zwischenzeitlich weitergeschaltet */
     state.SPOTS = r.spots.concat(mine.map(mySpotObj));
     byId('footRegion').innerHTML = r.fusszeile || '';
-    byId('appTitle').innerHTML = 'Angelrevier ' + (r.kurz || r.name) + ' <span class="tilde">~</span>';
     buildMarkers();
     buildChips();
     buildBanner();

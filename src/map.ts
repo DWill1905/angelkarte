@@ -104,10 +104,12 @@ export function applyFilters(){
 function dimFishChips(){
   fishEl.querySelectorAll('.chip[data-fish]').forEach((x: HTMLElement)=>{
     const id=x.dataset.fish||'';
-    if(!id){ x.classList.remove('dim'); return; } /* „Alle" nie ausgrauen */
+    if(!id){ x.classList.remove('gone','dim'); return; } /* „Alle" nie ausblenden */
     const arten=fischArtenFor([id]);
     const da=state.SPOTS.some(s=> state.active[s.cat] && !(state.uferOnly && s.zugang==='boot') && (s.arten||[]).some(a=>arten.includes(a)));
-    x.classList.toggle('dim', !da);
+    const sel=state.fishSel.includes(id);
+    x.classList.toggle('gone', !da && !sel); /* passt nicht zur Kategorie & nicht gewählt → ausblenden */
+    x.classList.toggle('dim', !da && sel);   /* gewählt, aber jetzt inkompatibel → dimmen (bleibt abwählbar) */
   });
 }
 

@@ -25,7 +25,8 @@ describe('Regionen laden', () => {
 
   test('der Titel folgt der Region', async () => {
     await loadRegion(ctx, 'elbe');
-    const titel = doc.getElementById('appTitle').textContent;
+    const sel = doc.getElementById('regionSel');
+    const titel = sel.options[sel.selectedIndex]?.textContent || sel.value;
     assert.match(titel, /Elbe|Magdeburg/);
   });
 });
