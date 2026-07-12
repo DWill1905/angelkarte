@@ -208,16 +208,18 @@ describe('Bug: Fangliste stand nach Backup-Import auf dem Kopf', () => {
 });
 
 describe('Bug: Empfehlung schlug Arten ohne Schonzeitdaten vor', () => {
-  test('eine Art ohne Schonzeit-/Maßdaten wird nie empfohlen', async () => {
-    await loadRegion(ctx, 'mecklenburg');
-    app.state.PEGEL = { value: 100, station: 'X', dist: 3, wt: 16 };
+  test('eine Art ohne Schonzeit-/Maßdaten wird nur mit Prüf-Hinweis empfohlen', async () => {
+    const mittag = new Date(Date.UTC(2026, 6, 15, 12, 0));
     for (const r of app.state.REGIONS) {
       await loadRegion(ctx, r.id);
-      const e = app.empfehlung();
+      app.state.PEGEL = { value: 100, station: 'X', dist: 3, wt: 16 };
+      const e = app.empfehlung(mittag);
       if (!e?.zielfisch) continue;
       const sc = app.state.SCHON.find((x) => x.fisch === e.zielfisch.art);
-      assert.ok(sc, `${r.id}: "${e.zielfisch.art}" empfohlen, obwohl keine Schonzeitdaten vorliegen – `
-        + 'der Maßcheck sagt für diesen Fall "KEINE Freigabe"');
+      if (!sc) {
+        assert.ok(e.luecken.some((l) => /keine Schonzeit\/kein Mindestmaß|Erlaubnisschein/.test(l)),
+          `${r.id}: "${e.zielfisch.art}" ohne Schonzeitdaten empfohlen, aber ohne Prüf-Hinweis`);
+      }
     }
   });
 
@@ -227,10 +229,14 @@ describe('Bug: Empfehlung schlug Arten ohne Schonzeitdaten vor', () => {
     const sicherung = app.state.SCHON.map((s) => ({ ...s }));
     app.state.SCHON.forEach((s) => { s.von = [1, 1]; s.bis = [12, 31]; });
 
-    /* Seit dem Umbau werden geschonte Arten gar nicht erst zu Kandidaten.
-       Bleibt keine offene Art übrig, gibt es keine Empfehlung – der Dialog sagt das. */
+    /* Sind alle EINGETRAGENEN Arten geschont, darf höchstens noch eine Art OHNE Schonzeit-Eintrag
+       übrig bleiben (die gilt als ganzjährig offen) – nie eine geschonte. */
     const e = app.empfehlung();
-    assert.equal(e, null, 'Es darf keine Empfehlung geben, wenn alles geschont ist');
+    if (e) {
+      const sc = app.state.SCHON.find((x) => x.fisch === e.kandidat.art);
+      assert.ok(!sc, `nur eine Art ohne Schonzeit-Eintrag darf übrig bleiben, war „${e.kandidat.art}"`);
+      assert.ok(e.luecken.some((l) => /Schonzeit|Erlaubnisschein/.test(l)), 'Prüf-Hinweis fehlt');
+    }
 
     app.state.SCHON.forEach((s, i) => { s.von = sicherung[i].von; s.bis = sicherung[i].bis; });
   });

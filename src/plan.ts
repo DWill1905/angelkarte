@@ -39,8 +39,7 @@ export interface Zielfisch {
 export function zielfischFor(s: Spot, wt: number | null): Zielfisch | null {
   const erlaubt = (s.arten || []).filter((a) => {
     const sc = state.SCHON.find((x) => x.fisch === a);
-    if (!sc) return false; /* keine Daten -> nicht empfehlen */
-    return !inSchonzeit(sc);
+    return !sc || !inSchonzeit(sc); /* kein Eintrag = keine hinterlegte Schonzeit -> beangelbar */
   });
   const raub = erlaubt.filter((a) => RAUB.includes(a));
   const kandidaten = raub.length ? raub : erlaubt;
@@ -186,10 +185,9 @@ export function kandidaten(jetzt: Date = new Date(), filter: PlanFilter = {}): K
     .forEach((s) => {
     const orte: Array<Hotspot | null> = (s.hotspots || []).length ? [...(s.hotspots as Hotspot[])] : [null];
 
-    /* Nur Arten mit Schonzeit-/Maßdaten – die Rechtslage muss bekannt sein.
-       Bei aktivem Filter zusätzlich auf die gewählten Zielfische eingegrenzt. */
+    /* Alle gelisteten Arten betrachten; die Schonzeit-Ausnahme greift unten über b.geschont.
+       Arten ohne Schonzeit-Eintrag gelten als ganzjährig beangelbar (Hinweis dazu in der Empfehlung). */
     const arten = (s.arten || [])
-      .filter((a) => state.SCHON.some((x) => x.fisch === a))
       .filter((a) => !nurArten.length || nurArten.includes(a));
 
     orte.forEach((h) => {
@@ -362,6 +360,9 @@ export function empfehlung(jetzt: Date = new Date(), filter: PlanFilter = {}): E
   const { koeder, jig } = koederSatz(k.spot, k.art);
 
   const luecken: string[] = [];
+  if (!state.SCHON.some((x) => x.fisch === k.art)) {
+    luecken.push(`Für ${k.art} ist keine Schonzeit/kein Mindestmaß hinterlegt – vor Entnahme den Erlaubnisschein prüfen.`);
+  }
   if (!state.WX) luecken.push('Kein Wetter verfügbar (offline?) – Wind und Luftdruck fließen nicht ein.');
   if (!state.PEGEL) luecken.push('Kein Pegel/Wassertemperatur in Reichweite – Zielfischwahl beruht nur auf Bestand und Saison.');
   if (k.spot.zugang === 'boot') luecken.push('Dieses Gewässer ist praktisch nur vom Boot zu beangeln.');

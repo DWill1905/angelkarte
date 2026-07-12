@@ -48,6 +48,10 @@ export const WT_OPT = {
     Barbe: [14, 22],
     Döbel: [12, 22],
     Quappe: [1, 8],
+    Brachse: [16, 24],
+    Rotauge: [14, 22],
+    Rotfeder: [16, 24],
+    Karausche: [16, 26],
 };
 const PROFILE = {
     Hecht: { rutePlus: 3, koeder: 'Gummi 12–19 cm, Swimbaits bis 25 cm, große Spinner/Blinker', stahl: true },

@@ -562,6 +562,18 @@
  ],
  "schon": [
   {
+   "fisch": "Äsche",
+   "von": [
+    1,
+    1
+   ],
+   "bis": [
+    6,
+    15
+   ],
+   "mm": "35 cm (SächsFischVO)"
+  },
+  {
    "fisch": "Hecht",
    "von": [
     2,

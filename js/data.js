@@ -220,6 +220,7 @@ export const SPOTS_SN = [
 ];
 /* Schonzeiten Sachsen (SächsFischVO 2022) – [Art, von(M,T), bis(M,T), Mindestmaß] */
 export const SCHON_SN = [
+    { fisch: 'Äsche', von: [1, 1], bis: [6, 15], mm: '35 cm (SächsFischVO)' },
     { fisch: 'Hecht', von: [2, 1], bis: [4, 30], mm: '50 cm' },
     { fisch: 'Zander', von: [2, 1], bis: [5, 31], mm: '50 cm' },
     { fisch: 'Bachforelle', von: [10, 1], bis: [4, 30], mm: '28 cm' },
@@ -620,6 +621,7 @@ export const SPOTS_HE = [
 ];
 /* Hessen HFischV vom 14.04.2023 (Gesetz- und Verordnungsblatt): Entnahmefenster für viele Arten, Zander ohne Schonzeit */
 export const SCHON_HE = [
+    { fisch: 'Äsche', von: [3, 1], bis: [5, 15], mm: '30 cm (HFischV)' },
     { fisch: 'Hecht', von: [2, 1], bis: [4, 15], mm: 'Entnahmefenster 50–90 cm' },
     { fisch: 'Zander', von: null, bis: null, mm: 'ab 50 cm (keine Schonzeit – in HE gebietsfremd)' },
     { fisch: 'Barbe', von: [5, 1], bis: [6, 30], mm: 'Entnahmefenster 40–60 cm' },
@@ -668,7 +670,7 @@ export const REGION_RLP = { id: 'mainz', geprueft: '2026-07', name: 'Rhein & Rhe
 /* ===== Region Elbe / Magdeburg (Sachsen-Anhalt) – recherchiert 07/2026 ===== */
 export const SPOTS_EL = [
     { name: 'Buhnenfeld Herrenkrug', wasser: 'fluss', verif: 'B', nr: 'Magdeburger Anglerverein · Elbe rechtes Ufer', cat: 'raub',
-        arten: ['Zander', 'Hecht', 'Wels', 'Rapfen', 'Barsch', 'Karpfen', 'Aal', 'Brasse'],
+        arten: ['Zander', 'Hecht', 'Wels', 'Rapfen', 'Barsch', 'Karpfen', 'Aal', 'Brachse'],
         lat: 52.1535, lng: 11.6720,
         fisch: 'Zander, Hecht, Wels, Rapfen, Barsch, Karpfen, Aal, Brasse',
         methode: 'Klassisches Magdeburger Buhnenfeld am Herrenkrug – der Elb-Zanderhotspot schlechthin. Vom Buhnenkopf die Strömungskante mit Gummifisch (Kopyto 10–12 cm, Bleikopf 10–20 g) beangeln; Kehrströmung und Prallhang sind die Standplätze. In trübem Sommerwasser beißt Zander sogar mittags.',
@@ -690,7 +692,7 @@ export const SPOTS_EL = [
             { name: 'Erste/letzte Buhne am Alte-Elbe-Abzweig', saison: 'Dämmerung, Zander', lat: 52.1050, lng: 11.6770, tipp: 'Die Rand-Buhnen eines Feldes und die Altarm-Mündung sind Top-Ansitzplätze mit Köderfisch. Lage grob – Buhnenreihe abgehen.' }
         ], warn: true, zugang: 'ufer' },
     { name: 'Rothenseer Abstiegskanal', wasser: 'kanal', verif: 'B', nr: 'Magdeburger Anglerverein · Kanal', cat: 'raub',
-        arten: ['Zander', 'Barsch', 'Hecht', 'Weißfisch'],
+        arten: ['Zander', 'Barsch', 'Hecht', 'Rotauge'],
         lat: 52.2057, lng: 11.6875,
         fisch: 'Zander, Barsch, Hecht, Weißfisch',
         methode: 'Kanal am Wasserstraßenkreuz – ganzjährig für kapitale Zander gut, auch im Winter. Ruhigeres Wasser als der Hauptstrom, gut mit Gummi und Dropshot an den Kanten und Kanalwänden zu beangeln.',
@@ -699,7 +701,7 @@ export const SPOTS_EL = [
         kartenLinks: [{ label: 'Magdeburger Anglerverein', url: 'https://www.magdeburger-anglerverein.de' }, { label: 'hejfish (online)', url: 'https://www.hejfish.com' }],
         hotspots: [], warn: true, zugang: 'ufer' },
     { name: 'Industriehafen Magdeburg', wasser: 'kanal', verif: 'B', nr: 'Magdeburger Anglerverein · Hafenbecken', cat: 'raub',
-        arten: ['Zander', 'Barsch', 'Hecht', 'Weißfisch'],
+        arten: ['Zander', 'Barsch', 'Hecht', 'Rotauge'],
         lat: 52.1648, lng: 11.6688,
         fisch: 'Zander, Barsch, Hecht, Weißfisch',
         methode: 'Hafenbecken mit Zander, Barsch und Hecht. Bei Hochwasser im Hauptstrom eine der besten Alternativen – an den Hafenausfahrten stauen sich dann die Fische. Gummiköder erste Wahl.',
@@ -708,7 +710,7 @@ export const SPOTS_EL = [
         kartenLinks: [{ label: 'Magdeburger Anglerverein', url: 'https://www.magdeburger-anglerverein.de' }, { label: 'hejfish (online)', url: 'https://www.hejfish.com' }],
         hotspots: [], warn: true, zugang: 'ufer' },
     { name: 'Zollelbe Magdeburg', wasser: 'kanal', verif: 'B', nr: 'Magdeburger Anglerverein · Nebenarm', cat: 'raub',
-        arten: ['Barsch', 'Zander', 'Hecht', 'Weißfisch'],
+        arten: ['Barsch', 'Zander', 'Hecht', 'Rotauge'],
         lat: 52.1305, lng: 11.6496,
         fisch: 'Barsch (im Herbst massenhaft), Zander, Hecht, Weißfisch',
         methode: 'Strömungsberuhigter Nebenarm mitten in der Stadt, gut zu Fuß/mit Rad erreichbar. Im Herbst treten Barsche in großen Mengen auf – kleine Spinner und Gummiköder. Gute Alternative bei starker Strömung im Hauptstrom.',
@@ -717,7 +719,7 @@ export const SPOTS_EL = [
         kartenLinks: [{ label: 'Magdeburger Anglerverein', url: 'https://www.magdeburger-anglerverein.de' }, { label: 'hejfish (online)', url: 'https://www.hejfish.com' }],
         hotspots: [], warn: true, zugang: 'ufer' },
     { name: 'Buhnenfelder Rothensee–Rogätz', wasser: 'fluss', verif: 'B', nr: 'Elbe · zusammenhängende Buhnenfelder nördl. Magdeburg', cat: 'raub',
-        arten: ['Zander', 'Hecht', 'Barsch', 'Aal', 'Rapfen', 'Wels', 'Brasse'],
+        arten: ['Zander', 'Hecht', 'Barsch', 'Aal', 'Rapfen', 'Wels', 'Brachse'],
         lat: 52.2600, lng: 11.7150,
         fisch: 'Zander, Hecht, Barsch, Aal, Rapfen, Wels, dicke Brassen/Alande',
         methode: 'Lange, zusammenhängende Buhnenfelder von Magdeburg-Rothensee bis Rogätz – „der ideale Angelplatz auf alles, was Flossen trägt". Strecke machen, aber jede Buhne gründlich abfischen (Strömungskante, Kehrströmung, Buhnenkopf, Prallhang). Zander an der Kante, Hecht am Prallhang, Rapfen am Kopf.',
@@ -760,7 +762,7 @@ export const REGION_EL = { id: 'elbe', geprueft: '2026-07', name: 'Elbe / Magdeb
 /* ===== Region Main / Frankfurt–Offenbach (Hessen) – recherchiert 07/2026 ===== */
 export const SPOTS_MA = [
     { name: 'Main – Niddamündung Höchst', wasser: 'fluss', verif: 'B', nr: 'Frankfurter Zunft-/Stadtstrecke · linksmainisch', cat: 'raub',
-        arten: ['Zander', 'Wels', 'Barsch', 'Rapfen', 'Aal', 'Karpfen', 'Brasse'],
+        arten: ['Zander', 'Wels', 'Barsch', 'Rapfen', 'Aal', 'Karpfen', 'Brachse'],
         lat: 50.09941, lng: 8.55165,
         fisch: 'Zander, Wels, Barsch, Rapfen, Aal, Karpfen, Brassen',
         methode: 'Mündung der Nidda in den Main – klassische Strömungskante mit sandig-steinigem Grund, laut Praxisberichten einer der besten Zanderbereiche der Frankfurter Strecke. Gummifisch an der Kante, nachts Pose oder Grund mit totem Köderfisch nah am befestigten Ufer.',
@@ -771,7 +773,7 @@ export const SPOTS_MA = [
             { name: 'Kante westlich der Niddamündung', saison: 'Herbst/Winter, Zander', lat: 50.0990, lng: 8.5490, tipp: 'Westlich der Mündung liegen laut Praxisberichten viele sandig-steinige Zanderspots. Kanten mit Gummi absuchen. Lage grob.' }
         ], warn: true, zugang: 'ufer' },
     { name: 'Main – Gerbermühle / Frankfurt-Süd', wasser: 'fluss', verif: 'B', nr: 'Frankfurter Strecke · Stadtstrecke', cat: 'raub',
-        arten: ['Zander', 'Barsch', 'Wels', 'Aal', 'Karpfen', 'Brasse', 'Rotauge'],
+        arten: ['Zander', 'Barsch', 'Wels', 'Aal', 'Karpfen', 'Brachse', 'Rotauge'],
         lat: 50.10600, lng: 8.72158,
         fisch: 'Zander, Barsch, Wels, Aal, Karpfen, Brassen, Rotaugen',
         methode: 'Stadtstrecke mit befestigten Ufern und Spundwänden – nachts kommen Zander dicht heran. Vertikal/Dropshot an der Spundwand, Pose nachts ufernah. Steiniger Grund = Hängergefahr, Jigkopf-Vorrat einpacken.',

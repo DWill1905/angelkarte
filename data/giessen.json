@@ -288,6 +288,18 @@
  ],
  "schon": [
   {
+   "fisch": "Äsche",
+   "von": [
+    3,
+    1
+   ],
+   "bis": [
+    5,
+    15
+   ],
+   "mm": "30 cm (HFischV)"
+  },
+  {
    "fisch": "Hecht",
    "von": [
     2,

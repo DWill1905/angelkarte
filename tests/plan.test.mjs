@@ -674,13 +674,14 @@ describe('Konsistenz: Empfehlung und Spotbewertung sagen dasselbe', () => {
 
   test('der Zielfisch wechselt mit der Wassertemperatur', async () => {
     await loadRegion(ctx, 'elbe');
+    const mittag = new Date(Date.UTC(2026, 6, 15, 12, 0)); // fest: Temperatur-Logik, nicht Tageszeit
     app.state.WX = { temp: 5, wind: 8, dirDeg: 0, dir: 'N', press: 1015, trendVal: -2 };
     app.state.PEGEL = { value: 180, station: 'MD', dist: 2, wt: 5 };
-    const kalt = app.empfehlung();
+    const kalt = app.empfehlung(mittag);
 
     app.state.WX = { temp: 24, wind: 8, dirDeg: 0, dir: 'N', press: 1015, trendVal: -2 };
     app.state.PEGEL = { value: 180, station: 'MD', dist: 2, wt: 21 };
-    const warm = app.empfehlung();
+    const warm = app.empfehlung(mittag);
 
     assert.notEqual(kalt.kandidat.art, warm.kandidat.art,
       'Vorher wurde der Ort artblind gewählt und die Art erst danach bestimmt');
@@ -770,8 +771,8 @@ describe('Determinismus und Alternativen', () => {
       await loadRegion(ctx, r.id);
       app.kandidaten().forEach((k) => {
         const sc = app.state.SCHON.find((x) => x.fisch === k.art);
-        assert.ok(sc, `${r.id}: ${k.art} ohne Schonzeitdaten als Kandidat`);
-        assert.equal(app.inSchonzeit(sc), false, `${r.id}: ${k.art} ist geschont`);
+        /* Arten ohne Eintrag sind erlaubt (keine hinterlegte Schonzeit); Eingetragene dürfen nicht geschont sein. */
+        if (sc) assert.equal(app.inSchonzeit(sc), false, `${r.id}: ${k.art} ist geschont`);
       });
     }
   });

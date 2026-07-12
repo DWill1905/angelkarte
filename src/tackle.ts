@@ -49,6 +49,10 @@ export const WT_OPT: Record<string, [number, number]> = {
   Barbe: [14, 22],
   Döbel: [12, 22],
   Quappe: [1, 8],
+  Brachse: [16, 24],
+  Rotauge: [14, 22],
+  Rotfeder: [16, 24],
+  Karausche: [16, 26],
 };
 
 /* ---------- Zielfisch-Profile ---------- */
