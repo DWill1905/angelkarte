@@ -246,15 +246,10 @@ describe('Bug: Gummifisch am Jigkopf für Friedfische', () => {
   test('Karpfen bekommt keinen Jigkopf empfohlen', async () => {
     await loadRegion(ctx, 'mecklenburg');
     app.state.PEGEL = { value: 100, station: 'X', dist: 3, wt: 18 };
-    const sicherung = app.state.SCHON.map((s) => ({ ...s }));
-    app.state.SCHON.forEach((s) => { if (s.fisch !== 'Karpfen') { s.von = [1, 1]; s.bis = [12, 31]; } else { s.von = null; s.bis = null; } });
-
-    const e = app.empfehlung();
+    const e = app.empfehlung(new Date(Date.UTC(2026, 6, 15, 12, 0)), { fisch: ['Karpfen'] });
     assert.equal(e.zielfisch.art, 'Karpfen');
     assert.ok(!/Jigkopf/.test(e.satz), 'Friedfisch am Jigkopf: ' + e.satz);
     assert.match(e.satz, /Boilie|Mais|Feeder/);
-
-    app.state.SCHON.forEach((s, i) => { s.von = sicherung[i].von; s.bis = sicherung[i].bis; });
   });
 });
 

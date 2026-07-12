@@ -1,6 +1,8 @@
 /* Karten-Kern: Leaflet-Instanz früh initialisieren (Reihenfolge-kritisch) */
 import { state } from './state.js';
-state.map = L.map('map');
+/* closePopupOnClick:false – sonst schließt markercluster den Marker-Klick als Karten-Klick
+   durch und das gerade geöffnete Popup verschwindet sofort wieder. */
+state.map = L.map('map', { closePopupOnClick: false });
 state.map.setView([51.0, 10.0], 6); /* neutrale Startansicht (Deutschland), bis Region lädt */
 /* iOS/iPad-Absicherung: Leaflet die Containergröße nach Layout/Load neu messen lassen,
    sonst kann die Karte auf Safari mit 0 Höhe unsichtbar bleiben. */
