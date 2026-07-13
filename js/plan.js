@@ -390,18 +390,22 @@ function renderPlanBody(e) {
     let h = '';
     if (e.gesperrt === 'sturm')
         h += '<div class="rate-sturm">⚠ Sturm – Angeln ist heute unverantwortlich.</div>';
-    h += '<div class="plan-satz">' + esc(e.satz) + '</div>';
-    h += '<div class="plan-chance"><span class="plan-sterne">' + sterneText(e.sterne) + '</span>'
-        + '<span class="plan-proz">' + e.chance + ' %</span>'
-        + '<span class="plan-basis">Chance JETZT für ' + esc(e.kandidat.art) + ' · Datenbasis '
-        + e.kandidat.bewertet + '/' + e.kandidat.gesamt + ' Signale</span></div>';
+    /* KPIs zuerst: die Chance ist das wichtigste Entscheidungskriterium. */
+    h += '<div class="plan-hero">'
+        + '<div class="plan-kpi"><span class="plan-proz">' + e.chance + '\u202F%</span>'
+        + '<span class="plan-sterne">' + sterneText(e.sterne) + '</span></div>'
+        + '<div class="plan-basis">Chance jetzt für ' + esc(e.kandidat.art) + ' · Datenbasis '
+        + e.kandidat.bewertet + '/' + e.kandidat.gesamt + ' Signale</div>'
+        + '</div>';
     if (e.kandidat.gesamt && e.kandidat.bewertet / e.kandidat.gesamt < 0.8) {
         h += '<div class="plan-luecke">⚠ Dünne Datenlage – die Chance ist bewusst zur Mitte gedämpft; was fehlt, steht unter „Was ich nicht weiß".</div>';
     }
     if (e.chanceFenster > e.chance + 4) {
         h += '<div class="plan-fenster">☾ Bestes Fenster heute: ' + esc(e.zeit.label) + ' ~' + hhmm(e.zeit.von)
-            + ' Uhr → dann eher <b>~' + e.chanceFenster + ' %</b></div>';
+            + ' Uhr → dann eher <b>~' + e.chanceFenster + '\u202F%</b></div>';
     }
+    /* Danach der generierte Detail-Tipp (Köder, Ort, Zeit). */
+    h += '<div class="plan-satz">' + esc(e.satz) + '</div>';
     if (e.massHinweis)
         h += '<div class="plan-mass">⚖ ' + esc(e.massHinweis) + '</div>';
     if (e.stroemung)
@@ -423,7 +427,7 @@ function renderPlanBody(e) {
     }
     if (e.alternativen.length) {
         h += '<div class="plan-sec"><h4>Alternativen</h4>'
-            + e.alternativen.map((a) => '<div class="plan-alt">' + esc(a.ort) + ' · ' + esc(a.art) + ' <b>' + a.basis + ' %</b></div>').join('')
+            + e.alternativen.map((a) => '<div class="plan-alt">' + esc(a.ort) + ' · ' + esc(a.art) + ' <b>' + a.basis + '\u202F%</b></div>').join('')
             + '</div>';
     }
     h += '<div class="verif" style="margin-top:12px">Eine begründete Vorauswahl aus Saison, Wind, Luftdruck, '
