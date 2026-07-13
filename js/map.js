@@ -86,25 +86,28 @@ export function spotVisible(s) {
 }
 export function applyFilters() {
     const cl = state.cluster;
-    const zeige = (m) => { if (cl) {
-        if (!cl.hasLayer(m))
-            cl.addLayer(m);
+    /* Linien-Spots (Polylines) nie in den Cluster – markercluster ist für Punkt-Marker;
+       Polylines im Cluster lassen ihr Popup sofort wieder zuklappen. */
+    const zeige = (m, ziel) => { if (ziel) {
+        if (!ziel.hasLayer(m))
+            ziel.addLayer(m);
     }
     else if (!state.map.hasLayer(m))
         m.addTo(state.map); };
-    const verstecke = (m) => { if (cl) {
-        if (cl.hasLayer(m))
-            cl.removeLayer(m);
+    const verstecke = (m, ziel) => { if (ziel) {
+        if (ziel.hasLayer(m))
+            ziel.removeLayer(m);
     }
     else if (state.map.hasLayer(m))
         m.remove(); };
     state.SPOTS.forEach(s => {
         const v = spotVisible(s);
+        const ziel = (cl && !s.line) ? cl : null; /* Punkt-Spot -> Cluster, Linie -> direkt auf Karte */
         if (v)
-            zeige(s.marker);
+            zeige(s.marker, ziel);
         else
-            verstecke(s.marker);
-        (s.hotMarkers || []).forEach(m => v ? zeige(m) : verstecke(m));
+            verstecke(s.marker, ziel);
+        (s.hotMarkers || []).forEach(m => v ? zeige(m, cl) : verstecke(m, cl)); /* Hotspots sind Punkte -> Cluster */
     });
     dimFishChips();
     renderList();

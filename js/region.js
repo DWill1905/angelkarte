@@ -44,12 +44,11 @@ export async function loadRegion(r) {
             if (sp.marker) {
                 if (state.cluster)
                     state.cluster.removeLayer(sp.marker);
-                else if (state.map.hasLayer(sp.marker))
+                if (state.map.hasLayer(sp.marker))
                     state.map.removeLayer(sp.marker);
             }
             (sp.hotMarkers || []).forEach(m => { if (state.cluster)
-                state.cluster.removeLayer(m);
-            else if (state.map.hasLayer(m))
+                state.cluster.removeLayer(m); if (state.map.hasLayer(m))
                 state.map.removeLayer(m); });
         });
     state.REGION = r;
