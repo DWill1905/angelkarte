@@ -120,20 +120,23 @@ function zugangAus(s: Spot, w: Wasser): string {
 }
 
 /** Saisonale Farbwahl, abhängig von der typischen Wassertrübung. */
-function farbenAus(w: Wasser): Farben {
-  const truebe = w === 'fluss' || w === 'kanal';
+function farbenAus(w: Wasser, trueb?: boolean): Farben {
+  const fluss = w === 'fluss' || w === 'kanal';
+  const truebe = fluss || !!trueb;
   if (truebe) {
     return {
-      fruehjahr: 'Grelle Signalfarben (Firetiger, Gelb) – Schmelzwasser trübt zusätzlich',
-      sommer: 'Grün/Weiß, Grundeldekore – die Hauptbeute ist grundelbraun gemustert',
+      fruehjahr: 'Grelle Signalfarben (Firetiger, Chartreuse) – kaltes, trübes Wasser',
+      sommer: fluss
+        ? 'Grün/Weiß, Grundeldekore – die Hauptbeute ist grundelbraun gemustert'
+        : 'Schockfarben (Firetiger, Weiß, Pink); große Schaufelschwänze für die Druckwelle',
       herbst: 'Weiß, Perlmutt, UV-Akzente – kürzeres Licht, Räuber jagen auf Sicht',
-      winter: 'Dunkle, natürliche Töne (Braun, Motoroil) bei klarerem Winterwasser',
+      winter: 'Dunkle Silhouette (Schwarz, Motoroil) – stärkster Kontrast gegen das Oberlicht',
     };
   }
   return {
     fruehjahr: 'Natürlich mit Kontrastpunkt (Barschdekor, roter Kopf) – klares Wasser nach der Eiszeit',
-    sommer: 'Naturtöne (Rotauge, Barsch); bei Algenblüte gern Weiß',
-    herbst: 'Kontrastreich (Feuertiger, Orange) – Beutefische stehen tiefer, Sicht nimmt ab',
+    sommer: 'Naturdekore (Rotauge, Barsch, Ukelei), Green Pumpkin/Motoroil – lautlos, keine Rasseln',
+    herbst: 'Gedeckte Naturtöne mit dezentem Akzent – Sicht nimmt ab, aber im Klaren kein Grellton',
     winter: 'Klarwasser: dezente Naturtöne, kleine Köder, sehr langsam',
   };
 }
@@ -156,7 +159,7 @@ export function tackleFor(s: Spot): { t: Tackle; kuratiert: boolean } {
       jig: jigAus(w, s.tiefe),
       vorfach: vorfachAus(arten),
       zugang: zugangAus(s, w),
-      farben: farbenAus(w),
+      farben: farbenAus(w, s.trueb),
     },
   };
 }
@@ -194,6 +197,7 @@ export function tackleHtml(s: Spot): string {
   }
 
   const jetzt = saison();
+  const w = wasserTyp(s);
   const LABEL: Record<keyof Farben, string> = { fruehjahr: 'Frühjahr', sommer: 'Sommer', herbst: 'Herbst', winter: 'Winter' };
   const SDOT: Record<keyof Farben, string> = { fruehjahr: '#6fae6f', sommer: '#e8b93c', herbst: '#d98a3d', winter: '#6ea8c4' };
   const row = (k: string, v: string) => `<div class="tk-row"><span class="k">${k}</span><span>${esc(v)}</span></div>`;
@@ -209,19 +213,18 @@ export function tackleHtml(s: Spot): string {
   if (s.tackle) {
     const t = s.tackle;
     inner = row('Rute', t.rute) + row('Köder', t.koeder) + row('Jigkopf', t.jig) + row('Vorfach', t.vorfach)
-      + (t.farben ? farbBlock(t.farben) : '')
+      + farbBlock(farbenAus(w, s.trueb))
       + `<div class="tk-free"><b>Boot / Ufer</b> ${esc(t.zugang)}</div>`
       + (t.warum ? `<div class="tk-free"><b>Warum</b> ${esc(t.warum)}</div>` : '')
       + '<div class="tk-verif">✎ Kuratiert für dieses Gewässer – Erfahrungswerte, kein Gesetz</div>';
   } else {
-    const w = wasserTyp(s);
     const arten = s.arten || [];
     const kunst = arten.filter((a) => KUNST.has(a));
     const natur = arten.filter((a) => !KUNST.has(a));
     if (kunst.length) {
       inner += '<div class="tk-grp"><div class="tk-grp-h">🎣 Raubfisch · Kunstköder / Spinnfischen</div>'
         + row('Rute', ruteAus(kunst, w)) + row('Köder', koederVon(kunst)) + row('Jigkopf', jigAus(w, s.tiefe))
-        + row('Vorfach', vorfachAus(kunst)) + farbBlock(farbenAus(w)) + '</div>';
+        + row('Vorfach', vorfachAus(kunst)) + farbBlock(farbenAus(w, s.trueb)) + '</div>';
     }
     if (natur.length) {
       inner += '<div class="tk-grp"><div class="tk-grp-h">🪱 Fried-/Grundfisch · Naturköder</div>'

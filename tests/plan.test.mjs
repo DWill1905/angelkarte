@@ -638,7 +638,7 @@ describe('Die Signale wirken tatsächlich', () => {
     await loadRegion(ctx, 'elbe');
     app.state.WX = { temp: 24, wind: 5, dirDeg: 0, dir: 'N', press: 1015, trendVal: 0 };
     app.state.PEGEL = { value: 180, station: 'MD', dist: 2, wt: 21 };
-    const e = app.empfehlung();
+    const e = app.empfehlung(new Date(Date.UTC(2026, 6, 15, 12, 0)));
     assert.equal(e.zielfisch.art, 'Zander', 'Bei 21 °C ist Hecht über dem Optimum');
   });
 

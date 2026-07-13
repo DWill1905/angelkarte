@@ -232,7 +232,7 @@ export const SCHON_SN = [
 ];
 /* ============ Region: Mecklenburgische Kleinseenplatte (recherchiert 07/2026) ============ */
 export const SPOTS_MV = [
-    { name: 'Woblitzsee', wasser: 'see-flach', zugang: 'ufer',
+    { name: 'Woblitzsee', wasser: 'see-flach', trueb: true, zugang: 'ufer',
         rig: 'Stahl- oder Titanvorfach Pflichtprogramm (Hechtdichte!), H-Rute 40–80 g fürs Zanderjiggen, Echolot fürs Boot.', nr: 'Obere Havel', cat: 'raub', arten: ['Hecht', 'Zander', 'Barsch', 'Aal', 'Karpfen', 'Schleie', 'Brachse'],
         lat: 53.3001, lng: 13.0102,
         fisch: 'Hecht, Zander, Barsch, Aal, Karpfen, Schleie, Brachse (14 gemeldete Arten)',
@@ -247,7 +247,7 @@ export const SPOTS_MV = [
             { name: 'Kammerkanal-Mündung', saison: 'Jun–Aug, nachts', lat: 53.3090, lng: 13.0280, tipp: 'Kanal Richtung Zierker See – bekannt für seinen Welsbestand. Abends raubende Barsche entlang der Stege. Lage ungefähr.' },
             { name: 'Ufer: Stadtufer/Havel-Auslauf Wesenberg', saison: 'Mai–Okt, abends', lat: 53.2890, lng: 13.0010, tipp: 'Zweiter schilffreier Uferzugang (Luftbild): Stadtufer und Hafenumfeld Wesenberg. Aal-Strecke am Abend, Barsch an den Stegen. Achtung: 100 m Mindestabstand zur Schleuse!' }
         ], warn: false },
-    { name: 'Zotzensee', wasser: 'see-flach', zugang: 'boot',
+    { name: 'Zotzensee', wasser: 'see-flach', trueb: true, zugang: 'boot',
         rig: 'Hechtcombo 30–80 g, Stahlvorfach, Weedless-Montagen fürs Kraut – Boot ist Pflicht.', nr: 'Obere Havel', cat: 'raub', arten: ['Hecht', 'Barsch', 'Aal', 'Schleie'],
         lat: 53.2437, lng: 12.8125,
         fisch: 'Hecht, Barsch, Aal, Schleie',
@@ -277,7 +277,7 @@ export const SPOTS_MV = [
         kartenLinks: [{ label: 'Fischereihof Wesenberg', url: 'https://fischerei-wesenberg.de' }],
         tackle: { rute: 'Jigrute 15–50 g für Zander, dazu H-Rute 40–80 g für Hecht', koeder: 'Zander: No-Action-Shad 10–14 cm; Hecht: Gummi 15–19 cm', jig: '10–21 g an den Kanten, vertikal 15–28 g', vorfach: 'FC 0,40 mm für Zander, Titan/Stahl bei gezieltem Hechtangeln', zugang: 'Boot – die Zanderkanten liegen abseits des Ufers', farben: { fruehjahr: 'Naturdekore mit Kontrastpunkt (Barsch, roter Kopf) – klares Nachwinterwasser', sommer: 'Naturtöne (Rotauge, Barsch); über Kraut gern Weiß/Perlmutt', herbst: 'Kontrastreich (Feuertiger, Orange) – Hechte fressen sich Winterspeck an', winter: 'Dezente Naturtöne, kleine Köder, extrem langsam führen' }, warum: 'Zwei-Combo-Revier: Zanderkanten und Hechtflachwasser liegen dicht beieinander. Entnahmefenster (Hecht 55–85, Zander 55–75 cm): große Fische MÜSSEN zurück – großer Gummikescher, Abhakmatte, Hakenlöser und Einzelhaken-Umbau gehören ins Gepäck.' },
         note: 'Ruhiger als der Woblitzsee, Übergang zum Useriner See (Nationalpark!).', warn: false },
-    { name: 'Useriner See', wasser: 'see-flach', zugang: 'boot',
+    { name: 'Useriner See', wasser: 'see-flach', trueb: true, zugang: 'boot',
         rig: 'Wie Woblitzsee: Stahlvorfach, Jigrute – dazu Driftsack/Anker (Schleppen verboten).', nr: 'Obere Havel / Müritz-NP', cat: 'raub', arten: ['Hecht', 'Zander', 'Barsch'],
         lat: 53.3431, lng: 12.9680,
         fisch: 'Hecht, Zander, Barsch',
@@ -286,7 +286,7 @@ export const SPOTS_MV = [
         kartenLinks: [{ label: 'Fischereihof Wesenberg', url: 'https://fischerei-wesenberg.de' }],
         tackle: { rute: 'H-Spinnrute 40–80 g', koeder: 'Gummi 12–19 cm, große Blinker; Schleppen mit tieflaufenden Wobblern', jig: '14–21 g', vorfach: 'Titan/Stahl 40 cm', zugang: 'Boot; Driftsack oder Anker für kontrollierte Drift über den Kanten', farben: { fruehjahr: 'Naturdekore mit Kontrastpunkt (Barsch, roter Kopf) – klares Nachwinterwasser', sommer: 'Naturtöne (Rotauge, Barsch); über Kraut gern Weiß/Perlmutt', herbst: 'Kontrastreich (Feuertiger, Orange) – Hechte fressen sich Winterspeck an', winter: 'Dezente Naturtöne, kleine Köder, extrem langsam führen' }, warum: 'Schleppen ist hier effektiv – Driftkontrolle entscheidet. Entnahmefenster (Hecht 55–85, Zander 55–75 cm): große Fische MÜSSEN zurück – großer Gummikescher, Abhakmatte, Hakenlöser und Einzelhaken-Umbau gehören ins Gepäck.' },
         note: 'Liegt im Müritz-Nationalpark: Schutzzonen und Befahrensregeln beachten, Uferbereiche teils gesperrt.', warn: true },
-    { name: 'Mirower See', wasser: 'see-flach', zugang: 'ufer',
+    { name: 'Mirower See', wasser: 'see-flach', trueb: true, zugang: 'ufer',
         rig: 'Vom Ufer: Spinnrute 10–40 g mit Stahlvorfach an den Stegen, nachts Grundrute mit Tauwurm auf Aal.', nr: 'Obere Havel', cat: 'raub', arten: ['Hecht', 'Zander', 'Barsch', 'Aal'],
         lat: 53.2826, lng: 12.8074,
         fisch: 'Hecht, Zander, Barsch, Aal',
@@ -298,7 +298,7 @@ export const SPOTS_MV = [
         hotspots: [
             { name: 'Ufer: Stadtufer & Schlossinsel', saison: 'Mai–Okt abends, Aal Jun–Aug', lat: 53.2720, lng: 12.8150, tipp: 'Bester Ufer-Spot der Kleinseenplatte (Luftbild): befestigtes Stadtufer mit vielen Stegen und der Schlossinsel-Brücke. Abends Barsch an den Stegen, nachts Aal – kurze Wege, kein Boot nötig.' }
         ], warn: false },
-    { name: 'Drewensee', wasser: 'see-flach', zugang: 'boot',
+    { name: 'Drewensee', wasser: 'see-flach', trueb: true, zugang: 'boot',
         rig: 'Allround-Raubfischcombo mit Stahlvorfach, Gummifische 10–14 cm für die Fahrrinnen-Kanten.', nr: 'Obere Havel', cat: 'raub', arten: ['Hecht', 'Zander', 'Barsch'],
         lat: 53.2600, lng: 13.0330,
         fisch: 'Hecht, Zander, Barsch',
@@ -352,11 +352,11 @@ export const SPOTS_MV = [
         note: 'Zentrale Anlaufstelle der Seenfischerei Obere Havel: Karten, aktuelle Infos, Räucherfisch für die Heimfahrt.', warn: false }
 ];
 export const SCHON_MV = [
-    { fisch: 'Hecht', von: [2, 1], bis: [4, 30], mm: 'Entnahmefenster 55–85 cm' },
+    { fisch: 'Hecht', von: [2, 1], bis: [4, 30], mm: 'Entnahmefenster 55–85 cm · Stahlvorfach-Pflicht' },
     { fisch: 'Zander', von: [3, 15], bis: [6, 15], mm: 'Entnahmefenster 55–75 cm' },
     { fisch: 'Barsch', von: null, bis: null, mm: 'Entnahmefenster 25–40 cm' },
     { fisch: 'Karpfen', von: null, bis: null, mm: '50 cm' },
-    { fisch: 'Aal', von: null, bis: null, mm: '40 cm (EU-Aalschutz: Fangfenster/Sperrzeiten möglich)' },
+    { fisch: 'Aal', von: null, bis: null, mm: '50 cm (lokale Karte Obere Havel; EU-Aalschutz beachten)' },
     { fisch: 'Schleie', von: null, bis: null, mm: '25 cm' },
     { fisch: 'Wels', von: null, bis: null, mm: '90 cm' }
 ];

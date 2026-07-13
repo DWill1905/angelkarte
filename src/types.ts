@@ -63,6 +63,8 @@ export interface Spot {
   strecke?: string;
   /** Gewässercharakter. Fehlt er, wird er aus cat/line/note abgeleitet. */
   wasser?: Wasser;
+  /** Trübes Stillwasser (Algensee/mäßig trüb) → Signalfarben statt Naturdekor. Seen sind sonst als klar angenommen. */
+  trueb?: boolean;
   /** Kuratierte Tackle-Empfehlung. Fehlt sie, wird sie abgeleitet. */
   tackle?: Tackle;
   /** Maximaltiefe in Metern, falls belegt (steuert Jigkopf & Rutenwahl). */

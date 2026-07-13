@@ -185,6 +185,14 @@ describe('Darstellung im Popup', () => {
     assert.match(html, /class="akt"/, 'aktuelle Saison nicht markiert');
   });
 
+  test('trübe Seen bekommen Signalfarben, klare Naturfarben', async () => {
+    await loadRegion(ctx, 'mecklenburg');
+    const trueb = app.state.SPOTS.find((s) => s.name.startsWith('Woblitzsee'));
+    const klar = app.state.SPOTS.find((s) => s.name.startsWith('Vilzsee'));
+    assert.match(app.popupHtml(trueb), /Schockfarben|Firetiger/, 'trüber See ohne Signalfarben');
+    assert.match(app.popupHtml(klar), /Naturdekore|Naturtöne/, 'klarer See ohne Naturfarben');
+  });
+
   test('Tackle trennt Kunst- und Naturköder (kein Spinnrute+Boilie-Mix)', async () => {
     await loadRegion(ctx, 'mainz');
     const spot = app.state.SPOTS.find((s) => !s.tackle

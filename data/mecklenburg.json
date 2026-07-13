@@ -24,6 +24,7 @@
   {
    "name": "Woblitzsee",
    "wasser": "see-flach",
+   "trueb": true,
    "zugang": "ufer",
    "rig": "Stahl- oder Titanvorfach Pflichtprogramm (Hechtdichte!), H-Rute 40–80 g fürs Zanderjiggen, Echolot fürs Boot.",
    "nr": "Obere Havel",
@@ -98,6 +99,7 @@
   {
    "name": "Zotzensee",
    "wasser": "see-flach",
+   "trueb": true,
    "zugang": "boot",
    "rig": "Hechtcombo 30–80 g, Stahlvorfach, Weedless-Montagen fürs Kraut – Boot ist Pflicht.",
    "nr": "Obere Havel",
@@ -229,6 +231,7 @@
   {
    "name": "Useriner See",
    "wasser": "see-flach",
+   "trueb": true,
    "zugang": "boot",
    "rig": "Wie Woblitzsee: Stahlvorfach, Jigrute – dazu Driftsack/Anker (Schleppen verboten).",
    "nr": "Obere Havel / Müritz-NP",
@@ -269,6 +272,7 @@
   {
    "name": "Mirower See",
    "wasser": "see-flach",
+   "trueb": true,
    "zugang": "ufer",
    "rig": "Vom Ufer: Spinnrute 10–40 g mit Stahlvorfach an den Stegen, nachts Grundrute mit Tauwurm auf Aal.",
    "nr": "Obere Havel",
@@ -319,6 +323,7 @@
   {
    "name": "Drewensee",
    "wasser": "see-flach",
+   "trueb": true,
    "zugang": "boot",
    "rig": "Allround-Raubfischcombo mit Stahlvorfach, Gummifische 10–14 cm für die Fahrrinnen-Kanten.",
    "nr": "Obere Havel",
@@ -550,7 +555,7 @@
     4,
     30
    ],
-   "mm": "Entnahmefenster 55–85 cm"
+   "mm": "Entnahmefenster 55–85 cm · Stahlvorfach-Pflicht"
   },
   {
    "fisch": "Zander",
@@ -580,7 +585,7 @@
    "fisch": "Aal",
    "von": null,
    "bis": null,
-   "mm": "40 cm (EU-Aalschutz: Fangfenster/Sperrzeiten möglich)"
+   "mm": "50 cm (lokale Karte Obere Havel; EU-Aalschutz beachten)"
   },
   {
    "fisch": "Schleie",
