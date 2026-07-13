@@ -182,6 +182,17 @@ describe('Darstellung im Popup', () => {
   test('die aktuelle Jahreszeit ist hervorgehoben', async () => {
     await loadRegion(ctx, 'mecklenburg');
     const html = app.popupHtml(beangelbar(app.state)[0]);
-    assert.match(html, /▸/, 'aktuelle Saison nicht markiert');
+    assert.match(html, /class="akt"/, 'aktuelle Saison nicht markiert');
+  });
+
+  test('Tackle trennt Kunst- und Naturköder (kein Spinnrute+Boilie-Mix)', async () => {
+    await loadRegion(ctx, 'mainz');
+    const spot = app.state.SPOTS.find((s) => !s.tackle
+      && (s.arten || []).some((a) => ['Zander', 'Hecht', 'Barsch'].includes(a))
+      && (s.arten || []).some((a) => ['Karpfen', 'Brachse', 'Rotauge', 'Aal', 'Schleie'].includes(a)));
+    assert.ok(spot, 'kein gemischtes Gewässer gefunden');
+    const html = app.popupHtml(spot);
+    assert.match(html, /Kunstköder/, 'Kunstköder-Sektion fehlt');
+    assert.match(html, /Naturköder/, 'Naturköder-Sektion fehlt');
   });
 });

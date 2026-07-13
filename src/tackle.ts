@@ -161,6 +161,22 @@ export function tackleFor(s: Spot): { t: Tackle; kuratiert: boolean } {
   };
 }
 
+/** Arten, die primär mit Kunstködern (Spinn-/Fliegenfischen) befischt werden.
+    Alle übrigen gelten als Naturköder-/Grundfische – damit im Popup nicht Spinnrute + Boilie steht. */
+const KUNST = new Set(['Hecht', 'Zander', 'Barsch', 'Wels', 'Rapfen', 'Bachforelle', 'Regenbogenforelle', 'Äsche', 'Döbel']);
+
+function naturRuteAus(arten: string[]): string {
+  if (arten.includes('Karpfen')) return 'Karpfen-/Grundrute 2,75–3,60 m, ~3 lbs, Freilaufrolle';
+  if (arten.includes('Barbe')) return 'Feederrute 90–150 g für die Strömung, ~3,60 m';
+  if (arten.includes('Aal')) return 'Robuste Grund-/Aalrute, Freilaufrolle, Kopflampe';
+  return 'Feeder-/Matchrute 20–60 g, feine Montage';
+}
+
+function koederVon(arten: string[]): string {
+  return arten.map((a) => PROFILE[a]?.koeder).filter(Boolean)[0]
+    || 'Nach Zielfisch wählen – siehe Köderberater im Werkzeuge-Menü';
+}
+
 /** Rendert den Tackle-Block fürs Popup. */
 export function tackleHtml(s: Spot): string {
   if (s.cat === 'sperr' || s.cat === 'info') return '';
@@ -177,30 +193,48 @@ export function tackleHtml(s: Spot): string {
     </details>`;
   }
 
-  const { t, kuratiert } = tackleFor(s);
   const jetzt = saison();
-  const LABEL: Record<keyof Farben, string> = {
-    fruehjahr: 'Frühjahr', sommer: 'Sommer', herbst: 'Herbst', winter: 'Winter',
+  const LABEL: Record<keyof Farben, string> = { fruehjahr: 'Frühjahr', sommer: 'Sommer', herbst: 'Herbst', winter: 'Winter' };
+  const SDOT: Record<keyof Farben, string> = { fruehjahr: '#6fae6f', sommer: '#e8b93c', herbst: '#d98a3d', winter: '#6ea8c4' };
+  const row = (k: string, v: string) => `<div class="tk-row"><span class="k">${k}</span><span>${esc(v)}</span></div>`;
+  const farbBlock = (farben: Farben) => {
+    const zeilen = (Object.keys(LABEL) as (keyof Farben)[]).map((k) => {
+      const akt = k === jetzt;
+      return `<div class="${akt ? 'akt' : 'inakt'}"><span class="dot" style="background:${SDOT[k]}"></span><b>${LABEL[k]}:</b> ${esc(farben[k])}</div>`;
+    }).join('');
+    return `<div class="tk-free"><b>Köderfarben nach Saison</b><div class="tk-farb">${zeilen}</div></div>`;
   };
-  const farbZeilen = (Object.keys(LABEL) as (keyof Farben)[]).map((k) => {
-    const aktiv = k === jetzt;
-    return `<div style="${aktiv ? 'color:var(--dusk);font-weight:600' : 'color:var(--muted)'}">`
-      + `${aktiv ? '▸ ' : '　'}<b>${LABEL[k]}:</b> ${esc(t.farben[k])}</div>`;
-  }).join('');
+
+  let inner = '';
+  if (s.tackle) {
+    const t = s.tackle;
+    inner = row('Rute', t.rute) + row('Köder', t.koeder) + row('Jigkopf', t.jig) + row('Vorfach', t.vorfach)
+      + (t.farben ? farbBlock(t.farben) : '')
+      + `<div class="tk-free"><b>Boot / Ufer</b> ${esc(t.zugang)}</div>`
+      + (t.warum ? `<div class="tk-free"><b>Warum</b> ${esc(t.warum)}</div>` : '')
+      + '<div class="tk-verif">✎ Kuratiert für dieses Gewässer – Erfahrungswerte, kein Gesetz</div>';
+  } else {
+    const w = wasserTyp(s);
+    const arten = s.arten || [];
+    const kunst = arten.filter((a) => KUNST.has(a));
+    const natur = arten.filter((a) => !KUNST.has(a));
+    if (kunst.length) {
+      inner += '<div class="tk-grp"><div class="tk-grp-h">🎣 Raubfisch · Kunstköder / Spinnfischen</div>'
+        + row('Rute', ruteAus(kunst, w)) + row('Köder', koederVon(kunst)) + row('Jigkopf', jigAus(w, s.tiefe))
+        + row('Vorfach', vorfachAus(kunst)) + farbBlock(farbenAus(w)) + '</div>';
+    }
+    if (natur.length) {
+      inner += '<div class="tk-grp"><div class="tk-grp-h">🪱 Fried-/Grundfisch · Naturköder</div>'
+        + row('Rute', naturRuteAus(natur)) + row('Köder', koederVon(natur))
+        + row('Montage', 'Grundmontage / Method-Feeder / Haar-Rig je nach Zielfisch')
+        + '<div class="tk-free">Farbe ist hier zweitrangig – es entscheiden Futterplatz, Aroma und Präsentation.</div></div>';
+    }
+    inner += `<div class="tk-free"><b>Boot / Ufer</b> ${esc(zugangAus(s, w))}</div>`
+      + '<div class="tk-verif">⚙ Abgeleitet aus Gewässertyp, Zielfischen und Zugang – als Startpunkt gedacht</div>';
+  }
 
   return `<details class="tackle">
     <summary>${ICON('fish')} Tackle für dieses Gewässer</summary>
-    <div class="tackle-body">
-      <div class="pop-row"><b>Rute</b>${esc(t.rute)}</div>
-      <div class="pop-row"><b>Köder</b>${esc(t.koeder)}</div>
-      <div class="pop-row"><b>Jigkopf</b>${esc(t.jig)}</div>
-      <div class="pop-row"><b>Vorfach</b>${esc(t.vorfach)}</div>
-      <div class="pop-row"><b>Boot / Ufer</b>${esc(t.zugang)}</div>
-      <div class="pop-row"><b>Köderfarben nach Saison</b>${farbZeilen}</div>
-      ${t.warum ? `<div class="pop-row"><b>Warum</b>${esc(t.warum)}</div>` : ''}
-      <div class="verif">${kuratiert
-        ? '✎ Kuratiert für dieses Gewässer – Erfahrungswerte, kein Gesetz'
-        : '⚙ Abgeleitet aus Gewässertyp, Zielfischen und Zugang – als Startpunkt gedacht'}</div>
-    </div>
+    <div class="tackle-body">${inner}</div>
   </details>`;
 }
