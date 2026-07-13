@@ -268,6 +268,12 @@
     display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;flex:0 0 auto}
   /* Pins mit Schlagschatten, damit sie sich vom detailreichen Kartenhintergrund abheben */
   .spot-pin{filter:drop-shadow(0 2px 3px rgba(0,0,0,.55))}
+  /* Offenes Spot-Popup: Karten-Bedienelemente ausblenden – kein Überlagern der Popup-Buttons */
+  body.popup-offen .legende,
+  body.popup-offen .toolsfab,
+  body.popup-offen .locbtn,
+  body.popup-offen .fsbtn,
+  body.popup-offen .leaflet-control-scale{display:none}
 
   .locbtn{
     position:absolute;right:14px;bottom:calc(46px + 44px);z-index:500;
@@ -322,6 +328,10 @@
   .pop-dist{font-family:"Space Mono",monospace;font-size:10.5px;color:#4a5b5f;margin-bottom:8px}
   .pop-row{font-size:12.5px;margin-bottom:6px}
   .pop-row b{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#5b6b66;margin-bottom:1px}
+  /* Taktische Tipps (Wind, Wassertemperatur) einheitlich boxen – abgesetzt von Erlaubnis/Regeln */
+  .pop-row[data-wind],.pop-row[data-wt]{background:#eef4f2;border:1px solid #d7e3e0;border-radius:8px;
+    padding:7px 9px;margin:7px 0;line-height:1.45}
+  .pop-row[data-wind] b,.pop-row[data-wt] b{color:#2a6b52}
   .pop-note{font-size:11.5px;background:#dfe7df;border-left:3px solid var(--forelle);
     padding:6px 8px;border-radius:0 6px 6px 0;margin-top:8px;color:#33423d}
   .pop-warn{border-left-color:var(--warn);background:#eddcd8;color:#4a2a24}
@@ -348,11 +358,12 @@
     padding:6px 8px;font-size:12px;margin-bottom:7px}
   .rate-art-block{border-bottom:1px solid #cfe0dd}
   .rate-art-block:last-of-type{border-bottom:0}
-  .rate-kopf{cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px;padding:6px 2px}
+  .rate-kopf{cursor:pointer;list-style:none;display:grid;grid-template-columns:1fr auto 3.4em;
+    align-items:center;column-gap:10px;padding:6px 2px}
   .rate-kopf::-webkit-details-marker{display:none}
-  .rate-art{font-weight:700;font-size:13px;min-width:66px;color:var(--ink)}
-  .rate-sterne{color:#b8860b;letter-spacing:1px;font-size:13px}
-  .rate-proz{margin-left:auto;font-family:'Space Mono',monospace;font-size:12.5px;font-weight:700;color:var(--ink)}
+  .rate-art{font-weight:700;font-size:13px;color:var(--ink);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .rate-sterne{color:#b8860b;letter-spacing:1px;font-size:13px;white-space:nowrap}
+  .rate-proz{font-family:'Space Mono',monospace;font-size:12.5px;font-weight:700;color:var(--ink);text-align:right;white-space:nowrap}
   .rate-proz.zu{color:#b23b30;font-size:11.5px}
   .rate-body{padding:2px 0 8px 4px}
   .rate-g{font-size:12px;line-height:1.45;padding:1.5px 0}

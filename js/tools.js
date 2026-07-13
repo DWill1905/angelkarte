@@ -588,6 +588,7 @@ function wtHinweis(wt, arten) {
 }
 /* Distanz im Popup nachtragen */
 state.map.on('popupopen', e => {
+    document.body.classList.add('popup-offen'); /* Karten-Controls ausblenden, kein Layer-Salat beim Scrollen */
     const wtEl = e.popup.getElement().querySelector('[data-wt]');
     if (wtEl) {
         const wt = (state.PEGEL && typeof state.PEGEL.wt === 'number') ? state.PEGEL.wt : (state.WX && typeof state.WX.wt === 'number' ? state.WX.wt : null);
@@ -622,3 +623,4 @@ state.map.on('popupopen', e => {
         el.textContent = '~' + haversine(ref[0], ref[1], la, ln).toFixed(1) + ' km ' + (state.userPos ? 'von dir' : 'von Kartenmitte');
     }
 });
+state.map.on('popupclose', () => document.body.classList.remove('popup-offen'));

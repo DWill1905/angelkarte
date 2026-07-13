@@ -478,15 +478,18 @@ export function ratingHtml(s: Spot, hotspot: Hotspot | null = null): string {
         <span class="rate-sterne" aria-label="${b.sterne} von 5 Sternen">${sterneText(b.sterne)}</span>
         <span class="rate-proz${b.geschont ? ' zu' : ''}">${b.geschont ? 'geschont' : b.prozent + '\u202F%'}</span>
       </summary>`;
-    /* Progressive Disclosure: bekannte Signale zeigen, fehlende in EINER dezenten Zeile bündeln. */
+    /* Progressive Disclosure: bekannte Signale zeigen, Qualitäts-Metadaten (fehlende Signale +
+       Datenbasis) in EINER gemeinsamen Box bündeln – statt zwei Zeilen direkt untereinander. */
     const bekannt = b.gruende.filter((g) => g.status !== 'unbekannt');
     const fehlt = b.gruende.filter((g) => g.status === 'unbekannt').length;
     const gruende = bekannt.map((g) =>
-      `<div class="rate-g ${g.status}"><span class="rate-ik">${IKON[g.status]}</span> ${esc(g.text)}</div>`).join('')
-      + (fehlt ? `<div class="rate-g fehlt">– ${fehlt} Signal${fehlt > 1 ? 'e' : ''} fehlen gerade (offline / kein Pegel / keine Historie)</div>` : '');
+      `<div class="rate-g ${g.status}"><span class="rate-ik">${IKON[g.status]}</span> ${esc(g.text)}</div>`).join('');
+    const meta: string[] = [];
+    if (b.bewertet < b.gesamt) meta.push(`Datenbasis ${b.bewertet}/${b.gesamt} Signale${b.konfidenz < 0.8 ? ' – dünn, Wert zur Mitte gedämpft' : ''}`);
+    if (fehlt) meta.push(`${fehlt} Signal${fehlt > 1 ? 'e' : ''} fehlen gerade (offline / kein Pegel / keine Historie)`);
     const mass = b.mass ? `<div class="rate-mass">⚖ ${esc(b.mass)}</div>` : '';
-    const unklar = b.bewertet < b.gesamt
-      ? `<div class="rate-hinweis${b.konfidenz < 0.8 ? ' warn' : ''}"><span class="ik">i</span> Datenbasis ${b.bewertet}/${b.gesamt} Signale${b.konfidenz < 0.8 ? ' – dünn, Wert zur Mitte gedämpft' : ''}.</div>`
+    const unklar = meta.length
+      ? `<div class="rate-hinweis${b.konfidenz < 0.8 ? ' warn' : ''}"><span class="ik">i</span> ${meta.join(' · ')}.</div>`
       : '';
     return `<details class="rate-art-block"${offen ? ' open' : ''}>${kopf}
       <div class="rate-body">${gruende}${mass}${unklar}</div></details>`;
