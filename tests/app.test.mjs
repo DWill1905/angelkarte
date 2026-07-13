@@ -41,6 +41,15 @@ describe('Popups', () => {
     }
   });
 
+  test('fehlende Signale werden im Popup zu einer Zeile gebündelt', async () => {
+    await loadRegion(ctx, 'mainz');
+    app.state.WX = null; app.state.PEGEL = null;
+    const spot = app.state.SPOTS.find((s) => s.cat !== 'sperr' && s.cat !== 'info' && (s.arten || []).length && !s.my);
+    const h = app.popupHtml(spot);
+    assert.match(h, /Signale? fehlen/, 'gebündelte Fehl-Zeile fehlt');
+    assert.ok(!/rate-g unbekannt/.test(h), 'einzelne unbekannt-Zeilen sollten gebündelt sein');
+  });
+
   test('Popup zeigt das Prüfdatum der Region', async () => {
     await loadRegion(ctx, 'elbe');
     const s = beangelbar(app.state)[0];

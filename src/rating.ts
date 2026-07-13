@@ -476,13 +476,17 @@ export function ratingHtml(s: Spot, hotspot: Hotspot | null = null): string {
     const kopf = `<summary class="rate-kopf">
         <span class="rate-art">${esc(b.art)}</span>
         <span class="rate-sterne" aria-label="${b.sterne} von 5 Sternen">${sterneText(b.sterne)}</span>
-        <span class="rate-proz${b.geschont ? ' zu' : ''}">${b.geschont ? 'geschont' : b.prozent + ' %'}</span>
+        <span class="rate-proz${b.geschont ? ' zu' : ''}">${b.geschont ? 'geschont' : b.prozent + '\u202F%'}</span>
       </summary>`;
-    const gruende = b.gruende.map((g) =>
-      `<div class="rate-g ${g.status}">${IKON[g.status]} ${esc(g.text)}</div>`).join('');
+    /* Progressive Disclosure: bekannte Signale zeigen, fehlende in EINER dezenten Zeile bündeln. */
+    const bekannt = b.gruende.filter((g) => g.status !== 'unbekannt');
+    const fehlt = b.gruende.filter((g) => g.status === 'unbekannt').length;
+    const gruende = bekannt.map((g) =>
+      `<div class="rate-g ${g.status}"><span class="rate-ik">${IKON[g.status]}</span> ${esc(g.text)}</div>`).join('')
+      + (fehlt ? `<div class="rate-g fehlt">– ${fehlt} Signal${fehlt > 1 ? 'e' : ''} fehlen gerade (offline / kein Pegel / keine Historie)</div>` : '');
     const mass = b.mass ? `<div class="rate-mass">⚖ ${esc(b.mass)}</div>` : '';
     const unklar = b.bewertet < b.gesamt
-      ? `<div class="rate-hinweis">Datenbasis ${b.bewertet}/${b.gesamt} Signale${b.konfidenz < 0.8 ? ' – dünn, der Wert ist zur Mitte gedämpft' : ' – Wert bezieht sich nur auf diese'}.</div>`
+      ? `<div class="rate-hinweis${b.konfidenz < 0.8 ? ' warn' : ''}"><span class="ik">i</span> Datenbasis ${b.bewertet}/${b.gesamt} Signale${b.konfidenz < 0.8 ? ' – dünn, Wert zur Mitte gedämpft' : ''}.</div>`
       : '';
     return `<details class="rate-art-block"${offen ? ' open' : ''}>${kopf}
       <div class="rate-body">${gruende}${mass}${unklar}</div></details>`;
@@ -495,7 +499,7 @@ export function ratingHtml(s: Spot, hotspot: Hotspot | null = null): string {
     <div class="rating-body">
       ${sturm ? '<div class="rate-sturm">⚠ Sturm – Angeln ist heute unverantwortlich. Die Bewertung ist gedeckelt.</div>' : ''}
       ${zeilen}
-      <div class="verif">Modellwert aus Wassertemperatur, Beißzeit, Luftdruck, Wind, Wasserstand,
+      <div class="verif"><span class="ik">i</span> Modellwert aus Wassertemperatur, Beißzeit, Luftdruck, Wind, Wasserstand,
         Gewässertyp und Jahreszeit – <b>keine Fangwahrscheinlichkeit</b>. Die Gewichte stehen offen im Quelltext.</div>
     </div>
   </details>`;

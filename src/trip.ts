@@ -35,6 +35,7 @@ export async function toggleTrip(name: string): Promise<void> {
 }
 export function setTripBtn(btn: HTMLElement, drin: boolean): void {
   btn.textContent = drin?'★ Gemerkt':'☆ Merken';
+  btn.classList.toggle('on', drin);
   btn.style.background = drin?'#2f5b4a':'';
   btn.style.color = drin?'#b9e6cf':'';
 }

@@ -352,11 +352,19 @@
   .rate-proz.zu{color:#b23b30;font-size:11.5px}
   .rate-body{padding:2px 0 8px 4px}
   .rate-g{font-size:12px;line-height:1.45;padding:1.5px 0}
-  .rate-g.ja{color:#2f7a4a}
-  .rate-g.nein{color:#b83a2e}
+  .rate-g.ja{color:#1c6138}
+  .rate-g.nein{color:#b03526}
   .rate-g.unbekannt{color:#5b6b66}
+  .rate-g.fehlt{color:#7a8783;font-size:11px;font-style:italic;margin-top:3px}
+  .rate-ik{font-weight:700}
+  .rate-g.ja .rate-ik{color:#22a457}
+  .rate-g.nein .rate-ik{color:#d0402e}
   .rate-mass{font-size:11.5px;color:#8a5e0f;margin-top:5px}
-  .rate-hinweis{font-size:11px;color:#5b6b66;margin-top:5px;font-style:italic}
+  .rate-hinweis{font-size:11px;color:#45554f;margin-top:6px;background:#eef3f2;border-left:3px solid #b9c7c3;
+    border-radius:5px;padding:5px 8px;display:flex;gap:6px;align-items:flex-start;line-height:1.4}
+  .rate-hinweis.warn{color:#7a5712;background:#fbf1d9;border-left-color:#e2b23c}
+  .rate-hinweis .ik,.rating-body .verif .ik{flex:0 0 auto;width:14px;height:14px;border-radius:50%;background:currentColor;color:#fff;
+    font-size:10px;font-weight:700;font-style:normal;display:inline-flex;align-items:center;justify-content:center;line-height:1;margin-top:1px}
   .tackle{margin:8px 0 4px;border:1px solid var(--line);border-radius:9px;overflow:hidden}
   .tackle summary{cursor:pointer;list-style:none;padding:7px 10px;font-size:11.5px;font-weight:700;
     letter-spacing:.06em;text-transform:uppercase;color:var(--dusk);background:rgba(166,212,232,.08);
@@ -374,11 +382,13 @@
     padding:4px 8px;text-decoration:none;line-height:1.2}
   .pop-link:hover{background:#d4e6e2}
   .pop-link .ic{width:12px;height:12px}
-  .pop-actions{display:flex;gap:6px;margin-top:10px}
-  .pop-btn{flex:1;text-align:center;font-size:12px;font-weight:700;text-decoration:none;
-    border-radius:7px;padding:8px 6px;border:0;cursor:pointer}
-  .pop-btn.nav{background:#16323c;color:#e4eef0}
-  .pop-btn.log{background:#e8a33d;color:#2a2008}
+  .pop-actions{display:flex;gap:6px;margin-top:12px}
+  .pop-btn{flex:1;text-align:center;font-size:12px;font-weight:700;text-decoration:none;min-height:38px;
+    border-radius:8px;padding:9px 6px;border:1.5px solid transparent;cursor:pointer;
+    display:inline-flex;align-items:center;justify-content:center}
+  .pop-btn.log{flex:1.4;background:#e8a33d;color:#2a2008;border-color:#e8a33d;box-shadow:0 2px 6px rgba(232,163,61,.35)}
+  .pop-btn.nav,.pop-btn.trip{background:#fff;color:#1a3a44;border-color:#c3d1cd}
+  .pop-btn.trip.on{background:#e2efe5;border-color:#8fb069;color:#1c6138}
 
   /* ===== Regeln ===== */
   .scrollpane{overflow-y:auto;padding:14px;flex:1 1 auto;min-height:0;-webkit-overflow-scrolling:touch}
@@ -422,6 +432,8 @@
   .fbcheck.ok{background:rgba(124,201,143,.14);color:#a8dcae;border:1px solid rgba(124,201,143,.25)}
   .fbcheck.bad{background:rgba(214,69,69,.16);color:#f0b6a8;font-weight:600;border:1px solid rgba(214,69,69,.3)}
   .verif{font-size:10px;color:#5b6b66;margin-top:7px;letter-spacing:.03em}
+  .rating-body .verif{font-size:10.5px;color:#45554f;margin-top:8px;background:#eef3f2;border-radius:6px;
+    padding:6px 8px;display:flex;gap:6px;align-items:flex-start;line-height:1.45;font-style:normal}
   .ic{width:1.05em;height:1.05em;display:inline-block;vertical-align:-.15em;flex-shrink:0}
   .chip .ic,.fbtool .ic{width:1.15em;height:1.15em;vertical-align:-.18em;margin-right:2px}
   .mydlg h3 .ic{width:1em;height:1em;vertical-align:-.1em;margin-right:5px;color:var(--dusk)}
