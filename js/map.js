@@ -16,7 +16,7 @@ L.control.scale({ imperial: false }).addTo(state.map);
 /* Marker-Clustering (Leaflet.markercluster): bündelt dicht stehende Spots zu einer Zahl,
    bricht beim Reinzoomen auf. Fällt sauber zurück auf die Karte, wenn das Plugin fehlt. */
 state.cluster = (typeof L.markerClusterGroup === 'function')
-    ? L.markerClusterGroup({ maxClusterRadius: 48, showCoverageOnHover: false, spiderfyOnMaxZoom: true, disableClusteringAtZoom: 13 })
+    ? L.markerClusterGroup({ maxClusterRadius: 48, showCoverageOnHover: false, spiderfyOnMaxZoom: true, disableClusteringAtZoom: 13, removeOutsideVisibleBounds: false })
     : null;
 if (state.cluster)
     state.cluster.addTo(state.map);
