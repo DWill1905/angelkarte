@@ -25,7 +25,7 @@ if (state.cluster) state.cluster.addTo(state.map);
 
 export function pinIcon(cat: string, fokus = false){
   const c=CATS[cat].color;
-  return L.divIcon({className:''+(fokus?' pin-fokus':''),iconSize:[28,40],iconAnchor:[14,38],popupAnchor:[0,-34],
+  return L.divIcon({className:'spot-pin'+(fokus?' pin-fokus':''),iconSize:[28,40],iconAnchor:[14,38],popupAnchor:[0,-34],
     html:`<svg width="28" height="40" viewBox="0 0 28 40" aria-hidden="true">
       <path d="M14 1C7 1 1.5 6.5 1.5 13.5 1.5 23 14 38 14 38s12.5-15 12.5-24.5C26.5 6.5 21 1 14 1z"
         fill="${c}" stroke="rgba(255,255,255,.85)" stroke-width="2"/>
@@ -230,10 +230,8 @@ uferBtn.onclick=()=>{
   applyFilters();
 };
 fishEl.appendChild(uferBtn);
-export const toolsBtn=document.createElement('button');
-toolsBtn.className='chip'; toolsBtn.id='toolsBtn'; toolsBtn.innerHTML=ICON('tools')+' Werkzeuge';
-toolsBtn.onclick=openTools;
-fishEl.appendChild(toolsBtn);
+export const toolsBtn=buttonById('toolsFab');
+if(toolsBtn) toolsBtn.onclick=openTools;
 
 /* Standort */
 

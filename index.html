@@ -98,7 +98,7 @@
   .chip .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
   .chip.off{opacity:.38}
   .chip:focus-visible{outline:2px solid var(--salmo);outline-offset:2px}
-  .chips.sub{background:var(--ink);padding-top:6px;padding-bottom:6px}
+  .chips.sub{background:var(--ink);padding-top:6px;padding-bottom:6px;box-shadow:inset 0 4px 6px -4px rgba(0,0,0,.6)}
   .chips.sub .chip{background:rgba(35,79,91,.4);border-color:var(--dusk);color:#dcebee;min-height:28px;padding:5px 11px}
   .chips.sub .chip.on{background:var(--dusk);border-color:var(--dusk);color:#0d3540;opacity:1;font-weight:700;box-shadow:0 0 0 3px rgba(110,168,196,.2)}
   .chip.gone{display:none}
@@ -249,19 +249,21 @@
   #sperrWarn b{color:#ffb3a0}
   #map{flex:1;min-height:0;background:#2a5966;z-index:0}
   .leaflet-container{font:inherit}
-  .marker-cluster-small,.marker-cluster-medium,.marker-cluster-large{background:rgba(74,130,143,.4)}
-  .marker-cluster-small div,.marker-cluster-medium div,.marker-cluster-large div{background:rgba(22,50,60,.96);color:#eaf6ff}
+  .marker-cluster-small,.marker-cluster-medium,.marker-cluster-large{background:rgba(124,77,255,.3)}
+  .marker-cluster-small div,.marker-cluster-medium div,.marker-cluster-large div{background:#7c4dff;color:#fff;border:2px solid #fff}
   .marker-cluster div{font-family:'Space Mono',monospace;font-weight:700}
-  .marker-cluster{box-shadow:0 2px 10px rgba(0,0,0,.45)}
-  .legende{position:absolute;left:12px;bottom:calc(46px + 12px);z-index:500;font-size:11.5px}
+  .marker-cluster{box-shadow:0 2px 12px rgba(0,0,0,.6)}
+  .legende{position:absolute;left:12px;bottom:calc(46px + 30px);z-index:500;font-size:11.5px}
   .leg-toggle{background:rgba(16,38,45,.92);color:var(--text);border:1px solid var(--shoal);border-radius:10px;
     padding:7px 11px;font-weight:700;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.45)}
-  .leg-body{margin-top:6px;background:rgba(16,38,45,.96);border:1px solid var(--shoal);border-radius:10px;
-    padding:8px 11px;box-shadow:0 4px 16px rgba(0,0,0,.5);max-width:230px}
+  .leg-body{position:absolute;left:0;bottom:100%;margin-bottom:7px;background:rgba(16,38,45,.96);border:1px solid var(--shoal);border-radius:10px;
+    padding:8px 11px;box-shadow:0 4px 16px rgba(0,0,0,.5);max-width:230px;white-space:nowrap}
   .leg-row{display:flex;align-items:center;gap:8px;padding:2px 0;color:var(--muted);line-height:1.3}
   .leg-dot{width:12px;height:12px;border-radius:50%;flex:0 0 auto;border:1.5px solid #fff}
-  .leg-cluster{width:17px;height:17px;border-radius:50%;background:rgba(22,50,60,.96);border:2px solid rgba(74,130,143,.6);
-    display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#eaf6ff;flex:0 0 auto}
+  .leg-cluster{width:17px;height:17px;border-radius:50%;background:#7c4dff;border:2px solid #fff;
+    display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;flex:0 0 auto}
+  /* Pins mit Schlagschatten, damit sie sich vom detailreichen Kartenhintergrund abheben */
+  .spot-pin{filter:drop-shadow(0 2px 3px rgba(0,0,0,.55))}
 
   .locbtn{
     position:absolute;right:14px;bottom:calc(46px + 44px);z-index:500;
@@ -273,6 +275,13 @@
   .locbtn svg,.locbtn .ic{width:24px;height:24px}
   .locbtn.active{background:var(--dusk);color:#0d3540}
   .locbtn:active{transform:scale(.94)}
+  .toolsfab{position:absolute;right:14px;bottom:calc(46px + 44px + 56px);z-index:500;
+    width:44px;height:44px;border-radius:50%;font-size:0;
+    background:rgba(18,40,47,.94);color:#eaf6ff;border:1px solid var(--shoal);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;
+    box-shadow:0 4px 16px rgba(0,0,0,.45);backdrop-filter:blur(6px)}
+  .toolsfab svg,.toolsfab .ic{width:21px;height:21px}
+  .toolsfab:active{transform:scale(.94)}
 
   .sheet{background:linear-gradient(180deg,var(--shelf),var(--panel));border-top:1px solid var(--shoal);max-height:36dvh;
     display:flex;flex-direction:column;transition:max-height .25s ease;flex-shrink:0}
@@ -560,11 +569,12 @@
     <button class="leg-toggle" id="legToggle" type="button" aria-expanded="false" aria-controls="legBody">Legende</button>
     <div class="leg-body" id="legBody" hidden></div>
   </div>
+  <button class="toolsfab" id="toolsFab" type="button" title="Werkzeuge" aria-label="Werkzeuge" data-ic="tools"></button>
   <button class="locbtn" id="locbtn" title="Meinen Standort anzeigen" aria-label="Meinen Standort anzeigen" data-ic="locate">Standort</button>
   <button class="fsbtn" id="fsBtn" type="button" aria-pressed="false" title="Karte im Vollbild" aria-label="Karte im Vollbild"></button>
   <div class="sheet collapsed" id="sheet">
     <div class="sheet-handle" id="sheetHandle" role="button" tabindex="0" aria-label="Spotliste ein-/ausklappen">
-      <h2>Spots <span id="spotCount"></span><span id="spotSort" style="color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0"></span></h2>
+      <h2>Plätze <span id="spotCount"></span><span id="spotSort" style="color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0"></span></h2>
       <span class="arrow">▼</span>
     </div>
     <input id="spotSearch" type="search" placeholder="Spot oder Fischart suchen…" autocomplete="off">
