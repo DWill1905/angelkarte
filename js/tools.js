@@ -589,6 +589,16 @@ function wtHinweis(wt, arten) {
 /* Distanz im Popup nachtragen */
 state.map.on('popupopen', e => {
     document.body.classList.add('popup-offen'); /* Karten-Controls ausblenden, kein Layer-Salat beim Scrollen */
+    const wrap = e.popup.getElement();
+    if (wrap)
+        wrap.querySelectorAll('.tackle > summary, .pop-details > summary').forEach((sum) => {
+            sum.addEventListener('click', (ev) => {
+                ev.preventDefault(); /* nicht im engen Popup aufklappen – Vollbild-Panel öffnen */
+                const det = sum.parentElement;
+                const body = det && det.querySelector('.tackle-body, .pop-details-body');
+                oeffneDetail((sum.textContent || '').replace(/[\u203A+\u2013\s]+$/, '').trim(), body ? body.outerHTML : '');
+            });
+        });
     const wtEl = e.popup.getElement().querySelector('[data-wt]');
     if (wtEl) {
         const wt = (state.PEGEL && typeof state.PEGEL.wt === 'number') ? state.PEGEL.wt : (state.WX && typeof state.WX.wt === 'number' ? state.WX.wt : null);
@@ -624,3 +634,29 @@ state.map.on('popupopen', e => {
     }
 });
 state.map.on('popupclose', () => document.body.classList.remove('popup-offen'));
+/* Vollbild-Panel für Tackle / Gewässer & Methode. */
+function oeffneDetail(titel, html) {
+    const sheet = byId('detailSheet');
+    const t = byId('detailTitle');
+    const b = byId('detailBody');
+    if (!sheet || !b)
+        return;
+    if (t)
+        t.textContent = titel;
+    b.innerHTML = html;
+    b.scrollTop = 0;
+    sheet.hidden = false;
+}
+(function () {
+    const sheet = byId('detailSheet');
+    if (!sheet)
+        return;
+    const zu = () => { sheet.hidden = true; };
+    const c = byId('detailClose');
+    if (c)
+        c.onclick = zu;
+    sheet.addEventListener('click', ev => { if (ev.target === sheet)
+        zu(); });
+    document.addEventListener('keydown', ev => { if (ev.key === 'Escape' && !sheet.hidden)
+        zu(); });
+})();

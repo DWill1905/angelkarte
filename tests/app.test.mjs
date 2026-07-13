@@ -50,6 +50,15 @@ describe('Popups', () => {
     assert.ok(!/rate-g unbekannt/.test(h), 'einzelne unbekannt-Zeilen sollten gebündelt sein');
   });
 
+  test('Detail-Panel existiert und lässt sich schließen', () => {
+    const sheet = doc.getElementById('detailSheet');
+    const close = doc.getElementById('detailClose');
+    assert.ok(sheet && close, 'Detail-Panel oder Schließen-Button fehlt');
+    sheet.hidden = false;
+    close.click();
+    assert.equal(sheet.hidden, true, 'Schließen wirkt nicht');
+  });
+
   test('Popup zeigt das Prüfdatum der Region', async () => {
     await loadRegion(ctx, 'elbe');
     const s = beangelbar(app.state)[0];
