@@ -283,6 +283,16 @@ export function bewerteSpot(s: Spot, art: string, jetzt: Date = new Date(), hots
   const add = (status: Bewertbar, text: string, erreicht: number, moeglich: number) =>
     gruende.push({ status, text, erreicht, moeglich });
 
+  /* Post-Schonzeit-Hunger (Gewicht 1): frisch aus der Schonzeit fressen viele Arten
+     in der Nachlaichphase aggressiv – ~2 Wochen lang ein kleiner Bonus. */
+  if (schon && schon.bis) {
+    const ende = new Date(jetzt.getFullYear(), schon.bis[0] - 1, schon.bis[1]);
+    const tage = Math.floor((jetzt.getTime() - ende.getTime()) / 86400000);
+    if (tage >= 0 && tage <= 16) {
+      add('ja', `Frisch aus der Schonzeit (seit ${tage} ${tage === 1 ? 'Tag' : 'Tagen'}) – ${art} frisst nach dem Laichen aggressiv`, 1, 1);
+    }
+  }
+
   /* 1) Wassertemperatur (Gewicht 2) */
   const opt = WT_OPT[art];
   if (wt == null || !opt) {
@@ -316,7 +326,16 @@ export function bewerteSpot(s: Spot, art: string, jetzt: Date = new Date(), hots
   } else if (wx.trendVal >= 1.5) {
     add('nein', p?.druckSensibel ? `Luftdruck steigt stark – der empfindliche ${art} ist oft zurückhaltend` : 'Luftdruck steigt stark – Fische oft zurückhaltend', p?.druckSensibel ? 0.2 : 0.4, 1.5);
   } else {
-    add('ja', p?.druckSensibel ? `Luftdruck stabil – ideal für den druckempfindlichen ${art}` : 'Luftdruck stabil – solide Bedingungen', p?.druckSensibel ? 1.5 : 1, 1.5);
+    const ap = typeof wx.press === 'number' ? wx.press : null;
+    if (ap !== null && ap >= 1025) {
+      add('ja', p?.druckSensibel
+        ? `Kräftiges Hoch (${Math.round(ap)} hPa), stabil – ideal für den druckempfindlichen ${art}`
+        : `Kräftiges Hoch (${Math.round(ap)} hPa) – stabil, aber Fische oft satt und träge`, p?.druckSensibel ? 1.5 : 0.8, 1.5);
+    } else if (ap !== null && ap <= 1002) {
+      add('ja', `Tiefdrucklage (${Math.round(ap)} hPa) – meist gesteigerte Aktivität`, p?.druckSensibel ? 1.1 : 1.3, 1.5);
+    } else {
+      add('ja', p?.druckSensibel ? `Luftdruck stabil – ideal für den druckempfindlichen ${art}` : 'Luftdruck stabil – solide Bedingungen', p?.druckSensibel ? 1.5 : 1, 1.5);
+    }
   }
 
   /* 4) Wind (Gewicht 1.5) */

@@ -166,6 +166,19 @@ describe('Filter-Verknüpfung: Fisch-Chips grauen aus', () => {
   });
 });
 
+describe('Post-Schonzeit-Hunger', () => {
+  test('Bonus kurz nach Schonzeitende, später weg', async () => {
+    await loadRegion(ctx, 'mainz');
+    const spot = app.state.SPOTS.find((s) => s.name.startsWith('Rhein Mainz'));
+    app.state.WX = { temp: 18, wind: 8, dirDeg: 0, dir: 'N', press: 1015, trendVal: 0, code: 3 };
+    app.state.PEGEL = { value: 250, station: 'X', dist: 3, wt: 17 };
+    const kurz = app.bewerteSpot(spot, 'Zander', new Date(Date.UTC(2026, 5, 5, 12, 0)));
+    assert.ok(kurz.gruende.some((g) => /Frisch aus der Schonzeit/.test(g.text)), 'Bonus fehlt kurz nach Ende');
+    const spaeter = app.bewerteSpot(spot, 'Zander', new Date(Date.UTC(2026, 6, 15, 12, 0)));
+    assert.ok(!spaeter.gruende.some((g) => /Frisch aus der Schonzeit/.test(g.text)), 'Bonus sollte im Juli weg sein');
+  });
+});
+
 describe('RLP-Kunstköderverbot', () => {
   test('im Fenster Naturköder + Warnung, sonst Gummifisch', async () => {
     await loadRegion(ctx, 'mainz');
