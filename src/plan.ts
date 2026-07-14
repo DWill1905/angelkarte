@@ -14,7 +14,7 @@
    Die Gewichte stehen offen im Code. Das ist kein Orakel, sondern eine
    nachvollziehbare Vorauswahl – die Entscheidung trifft der Angler. */
 import { state } from './state.js';
-import { hhmm, inSchonzeit, solunar, sunTimes } from './astro.js';
+import { hhmm, inSchonzeit, inWindowAt, solunar, sunTimes } from './astro.js';
 import { WT_OPT, tackleFor, wasserTyp } from './tackle.js';
 import { bewerteSpot, sterneAus, sterneText, artZeitprofil, stroemungsLage } from './rating.js';
 import { jahreszeit } from './saison.js';
@@ -357,9 +357,16 @@ export function empfehlung(jetzt: Date = new Date(), filter: PlanFilter = {}): E
     .sort((a, b) => b.punkte - a.punkte)[0];
   if (treiber) grund += ` – dazu: ${treiber.text}`;
   const zf: Zielfisch = { art: k.art, grund };
-  const { koeder, jig } = koederSatz(k.spot, k.art);
+  let { koeder, jig } = koederSatz(k.spot, k.art);
+  /* RLP-Frühjahrsschonzeit (15.4.–31.5.): an §18-Gewässern Kunstköderverbot – Empfehlung auf
+     Naturköder/Fliege umstellen, statt zu illegaler Methode zu raten. */
+  const kkVerbot = !!k.spot.rlpFruehjahr && inWindowAt(jetzt, [4, 15], [5, 31]) && !(k.art && FRIEDFISCH[k.art]);
+  if (kkVerbot) { koeder = 'Naturköder (Tauwurm/Köderfischfetzen am Grund) oder große Streamer-Fliege'; jig = null; }
 
   const luecken: string[] = [];
+  if (kkVerbot) {
+    luecken.push('15.4.–31.5.: An RLP-§18-Gewässern ist Kunstköder verboten (nur Naturköder/künstliche Fliege) – genauen Abschnitt auf dem Erlaubnisschein prüfen.');
+  }
   if (!state.SCHON.some((x) => x.fisch === k.art)) {
     luecken.push(`Für ${k.art} ist keine Schonzeit/kein Mindestmaß hinterlegt – vor Entnahme den Erlaubnisschein prüfen.`);
   }

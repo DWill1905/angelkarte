@@ -166,6 +166,20 @@ describe('Filter-Verknüpfung: Fisch-Chips grauen aus', () => {
   });
 });
 
+describe('RLP-Kunstköderverbot', () => {
+  test('im Fenster Naturköder + Warnung, sonst Gummifisch', async () => {
+    await loadRegion(ctx, 'mainz');
+    app.state.WX = { temp: 16, wind: 8, dirDeg: 200, dir: 'SW', press: 1015, trendVal: -1, code: 3 };
+    app.state.PEGEL = { value: 250, station: 'X', dist: 3, wt: 14 };
+    const opt = { fisch: ['Zander'], gewaesser: ['Rhein Mainz – Stadtstrecke'] };
+    const mai = app.empfehlung(new Date(Date.UTC(2026, 4, 5, 10, 0)), opt);
+    assert.match(mai.koeder, /Naturköder|Fliege/, 'Mai: sollte Naturköder sein');
+    assert.ok(mai.luecken.some((l) => /Kunstköder/.test(l)), 'Mai: Warnung fehlt');
+    const juli = app.empfehlung(new Date(Date.UTC(2026, 6, 15, 10, 0)), opt);
+    assert.match(juli.koeder, /Gummifisch/, 'Juli: Kunstköder wieder erlaubt');
+  });
+});
+
 describe('Trübung im Scoring', () => {
   test('trübes Wasser hilft dem lichtscheuen Zander bei Sonne/Flaute', async () => {
     await loadRegion(ctx, 'mecklenburg');

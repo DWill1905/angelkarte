@@ -64,7 +64,7 @@ describe('Popups', () => {
     await loadRegion(ctx, 'mainz');
     const rhein = app.state.SPOTS.find((s) => s.name.startsWith('Rhein Mainz'));
     const h = app.popupHtml(rhein);
-    assert.match(h, /Kunstköderverbot/, 'RLP-Frühjahrs-Badge fehlt');
+    assert.match(h, /Kunstköder/, 'RLP-Frühjahrs-Badge fehlt');
     assert.match(h, /Flussmitte/, 'Flussmitte-Badge fehlt');
   });
 

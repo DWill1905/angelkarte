@@ -1,11 +1,13 @@
 /* Astronomie & Datumslogik: Sonne, Mond, Solunar, Schonzeit-Fenster */
 import type { MonatTag } from './types';
 export const NOW = new Date();
-export function inWindow(von,bis){
-  const n=new Date();
-  const md=(n.getMonth()+1)*100+n.getDate();
+export function inWindowAt(d: Date, von: MonatTag, bis: MonatTag){
+  const md=(d.getMonth()+1)*100+d.getDate();
   const v=von[0]*100+von[1], b=bis[0]*100+bis[1];
   return v<=b?(md>=v&&md<=b):(md>=v||md<=b);
+}
+export function inWindow(von,bis){
+  return inWindowAt(new Date(), von, bis);
 }
 export function inSchonzeit(s){ return !!s.von && inWindow(s.von,s.bis); }
 /** Formatiert [monat, tag] als "TT.MM." – NICHT für Date-Objekte (siehe fmtDate). */
