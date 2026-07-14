@@ -235,7 +235,7 @@ export const SCHON_SN: Schonzeit[] = [
 
 /* ============ Region: Mecklenburgische Kleinseenplatte (recherchiert 07/2026) ============ */
 export const SPOTS_MV: Spot[] = [
-  {name:'Woblitzsee',wasser:'see-flach',trueb:true,zugang:'ufer',
+  {name:'Woblitzsee',motor:'verbrenner',schleppen:false,wasser:'see-flach',trueb:true,zugang:'ufer',
     rig:'Stahl- oder Titanvorfach Pflichtprogramm (Hechtdichte!), H-Rute 40–80 g fürs Zanderjiggen, Echolot fürs Boot.',nr:'Obere Havel',cat:'raub',arten:['Hecht','Zander','Barsch','Aal','Karpfen','Schleie','Brachse'],
    lat:53.3001,lng:13.0102,
    fisch:'Hecht, Zander, Barsch, Aal, Karpfen, Schleie, Brachse (14 gemeldete Arten)',
@@ -250,7 +250,7 @@ export const SPOTS_MV: Spot[] = [
      {name:'Kammerkanal-Mündung',saison:'Jun–Aug, nachts',lat:53.3090,lng:13.0280,tipp:'Kanal Richtung Zierker See – bekannt für seinen Welsbestand. Abends raubende Barsche entlang der Stege. Lage ungefähr.'},
      {name:'Ufer: Stadtufer/Havel-Auslauf Wesenberg',saison:'Mai–Okt, abends',lat:53.2890,lng:13.0010,tipp:'Zweiter schilffreier Uferzugang (Luftbild): Stadtufer und Hafenumfeld Wesenberg. Aal-Strecke am Abend, Barsch an den Stegen. Achtung: 100 m Mindestabstand zur Schleuse!'}
    ],warn:false},
-  {name:'Zotzensee',wasser:'see-flach',trueb:true,zugang:'boot',
+  {name:'Zotzensee',schleppen:false,wasser:'see-flach',trueb:true,zugang:'boot',
     rig:'Hechtcombo 30–80 g, Stahlvorfach, Weedless-Montagen fürs Kraut – Boot ist Pflicht.',nr:'Obere Havel',cat:'raub',arten:['Hecht','Barsch','Aal','Schleie'],
    lat:53.2437,lng:12.8125,
    fisch:'Hecht, Barsch, Aal, Schleie',
@@ -262,7 +262,7 @@ export const SPOTS_MV: Spot[] = [
    hotspots:[
      {name:'Westbuchten',saison:'Mai–Okt',lat:53.2450,lng:12.8050,tipp:'Ruhige Ankerbuchten am Westufer – Hecht über und an den Krautfeldern, Spinnerbait/Chatterbait flach geführt. Lage ungefähr.'}
    ],warn:false},
-  {name:'Vilzsee',wasser:'see-flach',zugang:'boot',
+  {name:'Vilzsee',motor:'verbrenner',schleppen:false,wasser:'see-flach',zugang:'boot',
     rig:'Mittlere Spinnrute, Stahlvorfach, flachlaufende Köder – Polbrille fürs Sichtangeln im klaren Wasser.',nr:'Obere Havel',cat:'raub',arten:['Hecht','Barsch','Schleie'],
    lat:53.2099,lng:12.8336,
    fisch:'Hecht, Barsch, Schleie',
@@ -271,7 +271,7 @@ export const SPOTS_MV: Spot[] = [
    kartenLinks:[{label:'Fischereihof Wesenberg',url:'https://fischerei-wesenberg.de'}],
    tackle:{rute:'Spinnrute 20–60 g',koeder:'Flachlaufende Wobbler, Spinnerbaits, Gummi 10–14 cm',jig:'7–14 g',vorfach:'Stahl/Titan 40 cm',zugang:'Boot; Polbrille ist hier Pflichtausrüstung für die Krautkanten',farben:{fruehjahr:'Naturdekore mit Kontrastpunkt (Barsch, roter Kopf) – klares Nachwinterwasser',sommer:'Naturtöne (Rotauge, Barsch); über Kraut gern Weiß/Perlmutt',herbst:'Kontrastreich (Feuertiger, Orange) – Hechte fressen sich Winterspeck an',winter:'Dezente Naturtöne, kleine Köder, extrem langsam führen'},warum:'Sichttiefe hoch – Köder flach führen, Kanten mit Polbrille lesen. Entnahmefenster (Hecht 55–85, Zander 55–75 cm): große Fische MÜSSEN zurück – großer Gummikescher, Abhakmatte, Hakenlöser und Einzelhaken-Umbau gehören ins Gepäck.'},
    note:'Klares, flaches Wasser – Sichtangeln möglich, Raubvogel-Revier.',warn:false},
-  {name:'Großer Labussee',wasser:'see-tief',zugang:'boot',
+  {name:'Großer Labussee',motor:'verbrenner',schleppen:false,wasser:'see-tief',zugang:'boot',
     rig:'Zander-Jigrute 15–50 g, FC 0,40+ oder dünner Stahl, DropShot-Setup für die Barschtrupps.',nr:'Obere Havel',cat:'raub',arten:['Hecht','Zander','Barsch','Aal'],
    lat:53.3067,lng:12.9504,
    fisch:'Hecht, Zander, Barsch, Aal',
@@ -280,7 +280,7 @@ export const SPOTS_MV: Spot[] = [
    kartenLinks:[{label:'Fischereihof Wesenberg',url:'https://fischerei-wesenberg.de'}],
    tackle:{rute:'Jigrute 15–50 g für Zander, dazu H-Rute 40–80 g für Hecht',koeder:'Zander: No-Action-Shad 10–14 cm; Hecht: Gummi 15–19 cm',jig:'10–21 g an den Kanten, vertikal 15–28 g',vorfach:'FC 0,40 mm für Zander, Titan/Stahl bei gezieltem Hechtangeln',zugang:'Boot – die Zanderkanten liegen abseits des Ufers',farben:{fruehjahr:'Naturdekore mit Kontrastpunkt (Barsch, roter Kopf) – klares Nachwinterwasser',sommer:'Naturtöne (Rotauge, Barsch); über Kraut gern Weiß/Perlmutt',herbst:'Kontrastreich (Feuertiger, Orange) – Hechte fressen sich Winterspeck an',winter:'Dezente Naturtöne, kleine Köder, extrem langsam führen'},warum:'Zwei-Combo-Revier: Zanderkanten und Hechtflachwasser liegen dicht beieinander. Entnahmefenster (Hecht 55–85, Zander 55–75 cm): große Fische MÜSSEN zurück – großer Gummikescher, Abhakmatte, Hakenlöser und Einzelhaken-Umbau gehören ins Gepäck.'},
    note:'Ruhiger als der Woblitzsee, Übergang zum Useriner See (Nationalpark!).',warn:false},
-  {name:'Useriner See',wasser:'see-flach',trueb:true,zugang:'boot',
+  {name:'Useriner See',nationalpark:true,schleppen:false,wasser:'see-flach',trueb:true,zugang:'boot',
     rig:'Wie Woblitzsee: Stahlvorfach, Jigrute – dazu Driftsack/Anker (Schleppen verboten).',nr:'Obere Havel / Müritz-NP',cat:'raub',arten:['Hecht','Zander','Barsch'],
    lat:53.3431,lng:12.9680,
    fisch:'Hecht, Zander, Barsch',
@@ -289,7 +289,7 @@ export const SPOTS_MV: Spot[] = [
    kartenLinks:[{label:'Fischereihof Wesenberg',url:'https://fischerei-wesenberg.de'}],
    tackle:{rute:'H-Spinnrute 40–80 g',koeder:'Gummi 12–19 cm, große Blinker; Schleppen mit tieflaufenden Wobblern',jig:'14–21 g',vorfach:'Titan/Stahl 40 cm',zugang:'Boot; Driftsack oder Anker für kontrollierte Drift über den Kanten',farben:{fruehjahr:'Naturdekore mit Kontrastpunkt (Barsch, roter Kopf) – klares Nachwinterwasser',sommer:'Naturtöne (Rotauge, Barsch); über Kraut gern Weiß/Perlmutt',herbst:'Kontrastreich (Feuertiger, Orange) – Hechte fressen sich Winterspeck an',winter:'Dezente Naturtöne, kleine Köder, extrem langsam führen'},warum:'Schleppen ist hier effektiv – Driftkontrolle entscheidet. Entnahmefenster (Hecht 55–85, Zander 55–75 cm): große Fische MÜSSEN zurück – großer Gummikescher, Abhakmatte, Hakenlöser und Einzelhaken-Umbau gehören ins Gepäck.'},
    note:'Liegt im Müritz-Nationalpark: Schutzzonen und Befahrensregeln beachten, Uferbereiche teils gesperrt.',warn:true},
-  {name:'Mirower See',wasser:'see-flach',trueb:true,zugang:'ufer',
+  {name:'Mirower See',motor:'verbrenner',schleppen:false,wasser:'see-flach',trueb:true,zugang:'ufer',
     rig:'Vom Ufer: Spinnrute 10–40 g mit Stahlvorfach an den Stegen, nachts Grundrute mit Tauwurm auf Aal.',nr:'Obere Havel',cat:'raub',arten:['Hecht','Zander','Barsch','Aal'],
    lat:53.2826,lng:12.8074,
    fisch:'Hecht, Zander, Barsch, Aal',
@@ -301,7 +301,7 @@ export const SPOTS_MV: Spot[] = [
    hotspots:[
      {name:'Ufer: Stadtufer & Schlossinsel',saison:'Mai–Okt abends, Aal Jun–Aug',lat:53.2720,lng:12.8150,tipp:'Bester Ufer-Spot der Kleinseenplatte (Luftbild): befestigtes Stadtufer mit vielen Stegen und der Schlossinsel-Brücke. Abends Barsch an den Stegen, nachts Aal – kurze Wege, kein Boot nötig.'}
    ],warn:false},
-  {name:'Drewensee',wasser:'see-flach',trueb:true,zugang:'boot',
+  {name:'Drewensee',schleppen:false,wasser:'see-flach',trueb:true,zugang:'boot',
     rig:'Allround-Raubfischcombo mit Stahlvorfach, Gummifische 10–14 cm für die Fahrrinnen-Kanten.',nr:'Obere Havel',cat:'raub',arten:['Hecht','Zander','Barsch'],
    lat:53.2600,lng:13.0330,
    fisch:'Hecht, Zander, Barsch',
@@ -310,7 +310,7 @@ export const SPOTS_MV: Spot[] = [
    kartenLinks:[{label:'Fischereihof Wesenberg',url:'https://fischerei-wesenberg.de'}],
    tackle:{rute:'Allround-Raubfischrute 20–60 g',koeder:'Gummifische 10–14 cm, Swimbaits; Barsch: 5–8 cm',jig:'10–21 g',vorfach:'Stahl/Titan 40 cm',zugang:'Boot – die fängigen Kanten liegen weit draußen',farben:{fruehjahr:'Naturdekore mit Kontrastpunkt (Barsch, roter Kopf) – klares Nachwinterwasser',sommer:'Naturtöne (Rotauge, Barsch); über Kraut gern Weiß/Perlmutt',herbst:'Kontrastreich (Feuertiger, Orange) – Hechte fressen sich Winterspeck an',winter:'Dezente Naturtöne, kleine Köder, extrem langsam führen'},warum:'Klassisches Kanten-Angeln, Echolot hilft beim Finden der Abbrüche. Entnahmefenster (Hecht 55–85, Zander 55–75 cm): große Fische MÜSSEN zurück – großer Gummikescher, Abhakmatte, Hakenlöser und Einzelhaken-Umbau gehören ins Gepäck.'},
    note:'Ruhiges Revier zwischen Wesenberg und Ahrensberg.',warn:false},
-  {name:'Rätzsee (bei Mirow/Canow)',wasser:'see-tief',zugang:'ufer',verif:'B',
+  {name:'Rätzsee (bei Mirow/Canow)',motor:'elektro',schleppen:false,wasser:'see-tief',zugang:'ufer',verif:'B',
     rig:'Vom Ufer an den erreichbaren Buchten: Spinnrute mit Stahlvorfach auf Hecht, DropShot auf Barsch; nur E-Motor auf dem Boot erlaubt.',nr:'Obere Havel · Meisterbereich Canow/Mirow',cat:'raub',arten:['Hecht','Zander','Barsch','Aal','Schleie','Karpfen','Wels'],
    lat:53.2870,lng:12.8590,
    fisch:'Hecht, Zander, Barsch, Aal, Schleie, Karpfen, Wels, Weißfisch (Artenangaben teils user-generated)',
@@ -322,7 +322,7 @@ export const SPOTS_MV: Spot[] = [
    hotspots:[
      {name:'Übergang zum Zirtowsee (Nordufer)',saison:'Mai–Okt',lat:53.3010,lng:12.8630,tipp:'Enge Verbindung zum Zirtowsee am Nordufer – Engstellen und Kanäle sind klassische Hecht- und Barschzüge. Vom Ufer bei Zirtow erreichbar. Lage ungefähr.'}
    ],warn:false},
-  {name:'Klenzsee (bei Canow)',wasser:'see-tief',zugang:'boot',verif:'B',
+  {name:'Klenzsee (bei Canow)',motor:'elektro',schleppen:false,wasser:'see-tief',zugang:'boot',verif:'B',
     rig:'Kräftige Spinn-/Baitcastrute für schwere Hechtköder + Stahlvorfach; Welsrute mit großem Köfi/Tauwurmbündel fürs Welsloch. Nur vom Boot sinnvoll.',nr:'Obere Havel · Meisterbereich Canow',cat:'raub',arten:['Hecht','Zander','Barsch','Wels','Aal','Karpfen','Schleie'],
    lat:53.2760,lng:12.8990,
    fisch:'Hecht, Zander, Barsch, Wels, Aal, Karpfen, Schleie, Weißfisch',
@@ -335,7 +335,7 @@ export const SPOTS_MV: Spot[] = [
      {name:'Zanderberg am Ostufer',saison:'Mai–Okt, Dämmerung/Nacht',lat:53.2730,lng:12.9030,tipp:'Gegenüber dem Kanal aus dem Gobenowsee, bei der Pappel-Gruppe am Ufer: ein sandiger Unterwasserberg nur Rutenlängen vom Schilf. Zander treiben abends/nachts ihre Beute den Hang hinauf. Lage ungefähr.'},
      {name:'Welsloch (hinter der ersten Kurve)',saison:'Sommernächte + Winter',lat:53.2790,lng:12.8960,tipp:'In der Bucht steigt der Grund von 13 auf 3 m an; direkt hinter der ersten scharfen Kurve am rechten Ufer liegt ein 9-m-Loch mitten in der flachen Zone – bester Wels- und Winterzander-Platz. Großer Köderfisch oder Tauwurmbündel am Grund. Lage ungefähr.'}
    ],warn:false},
-  {name:'Großer Priepertsee',wasser:'see-tief',zugang:'boot',verif:'B',
+  {name:'Großer Priepertsee',motor:'verbrenner',schleppen:false,wasser:'see-tief',zugang:'boot',verif:'B',
     rig:'Zander-Jigrute 15–50 g für die tiefen Kanten (26 m!), Pilker gehen hier laut Ortsanglern gut; Stahlvorfach auf Hecht. Boot nötig.',nr:'Obere Havel · Meisterbereich Ahrensberg',cat:'raub',arten:['Zander','Hecht','Barsch','Aal','Schleie','Wels','Karpfen'],
    lat:53.2560,lng:13.0180,
    fisch:'Zander (sehr gut), Hecht, Barsch, Aal, Schleie, Wels, Karpfen, Weißfisch',
@@ -885,7 +885,7 @@ export const REGIONS_EMBEDDED: Region[] = [
  REGION_HE,
  REGION_EL,
  REGION_MA,
- {id:'mecklenburg',geprueft:'2026-07',name:'Mecklenburgische Kleinseenplatte (MV)',nachtangeln:'frei',kurz:'Kleinseenplatte',packliste:['Fischereischein + Fischereiabgabe MV (10€) + ggf. Touristenschein','Anker-Pflicht – Schleppen & Driften verboten, max. 2 Handangeln','Tageslimit: max. 3 Edelfische gesamt (Aal, Hecht, Zander, Karpfen)','Echolot (Scharkanten weit draußen)','Stahl-/Titanvorfach (hohe Hechtdichte)','Mückenschutz (Wald überflutet)','Kescher, Kopflampe, Regenjacke'],
+ {id:'mecklenburg',geprueft:'2026-07',name:'Mecklenburgische Kleinseenplatte (MV)',nachtangeln:'frei',kurz:'Kleinseenplatte',packliste:['Fischereischein + Fischereiabgabe MV (10€) + ggf. Touristenschein','Anker-Pflicht – Schleppen & Driften verboten, max. 2 Handangeln','Tageslimit: max. 3 Edelfische gesamt (Aal, Hecht, Zander, Karpfen)','Mind. 5–10 m Abstand zum Schilf (Naturschutz) – nicht ans Schilf fahren','Urlauber-Fischereischein ohne Prüfung möglich (Ausgabe: Amt/Rathaus/Tourist-Info)','Echolot (Scharkanten weit draußen)','Stahl-/Titanvorfach (hohe Hechtdichte)','Mückenschutz (Wald überflutet)','Kescher, Kopflampe, Regenjacke'],
   koederfisch:['Lebender Köderfisch verboten (Tierschutzgesetz).','Köderfische nur aus dem befischten Gewässer (Seenverbund Obere Havel).','Barsch &amp; kleine Plötze sind top Hecht-/Zanderköder – als Fischfetzen oder ganzer toter Köfi am System.','Kein Anfüttern in Schongebieten/Nationalpark-Zonen.'],
   schonQuelle:'⚠ KARTENREGELN der Seenfischerei Obere Havel – teils strenger als MV-Landesrecht und NUR auf deren Gewässern gültig!',
   fusszeile:'Angelkarten: <a href="https://fischerei-wesenberg.de" target="_blank" rel="noopener">Seenfischerei Obere Havel</a> + Fischereiabgabe MV',

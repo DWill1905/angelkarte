@@ -8,6 +8,8 @@
   "Fischereischein + Fischereiabgabe MV (10€) + ggf. Touristenschein",
   "Anker-Pflicht – Schleppen & Driften verboten, max. 2 Handangeln",
   "Tageslimit: max. 3 Edelfische gesamt (Aal, Hecht, Zander, Karpfen)",
+  "Mind. 5–10 m Abstand zum Schilf (Naturschutz) – nicht ans Schilf fahren",
+  "Urlauber-Fischereischein ohne Prüfung möglich (Ausgabe: Amt/Rathaus/Tourist-Info)",
   "Echolot (Scharkanten weit draußen)",
   "Stahl-/Titanvorfach (hohe Hechtdichte)",
   "Mückenschutz (Wald überflutet)",
@@ -24,6 +26,8 @@
  "spots": [
   {
    "name": "Woblitzsee",
+   "motor": "verbrenner",
+   "schleppen": false,
    "wasser": "see-flach",
    "trueb": true,
    "zugang": "ufer",
@@ -99,6 +103,7 @@
   },
   {
    "name": "Zotzensee",
+   "schleppen": false,
    "wasser": "see-flach",
    "trueb": true,
    "zugang": "boot",
@@ -150,6 +155,8 @@
   },
   {
    "name": "Vilzsee",
+   "motor": "verbrenner",
+   "schleppen": false,
    "wasser": "see-flach",
    "zugang": "boot",
    "rig": "Mittlere Spinnrute, Stahlvorfach, flachlaufende Köder – Polbrille fürs Sichtangeln im klaren Wasser.",
@@ -190,6 +197,8 @@
   },
   {
    "name": "Großer Labussee",
+   "motor": "verbrenner",
+   "schleppen": false,
    "wasser": "see-tief",
    "zugang": "boot",
    "rig": "Zander-Jigrute 15–50 g, FC 0,40+ oder dünner Stahl, DropShot-Setup für die Barschtrupps.",
@@ -231,6 +240,8 @@
   },
   {
    "name": "Useriner See",
+   "nationalpark": true,
+   "schleppen": false,
    "wasser": "see-flach",
    "trueb": true,
    "zugang": "boot",
@@ -272,6 +283,8 @@
   },
   {
    "name": "Mirower See",
+   "motor": "verbrenner",
+   "schleppen": false,
    "wasser": "see-flach",
    "trueb": true,
    "zugang": "ufer",
@@ -323,6 +336,7 @@
   },
   {
    "name": "Drewensee",
+   "schleppen": false,
    "wasser": "see-flach",
    "trueb": true,
    "zugang": "boot",
@@ -364,6 +378,8 @@
   },
   {
    "name": "Rätzsee (bei Mirow/Canow)",
+   "motor": "elektro",
+   "schleppen": false,
    "wasser": "see-tief",
    "zugang": "ufer",
    "verif": "B",
@@ -418,6 +434,8 @@
   },
   {
    "name": "Klenzsee (bei Canow)",
+   "motor": "elektro",
+   "schleppen": false,
    "wasser": "see-tief",
    "zugang": "boot",
    "verif": "B",
@@ -479,6 +497,8 @@
   },
   {
    "name": "Großer Priepertsee",
+   "motor": "verbrenner",
+   "schleppen": false,
    "wasser": "see-tief",
    "zugang": "boot",
    "verif": "B",

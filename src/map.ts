@@ -37,6 +37,15 @@ export function monatLabel(ym){
   const m=/^(\d{4})-(\d{2})$/.exec(ym||'');
   return m ? M[+m[2]-1]+' '+m[1] : (ym||'');
 }
+/** Regulatorische Badges (Motor, Schleppen, Nationalpark) – kurz und deutlich unter dem Titel. */
+function badgesHtml(s: Spot): string {
+  const b: string[] = [];
+  if (s.motor === 'elektro') b.push('<span class="pop-badge stop">⛔ Verbrennungsmotor verboten</span>');
+  if (s.schleppen === false) b.push('<span class="pop-badge stop">⚓ Schleppangeln verboten</span>');
+  if (s.nationalpark) b.push('<span class="pop-badge np">🏞 Nationalpark – Befahrensregeln</span>');
+  return b.length ? `<div class="pop-badges">${b.join('')}</div>` : '';
+}
+
 export function popupHtml(s: Spot): string {
   const c=CATS[s.cat];
   const beangelbar = s.cat!=='sperr' && s.cat!=='info';
@@ -47,6 +56,7 @@ export function popupHtml(s: Spot): string {
   return `<span class="pop-cat" style="background:${c.color}">${c.label}</span><span class="pop-nr">${s.nr}</span>
     <div class="pop-title">${s.name}</div>
     <div class="pop-dist" data-dist="${s.lat},${s.lng}"></div>
+    ${badgesHtml(s)}
     ${ratingHtml(s)}
     ${!s.line&&beangelbar?'<div class="pop-row" data-wind="1"></div>':''}
     ${beangelbar?'<div class="pop-row" data-wt="'+esc((s.arten||[]).join(","))+'"></div>':''}

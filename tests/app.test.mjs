@@ -50,6 +50,16 @@ describe('Popups', () => {
     assert.ok(!/rate-g unbekannt/.test(h), 'einzelne unbekannt-Zeilen sollten gebündelt sein');
   });
 
+  test('regulatorische Badges erscheinen im Popup', async () => {
+    await loadRegion(ctx, 'mecklenburg');
+    const raetz = app.state.SPOTS.find((s) => s.name.startsWith('Rätzsee'));
+    const user = app.state.SPOTS.find((s) => s.name.startsWith('Useriner'));
+    const hr = app.popupHtml(raetz);
+    assert.match(hr, /Verbrennungsmotor verboten/, 'Motor-Badge fehlt');
+    assert.match(hr, /Schleppangeln verboten/, 'Schlepp-Badge fehlt');
+    assert.match(app.popupHtml(user), /Nationalpark/, 'Nationalpark-Badge fehlt');
+  });
+
   test('Detail-Panel existiert und lässt sich schließen', () => {
     const sheet = doc.getElementById('detailSheet');
     const close = doc.getElementById('detailClose');

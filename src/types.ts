@@ -65,6 +65,12 @@ export interface Spot {
   wasser?: Wasser;
   /** Trübes Stillwasser (Algensee/mäßig trüb) → Signalfarben statt Naturdekor. Seen sind sonst als klar angenommen. */
   trueb?: boolean;
+  /** Höchste erlaubte Bootsmotorisierung: 'elektro' = Verbrenner verboten, 'verbrenner' = erlaubt. */
+  motor?: 'elektro' | 'verbrenner';
+  /** Schleppangeln (Trolling) erlaubt? false = verboten (z. B. Seenfischerei Obere Havel). */
+  schleppen?: boolean;
+  /** Liegt im/grenzt an einen Nationalpark → Befahrens-/Schutzzonen beachten. */
+  nationalpark?: boolean;
   /** Kuratierte Tackle-Empfehlung. Fehlt sie, wird sie abgeleitet. */
   tackle?: Tackle;
   /** Maximaltiefe in Metern, falls belegt (steuert Jigkopf & Rutenwahl). */
