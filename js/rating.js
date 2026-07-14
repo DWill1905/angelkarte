@@ -142,7 +142,7 @@ function wtTrendBewertung(art, wt, wtTrend, p) {
 }
 /** Licht- und Bewölkungslage artspezifisch bewerten (nutzt weather_code + Wind + Trübungsprofil).
     Lichtscheue Räuber (Zander) mögen gedämpftes Licht, Sichträuber (Barsch, Forelle …) klareres. */
-function lichtBewertung(lat, lng, jetzt, wx, art, p) {
+function lichtBewertung(lat, lng, jetzt, wx, art, p, trueb) {
     const G = 1.5;
     if (!wx)
         return { status: 'unbekannt', text: 'Bewölkung/Licht unbekannt (offline?)', erreicht: 0, moeglich: 0 };
@@ -151,6 +151,17 @@ function lichtBewertung(lat, lng, jetzt, wx, art, p) {
     const hell = !!(st && st.rise && st.set && t > st.rise.getTime() && t < st.set.getTime());
     if (!hell)
         return { status: 'ja', text: 'Dunkelheit – Licht ist kein limitierender Faktor', erreicht: G, moeglich: G };
+    /* Trübes Stillwasser wirkt wie Dauerdeckung und überlagert die Oberflächen-Lichtlage:
+       ein Plus für lichtscheue/trübungsliebende Räuber, leichte Dämpfung für Sichträuber. */
+    if (trueb) {
+        if (p?.licht === 'scheu' || p?.truebung) {
+            return { status: 'ja', text: `Trübes Wasser wirkt wie Dauerdeckung – ideal für ${art}`, erreicht: G, moeglich: G };
+        }
+        if (p?.licht === 'sicht') {
+            return { status: 'ja', text: `Trübes Wasser – ${art} jagt hier eher über Kontrast/Vibration als auf Sicht`, erreicht: 1, moeglich: G };
+        }
+        return { status: 'ja', text: `Trübes, deckungsreiches Wasser – neutral für ${art}`, erreicht: 1.1, moeglich: G };
+    }
     const code = wx.code;
     const sonnig = code == null || code <= 1;
     const bedeckt = code === 3 || code === 45 || code === 48;
@@ -263,7 +274,7 @@ export function bewerteSpot(s, art, jetzt = new Date(), hotspot = null) {
     }
     /* 4b) Licht & Bewölkung (Gewicht 1.5) – artspezifisch, nutzt den weather_code der Wetter-API. */
     {
-        const li = lichtBewertung(lat, lng, jetzt, wx, art, p);
+        const li = lichtBewertung(lat, lng, jetzt, wx, art, p, s.trueb);
         add(li.status, li.text, li.erreicht, li.moeglich);
     }
     /* 5) Strömung/Wasserstand (Fluss) bzw. Wellenlage (See) – Gewicht 1.5, artspezifisch. */

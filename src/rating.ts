@@ -212,13 +212,25 @@ function wtTrendBewertung(art: string, wt: number | null, wtTrend: number | null
 
 /** Licht- und Bewölkungslage artspezifisch bewerten (nutzt weather_code + Wind + Trübungsprofil).
     Lichtscheue Räuber (Zander) mögen gedämpftes Licht, Sichträuber (Barsch, Forelle …) klareres. */
-function lichtBewertung(lat: number, lng: number, jetzt: Date, wx: any, art: string, p?: ArtProfil): { status: Bewertbar; text: string; erreicht: number; moeglich: number } {
+function lichtBewertung(lat: number, lng: number, jetzt: Date, wx: any, art: string, p?: ArtProfil, trueb?: boolean): { status: Bewertbar; text: string; erreicht: number; moeglich: number } {
   const G = 1.5;
   if (!wx) return { status: 'unbekannt', text: 'Bewölkung/Licht unbekannt (offline?)', erreicht: 0, moeglich: 0 };
   const st = sunTimes(lat, lng, jetzt);
   const t = jetzt.getTime();
   const hell = !!(st && st.rise && st.set && t > st.rise.getTime() && t < st.set.getTime());
   if (!hell) return { status: 'ja', text: 'Dunkelheit – Licht ist kein limitierender Faktor', erreicht: G, moeglich: G };
+
+  /* Trübes Stillwasser wirkt wie Dauerdeckung und überlagert die Oberflächen-Lichtlage:
+     ein Plus für lichtscheue/trübungsliebende Räuber, leichte Dämpfung für Sichträuber. */
+  if (trueb) {
+    if (p?.licht === 'scheu' || p?.truebung) {
+      return { status: 'ja', text: `Trübes Wasser wirkt wie Dauerdeckung – ideal für ${art}`, erreicht: G, moeglich: G };
+    }
+    if (p?.licht === 'sicht') {
+      return { status: 'ja', text: `Trübes Wasser – ${art} jagt hier eher über Kontrast/Vibration als auf Sicht`, erreicht: 1, moeglich: G };
+    }
+    return { status: 'ja', text: `Trübes, deckungsreiches Wasser – neutral für ${art}`, erreicht: 1.1, moeglich: G };
+  }
 
   const code: number | undefined = wx.code;
   const sonnig = code == null || code <= 1;
@@ -322,7 +334,7 @@ export function bewerteSpot(s: Spot, art: string, jetzt: Date = new Date(), hots
 
   /* 4b) Licht & Bewölkung (Gewicht 1.5) – artspezifisch, nutzt den weather_code der Wetter-API. */
   {
-    const li = lichtBewertung(lat, lng, jetzt, wx, art, p);
+    const li = lichtBewertung(lat, lng, jetzt, wx, art, p, s.trueb);
     add(li.status, li.text, li.erreicht, li.moeglich);
   }
 

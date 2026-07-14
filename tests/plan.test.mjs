@@ -166,6 +166,20 @@ describe('Filter-Verknüpfung: Fisch-Chips grauen aus', () => {
   });
 });
 
+describe('Trübung im Scoring', () => {
+  test('trübes Wasser hilft dem lichtscheuen Zander bei Sonne/Flaute', async () => {
+    await loadRegion(ctx, 'mecklenburg');
+    app.state.WX = { temp: 20, wind: 2, dirDeg: 0, dir: 'N', press: 1015, trendVal: 0, code: 0 };
+    app.state.PEGEL = { value: 100, station: 'X', dist: 3, wt: 18 };
+    const m = new Date(Date.UTC(2026, 6, 15, 12, 0));
+    const trueb = app.state.SPOTS.find((s) => s.name.startsWith('Woblitzsee'));
+    const klar = app.state.SPOTS.find((s) => s.name.startsWith('Vilzsee'));
+    const bt = app.bewerteSpot(trueb, 'Zander', m);
+    const bk = app.bewerteSpot(klar, 'Zander', m);
+    assert.ok(bt.prozent > bk.prozent, `trüber See sollte für Zander besser sein (${bt.prozent} vs ${bk.prozent})`);
+  });
+});
+
 describe('Karten-Legende', () => {
   test('listet die vorhandenen Kategorien + Cluster, lässt sich öffnen', async () => {
     await loadRegion(ctx, 'mainz');
