@@ -153,13 +153,30 @@ export function buildLegend() {
         return;
     const present = [...new Set(state.SPOTS.map(s => s.cat))].filter(c => CATS[c]);
     el.innerHTML = present.map(c => `<div class="leg-row"><span class="leg-dot" style="background:${CATS[c].color}"></span>${esc(CATS[c].label)}</div>`).join('')
-        + '<div class="leg-row"><span class="leg-cluster">5</span>mehrere Spots – reinzoomen</div>';
+        + '<div class="leg-row"><span class="leg-cluster">5</span>mehrere Spots – reinzoomen</div>'
+        + (state.REGION && state.REGION.flusskm && state.REGION.flusskm.length ? '<div class="leg-row"><span class="leg-km">km</span>Rhein-Strom-km</div>' : '');
 }
 (function () {
     const t = byId('legToggle'), b = byId('legBody');
     if (t && b)
         t.onclick = () => { const open = b.hidden; b.hidden = !open; t.setAttribute('aria-expanded', String(open)); };
 })();
+/* Fluss-Kilometer (Rhein) als dezente, nicht-klickbare Labels entlang des Laufs.
+   Näherungsweise interpoliert – zur Orientierung an km-basierten Erlaubnisscheinen. */
+export function buildRheinKm() {
+    (state.kmMarker || []).forEach(m => { if (state.map.hasLayer(m))
+        state.map.removeLayer(m); });
+    state.kmMarker = [];
+    const km = state.REGION && state.REGION.flusskm;
+    if (!km || !km.length)
+        return;
+    km.forEach(p => {
+        const icon = L.divIcon({ className: 'km-mark', html: String(p.km), iconSize: [26, 15], iconAnchor: [13, 7] });
+        const m = L.marker([p.lat, p.lng], { icon, interactive: false, keyboard: false, zIndexOffset: -600 });
+        m.addTo(state.map);
+        state.kmMarker.push(m);
+    });
+}
 export function hotPopup(parent, h) {
     return `<span class="pop-cat" style="background:${CATS[parent.cat].color}">Hotspot</span>
     <div class="pop-title">${h.name}</div>

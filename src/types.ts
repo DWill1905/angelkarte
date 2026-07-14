@@ -132,6 +132,8 @@ export interface Region {
   fusszeile?: string;
   spots: Spot[];
   schon: Schonzeit[];
+  /** Fluss-Kilometermarken (z. B. Rhein-Strom-km) zur Orientierung – näherungsweise interpoliert. */
+  flusskm?: { km: number; lat: number; lng: number }[];
   banner?: Banner[];
   regeln?: Regelblock[];
   hinweis?: string;
@@ -286,4 +288,6 @@ export interface AppState {
   map: any;
   /** Leaflet.markercluster-Gruppe für die Spot-Marker (null, wenn Plugin nicht geladen). */
   cluster?: any;
+  /** Fluss-Kilometer-Labels (Rhein) auf der Karte. */
+  kmMarker?: any[];
 }

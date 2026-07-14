@@ -68,6 +68,14 @@ describe('Popups', () => {
     assert.match(h, /Flussmitte/, 'Flussmitte-Badge fehlt');
   });
 
+  test('Rhein-km-Marken: für mainz erzeugt, beim Regionswechsel geleert', async () => {
+    await loadRegion(ctx, 'mainz');
+    assert.ok(app.state.REGION.flusskm && app.state.REGION.flusskm.length >= 8, 'flusskm-Daten fehlen');
+    assert.equal((app.state.kmMarker || []).length, app.state.REGION.flusskm.length, 'km-Marken nicht erzeugt');
+    await loadRegion(ctx, 'mecklenburg');
+    assert.equal((app.state.kmMarker || []).length, 0, 'km-Marken beim Wechsel nicht geleert');
+  });
+
   test('Detail-Panel existiert und lässt sich schließen', () => {
     const sheet = doc.getElementById('detailSheet');
     const close = doc.getElementById('detailClose');

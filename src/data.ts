@@ -674,6 +674,7 @@ export const REGION_RLP: Region = {id:'mainz',geprueft:'2026-07',name:'Rhein & R
   pegel:{warnAb:400,text:'Buhnen überspült – auf Hafenausfahrten ausweichen!'},
   fusszeile:'Erlaubnis: <a href="https://lfv-rhl-rhh.de/fischerei-erlaubnisscheine/rhein/" target="_blank" rel="noopener">LFV Rhl.-Rhh.</a> (links) · <a href="https://www.hejfish.com" target="_blank" rel="noopener">hejfish</a> (Hessen-Seite)',
   spots:SPOTS_RLP,schon:SCHON_RLP,
+  flusskm:[{km:460,lat:49.745,lng:8.4226},{km:465,lat:49.7736,lng:8.4063},{km:470,lat:49.8022,lng:8.3901},{km:475,lat:49.8308,lng:8.3738},{km:480,lat:49.8594,lng:8.3575},{km:485,lat:49.9237,lng:8.3432},{km:490,lat:49.9662,lng:8.3245},{km:495,lat:49.987,lng:8.3014},{km:500,lat:50.0085,lng:8.2645},{km:505,lat:50.0302,lng:8.1943}],
   banner:[
     {von:[2,1],bis:[3,14],text:'<b>Hecht geschont</b> (01.02.–31.05.).'},
     {von:[3,15],bis:[4,14],text:'<b>Hecht &amp; Zander geschont</b> – Zander bis 15.05., Hecht bis 31.05.'},

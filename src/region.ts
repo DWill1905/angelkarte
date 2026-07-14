@@ -3,7 +3,7 @@ import { byId, selectById } from './dom.js';
 import { state, store } from './state.js';
 import { REGIONS_EMBEDDED } from './data.js';
 import { buildFbOptions, checkFang } from './fangbuch.js';
-import { applyFilters, buildChips, buildLegend, buildMarkers, syncFishChips, sperrWarnung } from './map.js';
+import { applyFilters, buildChips, buildLegend, buildMarkers, buildRheinKm, syncFishChips, sperrWarnung } from './map.js';
 import { loadMySpots, mySpotObj } from './myspots.js';
 import { buildRegeln, buildSchonUI } from './regeln.js';
 import { buildBanner, buildSaisonBar, sunLine } from './ui.js';
@@ -38,7 +38,7 @@ export async function loadRegion(r){
   if(myToken!==state.loadToken) return; /* zwischenzeitlich weitergeschaltet */
   state.SPOTS=r.spots.concat(mine.map(mySpotObj));
   byId('footRegion').innerHTML=r.fusszeile||'';
-  buildMarkers(); buildChips(); buildLegend(); buildBanner(); buildSchonUI(); buildRegeln(); buildFbOptions();
+  buildMarkers(); buildChips(); buildLegend(); buildRheinKm(); buildBanner(); buildSchonUI(); buildRegeln(); buildFbOptions();
   if(typeof checkFang==='function') checkFang(); /* Maßcheck an neue Region anpassen */
   if(typeof sunLine==='function') sunLine();
   state.fishSel.length=0; syncFishChips(); applyFilters();
