@@ -885,7 +885,7 @@ export const REGIONS_EMBEDDED: Region[] = [
  REGION_HE,
  REGION_EL,
  REGION_MA,
- {id:'mecklenburg',geprueft:'2026-07',name:'Mecklenburgische Kleinseenplatte (MV)',nachtangeln:'frei',kurz:'Kleinseenplatte',packliste:['Fischereischein + Fischereiabgabe MV (10€) + ggf. Touristenschein','Boot/Anker – Schleppen verboten, Ufer meist Schilf!','Echolot (Scharkanten weit draußen)','Stahl-/Titanvorfach (hohe Hechtdichte)','Mückenschutz (Wald überflutet)','Kescher, Kopflampe, Regenjacke'],
+ {id:'mecklenburg',geprueft:'2026-07',name:'Mecklenburgische Kleinseenplatte (MV)',nachtangeln:'frei',kurz:'Kleinseenplatte',packliste:['Fischereischein + Fischereiabgabe MV (10€) + ggf. Touristenschein','Anker-Pflicht – Schleppen & Driften verboten, max. 2 Handangeln','Tageslimit: max. 3 Edelfische gesamt (Aal, Hecht, Zander, Karpfen)','Echolot (Scharkanten weit draußen)','Stahl-/Titanvorfach (hohe Hechtdichte)','Mückenschutz (Wald überflutet)','Kescher, Kopflampe, Regenjacke'],
   koederfisch:['Lebender Köderfisch verboten (Tierschutzgesetz).','Köderfische nur aus dem befischten Gewässer (Seenverbund Obere Havel).','Barsch &amp; kleine Plötze sind top Hecht-/Zanderköder – als Fischfetzen oder ganzer toter Köfi am System.','Kein Anfüttern in Schongebieten/Nationalpark-Zonen.'],
   schonQuelle:'⚠ KARTENREGELN der Seenfischerei Obere Havel – teils strenger als MV-Landesrecht und NUR auf deren Gewässern gültig!',
   fusszeile:'Angelkarten: <a href="https://fischerei-wesenberg.de" target="_blank" rel="noopener">Seenfischerei Obere Havel</a> + Fischereiabgabe MV',
