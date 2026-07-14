@@ -6,10 +6,13 @@
  "kurz": "Rhein & Rheinhessen",
  "packliste": [
   "Rheinischer Erlaubnisschein (Strom-km prüfen!)",
+  "RLP-Frühjahrsschonzeit 15.4.–31.5.: am Rhein & größeren RLP-Gewässern Kunstköderverbot – nur Naturköder/Fliege",
+  "Rheinkarte gilt nur bis Flussmitte – hessische Seite braucht hessischen Schein",
+  "Winterschonzeit 15.10.–15.3. an Standgewässern ohne Frühjahrsschonzeit (Rhein ausgenommen) – Schein prüfen",
   "Schwere Jigrute 30–60 g + Bleikopf-Vorrat (Steinpackung!)",
   "Grundel-Dekore, Stahl-/FC-Vorfach",
   "Wathose/Gummistiefel für Buhnen",
-  "Pegel checken – bei >400 cm Buhnen weg",
+  "Buhnen NIE bei Hochwasser betreten – lebensgefährlich (Sog/Wellenschlag); Pegel Mainz >400 cm = Buhnen weg",
   "Stirnlampe, Kescher, Abhakmatte"
  ],
  "koederfisch": [
@@ -27,6 +30,8 @@
  "spots": [
   {
    "name": "Rhein Mainz – Stadtstrecke",
+   "rlpFruehjahr": true,
+   "flussmitte": true,
    "wasser": "fluss",
    "zugang": "ufer",
    "nr": "LFV RLP · ~Strom-km 498–500",
@@ -145,6 +150,8 @@
   },
   {
    "name": "Buhnen & Rampen Budenheim",
+   "rlpFruehjahr": true,
+   "flussmitte": true,
    "wasser": "fluss",
    "zugang": "ufer",
    "nr": "LFV RLP · ~Strom-km 506–508",
@@ -204,6 +211,8 @@
   },
   {
    "name": "Hafen & Buhnen Oppenheim",
+   "rlpFruehjahr": true,
+   "flussmitte": true,
    "wasser": "fluss",
    "zugang": "ufer",
    "nr": "LFV RLP · ~Strom-km 480",
@@ -232,6 +241,8 @@
   },
   {
    "name": "Rhein Nackenheim & Mühlarm",
+   "rlpFruehjahr": true,
+   "flussmitte": true,
    "wasser": "fluss",
    "zugang": "ufer",
    "verif": "B",
@@ -272,6 +283,8 @@
   },
   {
    "name": "Buhnen Gimbsheim–Ibersheim",
+   "rlpFruehjahr": true,
+   "flussmitte": true,
    "wasser": "fluss",
    "zugang": "ufer",
    "verif": "B",
@@ -494,6 +507,7 @@
   },
   {
    "name": "Selz-Mündung Ingelheim",
+   "rlpFruehjahr": true,
    "wasser": "fluss",
    "verif": "B",
    "nr": "Selz · Mündung in den Rhein bei Frei-Weinheim",

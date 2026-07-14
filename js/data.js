@@ -362,7 +362,7 @@ export const SCHON_MV = [
 ];
 /* ============ Region: Rhein & Rheinhessen / Mainz (recherchiert 07/2026) ============ */
 export const SPOTS_RLP = [
-    { name: 'Rhein Mainz – Stadtstrecke', wasser: 'fluss', zugang: 'ufer', nr: 'LFV RLP · ~Strom-km 498–500', cat: 'raub',
+    { name: 'Rhein Mainz – Stadtstrecke', rlpFruehjahr: true, flussmitte: true, wasser: 'fluss', zugang: 'ufer', nr: 'LFV RLP · ~Strom-km 498–500', cat: 'raub',
         arten: ['Zander', 'Barsch', 'Rapfen', 'Wels', 'Aal', 'Döbel', 'Brachse'],
         lat: 50.0010, lng: 8.2790,
         fisch: 'Zander, Barsch, Rapfen, Wels, Aal, Barbe, Döbel, Brassen – Grundel ist Hauptfutter',
@@ -397,7 +397,7 @@ export const SPOTS_RLP = [
             { name: 'Hinter dem Bauhaus', saison: 'ganzjährig', lat: 50.0305, lng: 8.2200, tipp: 'Zugänglicher Klassiker am erlaubten Ausfahrtsbereich – Ansitz und Raubfisch, entsprechend frequentiert.' },
             { name: 'Auspitze Ingelheimer Aue', saison: 'Okt–Mär + Hochwasser', lat: 50.0370, lng: 8.2340, tipp: 'Die Spitze der Insel an der Hafenausfahrt – Strömungskante trifft Stillwasser, klassischer Zanderzug. Lage ungefähr.' }
         ], warn: true },
-    { name: 'Buhnen & Rampen Budenheim', wasser: 'fluss', zugang: 'ufer', nr: 'LFV RLP · ~Strom-km 506–508', cat: 'raub',
+    { name: 'Buhnen & Rampen Budenheim', rlpFruehjahr: true, flussmitte: true, wasser: 'fluss', zugang: 'ufer', nr: 'LFV RLP · ~Strom-km 506–508', cat: 'raub',
         arten: ['Zander', 'Barsch', 'Döbel', 'Aal', 'Brachse'],
         lat: 50.0295, lng: 8.1675,
         fisch: 'Zander, Barsch, Barbe, Döbel, Aal, Brassen',
@@ -415,7 +415,7 @@ export const SPOTS_RLP = [
         rig: 'Feeder/Pose fürs Stillwasser, Spinnrute für den Ausgang zum Strom',
         kartenLinks: [{ label: 'LFV RLP – Rheinkarte', url: 'https://lfv-rhl-rhh.de/fischerei-erlaubnisscheine/rhein/' }],
         note: 'Beliebt und teils saisonal gesperrt (Berichte über Sperrung bis 31.08. kursieren) – Beschilderung maßgeblich. Badestrand nebenan = Sommer-Trubel.', warn: true },
-    { name: 'Hafen & Buhnen Oppenheim', wasser: 'fluss', zugang: 'ufer', nr: 'LFV RLP · ~Strom-km 480', cat: 'raub',
+    { name: 'Hafen & Buhnen Oppenheim', rlpFruehjahr: true, flussmitte: true, wasser: 'fluss', zugang: 'ufer', nr: 'LFV RLP · ~Strom-km 480', cat: 'raub',
         arten: ['Zander', 'Barsch', 'Wels', 'Aal', 'Brachse'],
         lat: 49.8594, lng: 8.3575,
         fisch: 'Zander, Barsch, Wels, Aal, Brassen, Barbe',
@@ -424,7 +424,7 @@ export const SPOTS_RLP = [
         rig: 'Rhein-Standard: Jigrute 30–60 g, Grundelfarben; Welsrute lohnt als zweite Rute',
         kartenLinks: [{ label: 'LFV RLP – Rheinkarte', url: 'https://lfv-rhl-rhh.de/fischerei-erlaubnisscheine/rhein/' }],
         note: 'Gut kombinierbar: Hafeneinfahrt bei Hochwasser, Buhnen bei Normalpegel. Marina-Bereich respektieren.', warn: false },
-    { name: 'Rhein Nackenheim & Mühlarm', wasser: 'fluss', zugang: 'ufer', verif: 'B', nr: 'LFV RLP · km 485–490', cat: 'raub',
+    { name: 'Rhein Nackenheim & Mühlarm', rlpFruehjahr: true, flussmitte: true, wasser: 'fluss', zugang: 'ufer', verif: 'B', nr: 'LFV RLP · km 485–490', cat: 'raub',
         arten: ['Zander', 'Barsch', 'Rapfen', 'Wels', 'Hecht', 'Aal', 'Brachse'],
         lat: 49.9558, lng: 8.3360,
         fisch: 'Zander, Barsch, Rapfen, Wels, Hecht, Aal, Brassen (Artenangaben teils user-generated)',
@@ -436,7 +436,7 @@ export const SPOTS_RLP = [
         hotspots: [
             { name: 'Mühlarm bei der B9', saison: 'ganzjährig, top bei Hochwasser', lat: 49.9585, lng: 8.3345, tipp: 'Strömungsberuhigter Nebenarm zwischen Ufer und den Inseln – ideal wenn der Hauptstrom bei Hochwasser unfischbar wird. Viele Bootsstege, Friedfisch und Zander. Inselseite wegen NSG-Sperren meiden!' }
         ], warn: true },
-    { name: 'Buhnen Gimbsheim–Ibersheim', wasser: 'fluss', zugang: 'ufer', verif: 'B', nr: 'LFV RLP · km ~453–460', cat: 'raub',
+    { name: 'Buhnen Gimbsheim–Ibersheim', rlpFruehjahr: true, flussmitte: true, wasser: 'fluss', zugang: 'ufer', verif: 'B', nr: 'LFV RLP · km ~453–460', cat: 'raub',
         arten: ['Zander', 'Barsch', 'Wels', 'Aal', 'Barbe', 'Brachse', 'Karpfen'],
         lat: 49.7250, lng: 8.4340,
         fisch: 'Zander (kapital, 3–7 Pfd berichtet), Barsch, Wels, Aal, Barbe, Brassen, Karpfen',
@@ -504,7 +504,7 @@ export const SPOTS_RLP = [
         karte: 'Erlaubnisschein über den bewirtschaftenden Verein – Modalitäten vor Ort/online (hejfish) prüfen',
         note: '⚠ Freizeit-/Badesee: im Sommer tagsüber stark genutzt (sehr klares Wasser, beliebt zum Baden) – Dämmerung und Randsaison sind fängiger. Nicht mit dem benachbarten Eicher See verwechseln.',
         hotspots: [], warn: true, zugang: 'ufer' },
-    { name: 'Selz-Mündung Ingelheim', wasser: 'fluss', verif: 'B', nr: 'Selz · Mündung in den Rhein bei Frei-Weinheim', cat: 'raub',
+    { name: 'Selz-Mündung Ingelheim', rlpFruehjahr: true, wasser: 'fluss', verif: 'B', nr: 'Selz · Mündung in den Rhein bei Frei-Weinheim', cat: 'raub',
         arten: ['Döbel', 'Barsch', 'Hecht', 'Aal', 'Rapfen', 'Karpfen', 'Brachse'],
         lat: 49.99560, lng: 8.05340,
         fisch: 'Döbel, Barsch, Hecht, Aal, Rapfen, Karpfen, Brassen, Weißfische',
@@ -650,7 +650,7 @@ export const REGION_HE = { id: 'giessen', geprueft: '2026-07', name: 'Gießen / 
         { titel: 'Lahn- & Seen-Praxis', punkte: ['Lahn ab Wetzlar Bundeswasserstraße – Schifffahrt/Wellenschlag beachten, Ruten sichern', 'Stadtnahe Lahn: Zugang durch Bebauung eingeschränkt – Wehre und Brücken sind die Hotspots', 'Baggerseen (Dutenhofen): Sommer/Wochenende Freizeittrubel – Dämmerung und Nacht sind fängiger', 'Grundeln breiten sich aus: toter Köderfisch am Grund auf Zander/Wels/Aal', 'Setzkescher an Bundeswasserstraßen/bei Wellenschlag laut HFischV unzulässig'] }
     ],
     hinweis: 'Angaben ohne Gewähr, recherchiert 07/2026 (HFischV 14.04.2023, Vereinsseiten VSA Gießen/ASV Wetzlar/ASV Lahnau, IG Lahn, Anglerforen). Maßgeblich sind der jeweilige Erlaubnisschein und die Beschilderung vor Ort. Entnahmefenster vor Entnahme prüfen.' };
-export const REGION_RLP = { id: 'mainz', geprueft: '2026-07', name: 'Rhein & Rheinhessen (Mainz)', nachtangeln: 'frei', kurz: 'Rhein & Rheinhessen', packliste: ['Rheinischer Erlaubnisschein (Strom-km prüfen!)', 'Schwere Jigrute 30–60 g + Bleikopf-Vorrat (Steinpackung!)', 'Grundel-Dekore, Stahl-/FC-Vorfach', 'Wathose/Gummistiefel für Buhnen', 'Pegel checken – bei >400 cm Buhnen weg', 'Stirnlampe, Kescher, Abhakmatte'],
+export const REGION_RLP = { id: 'mainz', geprueft: '2026-07', name: 'Rhein & Rheinhessen (Mainz)', nachtangeln: 'frei', kurz: 'Rhein & Rheinhessen', packliste: ['Rheinischer Erlaubnisschein (Strom-km prüfen!)', 'RLP-Frühjahrsschonzeit 15.4.–31.5.: am Rhein & größeren RLP-Gewässern Kunstköderverbot – nur Naturköder/Fliege', 'Rheinkarte gilt nur bis Flussmitte – hessische Seite braucht hessischen Schein', 'Winterschonzeit 15.10.–15.3. an Standgewässern ohne Frühjahrsschonzeit (Rhein ausgenommen) – Schein prüfen', 'Schwere Jigrute 30–60 g + Bleikopf-Vorrat (Steinpackung!)', 'Grundel-Dekore, Stahl-/FC-Vorfach', 'Wathose/Gummistiefel für Buhnen', 'Buhnen NIE bei Hochwasser betreten – lebensgefährlich (Sog/Wellenschlag); Pegel Mainz >400 cm = Buhnen weg', 'Stirnlampe, Kescher, Abhakmatte'],
     koederfisch: ['Grundel ist am Rhein der dominante Beifang und ideal als toter Köderfisch – vor Ort fangen, gebietsfremd aber ohnehin schon überall.', 'Köderfischsenke vom Ufer laut rheinischem Erlaubnisschein erlaubt.', 'Lebender Köderfisch verboten (Tierschutzgesetz).', 'Zander/Wels stehen auf Grundelfetzen &amp; -filet – am Grund an der Strömungskante anbieten.'],
     schonQuelle: 'Quelle: Landesfischereiordnung RLP / FischGDV RP (abgeglichen 07/2026: Hecht 01.02.–15.04., Zander 01.04.–31.05., Barbe 01.05.–15.06., Aal-Maß 40 cm). Am Rhein gelten die artspezifischen Schonzeiten; die allg. Frühjahrsschonzeit 15.04.–31.05. gilt NICHT für Rhein/Mosel/Lahn. Verein/Erlaubnisschein kann strenger sein.',
     pegel: { warnAb: 400, text: 'Buhnen überspült – auf Hafenausfahrten ausweichen!' },

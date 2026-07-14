@@ -71,6 +71,10 @@ export interface Spot {
   schleppen?: boolean;
   /** Liegt im/grenzt an einen Nationalpark → Befahrens-/Schutzzonen beachten. */
   nationalpark?: boolean;
+  /** Unterliegt der RLP-Frühjahrsschonzeit (15.4.–31.5.): Kunstköderverbot, nur Naturköder/Fliege. */
+  rlpFruehjahr?: boolean;
+  /** RLP-Rheinkarte gilt nur bis zur Flussmitte (Ländergrenze) – andere Uferseite braucht eigenen Schein. */
+  flussmitte?: boolean;
   /** Kuratierte Tackle-Empfehlung. Fehlt sie, wird sie abgeleitet. */
   tackle?: Tackle;
   /** Maximaltiefe in Metern, falls belegt (steuert Jigkopf & Rutenwahl). */

@@ -43,6 +43,10 @@ function badgesHtml(s) {
         b.push('<span class="pop-badge stop">⚓ Schleppangeln verboten</span>');
     if (s.nationalpark)
         b.push('<span class="pop-badge np">🏞 Nationalpark – Befahrensregeln</span>');
+    if (s.rlpFruehjahr)
+        b.push('<span class="pop-badge stop">⚠ 15.4.–31.5. Kunstköderverbot (RLP)</span>');
+    if (s.flussmitte)
+        b.push('<span class="pop-badge info">🪧 Karte nur bis Flussmitte (RLP)</span>');
     return b.length ? `<div class="pop-badges">${b.join('')}</div>` : '';
 }
 export function popupHtml(s) {

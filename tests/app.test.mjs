@@ -60,6 +60,14 @@ describe('Popups', () => {
     assert.match(app.popupHtml(user), /Nationalpark/, 'Nationalpark-Badge fehlt');
   });
 
+  test('RLP-Rhein zeigt Kunstköderverbot- und Flussmitte-Badge', async () => {
+    await loadRegion(ctx, 'mainz');
+    const rhein = app.state.SPOTS.find((s) => s.name.startsWith('Rhein Mainz'));
+    const h = app.popupHtml(rhein);
+    assert.match(h, /Kunstköderverbot/, 'RLP-Frühjahrs-Badge fehlt');
+    assert.match(h, /Flussmitte/, 'Flussmitte-Badge fehlt');
+  });
+
   test('Detail-Panel existiert und lässt sich schließen', () => {
     const sheet = doc.getElementById('detailSheet');
     const close = doc.getElementById('detailClose');
