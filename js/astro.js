@@ -53,6 +53,17 @@ export function mondPhase(d) {
         age += syn;
     return ['🌑', '🌒', '🌓', '🌔', '🌕', '🌖', '🌗', '🌘'][Math.round(age / syn * 8) % 8];
 }
+/** Solunar-Stärke aus der Mondphase: 1 an Neu-/Vollmond, 0 an den Vierteln (Spring/Nipp-Prinzip). */
+export function mondStaerke(d) {
+    const syn = 29.53058867, ref = Date.UTC(2000, 0, 6, 18, 14);
+    let age = ((d - ref) / 864e5) % syn;
+    if (age < 0)
+        age += syn;
+    const halb = syn / 2; /* Neu- und Vollmond liegen halbe Periode auseinander */
+    const r = age % halb; /* 0 an Neu/Voll */
+    const dist = Math.min(r, halb - r); /* 0 an Neu/Voll, ~7.38 an den Vierteln */
+    return Math.max(0, Math.min(1, 1 - dist / (halb / 2)));
+}
 /* Vereinfachte Mondkulmination (Transit) & Gegen-Transit für Solunar-Fenster */
 /** Mond-Transit (Kulmination). Hängt nur von der geografischen Länge ab –
     `_lat` bleibt nur der Symmetrie zu sunTimes(lat, lng, date) wegen erhalten. */

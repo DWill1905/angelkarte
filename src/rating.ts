@@ -10,7 +10,7 @@
    - Ist die Art geschont, gibt es 0 % und einen klaren Hinweis – unabhängig vom Wetter.
    - Die Gewichte stehen offen in diesem Modul. */
 import { state } from './state.js';
-import { hhmm, inSchonzeit, solunar, sunTimes } from './astro.js';
+import { hhmm, inSchonzeit, mondStaerke, solunar, sunTimes } from './astro.js';
 import { WT_OPT, wasserTyp } from './tackle.js';
 import { istAuflandig } from './geo.js';
 import { hotspotAktiv } from './saison.js';
@@ -158,9 +158,13 @@ function zeitBewertung(lat: number, lng: number, jetzt: Date, daemmerungsfisch: 
 
   const laeuft = fenster.find((f: any) => t >= f.from.getTime() && t <= f.to.getTime());
   if (laeuft) {
+    const ms = mondStaerke(jetzt.getTime());        /* Neu-/Vollmond verstärkt die Solunar-Fenster */
+    const basis = laeuft.type === 'major' ? 1 : 0.7;
+    const punkte = Math.max(0.4, Math.min(1, basis * (0.9 + 0.2 * ms)));
+    const mondZus = ms > 0.6 ? ' · Neu-/Vollmond verstärkt' : ms < 0.25 ? ' · Halbmond, etwas schwächer' : '';
     return {
-      punkte: laeuft.type === 'major' ? 1 : 0.7,
-      text: `${laeuft.type === 'major' ? 'Starkes Beißfenster' : 'Beißfenster'} läuft gerade (bis ${hhmm(laeuft.to)})`,
+      punkte,
+      text: `${laeuft.type === 'major' ? 'Starkes Beißfenster' : 'Beißfenster'} läuft gerade (bis ${hhmm(laeuft.to)})${mondZus}`,
       status: 'ja',
     };
   }
