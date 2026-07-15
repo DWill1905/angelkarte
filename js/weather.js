@@ -180,23 +180,61 @@ export async function loadPegel(ctr, el) {
             if (q && typeof q.value !== 'undefined') {
                 state.PEGEL.abfluss = q.value;
                 let qtxt = ' · ' + Math.round(q.value) + ' m³/s';
+                /* Amtliche Pegelkennwerte (MQ/MNQ/MHQ) der WSV – die belastbare Referenz.
+                   Ein 30-Tage-Median wäre in einem trockenen Sommer selbst niedrig und würde
+                   Niedrigwasser als „normal" ausweisen. Nur wenn die Station keine Kennwerte
+                   führt, fällt die App auf den Median zurück – und sagt das dann auch. */
+                let mq = null;
                 try {
-                    /* 30-Tage-Verlauf: Median als MQ-Näherung (robust gegen Spitzen) + 24-h-Trend aus derselben Reihe. */
-                    const qh = await (await fetch(base + '/' + s0.uuid + '/Q/measurements.json?start=P30D')).json();
-                    const vals = Array.isArray(qh) ? qh.map((x) => x.value).filter((v) => typeof v === 'number') : [];
-                    if (vals.length >= 20) {
-                        const sorted = [...vals].sort((a, b) => a - b);
-                        const med = sorted[Math.floor(sorted.length / 2)];
-                        state.PEGEL.abflussMittel = Math.round(med);
-                        const proTag = Math.max(1, Math.round(vals.length / 30));
-                        const vor24h = vals[Math.max(0, vals.length - 1 - proTag)];
-                        state.PEGEL.abflussTrend = Math.round(q.value - vor24h);
-                        const ratio = med > 0 ? q.value / med : null;
-                        if (ratio != null)
-                            qtxt += ' (' + Math.round(ratio * 100) + ' % des Mittels' + (ratio >= 1.5 ? ' – kräftig' : ratio <= 0.7 ? ' – wenig' : '') + ')';
+                    const cv = await (await fetch(base + '/' + s0.uuid + '/Q.json?includeCharacteristicValues=true')).json();
+                    const kw = (cv && cv.characteristicValues) || [];
+                    const hol = (n) => { const x = kw.find(v => v && v.shortname === n); return x && typeof x.value === 'number' ? x.value : null; };
+                    mq = hol('MQ');
+                    if (mq != null) {
+                        state.PEGEL.abflussMittel = Math.round(mq);
+                        state.PEGEL.mqQuelle = 'amtlich';
+                        state.PEGEL.mnq = hol('MNQ');
+                        state.PEGEL.mhq = hol('MHQ');
                     }
                 }
                 catch (e) { }
+                /* 24-h-Trend aus der Q-Reihe */
+                try {
+                    const qh = await (await fetch(base + '/' + s0.uuid + '/Q/measurements.json?start=P1D')).json();
+                    if (Array.isArray(qh) && qh.length > 1 && typeof qh[0].value === 'number') {
+                        state.PEGEL.abflussTrend = Math.round(q.value - qh[0].value);
+                    }
+                }
+                catch (e) { }
+                /* Fallback: nur wenn kein amtliches MQ vorliegt */
+                if (mq == null) {
+                    try {
+                        const qh = await (await fetch(base + '/' + s0.uuid + '/Q/measurements.json?start=P30D')).json();
+                        const vals = Array.isArray(qh) ? qh.map((x) => x.value).filter((v) => typeof v === 'number') : [];
+                        if (vals.length >= 20) {
+                            const sorted = [...vals].sort((a, b) => a - b);
+                            state.PEGEL.abflussMittel = Math.round(sorted[Math.floor(sorted.length / 2)]);
+                            state.PEGEL.mqQuelle = 'median30';
+                        }
+                    }
+                    catch (e) { }
+                }
+                const mittel = state.PEGEL.abflussMittel;
+                if (mittel && mittel > 0) {
+                    const ratio = q.value / mittel;
+                    const amtlich = state.PEGEL.mqQuelle === 'amtlich';
+                    qtxt += ' (' + Math.round(ratio * 100) + '\u202F% von ' + (amtlich ? 'MQ' : '~Mittel (30\u202Fd)');
+                    qtxt += ')';
+                    const mnq = state.PEGEL.mnq, mhq = state.PEGEL.mhq;
+                    if (amtlich && mnq != null && q.value <= mnq)
+                        qtxt += ' – Niedrigwasser (unter MNQ)';
+                    else if (amtlich && mhq != null && q.value >= mhq)
+                        qtxt += ' – Hochwasser (über MHQ)';
+                    else if (ratio >= 1.5)
+                        qtxt += ' – kräftig';
+                    else if (ratio <= 0.7)
+                        qtxt += ' – wenig';
+                }
                 txt += qtxt;
             }
         }

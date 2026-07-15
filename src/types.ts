@@ -214,8 +214,14 @@ export interface Pegel {
   abfluss?: number;
   /** Abfluss-Trend der letzten 24 h in m³/s (nachgetragen). */
   abflussTrend?: number;
-  /** Näherung des mittleren Abflusses (Median der letzten ~30 Tage) als Bezugsgröße für „viel/wenig". */
+  /** Bezugsgröße für „viel/wenig": amtliches MQ der WSV, sonst Median der letzten ~30 Tage. */
   abflussMittel?: number;
+  /** Herkunft von abflussMittel – 'amtlich' = MQ aus den WSV-Pegelkennwerten, 'median30' = Notbehelf. */
+  mqQuelle?: 'amtlich' | 'median30';
+  /** Amtliches MNQ (Mittel der Niedrigwasserabflüsse), wenn die Station es führt. */
+  mnq?: number | null;
+  /** Amtliches MHQ (Mittel der Hochwasserabflüsse), wenn die Station es führt. */
+  mhq?: number | null;
 }
 
 /** Automatisch mitgeloggter Kontext eines Fangs. */

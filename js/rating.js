@@ -53,16 +53,22 @@ export function stroemungsLage() {
     const steigt = abflussSteigt || levelSteigt;
     let stark;
     let wenig;
+    const amtlich = pegel.mqQuelle === 'amtlich';
     if (ratio != null) {
-        stark = hoch || ratio >= 1.5; // ≥ 150 % des Mittels = kräftig
-        wenig = !hoch && ratio <= 0.7; // ≤ 70 % = Niedrigwasser
+        /* Mit amtlichen Kennwerten sind MNQ/MHQ die richtigen Schwellen – sie sagen für DIESEN
+           Pegel, was Nieder- bzw. Hochwasser ist. Ohne sie bleibt die alte 70/150-%-Heuristik. */
+        const unterMnq = amtlich && pegel.mnq != null && pegel.abfluss != null && pegel.abfluss <= pegel.mnq;
+        const ueberMhq = amtlich && pegel.mhq != null && pegel.abfluss != null && pegel.abfluss >= pegel.mhq;
+        stark = hoch || ueberMhq || ratio >= 1.5;
+        wenig = !hoch && !ueberMhq && (unterMnq || ratio <= 0.7);
     }
     else {
         stark = hoch || steigt; // ohne MQ: grobe Schwelle wie bisher
         wenig = false;
     }
     const qt = pegel.abfluss != null ? `, ${Math.round(pegel.abfluss)} m³/s` : '';
-    const text = ratio != null ? `${Math.round(ratio * 100)} % des Mittels${qt}` : `${pegel.value} cm${qt}`;
+    const bezug = amtlich ? 'von MQ' : 'vom ~Mittel (30 d)';
+    const text = ratio != null ? `${Math.round(ratio * 100)} % ${bezug}${qt}` : `${pegel.value} cm${qt}`;
     return { stark, wenig, steigt, hoch, ratio, text };
 }
 /* ---------- Zeitfenster ---------- */

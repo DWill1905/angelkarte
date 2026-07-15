@@ -341,18 +341,18 @@ describe('Strömung relativ zum Mittel (Q/MQ)', () => {
   test('Q = 150 % des Mittels → starke Strömung', async () => {
     await loadRegion(ctx, 'mainz');
     app.state.WX = { temp: 20, wind: 8, dirDeg: 200, dir: 'SW', press: 1015, trendVal: 0, code: 3 };
-    app.state.PEGEL = { value: 250, station: 'Mainz', dist: 3, wt: 18, abfluss: 3000, abflussMittel: 2000 };
+    app.state.PEGEL = { value: 250, station: 'Mainz', dist: 3, wt: 18, abfluss: 3000, abflussMittel: 2000, mqQuelle: 'amtlich' };
     const barbe = (app.bewerteSpot(flussSpot(), 'Barbe', MITTAG()).gruende || []).find((x) => /Strömung|Zug|Mittels/.test(x.text));
     assert.ok(barbe && barbe.status === 'ja', 'starke Strömung sollte Barbe (liebt Strömung) positiv werten');
-    assert.match(barbe.text, /150 % des Mittels/);
+    assert.match(barbe.text, /150 % von MQ/);
   });
 
   test('Q = 60 % des Mittels → Niedrigwasser', async () => {
     await loadRegion(ctx, 'mainz');
     app.state.WX = { temp: 20, wind: 8, dirDeg: 200, dir: 'SW', press: 1015, trendVal: 0, code: 3 };
-    app.state.PEGEL = { value: 150, station: 'Mainz', dist: 3, wt: 18, abfluss: 1200, abflussMittel: 2000 };
+    app.state.PEGEL = { value: 150, station: 'Mainz', dist: 3, wt: 18, abfluss: 1200, abflussMittel: 2000, mqQuelle: 'amtlich' };
     const e = app.empfehlung(MITTAG(), { gewaesser: [flussSpot().name] });
-    assert.match(e.stroemung, /Wenig Strömung \(60 % des Mittels/);
+    assert.match(e.stroemung, /Wenig Strömung \(60 % von MQ/);
   });
 
   test('Blei-Hinweis nennt das Verhältnis zum Mittel', async () => {
@@ -360,14 +360,14 @@ describe('Strömung relativ zum Mittel (Q/MQ)', () => {
     app.state.WX = { temp: 20, wind: 8, dirDeg: 200, dir: 'SW', press: 1015, trendVal: 0, code: 3 };
     app.state.PEGEL = { value: 250, station: 'Mainz', dist: 3, wt: 18, abfluss: 3200, abflussMittel: 2000 };
     const e = app.empfehlung(MITTAG(), { gewaesser: [flussSpot().name] });
-    assert.match(e.stroemung, /des Mittels/);
+    assert.match(e.stroemung, /von MQ|Mittel/);
     assert.match(e.stroemung, /30–50|40–80/);
   });
 
   test('Niedrigwasser → leichteres Blei', async () => {
     await loadRegion(ctx, 'mainz');
     app.state.WX = { temp: 20, wind: 8, dirDeg: 200, dir: 'SW', press: 1015, trendVal: 0, code: 3 };
-    app.state.PEGEL = { value: 150, station: 'Mainz', dist: 3, wt: 18, abfluss: 1200, abflussMittel: 2000 };
+    app.state.PEGEL = { value: 150, station: 'Mainz', dist: 3, wt: 18, abfluss: 1200, abflussMittel: 2000, mqQuelle: 'amtlich' };
     const e = app.empfehlung(MITTAG(), { gewaesser: [flussSpot().name] });
     assert.match(e.stroemung, /Wenig Strömung|7–15 g/);
   });
@@ -382,7 +382,29 @@ describe('Strömung relativ zum Mittel (Q/MQ)', () => {
     const brachse = g(app.bewerteSpot(spot, 'Brachse', MITTAG()));
     assert.ok(barbe && barbe.status === 'ja', 'Barbe sollte profitieren');
     assert.ok(brachse && brachse.status === 'nein', 'Brachse sollte verlieren');
-    assert.match(barbe.text, /des Mittels/);
+    assert.match(barbe.text, /von MQ|Mittel/);
+  });
+
+  test('amtliches MNQ schlägt die 70-%-Heuristik', async () => {
+    await loadRegion(ctx, 'mainz');
+    app.state.WX = { temp: 20, wind: 8, dirDeg: 200, dir: 'SW', press: 1015, trendVal: 0, code: 3 };
+    /* 90 % von MQ – die alte Heuristik hätte „normal" gesagt; MNQ sagt Niedrigwasser. */
+    app.state.PEGEL = { value: 150, station: 'Mainz', dist: 3, wt: 18, abfluss: 1800, abflussMittel: 2000,
+      mqQuelle: 'amtlich', mnq: 1900, mhq: 4000 };
+    const g = (app.bewerteSpot(flussSpot(), 'Barbe', MITTAG()).gruende || []).find((x) => /Strömung|Zug|MQ/.test(x.text));
+    assert.ok(g, 'Strömungs-Grund fehlt');
+    assert.match(g.text, /90 % von MQ/, 'Bezug muss MQ heißen');
+  });
+
+  test('ohne amtliches MQ wird der Median-Notbehelf offen benannt', async () => {
+    await loadRegion(ctx, 'mainz');
+    app.state.WX = { temp: 20, wind: 8, dirDeg: 200, dir: 'SW', press: 1015, trendVal: 0, code: 3 };
+    app.state.PEGEL = { value: 250, station: 'Mainz', dist: 3, wt: 18, abfluss: 3000, abflussMittel: 2000,
+      mqQuelle: 'median30' };
+    const g = (app.bewerteSpot(flussSpot(), 'Barbe', MITTAG()).gruende || []).find((x) => /Strömung|Zug|Mittel/.test(x.text));
+    assert.ok(g, 'Strömungs-Grund fehlt');
+    assert.match(g.text, /Mittel \(30 d\)/, 'Notbehelf muss als solcher erkennbar sein');
+    assert.ok(!/von MQ/.test(g.text), 'ohne amtliches MQ darf nicht „von MQ" behauptet werden');
   });
 });
 
