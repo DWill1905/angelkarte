@@ -14,7 +14,7 @@
    Die Gewichte stehen offen im Code. Das ist kein Orakel, sondern eine
    nachvollziehbare Vorauswahl – die Entscheidung trifft der Angler. */
 import { state } from './state.js';
-import { hhmm, inSchonzeit, inWindowAt, solunar, sunTimes } from './astro.js';
+import { hhmm, inSchonzeitAt, inWindowAt, solunar, sunTimes } from './astro.js';
 import { WT_OPT, tackleFor, wasserTyp } from './tackle.js';
 import { bewerteSpot, sterneAus, sterneText, artZeitprofil, stroemungsLage } from './rating.js';
 import { jahreszeit } from './saison.js';
@@ -25,10 +25,10 @@ export { peilung, himmelsrichtung, winkelDiff, istAuflandig } from './geo.js';
     Arten ohne Schonzeit-/Maßdaten werden bewusst NICHT empfohlen: die Rechtslage ist
     dann unbekannt, und der Maßcheck im Fangbuch sagt für genau diesen Fall „KEINE Freigabe".
     Die App darf sich nicht selbst widersprechen. */
-export function zielfischFor(s, wt) {
+export function zielfischFor(s, wt, jetzt = new Date()) {
     const erlaubt = (s.arten || []).filter((a) => {
         const sc = state.SCHON.find((x) => x.fisch === a);
-        return !sc || !inSchonzeit(sc); /* kein Eintrag = keine hinterlegte Schonzeit -> beangelbar */
+        return !sc || !inSchonzeitAt(sc, jetzt); /* kein Eintrag = keine hinterlegte Schonzeit -> beangelbar */
     });
     const raub = erlaubt.filter((a) => RAUB.includes(a));
     const kandidaten = raub.length ? raub : erlaubt;
@@ -278,12 +278,12 @@ export function empfehlung(jetzt = new Date(), filter = {}) {
        Naturköder/Fliege umstellen, statt zu illegaler Methode zu raten. */
     const kkVerbot = !!k.spot.rlpFruehjahr && inWindowAt(jetzt, [4, 15], [5, 31]) && !(k.art && FRIEDFISCH[k.art]);
     if (kkVerbot) {
-        koeder = 'Naturköder (Tauwurm/Köderfischfetzen am Grund) oder große Streamer-Fliege';
+        koeder = 'Naturköder ruhig am Grund (Tauwurm/Grundelfetzen) – keine aktive Köderführung';
         jig = null;
     }
     const luecken = [];
     if (kkVerbot) {
-        luecken.push('15.4.–31.5.: An RLP-§18-Gewässern ist Kunstköder verboten (nur Naturköder/künstliche Fliege) – genauen Abschnitt auf dem Erlaubnisschein prüfen.');
+        luecken.push('Frühjahrsschonzeit 15.4.–31.5.: keine Kunstköder (Spinner/Blinker/Gummi) und keine aktive Köderführung; künstliche Fliege nur an der Fliegenrute. Genauen Abschnitt auf dem Erlaubnisschein prüfen.');
     }
     if (!state.SCHON.some((x) => x.fisch === k.art)) {
         luecken.push(`Für ${k.art} ist keine Schonzeit/kein Mindestmaß hinterlegt – vor Entnahme den Erlaubnisschein prüfen.`);

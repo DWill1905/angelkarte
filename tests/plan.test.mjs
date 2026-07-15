@@ -166,6 +166,34 @@ describe('Filter-Verknüpfung: Fisch-Chips grauen aus', () => {
   });
 });
 
+describe('RLP-Schonzeiten laut Beiblatt SGD Süd (Stand 2025)', () => {
+  const F = (m, d) => new Date(Date.UTC(2026, m - 1, d, 12, 0));
+
+  test('Hecht 01.02.–31.05., Zander 15.03.–15.05., Aalfangverbot 01.10.–01.03.', async () => {
+    await loadRegion(ctx, 'mainz');
+    app.state.WX = { temp: 16, wind: 8, dirDeg: 200, dir: 'SW', press: 1015, trendVal: -1, code: 3 };
+    app.state.PEGEL = { value: 250, station: 'X', dist: 3, wt: 14 };
+    const spot = app.state.SPOTS.find((s) => s.name.startsWith('Rhein Mainz'));
+    const zu = (art, d) => app.bewerteSpot(spot, art, d).geschont;
+    assert.equal(zu('Hecht', F(4, 20)), true, 'Hecht ist am 20.04. geschont (bis 31.05.)');
+    assert.equal(zu('Hecht', F(5, 1)), true, 'Hecht ist am 01.05. geschont');
+    assert.equal(zu('Hecht', F(6, 5)), false, 'Hecht ist am 05.06. frei');
+    assert.equal(zu('Zander', F(3, 20)), true, 'Zander ist ab 15.03. geschont');
+    assert.equal(zu('Zander', F(5, 20)), false, 'Zander ist ab 16.05. frei');
+    assert.equal(zu('Aal', F(11, 15)), true, 'Aalfangverbot 01.10.–01.03.');
+    assert.equal(zu('Aal', F(7, 15)), false, 'Aal im Juli frei');
+  });
+
+  test('die Schonzeitprüfung folgt dem bewerteten Datum, nicht der Uhr', async () => {
+    await loadRegion(ctx, 'mainz');
+    app.state.PEGEL = { value: 250, station: 'X', dist: 3, wt: 14 };
+    const spot = app.state.SPOTS.find((s) => s.name.startsWith('Rhein Mainz'));
+    const imMai = app.bewerteSpot(spot, 'Hecht', F(5, 1)).geschont;
+    const imJuli = app.bewerteSpot(spot, 'Hecht', F(7, 15)).geschont;
+    assert.notEqual(imMai, imJuli, 'geschont muss vom übergebenen Datum abhängen');
+  });
+});
+
 describe('Fangbuch-Rückkopplung', () => {
   afterEach(() => { app.state.fbMem = []; });
 
@@ -189,7 +217,7 @@ describe('Post-Schonzeit-Hunger', () => {
     const spot = app.state.SPOTS.find((s) => s.name.startsWith('Rhein Mainz'));
     app.state.WX = { temp: 18, wind: 8, dirDeg: 0, dir: 'N', press: 1015, trendVal: 0, code: 3 };
     app.state.PEGEL = { value: 250, station: 'X', dist: 3, wt: 17 };
-    const kurz = app.bewerteSpot(spot, 'Zander', new Date(Date.UTC(2026, 5, 5, 12, 0)));
+    const kurz = app.bewerteSpot(spot, 'Zander', new Date(Date.UTC(2026, 4, 20, 12, 0))); // Zander-Schonzeit RLP endet 15.05.
     assert.ok(kurz.gruende.some((g) => /Frisch aus der Schonzeit/.test(g.text)), 'Bonus fehlt kurz nach Ende');
     const spaeter = app.bewerteSpot(spot, 'Zander', new Date(Date.UTC(2026, 6, 15, 12, 0)));
     assert.ok(!spaeter.gruende.some((g) => /Frisch aus der Schonzeit/.test(g.text)), 'Bonus sollte im Juli weg sein');
@@ -202,8 +230,9 @@ describe('RLP-Kunstköderverbot', () => {
     app.state.WX = { temp: 16, wind: 8, dirDeg: 200, dir: 'SW', press: 1015, trendVal: -1, code: 3 };
     app.state.PEGEL = { value: 250, station: 'X', dist: 3, wt: 14 };
     const opt = { fisch: ['Zander'], gewaesser: ['Rhein Mainz – Stadtstrecke'] };
-    const mai = app.empfehlung(new Date(Date.UTC(2026, 4, 5, 10, 0)), opt);
-    assert.match(mai.koeder, /Naturköder|Fliege/, 'Mai: sollte Naturköder sein');
+    /* 16.–31.05.: Zander ist wieder offen, die Frühjahrsschonzeit läuft aber noch. */
+    const mai = app.empfehlung(new Date(Date.UTC(2026, 4, 20, 10, 0)), opt);
+    assert.match(mai.koeder, /Naturköder/, 'Mai: sollte Naturköder sein');
     assert.ok(mai.luecken.some((l) => /Kunstköder/.test(l)), 'Mai: Warnung fehlt');
     const juli = app.empfehlung(new Date(Date.UTC(2026, 6, 15, 10, 0)), opt);
     assert.match(juli.koeder, /Gummifisch/, 'Juli: Kunstköder wieder erlaubt');

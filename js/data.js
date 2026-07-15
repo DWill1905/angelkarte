@@ -536,14 +536,21 @@ export const SPOTS_RLP = [
         note: 'Liegt zwischen Stadtstrecke und Industriehafen, inkl. der Buhnen und Strände dahinter. Strom-km im Erlaubnisschein beachten. Lage ungefähr.', warn: true }
 ];
 export const SCHON_RLP = [
-    { fisch: 'Hecht', von: [2, 1], bis: [4, 15], mm: '50 cm' },
-    { fisch: 'Zander', von: [4, 1], bis: [5, 31], mm: '45 cm' },
-    { fisch: 'Barsch', von: null, bis: null, mm: '– (kein gesetzl. Maß)' },
-    { fisch: 'Aal', von: null, bis: null, mm: '40 cm (EU-Aalschutz: Fangfenster/Sperrzeiten möglich)' },
+    { fisch: 'Hecht', von: [2, 1], bis: [5, 31], mm: '50 cm' },
+    { fisch: 'Zander', von: [3, 15], bis: [5, 15], mm: '45 cm' },
+    { fisch: 'Barsch', von: null, bis: null, mm: '– (kein Maß; Rücksetzverbot!)' },
+    { fisch: 'Aal', von: [10, 1], bis: [3, 1], mm: '50 cm (Aalfangverbot 01.10.–01.03. im Rhein, Stillgewässern & Häfen)' },
     { fisch: 'Barbe', von: [5, 1], bis: [6, 15], mm: '35 cm' },
+    { fisch: 'Äsche', von: [2, 15], bis: [4, 30], mm: '30 cm' },
+    { fisch: 'Bachforelle', von: [10, 15], bis: [3, 15], mm: '25 cm' },
     { fisch: 'Karpfen', von: null, bis: null, mm: '35 cm' },
     { fisch: 'Schleie', von: null, bis: null, mm: '25 cm' },
-    { fisch: 'Wels', von: null, bis: null, mm: '–' },
+    { fisch: 'Wels', von: null, bis: null, mm: '– (kein Maß; Rücksetzverbot!)' },
+    { fisch: 'Brachse', von: null, bis: null, mm: '– (kein Maß; Rücksetzverbot!)' },
+    { fisch: 'Rotauge', von: null, bis: null, mm: '15 cm' },
+    { fisch: 'Rotfeder', von: null, bis: null, mm: '15 cm' },
+    { fisch: 'Karausche', von: [1, 1], bis: [12, 31], mm: '– (ganzjährig geschont, Fang nicht ausüben)' },
+    { fisch: 'Quappe', von: [1, 1], bis: [12, 31], mm: '– (ganzjährig geschont, Fang nicht ausüben)' },
     { fisch: 'Rapfen', von: null, bis: null, mm: '– (RLP: keine Schonzeit/kein Maß, Vereinsregeln prüfen)' }
 ];
 /* ============ Regionsdefinitionen (eingebetteter Fallback zur JSON-Datenbank) ============ */
@@ -650,18 +657,19 @@ export const REGION_HE = { id: 'giessen', geprueft: '2026-07', name: 'Gießen / 
         { titel: 'Lahn- & Seen-Praxis', punkte: ['Lahn ab Wetzlar Bundeswasserstraße – Schifffahrt/Wellenschlag beachten, Ruten sichern', 'Stadtnahe Lahn: Zugang durch Bebauung eingeschränkt – Wehre und Brücken sind die Hotspots', 'Baggerseen (Dutenhofen): Sommer/Wochenende Freizeittrubel – Dämmerung und Nacht sind fängiger', 'Grundeln breiten sich aus: toter Köderfisch am Grund auf Zander/Wels/Aal', 'Setzkescher an Bundeswasserstraßen/bei Wellenschlag laut HFischV unzulässig'] }
     ],
     hinweis: 'Angaben ohne Gewähr, recherchiert 07/2026 (HFischV 14.04.2023, Vereinsseiten VSA Gießen/ASV Wetzlar/ASV Lahnau, IG Lahn, Anglerforen). Maßgeblich sind der jeweilige Erlaubnisschein und die Beschilderung vor Ort. Entnahmefenster vor Entnahme prüfen.' };
-export const REGION_RLP = { id: 'mainz', geprueft: '2026-07', name: 'Rhein & Rheinhessen (Mainz)', nachtangeln: 'frei', kurz: 'Rhein & Rheinhessen', packliste: ['Rheinischer Erlaubnisschein (Strom-km prüfen!)', 'RLP-Frühjahrsschonzeit 15.4.–31.5.: am Rhein & größeren RLP-Gewässern Kunstköderverbot – nur Naturköder/Fliege', 'Rheinkarte gilt nur bis Flussmitte – hessische Seite braucht hessischen Schein', 'Winterschonzeit 15.10.–15.3. an Standgewässern ohne Frühjahrsschonzeit (Rhein ausgenommen) – Schein prüfen', 'Schwere Jigrute 30–60 g + Bleikopf-Vorrat (Steinpackung!)', 'Grundel-Dekore, Stahl-/FC-Vorfach', 'Wathose/Gummistiefel für Buhnen', 'Buhnen NIE bei Hochwasser betreten – lebensgefährlich (Sog/Wellenschlag); Pegel Mainz >400 cm = Buhnen weg', 'Stirnlampe, Kescher, Abhakmatte'],
+export const REGION_RLP = { id: 'mainz', geprueft: '2026-07', name: 'Rhein & Rheinhessen (Mainz)', nachtangeln: 'frei', kurz: 'Rhein & Rheinhessen', packliste: ['Rheinischer Erlaubnisschein (Strom-km prüfen!)', 'Pflicht dabei: Kescher, Maßband + Mittel zum Betäuben und Töten', 'Frühjahrsschonzeit 15.4.–31.5. – gilt AUCH für den Rhein & offen verbundene Altrheine: keine Kunstköder, keine aktive Köderführung; Fliege nur an der Fliegenrute', 'Rücksetzverbot: Fische ohne Mindestmaß (Brassen, Barsch, Wels u.a.) dürfen NICHT zurückgesetzt werden', 'Aalfangverbot 01.10.–01.03. im Rhein, verbundenen Stillgewässern & Häfen', 'Rheinkarte gilt nur bis Flussmitte – hessische Seite braucht hessischen Schein', 'Setzkescher: min. 3,5 m lang, Ringe 50 cm, aus Textil, min. 2,5 m eingetaucht – Drahtsetzkescher verboten; bei Wellenschlag/Schiffsverkehr gar kein Hältern', 'Kosak nur senkrecht geführt, 01.06.–31.10.: max. 55 mm, max. 30 g, ein Drilling (Krümmung ≤ 9 mm)', 'Schwere Jigrute 30–60 g + Bleikopf-Vorrat (Steinpackung!)', 'Grundel-Dekore, Stahl-/FC-Vorfach', 'Wathose/Gummistiefel für Buhnen', 'Buhnen NIE bei Hochwasser betreten – lebensgefährlich (Sog/Wellenschlag); Pegel Mainz >400 cm = Buhnen weg', 'Stirnlampe, Kescher, Abhakmatte'],
     koederfisch: ['Grundel ist am Rhein der dominante Beifang und ideal als toter Köderfisch – vor Ort fangen, gebietsfremd aber ohnehin schon überall.', 'Köderfischsenke vom Ufer laut rheinischem Erlaubnisschein erlaubt.', 'Lebender Köderfisch verboten (Tierschutzgesetz).', 'Zander/Wels stehen auf Grundelfetzen &amp; -filet – am Grund an der Strömungskante anbieten.'],
-    schonQuelle: 'Quelle: Landesfischereiordnung RLP / FischGDV RP (abgeglichen 07/2026: Hecht 01.02.–15.04., Zander 01.04.–31.05., Barbe 01.05.–15.06., Aal-Maß 40 cm). Am Rhein gelten die artspezifischen Schonzeiten; die allg. Frühjahrsschonzeit 15.04.–31.05. gilt NICHT für Rhein/Mosel/Lahn. Verein/Erlaubnisschein kann strenger sein.',
+    schonQuelle: 'Quelle: Beiblatt zum Erlaubnisschein für die finanzstaatlichen Gewässer von Rheinhessen-Pfalz, SGD Süd – Obere Fischereibehörde, Stand 2025. Hecht 01.02.–31.05./50, Zander 15.03.–15.05./45, Äsche 15.02.–30.04./30, Barbe 01.05.–15.06./35, Bachforelle 15.10.–15.03./25, Aalfangverbot 01.10.–01.03. (Maß 50). Ganzjährig geschont: Lachs, Meerforelle, Maifisch, Neunaugen, Schnäpel, Karausche, Quappe u.a. Die Frühjahrsschonzeit 15.04.–31.05. gilt AUCH für den Rhein, alle Altrheingewässer, Seitenarme und blind endenden Gewässer mit offener Rhein-Verbindung. Fische ohne Mindestmaß (Brassen, Barsch, Wels u.a.) dürfen NICHT zurückgesetzt werden. Verein/Erlaubnisschein kann strenger sein.',
     pegel: { warnAb: 400, text: 'Buhnen überspült & lebensgefährlich (Sog/Wellenschlag) – nicht betreten, auf Hafenausfahrten ausweichen!' },
     fusszeile: 'Erlaubnis: <a href="https://lfv-rhl-rhh.de/fischerei-erlaubnisscheine/rhein/" target="_blank" rel="noopener">LFV Rhl.-Rhh.</a> (links) · <a href="https://www.hejfish.com" target="_blank" rel="noopener">hejfish</a> (Hessen-Seite)',
     spots: SPOTS_RLP, schon: SCHON_RLP,
     flusskm: [{ km: 460, lat: 49.745, lng: 8.4226 }, { km: 465, lat: 49.7736, lng: 8.4063 }, { km: 470, lat: 49.8022, lng: 8.3901 }, { km: 475, lat: 49.8308, lng: 8.3738 }, { km: 480, lat: 49.8594, lng: 8.3575 }, { km: 485, lat: 49.9237, lng: 8.3432 }, { km: 490, lat: 49.9662, lng: 8.3245 }, { km: 495, lat: 49.987, lng: 8.3014 }, { km: 500, lat: 50.0085, lng: 8.2645 }, { km: 505, lat: 50.0302, lng: 8.1943 }],
     banner: [
-        { von: [2, 1], bis: [3, 14], text: '<b>Hecht geschont</b> (01.02.–31.05.).' },
+        { von: [2, 1], bis: [3, 14], text: '<b>Hecht geschont</b> (01.02.–31.05.). <b>Aalfangverbot</b> bis 01.03.' },
         { von: [3, 15], bis: [4, 14], text: '<b>Hecht &amp; Zander geschont</b> – Zander bis 15.05., Hecht bis 31.05.' },
-        { von: [4, 15], bis: [5, 15], text: '<b>Frühjahrsschonzeit:</b> Kunstköderverbot (außer Fliege, §18-Gewässer) – Hecht &amp; Zander geschont.' },
-        { von: [5, 16], bis: [5, 31], text: '<b>Bis 31.05.:</b> Hecht geschont, Kunstköderverbot (§18-Gewässer). Zander offen – nur Naturköder/Fliege.' }
+        { von: [4, 15], bis: [5, 15], text: '<b>Frühjahrsschonzeit (15.04.–31.05.):</b> am Rhein &amp; allen offen verbundenen Altrheingewässern keine Kunstköder und <b>keine aktive Köderführung</b> – künstliche Fliege nur an der Fliegenrute. Hecht &amp; Zander geschont.' },
+        { von: [5, 16], bis: [5, 31], text: '<b>Bis 31.05.:</b> Hecht geschont, Frühjahrsschonzeit läuft – keine Kunstköder, keine aktive Köderführung. Zander offen (nur Naturköder am Grund).' },
+        { von: [10, 1], bis: [12, 31], text: '<b>Aalfangverbot 01.10.–01.03.</b> im Rhein, verbundenen Stillgewässern &amp; Häfen.' }
     ],
     regeln: [
         { titel: 'Erlaubnisscheine am Rhein', punkte: ['Linksrheinisch (Mainzer Ufer): rheinischer Erlaubnisschein ~31 €/Jahr – online-Infos &amp; Ausgabestellen: <a href="https://lfv-rhl-rhh.de/fischerei-erlaubnisscheine/rhein/" target="_blank" rel="noopener">lfv-rhl-rhh.de</a>, klassisch im Angelladen (z.B. Bode Heidesheim)', 'Ufer und handgerudertes Boot erlaubt (Bootsplakette sichtbar anbringen), Köderfischsenke vom Ufer zulässig', 'Rechtsrheinische Seite, Mainspitze &amp; Ginsheim: hessischer Rheinschein – seit 2025 nur noch online über <a href="https://www.hejfish.com" target="_blank" rel="noopener">hejfish.com</a> (HLG)', 'Main km 0–2,89: Erlaubnis nur mit Vereinsmitgliedschaft im hessischen Verband'] },

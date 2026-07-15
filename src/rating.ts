@@ -10,7 +10,7 @@
    - Ist die Art geschont, gibt es 0 % und einen klaren Hinweis – unabhängig vom Wetter.
    - Die Gewichte stehen offen in diesem Modul. */
 import { state } from './state.js';
-import { hhmm, inSchonzeit, mondStaerke, solunar, sunTimes } from './astro.js';
+import { hhmm, inSchonzeitAt, mondStaerke, solunar, sunTimes } from './astro.js';
 import { WT_OPT, wasserTyp } from './tackle.js';
 import { istAuflandig } from './geo.js';
 import { hotspotAktiv } from './saison.js';
@@ -265,7 +265,7 @@ function lichtBewertung(lat: number, lng: number, jetzt: Date, wx: any, art: str
 export function bewerteSpot(s: Spot, art: string, jetzt: Date = new Date(), hotspot: Hotspot | null = null): Bewertung {
   const gruende: Grund[] = [];
   const schon = state.SCHON.find((x) => x.fisch === art);
-  const geschont = !!schon && inSchonzeit(schon);
+  const geschont = !!schon && inSchonzeitAt(schon, jetzt);
   const mass = schon?.mm;
 
   if (geschont) {

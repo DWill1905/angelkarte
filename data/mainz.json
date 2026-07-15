@@ -6,9 +6,13 @@
  "kurz": "Rhein & Rheinhessen",
  "packliste": [
   "Rheinischer Erlaubnisschein (Strom-km prüfen!)",
-  "RLP-Frühjahrsschonzeit 15.4.–31.5.: am Rhein & größeren RLP-Gewässern Kunstköderverbot – nur Naturköder/Fliege",
+  "Pflicht dabei: Kescher, Maßband + Mittel zum Betäuben und Töten",
+  "Frühjahrsschonzeit 15.4.–31.5. – gilt AUCH für den Rhein & offen verbundene Altrheine: keine Kunstköder, keine aktive Köderführung; Fliege nur an der Fliegenrute",
+  "Rücksetzverbot: Fische ohne Mindestmaß (Brassen, Barsch, Wels u.a.) dürfen NICHT zurückgesetzt werden",
+  "Aalfangverbot 01.10.–01.03. im Rhein, verbundenen Stillgewässern & Häfen",
   "Rheinkarte gilt nur bis Flussmitte – hessische Seite braucht hessischen Schein",
-  "Winterschonzeit 15.10.–15.3. an Standgewässern ohne Frühjahrsschonzeit (Rhein ausgenommen) – Schein prüfen",
+  "Setzkescher: min. 3,5 m lang, Ringe 50 cm, aus Textil, min. 2,5 m eingetaucht – Drahtsetzkescher verboten; bei Wellenschlag/Schiffsverkehr gar kein Hältern",
+  "Kosak nur senkrecht geführt, 01.06.–31.10.: max. 55 mm, max. 30 g, ein Drilling (Krümmung ≤ 9 mm)",
   "Schwere Jigrute 30–60 g + Bleikopf-Vorrat (Steinpackung!)",
   "Grundel-Dekore, Stahl-/FC-Vorfach",
   "Wathose/Gummistiefel für Buhnen",
@@ -21,7 +25,7 @@
   "Lebender Köderfisch verboten (Tierschutzgesetz).",
   "Zander/Wels stehen auf Grundelfetzen &amp; -filet – am Grund an der Strömungskante anbieten."
  ],
- "schonQuelle": "Quelle: Landesfischereiordnung RLP / FischGDV RP (abgeglichen 07/2026: Hecht 01.02.–15.04., Zander 01.04.–31.05., Barbe 01.05.–15.06., Aal-Maß 40 cm). Am Rhein gelten die artspezifischen Schonzeiten; die allg. Frühjahrsschonzeit 15.04.–31.05. gilt NICHT für Rhein/Mosel/Lahn. Verein/Erlaubnisschein kann strenger sein.",
+ "schonQuelle": "Quelle: Beiblatt zum Erlaubnisschein für die finanzstaatlichen Gewässer von Rheinhessen-Pfalz, SGD Süd – Obere Fischereibehörde, Stand 2025. Hecht 01.02.–31.05./50, Zander 15.03.–15.05./45, Äsche 15.02.–30.04./30, Barbe 01.05.–15.06./35, Bachforelle 15.10.–15.03./25, Aalfangverbot 01.10.–01.03. (Maß 50). Ganzjährig geschont: Lachs, Meerforelle, Maifisch, Neunaugen, Schnäpel, Karausche, Quappe u.a. Die Frühjahrsschonzeit 15.04.–31.05. gilt AUCH für den Rhein, alle Altrheingewässer, Seitenarme und blind endenden Gewässer mit offener Rhein-Verbindung. Fische ohne Mindestmaß (Brassen, Barsch, Wels u.a.) dürfen NICHT zurückgesetzt werden. Verein/Erlaubnisschein kann strenger sein.",
  "pegel": {
   "warnAb": 400,
   "text": "Buhnen überspült & lebensgefährlich (Sog/Wellenschlag) – nicht betreten, auf Hafenausfahrten ausweichen!"
@@ -618,20 +622,20 @@
     1
    ],
    "bis": [
-    4,
-    15
+    5,
+    31
    ],
    "mm": "50 cm"
   },
   {
    "fisch": "Zander",
    "von": [
-    4,
-    1
+    3,
+    15
    ],
    "bis": [
     5,
-    31
+    15
    ],
    "mm": "45 cm"
   },
@@ -639,13 +643,19 @@
    "fisch": "Barsch",
    "von": null,
    "bis": null,
-   "mm": "– (kein gesetzl. Maß)"
+   "mm": "– (kein Maß; Rücksetzverbot!)"
   },
   {
    "fisch": "Aal",
-   "von": null,
-   "bis": null,
-   "mm": "40 cm (EU-Aalschutz: Fangfenster/Sperrzeiten möglich)"
+   "von": [
+    10,
+    1
+   ],
+   "bis": [
+    3,
+    1
+   ],
+   "mm": "50 cm (Aalfangverbot 01.10.–01.03. im Rhein, Stillgewässern & Häfen)"
   },
   {
    "fisch": "Barbe",
@@ -658,6 +668,30 @@
     15
    ],
    "mm": "35 cm"
+  },
+  {
+   "fisch": "Äsche",
+   "von": [
+    2,
+    15
+   ],
+   "bis": [
+    4,
+    30
+   ],
+   "mm": "30 cm"
+  },
+  {
+   "fisch": "Bachforelle",
+   "von": [
+    10,
+    15
+   ],
+   "bis": [
+    3,
+    15
+   ],
+   "mm": "25 cm"
   },
   {
    "fisch": "Karpfen",
@@ -675,7 +709,49 @@
    "fisch": "Wels",
    "von": null,
    "bis": null,
-   "mm": "–"
+   "mm": "– (kein Maß; Rücksetzverbot!)"
+  },
+  {
+   "fisch": "Brachse",
+   "von": null,
+   "bis": null,
+   "mm": "– (kein Maß; Rücksetzverbot!)"
+  },
+  {
+   "fisch": "Rotauge",
+   "von": null,
+   "bis": null,
+   "mm": "15 cm"
+  },
+  {
+   "fisch": "Rotfeder",
+   "von": null,
+   "bis": null,
+   "mm": "15 cm"
+  },
+  {
+   "fisch": "Karausche",
+   "von": [
+    1,
+    1
+   ],
+   "bis": [
+    12,
+    31
+   ],
+   "mm": "– (ganzjährig geschont, Fang nicht ausüben)"
+  },
+  {
+   "fisch": "Quappe",
+   "von": [
+    1,
+    1
+   ],
+   "bis": [
+    12,
+    31
+   ],
+   "mm": "– (ganzjährig geschont, Fang nicht ausüben)"
   },
   {
    "fisch": "Rapfen",
@@ -746,7 +822,7 @@
     3,
     14
    ],
-   "text": "<b>Hecht geschont</b> (01.02.–31.05.)."
+   "text": "<b>Hecht geschont</b> (01.02.–31.05.). <b>Aalfangverbot</b> bis 01.03."
   },
   {
    "von": [
@@ -768,7 +844,7 @@
     5,
     15
    ],
-   "text": "<b>Frühjahrsschonzeit:</b> Kunstköderverbot (außer Fliege, §18-Gewässer) – Hecht &amp; Zander geschont."
+   "text": "<b>Frühjahrsschonzeit (15.04.–31.05.):</b> am Rhein &amp; allen offen verbundenen Altrheingewässern keine Kunstköder und <b>keine aktive Köderführung</b> – künstliche Fliege nur an der Fliegenrute. Hecht &amp; Zander geschont."
   },
   {
    "von": [
@@ -779,7 +855,18 @@
     5,
     31
    ],
-   "text": "<b>Bis 31.05.:</b> Hecht geschont, Kunstköderverbot (§18-Gewässer). Zander offen – nur Naturköder/Fliege."
+   "text": "<b>Bis 31.05.:</b> Hecht geschont, Frühjahrsschonzeit läuft – keine Kunstköder, keine aktive Köderführung. Zander offen (nur Naturköder am Grund)."
+  },
+  {
+   "von": [
+    10,
+    1
+   ],
+   "bis": [
+    12,
+    31
+   ],
+   "text": "<b>Aalfangverbot 01.10.–01.03.</b> im Rhein, verbundenen Stillgewässern &amp; Häfen."
   }
  ],
  "regeln": [

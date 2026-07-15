@@ -9,7 +9,8 @@ export function inWindowAt(d: Date, von: MonatTag, bis: MonatTag){
 export function inWindow(von,bis){
   return inWindowAt(new Date(), von, bis);
 }
-export function inSchonzeit(s){ return !!s.von && inWindow(s.von,s.bis); }
+export function inSchonzeitAt(s, d: Date){ return !!s.von && inWindowAt(d, s.von, s.bis); }
+export function inSchonzeit(s){ return inSchonzeitAt(s, new Date()); }
 /** Formatiert [monat, tag] als "TT.MM." – NICHT für Date-Objekte (siehe fmtDate). */
 export function fmtMD(a: MonatTag): string {return String(a[1]).padStart(2,'0')+'.'+String(a[0]).padStart(2,'0')+'.';}
 /** Formatiert ein Date als "TT.MM." */
