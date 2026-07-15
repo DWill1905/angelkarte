@@ -138,7 +138,7 @@ export function buildLegend(){
   el.innerHTML = present.map(c=>
     `<div class="leg-row"><span class="leg-dot" style="background:${CATS[c].color}"></span>${esc(CATS[c].label)}</div>`).join('')
     + '<div class="leg-row"><span class="leg-cluster">5</span>mehrere Spots – reinzoomen</div>'
-    + (state.REGION&&state.REGION.flusskm&&state.REGION.flusskm.length?'<div class="leg-row"><span class="leg-km">km</span>Rhein-Strom-km</div>':'');
+    + (state.REGION&&state.REGION.flusskm&&state.REGION.flusskm.length?'<div class="leg-row"><span class="leg-km">km</span>Strom-km · <b>fett</b>=Pegel (amtlich), ≈=geschätzt</div>':'');
 }
 (function(){
   const t=byId('legToggle'), b=byId('legBody');
@@ -153,8 +153,11 @@ export function buildRheinKm(){
   const km=state.REGION&&state.REGION.flusskm;
   if(!km||!km.length) return;
   km.forEach(p=>{
-    const icon=L.divIcon({className:'km-mark',html:String(p.km),iconSize:[26,15],iconAnchor:[13,7]});
-    const m=L.marker([p.lat,p.lng],{icon,interactive:false,keyboard:false,zIndexOffset:-600});
+    const exakt=!!p.pegel;
+    const txt=String(p.km).replace('.',',');
+    const icon=L.divIcon({className:'km-mark'+(exakt?' km-exakt':''),html:(exakt?'':'≈')+txt,iconSize:[exakt?34:30,15],iconAnchor:[exakt?17:15,7]});
+    const m=L.marker([p.lat,p.lng],{icon,interactive:false,keyboard:false,zIndexOffset:-600,
+      title:exakt?`Pegel ${p.pegel} – Strom-km ${txt} (amtlich, WSV)`:`Strom-km ${txt} (interpoliert, ±~300 m)`});
     m.addTo(state.map);
     state.kmMarker.push(m);
   });

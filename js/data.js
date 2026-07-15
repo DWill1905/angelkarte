@@ -424,7 +424,7 @@ export const SPOTS_RLP = [
         rig: 'Rhein-Standard: Jigrute 30–60 g, Grundelfarben; Welsrute lohnt als zweite Rute',
         kartenLinks: [{ label: 'LFV RLP – Rheinkarte', url: 'https://lfv-rhl-rhh.de/fischerei-erlaubnisscheine/rhein/' }],
         note: 'Gut kombinierbar: Hafeneinfahrt bei Hochwasser, Buhnen bei Normalpegel. Marina-Bereich respektieren.', warn: false },
-    { name: 'Rhein Nackenheim & Mühlarm', rlpFruehjahr: true, flussmitte: true, wasser: 'fluss', zugang: 'ufer', verif: 'B', nr: 'LFV RLP · km 485–490', cat: 'raub',
+    { name: 'Rhein Nackenheim & Mühlarm', rlpFruehjahr: true, flussmitte: true, wasser: 'fluss', zugang: 'ufer', verif: 'B', nr: 'LFV RLP · ~km 490–492', cat: 'raub',
         arten: ['Zander', 'Barsch', 'Rapfen', 'Wels', 'Hecht', 'Aal', 'Brachse'],
         lat: 49.9558, lng: 8.3360,
         fisch: 'Zander, Barsch, Rapfen, Wels, Hecht, Aal, Brassen (Artenangaben teils user-generated)',
@@ -663,7 +663,18 @@ export const REGION_RLP = { id: 'mainz', geprueft: '2026-07', name: 'Rhein & Rhe
     pegel: { warnAb: 400, text: 'Buhnen überspült & lebensgefährlich (Sog/Wellenschlag) – nicht betreten, auf Hafenausfahrten ausweichen!' },
     fusszeile: 'Erlaubnis: <a href="https://lfv-rhl-rhh.de/fischerei-erlaubnisscheine/rhein/" target="_blank" rel="noopener">LFV Rhl.-Rhh.</a> (links) · <a href="https://www.hejfish.com" target="_blank" rel="noopener">hejfish</a> (Hessen-Seite)',
     spots: SPOTS_RLP, schon: SCHON_RLP,
-    flusskm: [{ km: 460, lat: 49.745, lng: 8.4226 }, { km: 465, lat: 49.7736, lng: 8.4063 }, { km: 470, lat: 49.8022, lng: 8.3901 }, { km: 475, lat: 49.8308, lng: 8.3738 }, { km: 480, lat: 49.8594, lng: 8.3575 }, { km: 485, lat: 49.9237, lng: 8.3432 }, { km: 490, lat: 49.9662, lng: 8.3245 }, { km: 495, lat: 49.987, lng: 8.3014 }, { km: 500, lat: 50.0085, lng: 8.2645 }, { km: 505, lat: 50.0302, lng: 8.1943 }],
+    /* Strom-km: exakte Punkte sind amtliche WSV-Pegel (PEGELONLINE, km + Koordinate).
+       Dazwischen nur dort interpoliert, wo die Anker dicht stehen und der Fluss kaum mäandert
+       (Nierstein→Bodenheim→Mainz, Faktor 1.03–1.06). Für die Strecke Worms→Nierstein (37 km ohne
+       Anker, Faktor 1.43) und flussab Mainz gibt es bewusst KEINE Marken – die wären geraten. */
+    flusskm: [
+        { km: 443.4, lat: 49.6318, lng: 8.3775, pegel: 'Worms' },
+        { km: 480.6, lat: 49.865, lng: 8.3524, pegel: 'Nierstein-Oppenheim' },
+        { km: 485, lat: 49.902, lng: 8.3474 },
+        { km: 489, lat: 49.9357, lng: 8.3428, pegel: 'Bodenheim' },
+        { km: 495, lat: 49.9799, lng: 8.2991 },
+        { km: 498.3, lat: 50.004, lng: 8.2753, pegel: 'Mainz' }
+    ],
     banner: [
         { von: [2, 1], bis: [3, 14], text: '<b>Hecht geschont</b> (01.02.–31.05.). <b>Aalfangverbot</b> bis 01.03.' },
         { von: [3, 15], bis: [4, 14], text: '<b>Hecht &amp; Zander geschont</b> – Zander bis 15.05., Hecht bis 31.05.' },

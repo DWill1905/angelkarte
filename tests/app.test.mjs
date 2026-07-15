@@ -70,10 +70,27 @@ describe('Popups', () => {
 
   test('Rhein-km-Marken: für mainz erzeugt, beim Regionswechsel geleert', async () => {
     await loadRegion(ctx, 'mainz');
-    assert.ok(app.state.REGION.flusskm && app.state.REGION.flusskm.length >= 8, 'flusskm-Daten fehlen');
+    assert.ok(app.state.REGION.flusskm && app.state.REGION.flusskm.length >= 4, 'flusskm-Daten fehlen');
     assert.equal((app.state.kmMarker || []).length, app.state.REGION.flusskm.length, 'km-Marken nicht erzeugt');
     await loadRegion(ctx, 'mecklenburg');
     assert.equal((app.state.kmMarker || []).length, 0, 'km-Marken beim Wechsel nicht geleert');
+  });
+
+  test('km-Marken stimmen mit den amtlichen WSV-Pegeln überein', async () => {
+    await loadRegion(ctx, 'mainz');
+    /* Amtlich (PEGELONLINE/WSV): km + Koordinate. Toleranz 150 m. */
+    const amtlich = [
+      { km: 480.6, lat: 49.864981, lng: 8.352376 },
+      { km: 489.0, lat: 49.935650, lng: 8.342776 },
+      { km: 498.3, lat: 50.003995, lng: 8.275319 },
+    ];
+    for (const a of amtlich) {
+      const m = app.state.REGION.flusskm.find((x) => Math.abs(x.km - a.km) < 0.2);
+      assert.ok(m, `Marke für amtlichen Pegel km ${a.km} fehlt`);
+      assert.ok(m.pegel, `km ${a.km} sollte als amtlicher Pegel markiert sein`);
+      const d = app.haversine(m.lat, m.lng, a.lat, a.lng);
+      assert.ok(d < 0.15, `km ${a.km}: ${(d * 1000).toFixed(0)} m vom amtlichen Pegel entfernt`);
+    }
   });
 
   test('Detail-Panel existiert und lässt sich schließen', () => {

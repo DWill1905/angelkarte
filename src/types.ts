@@ -132,8 +132,8 @@ export interface Region {
   fusszeile?: string;
   spots: Spot[];
   schon: Schonzeit[];
-  /** Fluss-Kilometermarken (z. B. Rhein-Strom-km) zur Orientierung – näherungsweise interpoliert. */
-  flusskm?: { km: number; lat: number; lng: number }[];
+  /** Fluss-Kilometermarken. `pegel` = amtlicher WSV-Pegel (exakt); ohne `pegel` = interpoliert (≈). */
+  flusskm?: { km: number; lat: number; lng: number; pegel?: string }[];
   banner?: Banner[];
   regeln?: Regelblock[];
   hinweis?: string;
