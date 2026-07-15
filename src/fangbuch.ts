@@ -7,6 +7,7 @@ import { uid } from './myspots.js';
 import { initRegions } from './region.js';
 import { ICON, esc } from './util.js';
 import { regionCenter } from './ui.js';
+import { WT_OPT } from './tackle.js';
 import { loadWeather } from './weather.js';
 export const fbSpotSel=selectById('fbSpot');
 export function buildFbOptions(){
@@ -88,6 +89,88 @@ export function parseFangDatum(d){
   return isNaN(t)?null:new Date(t);
 }
 
+/* ---- Modell-Abgleich: hält das Fangbuch, was das Modell behauptet? ----
+   Bewusst NUR ein Abgleich, kein Nachjustieren der Gewichte. Und mit einer
+   Einschränkung, die man nicht wegdiskutieren kann: Das Fangbuch kennt nur
+   Fänge, nicht die Stunden ohne Biss. Ohne diese Vergleichsbasis lässt sich
+   nicht beweisen, dass ein Faktor die Ursache war – nur, ob die Annahme des
+   Modells zu deinen Fängen passt. Das steht auch so in der Ausgabe. */
+function urteil(passt: boolean | null, jaTxt: string, neinTxt: string, wenig: string){
+  if(passt===null) return '<span style="color:var(--muted)">'+wenig+'</span>';
+  return passt
+    ? '<span style="color:var(--forelle)">✓ '+jaTxt+'</span>'
+    : '<span style="color:var(--warn)">✗ '+neinTxt+'</span>';
+}
+
+export function fbModellCheck(): string {
+  const MIN=12;
+  if(state.fbMem.length<MIN){
+    return '<p class="fineprint" style="margin-top:10px">Modell-Abgleich erscheint ab '+MIN+' Fängen (aktuell '+state.fbMem.length+').</p>';
+  }
+  const zeilen: string[] = [];
+
+  /* 1) Luftdruck: das Modell wertet fallenden Druck (≤ -1,5 hPa/3h) als Beißtrigger. */
+  const mitDruck=state.fbMem.filter(e=>e.ctx&&typeof e.ctx.trend==='number');
+  if(mitDruck.length>=8){
+    const fallend=mitDruck.filter(e=>(e.ctx!.trend as number)<=-1.5).length;
+    const pct=Math.round(fallend/mitDruck.length*100);
+    /* Fallender Druck herrscht grob an einem Viertel der Zeit – deutlich mehr Fänge
+       sprechen für die Annahme, deutlich weniger dagegen. */
+    const passt = pct>=35 ? true : pct<=12 ? false : null;
+    zeilen.push('<div style="margin-top:8px"><b>Fallender Luftdruck = Beißtrigger</b>'
+      +'<div>Modell: hoch gewichtet · Dein Fangbuch: '+pct+'\u202F% von '+mitDruck.length+' Fängen</div>'
+      +'<div>'+urteil(passt,'passt zusammen','widerspricht – bei dir beißt es eher nicht bei fallendem Druck',
+        'uneindeutig – liegt im Bereich des Zufalls')+'</div></div>');
+  }
+
+  /* 2) Solunar: das Modell gewichtet die Beißfenster mit 2 – dem höchsten Einzelgewicht. */
+  const mitF=state.fbMem.filter(e=>e.ctx&&e.ctx.fenster!==undefined);
+  if(mitF.length>=8){
+    const drin=mitF.filter(e=>!!e.ctx!.fenster).length;
+    const pct=Math.round(drin/mitF.length*100);
+    /* Die Fenster decken grob ein Drittel des Tages ab. */
+    const passt = pct>=45 ? true : pct<=20 ? false : null;
+    zeilen.push('<div style="margin-top:8px"><b>Beißfenster (Solunar)</b>'
+      +'<div>Modell: stärkstes Einzelgewicht · Dein Fangbuch: '+pct+'\u202F% von '+mitF.length+' Fängen im Fenster</div>'
+      +'<div>'+urteil(passt,'passt zusammen','widerspricht – deine Fänge kommen überwiegend außerhalb',
+        'uneindeutig – die Fenster decken ohnehin ~⅓ des Tages ab')+'</div></div>');
+  }
+
+  /* 3) Wassertemperatur-Optimum je Art (WT_OPT) – nur Arten mit genug Fängen. */
+  const proArt: Record<string,{drin:number;n:number}> = {};
+  state.fbMem.forEach(e=>{
+    const opt=WT_OPT[e.fisch];
+    const wt=e.ctx&&typeof e.ctx.wt==='number'?e.ctx.wt:null;
+    if(!opt||wt==null) return;
+    const a=proArt[e.fisch]||(proArt[e.fisch]={drin:0,n:0});
+    a.n++; if(wt>=opt[0]&&wt<=opt[1]) a.drin++;
+  });
+  const arten=Object.keys(proArt).filter(a=>proArt[a].n>=4);
+  if(arten.length){
+    const teile=arten.map(a=>{
+      const {drin,n}=proArt[a];
+      const pct=Math.round(drin/n*100);
+      return esc(a)+': '+pct+'\u202F% von '+n+' Fängen im Modell-Optimum ('+WT_OPT[a][0]+'–'+WT_OPT[a][1]+'\u202F°C)';
+    });
+    const gesamt=arten.reduce((s,a)=>s+proArt[a].drin,0)/arten.reduce((s,a)=>s+proArt[a].n,0);
+    const passt = gesamt>=0.6 ? true : gesamt<=0.3 ? false : null;
+    zeilen.push('<div style="margin-top:8px"><b>Wassertemperatur-Optimum</b><div>'+teile.join('<br>')+'</div>'
+      +'<div>'+urteil(passt,'passt zusammen','widerspricht – deine Fänge liegen meist außerhalb des angenommenen Optimums',
+        'uneindeutig')+'</div></div>');
+  }
+
+  if(!zeilen.length){
+    return '<p class="fineprint" style="margin-top:10px">Für den Modell-Abgleich fehlen die Begleitdaten (Druck, Fenster, Wassertemperatur) – die werden erst seit neueren Fängen mitgeschrieben.</p>';
+  }
+  return '<div class="insight" style="margin-top:10px"><h4>Modell-Abgleich</h4>'
+    +'<p class="fineprint" style="margin:0 0 4px">Hält das Modell, was es behauptet – gemessen an DEINEN Fängen?</p>'
+    +zeilen.join('')
+    +'<p class="fineprint" style="margin-top:10px">⚠ Wichtig: Das Fangbuch kennt nur deine <b>Fänge</b>, nicht die Stunden <b>ohne Biss</b>. '
+    +'Ohne diese Vergleichsbasis lässt sich nicht belegen, dass ein Faktor die Ursache war – der Abgleich zeigt nur, '
+    +'ob die Annahme des Modells zu deinen Fängen passt. Die Gewichte werden bewusst <b>nicht</b> automatisch nachgestellt: '
+    +'bei dieser Datenmenge wäre das Überanpassung an Zufall.</p></div>';
+}
+
 export function fbInsights(){
   const el=byId('fbInsights');
   if(state.fbMem.length<8){ el.innerHTML='<p class="fineprint" style="margin-top:10px">Muster-Auswertung erscheint ab 8 Fängen (aktuell '+state.fbMem.length+'). Je mehr Fänge, desto aussagekräftiger.</p>'; return; }
@@ -136,7 +219,7 @@ export function fbInsights(){
     });
     h+='</div>';
   }
-  el.innerHTML=h;
+  el.innerHTML=h+fbModellCheck();
 }
 /* ===== Backup: vollständiger Export/Import als JSON (reimportierbar, anders als CSV) ===== */
 export function fbBackup(){

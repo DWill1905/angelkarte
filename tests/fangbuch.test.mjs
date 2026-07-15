@@ -1,6 +1,6 @@
 /* Tests des Fangbuchs: Speichern, Maßcheck, Statistik, Backup/Restore.
    Deckt die Bugs ab, die in dieser Session real aufgetreten sind. */
-import { test, describe, before, after, beforeEach } from 'node:test';
+import { test, describe, before, after, beforeEach, afterEach } from 'node:test';
 import assert from 'node:assert/strict';
 import { startApp, loadRegion, tick } from './setup.mjs';
 
@@ -188,5 +188,41 @@ describe('Backup: Export und Import', () => {
   test('Backup ohne gültige Fänge wird abgewiesen', async () => {
     const r = await app.fbRestore({ text: async () => JSON.stringify({ faenge: [{ unsinn: true }] }) });
     assert.equal(r.error, 'leer');
+  });
+});
+
+describe('Modell-Abgleich (Fangbuch gegen Modell)', () => {
+  const mk = (n, { trend, fenster, wt }) => Array.from({ length: n }, (_, i) => ({
+    id: i + 1, fisch: 'Zander', laenge: 60, spot: 'X', koeder: 'Gummi', datum: '1.7.2026', entnommen: false,
+    ctx: { zeit: '20:00', mond: 'M', druck: 1010, trend, wind: 'SW', pegel: 250, wt, fenster },
+  }));
+  afterEach(() => { app.state.fbMem = []; });
+
+  test('unter 12 Fängen wird kein Urteil gefällt', () => {
+    app.state.fbMem = mk(5, { trend: -2.5, fenster: 'major', wt: 18 });
+    const h = app.fbModellCheck();
+    assert.match(h, /ab 12 Fängen/, 'bei dünner Datenlage darf es kein Urteil geben');
+    assert.ok(!/passt zusammen/.test(h), 'kein Urteil bei zu wenig Daten');
+  });
+
+  test('modellkonforme Fänge werden bestätigt', () => {
+    app.state.fbMem = mk(14, { trend: -2.5, fenster: 'major', wt: 18 });
+    const h = app.fbModellCheck();
+    assert.match(h, /passt zusammen/, 'Bestätigung fehlt');
+    assert.ok(!/widerspricht/.test(h), 'darf hier nicht widersprechen');
+  });
+
+  test('widersprechende Fänge werden auch als Widerspruch benannt', () => {
+    app.state.fbMem = mk(14, { trend: 3, fenster: null, wt: 2 });
+    const h = app.fbModellCheck();
+    assert.match(h, /widerspricht/, 'Widerspruch muss benannt werden – nicht schöngeredet');
+    assert.ok(!/passt zusammen/.test(h), 'darf hier nichts bestätigen');
+  });
+
+  test('die fehlende Vergleichsbasis wird immer offengelegt', () => {
+    app.state.fbMem = mk(14, { trend: -2.5, fenster: 'major', wt: 18 });
+    const h = app.fbModellCheck();
+    assert.match(h, /nicht die Stunden/, 'Caveat zu den fehlenden Nullfängen fehlt');
+    assert.match(h, /nicht.*automatisch/, 'Hinweis auf bewusst kein Auto-Tuning fehlt');
   });
 });
