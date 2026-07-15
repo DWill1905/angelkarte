@@ -93,6 +93,22 @@ describe('Popups', () => {
     }
   });
 
+  test('NSG-Sperrzonen aus der Rechtsverordnung sind hinterlegt', async () => {
+    await loadRegion(ctx, 'mainz');
+    const sperr = app.state.SPOTS.filter((s) => s.cat === 'sperr');
+    const finde = (t) => sperr.find((s) => s.name.includes(t));
+    const mombach = finde('Mombacher');
+    const haderaue = finde('Haderaue');
+    const kissel = finde('Kisselwörth');
+    assert.ok(mombach && haderaue && kissel, 'NSG-Sperrzone fehlt');
+    /* Amtliche km-Angaben müssen im Text stehen – sie sind maßgeblich, nicht die Kartenlage. */
+    assert.match(mombach.nr + mombach.note, /505,4/, 'Mombach ohne amtliche km');
+    assert.match(haderaue.nr + haderaue.note, /508,0/, 'Haderaue ohne amtliche km');
+    assert.match(haderaue.note, /511,0–512,5/, 'Haderaue ohne Handangel-Ausnahme');
+    assert.match(kissel.note, /10\.03\.–15\.07\./, 'Sändchen-Datum nicht amtlich (10.03.)');
+    for (const s of [mombach, haderaue, kissel]) assert.equal(s.warn, true, `${s.name} ohne warn`);
+  });
+
   test('Detail-Panel existiert und lässt sich schließen', () => {
     const sheet = doc.getElementById('detailSheet');
     const close = doc.getElementById('detailClose');

@@ -405,16 +405,16 @@ export const SPOTS_RLP = [
         karte: 'Rheinischer Erlaubnisschein',
         rig: 'Jigköpfe 15–30 g je nach Strömung; fürs Posenangeln hinter den Rampen leichte Matchrute',
         kartenLinks: [{ label: 'LFV RLP – Rheinkarte', url: 'https://lfv-rhl-rhh.de/fischerei-erlaubnisscheine/rhein/' }],
-        note: 'Zwei Rampen an der chemischen Fabrik plus eine kleine stromauf – die ruhigen Bereiche dahinter sind die Friedfisch-Geheimecken. Parkplatz am Kiosk Rheinblick.', warn: false },
-    { name: 'Altrhein Heidenfahrt', wasser: 'see-flach', zugang: 'ufer', verif: 'B', nr: '~Strom-km 511 · Teilsperrung', cat: 'fried',
+        note: '⚠ Dieser Abschnitt liegt genau ZWISCHEN zwei Angelverboten: stromauf endet das NSG Mombacher Rheinufer bei km 506,0, stromab beginnt das NSG Haderaue-Königsklinger Aue bei km 508,0 (dort ganzjährig verboten). Die km-Marken der Karte sind nur auf ±~300 m genau – im Grenzbereich also Beschilderung und Erlaubnisschein prüfen. Zwei Rampen an der chemischen Fabrik plus eine kleine stromauf – die ruhigen Bereiche dahinter sind die Friedfisch-Geheimecken. Parkplatz am Kiosk Rheinblick.', warn: true },
+    { name: 'Altrhein Heidenfahrt', wasser: 'see-flach', zugang: 'ufer', verif: 'B', nr: '~Strom-km 512 · Sommersperre', cat: 'fried',
         arten: ['Zander', 'Barsch', 'Hecht', 'Karpfen', 'Schleie', 'Brachse', 'Aal'],
         lat: 50.0121, lng: 8.1021,
         fisch: 'Zander, Barsch, Hecht, Karpfen, Schleie, Brassen, Aal',
         methode: 'Strömungsberuhigt: Pose und Grund auf Friedfisch, am Altrhein-Ausgang Raubfisch',
-        karte: 'Rheinischer Erlaubnisschein – nur der hintere Bereich, vorderer Teil ist Schutzgebiet!',
+        karte: 'Rheinischer Erlaubnisschein – im NSG-Band km 511,0–512,5 nur Handangel und nur 01.09.–31.05.',
         rig: 'Feeder/Pose fürs Stillwasser, Spinnrute für den Ausgang zum Strom',
         kartenLinks: [{ label: 'LFV RLP – Rheinkarte', url: 'https://lfv-rhl-rhh.de/fischerei-erlaubnisscheine/rhein/' }],
-        note: 'Beliebt und teils saisonal gesperrt (Berichte über Sperrung bis 31.08. kursieren) – Beschilderung maßgeblich. Badestrand nebenan = Sommer-Trubel.', warn: true },
+        note: '⚠ Die kursierenden Berichte über eine „Sperrung bis 31.08." haben eine amtliche Grundlage: Im NSG Haderaue-Königsklinger Aue ist in km 511,0–512,5 die Handangel nur vom 1. September bis 31. Mai erlaubt – von Juni bis August also dicht. Stromauf (km 508,0–511,0) ist die Fischerei ganzjährig verboten. Dieser Spot liegt berechnet bei ~km 512 (±~300 m), also im Randbereich – Beschilderung und Erlaubnisschein sind maßgeblich. Badestrand nebenan = Sommer-Trubel.', warn: true },
     { name: 'Hafen & Buhnen Oppenheim', rlpFruehjahr: true, flussmitte: true, wasser: 'fluss', zugang: 'ufer', nr: 'LFV RLP · ~Strom-km 480', cat: 'raub',
         arten: ['Zander', 'Barsch', 'Wels', 'Aal', 'Brachse'],
         lat: 49.8594, lng: 8.3575,
@@ -432,7 +432,7 @@ export const SPOTS_RLP = [
         karte: 'Rheinischer Erlaubnisschein (LFV Rhl.-Rhh.) – Ausgabestelle u.a. Angelsport Reika, Hauptstr. 55, Eich (Tel. 06246 904605)',
         rig: 'Rhein-Standard: Jigrute 30–60 g mit Grundeldekoren; im Mühlarm reicht leichteres Gerät und Posen-/Grundmontage',
         kartenLinks: [{ label: 'LFV RLP – Rheinkarte', url: 'https://lfv-rhl-rhh.de/fischerei-erlaubnisscheine/rhein/' }],
-        note: '⚠ WICHTIG: Die Rheininseln Kisselwörth & Sändchen sind Naturschutzgebiet mit WECHSELNDEN Handangel-Sperren – auf Kisselwörth 16.07.–29.02. verboten, auf Sändchen Anfang März–15.07. verboten. Der Mühlarm (Ufer neben B9) und das befestigte Hauptstromufer sind alle 100–200 m an Treppen/Bootsrampen zugänglich. Zufahrt/Parken über Rheinstraße Nackenheim.',
+        note: '⚠ WICHTIG: Die Rheininseln Kisselwörth & Sändchen sind Naturschutzgebiet mit WECHSELNDEN Handangel-Sperren – auf Kisselwörth 16.07.–29.02. verboten, auf Sändchen 10.03.–15.07. verboten. Der Mühlarm (Ufer neben B9) und das befestigte Hauptstromufer sind alle 100–200 m an Treppen/Bootsrampen zugänglich. Zufahrt/Parken über Rheinstraße Nackenheim.',
         hotspots: [
             { name: 'Mühlarm bei der B9', saison: 'ganzjährig, top bei Hochwasser', lat: 49.9585, lng: 8.3345, tipp: 'Strömungsberuhigter Nebenarm zwischen Ufer und den Inseln – ideal wenn der Hauptstrom bei Hochwasser unfischbar wird. Viele Bootsstege, Friedfisch und Zander. Inselseite wegen NSG-Sperren meiden!' }
         ], warn: true },
@@ -530,10 +530,18 @@ export const SPOTS_RLP = [
         lat: 50.0410, lng: 8.1960,
         fisch: '—', methode: '—', karte: 'Seit 2005 komplett gesperrt',
         note: 'Verbot der Stadt Wiesbaden wegen Schadstoffbelastung – Gesundheitsgefahr, gilt bis zur Mündung in den Rhein. Lage ungefähr.', warn: true },
-    { name: 'NSG Mombacher Rheinufer', verif: 'B', nr: 'VERBOTEN', cat: 'sperr', arten: [],
-        lat: 50.0240, lng: 8.2380,
-        fisch: '—', methode: '—', karte: 'Naturschutzgebiet – Angeln ganzjährig verboten',
-        note: 'Liegt zwischen Stadtstrecke und Industriehafen, inkl. der Buhnen und Strände dahinter. Strom-km im Erlaubnisschein beachten. Lage ungefähr.', warn: true }
+    { name: 'NSG Mombacher Rheinufer', verif: 'B', nr: 'VERBOTEN · Strom-km 505,4–506,0', cat: 'sperr', arten: [],
+        lat: 50.0229, lng: 8.1883,
+        fisch: '—', methode: '—', karte: 'Naturschutzgebiet – Angelverbot laut Rechtsverordnung',
+        note: 'Amtlich (SGD Süd, Stand 2025): „Im Naturschutzgebiet ist es verboten: an den Stillgewässern sowie am Rheinufer zwischen Rhein-km 505,4 und 506,0 zu angeln." Gilt also für den Uferabschnitt UND alle Stillgewässer im NSG. ⚠ Markerlage ist berechnet (±~300 m) – maßgeblich sind die Strom-km der Rechtsverordnung, nicht die Karte. Einsicht: Untere Naturschutzbehörde KV Mainz-Bingen, Ingelheim.', warn: true },
+    { name: 'NSG Haderaue-Königsklinger Aue', verif: 'B', nr: 'VERBOTEN · Strom-km 508,0–511,0', cat: 'sperr', arten: [],
+        lat: 50.0168, lng: 8.1398,
+        fisch: '—', methode: '—', karte: 'Ganzjähriges Angelverbot km 508,0–511,0',
+        note: 'Amtlich (SGD Süd, Stand 2025): Fischerei zwischen Strom-km 508,0 und 511,0 am Rhein und Altrhein sowie am Gewässer „Krappen" (Haderaulache) ganzjährig verboten. Erlaubt ist die Handangel vom 1. September bis 31. Mai in km 511,0–512,5 (Rhein und Altrhein) – im Sommer also auch dort dicht. ⚠ Markerlage berechnet (±~300 m) – maßgeblich sind die Strom-km.', warn: true },
+    { name: 'NSG Kisselwörth und Sändchen', verif: 'B', nr: 'VERBOTEN (saisonal) · Inseln bei Nackenheim', cat: 'sperr', arten: [],
+        lat: 49.9620, lng: 8.3450,
+        fisch: '—', methode: '—', karte: 'Handangel auf den Inseln saisonal verboten',
+        note: 'Amtlich (SGD Süd, Stand 2025): Handangeln verboten auf der Insel Kisselwörth vom 16.07.–28.(29.)02. und auf der Insel Sändchen vom 10.03.–15.07. Die beiden Rheininseln liegen östlich von Nackenheim, vom Ufer durch den Mühlarm getrennt – das Verbot gilt AUF den Inseln; vom Nackenheimer Ufer/Mühlarm aus ist es nicht berührt. ⚠ Markerlage ungefähr.', warn: true }
 ];
 export const SCHON_RLP = [
     { fisch: 'Hecht', von: [2, 1], bis: [5, 31], mm: '50 cm' },
@@ -684,7 +692,7 @@ export const REGION_RLP = { id: 'mainz', geprueft: '2026-07', name: 'Rhein & Rhe
     ],
     regeln: [
         { titel: 'Erlaubnisscheine am Rhein', punkte: ['Linksrheinisch (Mainzer Ufer): rheinischer Erlaubnisschein ~31 €/Jahr – online-Infos &amp; Ausgabestellen: <a href="https://lfv-rhl-rhh.de/fischerei-erlaubnisscheine/rhein/" target="_blank" rel="noopener">lfv-rhl-rhh.de</a>, klassisch im Angelladen (z.B. Bode Heidesheim)', 'Ufer und handgerudertes Boot erlaubt (Bootsplakette sichtbar anbringen), Köderfischsenke vom Ufer zulässig', 'Rechtsrheinische Seite, Mainspitze &amp; Ginsheim: hessischer Rheinschein – seit 2025 nur noch online über <a href="https://www.hejfish.com" target="_blank" rel="noopener">hejfish.com</a> (HLG)', 'Main km 0–2,89: Erlaubnis nur mit Vereinsmitgliedschaft im hessischen Verband'] },
-        { titel: 'Verbotszonen – teuer bei Kontrolle', punkte: ['Zollhafen Mainz: komplett verboten', 'Schiersteiner Hafen: seit 2005 komplett gesperrt (Schadstoffe)', 'NSG Mombacher Rheinufer: ganzjährig verboten, inkl. Buhnen/Strände', 'Industrie- und Winterhafen: nur ausgeschilderte Bereiche', 'Altrhein Heidenfahrt: vorderer Teil Schutzgebiet'] },
+        { titel: 'Verbotszonen – teuer bei Kontrolle', punkte: ['Zollhafen Mainz: komplett verboten', 'Schiersteiner Hafen: seit 2005 komplett gesperrt (Schadstoffe)', 'NSG Mombacher Rheinufer: Angeln an den Stillgewässern + Rheinufer km 505,4–506,0 verboten', 'NSG Haderaue-Königsklinger Aue: km 508,0–511,0 (Rhein/Altrhein) + Gewässer „Krappen"/Haderaulache ganzjährig verboten; km 511,0–512,5 nur Handangel und nur 01.09.–31.05.', 'NSG Kisselwörth und Sändchen (Inseln bei Nackenheim): Handangel auf Kisselwörth 16.07.–28.(29.)02., auf Sändchen 10.03.–15.07. verboten', 'NSG Sandlache: Fischerei (Berufs- und Angelfischerei) komplett verboten – Lage nicht in der App hinterlegt, bei der Unteren Naturschutzbehörde erfragen', 'NSG Fulder Aue – Ilmen Aue: Fischerei verboten, nur vom Ufer km 525,4–525,0 gestattet (liegt stromab der App-Strecke)', 'Industrie- und Winterhafen: nur ausgeschilderte Bereiche', 'Grundlage: Rechtsverordnungen der SGD Süd (Obere Naturschutzbehörde), Stand 2025 – einsehbar bei den Unteren Naturschutzbehörden KV Mainz-Bingen (Ingelheim) und Alzey-Worms', '⚠ Die km-Marken der Karte sind auf ±~300 m genau – sie taugen NICHT zum Beurteilen einer Schutzgebietsgrenze. Maßgeblich sind Rechtsverordnung und Beschilderung.'] },
         { titel: 'Rhein-Praxis', punkte: ['Pegel über ~4 m: Buhnen überspült – dann auf Hafenausfahrten ausweichen (Pegelanzeige oben in der App nutzen!)', 'Grundel ist Hauptfutter: Ködergrößen 9–12 cm in Grundeldekoren, Naturköder am Grund = Grundel-Lotterie', 'Nachts schlägt der flach geführte Wobbler an kurzen Buhnen oft den Gummifisch', 'Frühjahrsschonzeit 15.04.–31.05.: Kunstköder verboten (außer Fliege) – de facto Spinnstart am 1. Juni', 'Schifffahrt: Wellenschlag reißt Ruten ins Wasser – sichern!'] }
     ],
     hinweis: 'Angaben ohne Gewähr, recherchiert 07/2026 (FischGDV RP, LFV RLP, Anglerforen). Maßgeblich: Erlaubnisschein mit Strom-km-Angaben und Beschilderung. Mindestmaße RLP vor Entnahme gegenprüfen.' };
