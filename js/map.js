@@ -9,9 +9,35 @@ import { openTools } from './tools.js';
 import { sunLine } from './ui.js';
 import { ICON, esc } from './util.js';
 import { loadWeather } from './weather.js';
-L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+/* Basiskarten. OSM ist Standard (beschriftet, gut für Orientierung); das Luftbild zeigt
+   Buhnenfelder, Krautkanten und Altarm-Struktur, die in OSM schlicht nicht drin sind. */
+const osmLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 18, attribution: '&copy; OpenStreetMap'
-}).addTo(state.map);
+});
+const satLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    maxZoom: 18, attribution: 'Luftbild &copy; Esri, Maxar, Earthstar Geographics'
+});
+osmLayer.addTo(state.map);
+state.satAn = false;
+/** Zwischen Karte und Luftbild umschalten. Gibt den neuen Zustand zurück. */
+export function satToggle() {
+    state.satAn = !state.satAn;
+    if (state.satAn) {
+        state.map.removeLayer(osmLayer);
+        satLayer.addTo(state.map);
+    }
+    else {
+        state.map.removeLayer(satLayer);
+        osmLayer.addTo(state.map);
+    }
+    document.body.classList.toggle('sat-an', state.satAn);
+    const b = byId('satBtn');
+    if (b) {
+        b.setAttribute('aria-pressed', String(state.satAn));
+        b.classList.toggle('on', state.satAn);
+    }
+    return state.satAn;
+}
 L.control.scale({ imperial: false }).addTo(state.map);
 /* Marker-Clustering (Leaflet.markercluster): bündelt dicht stehende Spots zu einer Zahl,
    bricht beim Reinzoomen auf. Fällt sauber zurück auf die Karte, wenn das Plugin fehlt. */

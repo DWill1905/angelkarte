@@ -282,6 +282,9 @@
   .leaflet-div-icon.km-mark{background:rgba(247,251,250,.86);color:#2a5470;border:1px solid rgba(42,84,112,.45);
     border-radius:7px;font:700 9px/13px 'Space Mono',monospace;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.3);pointer-events:none}
   .leaflet-div-icon.km-mark.km-exakt{background:#2a5470;color:#f7fbfa;border-color:#f7fbfa;font-weight:700}
+  /* Auf dem Luftbild ist der Hintergrund dunkel und unruhig – Marken brauchen mehr Deckkraft. */
+  body.sat-an .leaflet-div-icon.km-mark{background:rgba(255,255,255,.96);border-color:#1b3c50;color:#12323f}
+  body.sat-an .leaflet-div-icon.km-mark.km-exakt{background:#12323f;color:#fff;border-color:#fff}
   .leg-km{width:19px;height:14px;border-radius:5px;background:rgba(247,251,250,.92);color:#2a5470;
     border:1px solid rgba(42,84,112,.45);font:700 8px/12px 'Space Mono',monospace;text-align:center;flex:0 0 auto}
   /* Pins mit Schlagschatten, damit sie sich vom detailreichen Kartenhintergrund abheben */
@@ -724,6 +727,7 @@
         <button class="fbtool" id="tTrip" data-ic="bag">Trip-Liste <span id="tripCount" style="color:var(--dusk);font-weight:700"></span></button>
         <button class="fbtool" id="tOff" data-ic="pin">Offline sichern</button>
         <button class="fbtool" id="schilfBtn" data-ic="waves" aria-pressed="false">Schilf (OSM)</button>
+        <button class="fbtool" id="satBtn" data-ic="pin" aria-pressed="false">Satellit</button>
       </div>
     </div>
     <div class="mydlg-btns"><button id="toolsClose">Schließen</button></div>

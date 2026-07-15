@@ -109,6 +109,20 @@ describe('Popups', () => {
     for (const s of [mombach, haderaue, kissel]) assert.equal(s.warn, true, `${s.name} ohne warn`);
   });
 
+  test('Satellit-Umschalter wechselt die Basiskarte und ist zurückschaltbar', () => {
+    const btn = doc.getElementById('satBtn');
+    assert.ok(btn, 'Satellit-Schalter fehlt');
+    assert.equal(app.state.satAn, false, 'Standard muss die OSM-Karte sein');
+    btn.click();
+    assert.equal(app.state.satAn, true, 'Umschalten auf Luftbild wirkt nicht');
+    assert.equal(btn.getAttribute('aria-pressed'), 'true');
+    assert.ok(doc.body.classList.contains('sat-an'), 'Kontrast-Klasse fehlt');
+    doc.getElementById('toolsFab').click();
+    btn.click();
+    assert.equal(app.state.satAn, false, 'Zurückschalten wirkt nicht');
+    assert.ok(!doc.body.classList.contains('sat-an'), 'Kontrast-Klasse nicht entfernt');
+  });
+
   test('Detail-Panel existiert und lässt sich schließen', () => {
     const sheet = doc.getElementById('detailSheet');
     const close = doc.getElementById('detailClose');

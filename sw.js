@@ -1,7 +1,7 @@
 /* Angelkarte Service Worker – Offline-Modus
    Shell + Daten: stale-while-revalidate · OSM-Tiles: cache-first (max. 600)
    API-Aufrufe (Wetter, Pegel, Anthropic): immer Netz */
-const CACHE='angelkarte-shell-v83';
+const CACHE='angelkarte-shell-v84';
 const TILES='angelkarte-tiles-v1';
 const SHELL=[
   './','index.html','manifest.json',
@@ -44,8 +44,8 @@ self.addEventListener('fetch',e=>{
   /* Live-APIs nie cachen */
   if(u.hostname==='api.open-meteo.com'||u.hostname.endsWith('pegelonline.wsv.de')) return;
 
-  /* OSM-Tiles: cache-first, Hintergrund-Refresh, begrenzte Größe */
-  if(u.hostname.endsWith('tile.openstreetmap.org')){
+  /* Kartenkacheln (OSM + Esri-Luftbild): cache-first, Hintergrund-Refresh, begrenzte Größe */
+  if(u.hostname.endsWith('tile.openstreetmap.org')||u.hostname.endsWith('server.arcgisonline.com')){
     e.respondWith((async()=>{
       const c=await caches.open(TILES);
       const hit=await c.match(e.request);

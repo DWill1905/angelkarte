@@ -285,6 +285,8 @@ export interface AppState {
   userMarker: any;
   uidLast: number;
   WX: Wetter | null;
+  /** Luftbild statt OSM-Karte aktiv. */
+  satAn: boolean;
   /** Stundenreihe von Open-Meteo (lokale Zeitstempel) – Basis für andere Tage im Planer. */
   WXH: any | null;
   PEGEL: Pegel | null;

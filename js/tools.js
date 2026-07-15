@@ -10,7 +10,7 @@ import { fullscreenToggle } from './fullscreen.js';
 import { fokusFor } from './saison.js';
 import { NOW, fmtDate, fmtMD, haversine, hhmm, inSchonzeit, mondPhase, mondStaerke, solunar, sunTimes } from './astro.js';
 import { regionCenter } from './ui.js';
-import { openOffline } from './map.js';
+import { openOffline, satToggle } from './map.js';
 import { openTrip, inTrip, setTripBtn } from './trip.js';
 import { esc } from './util.js';
 export function season() { const m = NOW.getMonth() + 1; return m === 12 || m <= 2 ? 'winter' : m <= 5 ? 'fruehjahr' : m <= 8 ? 'sommer' : 'herbst'; }
@@ -137,6 +137,10 @@ byId('wxScore')?.addEventListener('click', () => { if (wxDlg)
 byId('tFore').onclick = () => { toolsDlg.hidden = true; openForecast(); };
 byId('tOff').onclick = () => { toolsDlg.hidden = true; openOffline(); };
 byId('tTrip').onclick = () => { toolsDlg.hidden = true; openTrip(); };
+const satBtn = byId('satBtn');
+if (satBtn) {
+    satBtn.onclick = () => { toolsDlg.hidden = true; satToggle(); };
+}
 const schilfBtn = byId('schilfBtn');
 if (schilfBtn) {
     schilfBtn.onclick = async () => { toolsDlg.hidden = true; await schilfToggle(); };
