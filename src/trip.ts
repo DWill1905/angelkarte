@@ -3,6 +3,8 @@ import { byId, qsa } from './dom.js';
 import { state, store } from './state.js';
 import { esc, ICON } from './util.js';
 import { mapsLink } from './map.js';
+import { tagesplan, tagLabel, MAX_TAG } from './plan.js';
+import { hhmm } from './astro.js';
 
 const KEY='trip';
 export function inTrip(name: string): boolean {
@@ -48,6 +50,59 @@ export function updateTripBadge(){
 }
 
 export const tripDlg=byId('tripDlg');
+
+/* ---- Tagesplan über die gemerkten Spots ---- */
+export const routeDlg=byId('routeDlg');
+let routeTag=0;
+
+export function openRoute(){
+  routeTag=0;
+  renderRoute();
+  if(routeDlg) routeDlg.hidden=false;
+}
+
+function renderRoute(){
+  const body=byId('routeBody');
+  if(!body) return;
+  const lbl=byId('routeTagLabel'); if(lbl) lbl.textContent=tagLabel(routeTag);
+  const pv=byId('routePrev') as HTMLButtonElement|null; if(pv) pv.disabled=routeTag<=0;
+  const nx=byId('routeNext') as HTMLButtonElement|null; if(nx) nx.disabled=routeTag>=MAX_TAG;
+  const stopps=tagesplan(routeTag);
+  if(!stopps.length){
+    body.innerHTML='<p>Für diesen Tag lässt sich kein Plan bauen.</p>'
+      +'<p style="color:var(--muted);margin-top:8px;font-size:12px">Merke dir mindestens einen Spot der aktuellen Region (☆ Merken im Popup). Sind alle Zielfische geschont, bleibt der Plan ebenfalls leer – das ist Absicht.</p>';
+    return;
+  }
+  let h='<p style="color:var(--muted);margin-bottom:10px">'+stopps.length+' Stopp'+(stopps.length===1?'':'s')
+    +' – jeder Spot in dem Beißfenster, in dem er am stärksten ist.</p>';
+  stopps.forEach((s,i)=>{
+    h+='<div style="display:flex;gap:9px;padding:8px 0;border-bottom:1px solid var(--line)">'
+      +'<div style="min-width:14px;color:var(--dusk);font-weight:700">'+(i+1)+'</div>'
+      +'<div style="flex:1">'
+        +'<div style="font-family:\'Space Mono\',monospace;color:'+(s.typ==='major'?'var(--amber)':'var(--dusk)')+'">'
+          +hhmm(s.von)+'–'+hhmm(s.bis)+' · '+esc(s.label)+(s.typ==='major'?' · stark':'')+'</div>'
+        +'<div style="font-weight:700;margin-top:1px">'+esc(s.spot.name)+'</div>'
+        +'<div style="color:var(--muted);font-size:12px">'+esc(s.art)+' · '+s.chance+'\u202F% Chance</div>'
+        +(s.weiter!=null?'<div style="color:var(--muted);font-size:11px;margin-top:3px">↓ '+s.weiter.toFixed(1)+' km Luftlinie zum nächsten Stopp</div>':'')
+      +'</div>'
+      +'<a class="pop-btn nav" style="padding:4px 8px;font-size:11px;align-self:flex-start" href="'+mapsLink(s.spot)+'" target="_blank" rel="noopener">Route</a>'
+      +'</div>';
+  });
+  h+='<p style="color:var(--muted);margin-top:10px;font-size:11px">Entfernungen sind <b>Luftlinie</b> – echte Fahrzeiten kennt die App nicht. '
+    +'Die Reihenfolge folgt den Beißfenstern, nicht dem kürzesten Weg.</p>';
+  body.innerHTML=h;
+}
+
+(function(){
+  if(!routeDlg) return;
+  const zu=()=>{ routeDlg.hidden=true; };
+  const c=byId('routeClose'); if(c) c.onclick=zu;
+  routeDlg.addEventListener('click',ev=>{ if(ev.target===routeDlg) zu(); });
+  const pv=byId('routePrev'); const nx=byId('routeNext');
+  if(pv) pv.onclick=()=>{ if(routeTag>0){ routeTag--; renderRoute(); } };
+  if(nx) nx.onclick=()=>{ if(routeTag<MAX_TAG){ routeTag++; renderRoute(); } };
+})();
+
 export function openTrip(){
   const body=byId('tripBody');
   if(!state.trip.length){
@@ -71,8 +126,10 @@ export function openTrip(){
     });
     h+='</div>';
   });
-  h+='<div class="mydlg-btns" style="margin-top:12px"><button id="tripClear" class="ghost">Liste leeren</button></div>';
+  h+='<div class="mydlg-btns" style="margin-top:12px"><button id="tripRoute">Tagesplan bauen</button><button id="tripClear" class="ghost">Liste leeren</button></div>';
   body.innerHTML=h;
+  const rb=byId('tripRoute');
+  if(rb) rb.onclick=()=>{ tripDlg.hidden=true; openRoute(); };
   qsa<HTMLElement>('.trip-del', body).forEach(b=>{
     b.onclick=async()=>{
       const {region,name}=b.dataset;

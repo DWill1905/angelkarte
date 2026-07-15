@@ -166,6 +166,46 @@ describe('Filter-Verknüpfung: Fisch-Chips grauen aus', () => {
   });
 });
 
+describe('Tagesplan über gemerkte Spots', () => {
+  afterEach(() => { app.state.trip = []; });
+
+  test('verteilt Spots überlappungsfrei und chronologisch über die Fenster', async () => {
+    await loadRegion(ctx, 'mainz');
+    app.state.WX = { temp: 20, wind: 8, dirDeg: 200, dir: 'SW', press: 1015, trendVal: -1, code: 3 };
+    app.state.PEGEL = { value: 250, station: 'X', dist: 3, wt: 18 };
+    const drei = app.state.SPOTS.filter((s) => s.cat !== 'sperr' && s.cat !== 'info' && !s.my && (s.arten || []).length).slice(0, 3);
+    app.state.trip = drei.map((s) => ({ region: 'mainz', name: s.name, notiz: '' }));
+    const plan = app.tagesplan(1);
+    assert.ok(plan.length >= 2, 'zu wenige Stopps');
+    /* chronologisch */
+    for (let i = 1; i < plan.length; i++) assert.ok(plan[i].von >= plan[i - 1].von, 'nicht chronologisch');
+    /* kein Spot doppelt */
+    assert.equal(new Set(plan.map((s) => s.spot.name)).size, plan.length, 'Spot doppelt verplant');
+    /* keine Überlappung – man kann nicht an zwei Orten gleichzeitig sein */
+    for (let i = 0; i < plan.length; i++) {
+      for (let j = i + 1; j < plan.length; j++) {
+        assert.ok(!(plan[i].von < plan[j].bis && plan[i].bis > plan[j].von), 'Stopps überlappen sich');
+      }
+    }
+    /* Distanz zum nächsten gesetzt, beim letzten null */
+    assert.equal(plan[plan.length - 1].weiter, null, 'letzter Stopp darf keine Weiter-Distanz haben');
+    assert.ok(plan[0].weiter != null && plan[0].weiter >= 0, 'Distanz fehlt');
+  });
+
+  test('ohne gemerkte Spots bleibt der Plan leer', async () => {
+    await loadRegion(ctx, 'mainz');
+    app.state.trip = [];
+    assert.equal(app.tagesplan(0).length, 0, 'ohne Merkliste darf nichts geplant werden');
+  });
+
+  test('Sperrzonen werden nie eingeplant', async () => {
+    await loadRegion(ctx, 'mainz');
+    const sperr = app.state.SPOTS.find((s) => s.cat === 'sperr');
+    app.state.trip = [{ region: 'mainz', name: sperr.name, notiz: '' }];
+    assert.equal(app.tagesplan(0).length, 0, 'Sperrzone darf nicht im Tagesplan landen');
+  });
+});
+
 describe('Tages-Blätterer', () => {
   const NOW = new Date(2026, 6, 15, 18, 0);
 

@@ -14,7 +14,7 @@
    Die Gewichte stehen offen im Code. Das ist kein Orakel, sondern eine
    nachvollziehbare Vorauswahl – die Entscheidung trifft der Angler. */
 import { state } from './state.js';
-import { hhmm, inSchonzeitAt, inWindowAt, mondStaerke, solunar, sunTimes } from './astro.js';
+import { haversine, hhmm, inSchonzeitAt, inWindowAt, mondStaerke, solunar, sunTimes } from './astro.js';
 import { WT_OPT, tackleFor, wasserTyp } from './tackle.js';
 import { bewerteSpot, sterneAus, sterneText, artZeitprofil, stroemungsLage } from './rating.js';
 import { jahreszeit } from './saison.js';
@@ -595,6 +595,73 @@ export function fensterHtml(lat: number, lng: number, tag: Date, offset: number)
   return '<div class="plan-fenster-liste"><div class="plan-fl-h">Beißfenster '
     + (offset === 0 ? 'heute' : offset === 1 ? 'morgen' : tagLabel(offset)) + esc(mond)
     + '</div><div class="plan-fl">' + zeilen + '</div></div>';
+}
+
+/* --- Tagesplan über die gemerkten Spots -------------------------------------
+   Verteilt die vorgemerkten Spots über die Beißfenster eines Tages: jeder Spot
+   bekommt das Fenster, in dem ER am stärksten ist – jedes Fenster nur einmal.
+   Bewusst KEINE Fahrzeit: dafür fehlt eine Routing-Quelle, die Distanz ist
+   Luftlinie und wird auch so benannt. */
+export interface Stopp {
+  spot: Spot;
+  art: string;
+  chance: number;
+  von: Date;
+  bis: Date;
+  label: string;
+  typ: 'major' | 'minor';
+  /** Luftlinie zum nächsten Stopp in km (null beim letzten). */
+  weiter: number | null;
+}
+
+export function tagesplan(offset: number, jetzt: Date = new Date()): Stopp[] {
+  if (!state.REGION) return [];
+  const namen = state.trip.filter((t) => t.region === state.REGION.id).map((t) => t.name);
+  const spots = namen.map((n) => state.SPOTS.find((s) => s.name === n))
+    .filter((s): s is Spot => !!s && s.cat !== 'sperr' && s.cat !== 'info');
+  if (!spots.length) return [];
+  const tag = tagDatum(offset, jetzt);
+  const c = spots[0];
+  const fenster = solunar(c.lat, c.lng, tag);
+  if (!fenster.length) return [];
+  const wt = state.PEGEL?.wt ?? state.WX?.wt ?? null;
+
+  /* Alle Kombinationen (Spot × Fenster) bewerten. */
+  type Paar = { spot: Spot; f: any; art: string; chance: number };
+  const paare: Paar[] = [];
+  for (const s of spots) {
+    for (const f of fenster) {
+      const mitte = new Date((f.from.getTime() + f.to.getTime()) / 2);
+      const zf = zielfischFor(s, wt, mitte);
+      if (!zf) continue;
+      const b = bewerteSpot(s, zf.art, mitte);
+      if (b.geschont) continue;
+      paare.push({ spot: s, f, art: zf.art, chance: b.prozent });
+    }
+  }
+  /* Gierig zuordnen: stärkste Kombination zuerst, jeder Spot nur einmal.
+     Solunar-Fenster überlappen sich (Mond-Transit und Dämmerung fallen oft zusammen) –
+     überlappende Stopps wären aber unmöglich, man kann nicht an zwei Orten gleichzeitig
+     sein. Deshalb wird jedes Fenster verworfen, das ein bereits verplantes schneidet. */
+  paare.sort((a, b) => b.chance - a.chance);
+  const gelegt: { von: number; bis: number }[] = [];
+  const verplant = new Set<string>();
+  const stopps: Stopp[] = [];
+  for (const p of paare) {
+    if (verplant.has(p.spot.name)) continue;
+    const von = p.f.from.getTime(); const bis = p.f.to.getTime();
+    if (gelegt.some((g) => von < g.bis && bis > g.von)) continue;
+    gelegt.push({ von, bis });
+    verplant.add(p.spot.name);
+    stopps.push({ spot: p.spot, art: p.art, chance: p.chance, von: p.f.from, bis: p.f.to,
+      label: p.f.label, typ: p.f.type, weiter: null });
+  }
+  stopps.sort((a, b) => a.von.getTime() - b.von.getTime());
+  for (let i = 0; i < stopps.length - 1; i++) {
+    stopps[i].weiter = haversine(stopps[i].spot.lat, stopps[i].spot.lng,
+      stopps[i + 1].spot.lat, stopps[i + 1].spot.lng);
+  }
+  return stopps;
 }
 
 /** Empfehlung mit den aktuellen Seiten-Filtern neu berechnen und anzeigen. */

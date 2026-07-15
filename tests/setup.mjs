@@ -28,7 +28,7 @@ import { schilfLaden, schilfAus, schilfAktiv } from './reed.js';
 import { computeScore } from './tools.js';
 import { fullscreenToggle, fullscreenAktiv } from './fullscreen.js';
 import { setzeSicht, aktuelleSicht, ladeSicht, sichtReady } from './sicht.js';
-import { empfehlung, kandidaten, openPlan, zielfischFor, startzeitFor, peilung, himmelsrichtung, winkelDiff, istAuflandig, tagDatum, tagLabel, bewertZeit, MAX_TAG } from './plan.js';
+import { empfehlung, kandidaten, openPlan, zielfischFor, startzeitFor, peilung, himmelsrichtung, winkelDiff, istAuflandig, tagDatum, tagLabel, bewertZeit, tagesplan, MAX_TAG } from './plan.js';
 import { bewerteSpot, bewerteAlle, sterneAus, sterneText } from './rating.js';
 import { jahreszeit } from './saison.js';
 import { saison } from './tackle.js';
@@ -37,7 +37,7 @@ window.__app = { state, popupHtml, mapsLink, spotVisible, sperrWarnung, locApply
   fbInsights, fbRestore, parseFangDatum, beissfensterJetzt, fbRender, fbSortiert, fbCsv,
   toggleTrip, inTrip, openTrip, tripReady, schilfLaden, schilfAus, schilfAktiv,
   fullscreenToggle, fullscreenAktiv, setzeSicht, aktuelleSicht, ladeSicht, sichtReady,
-  empfehlung, kandidaten, openPlan, zielfischFor, startzeitFor, tagDatum, tagLabel, bewertZeit, MAX_TAG,
+  empfehlung, kandidaten, openPlan, zielfischFor, startzeitFor, tagDatum, tagLabel, bewertZeit, tagesplan, MAX_TAG,
   peilung, himmelsrichtung, winkelDiff, istAuflandig,
   bewerteSpot, bewerteAlle, sterneAus, sterneText, jahreszeit, saison, computeScore,
   inWindow, inSchonzeit, daysUntilMD, masseAus, fmtMD, fmtDate, solunar, haversine, sunTimes };
