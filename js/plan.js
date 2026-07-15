@@ -312,9 +312,18 @@ export function empfehlung(jetzt = new Date(), filter = {}) {
             + (jig ? ` mit einem ${koeder} am ${jig}-Jigkopf.` : ` mit ${koeder}.`);
     if (sturm)
         luecken.unshift('Sturm ab 35 km/h – Angeln ist heute unverantwortlich (Wellen, Blitzschlag).');
+    /* Persönliche Rückkopplung: was hast DU an diesem Spot schon geloggt?
+       Bewusst deskriptiv – das Modell wird davon nicht verstellt. */
+    const meine = (state.fbMem || []).filter((e) => e.spot === k.spot.name);
+    let persoenlich;
+    if (meine.length) {
+        const l = meine[meine.length - 1];
+        const detail = l.fisch ? ` – zuletzt ${l.fisch}${l.laenge ? ' ' + l.laenge + '\u202Fcm' : ''}` : '';
+        persoenlich = `Dein Fangbuch: hier ${meine.length} ${meine.length === 1 ? 'Fang' : 'Fänge'} geloggt${detail}.`;
+    }
     return {
         satz, massHinweis, kandidat: k, zeit, zielfisch: zf, koeder, jig,
-        stroemung: stroemungBlei(k.spot),
+        stroemung: stroemungBlei(k.spot), persoenlich,
         faktoren: k.faktoren, chance: k.basis, chanceFenster, sterne: sterneAus(k.basis, sturm),
         gesperrt: sturm ? 'sturm' : undefined,
         luecken, alternativen: besteJeOrt(liste.filter((x) => x.ort !== k.ort)).slice(0, 3),
@@ -416,6 +425,8 @@ function renderPlanBody(e) {
     }
     /* Danach der generierte Detail-Tipp (Köder, Ort, Zeit). */
     h += '<div class="plan-satz">' + esc(e.satz) + '</div>';
+    if (e.persoenlich)
+        h += '<div class="plan-pers">' + esc(e.persoenlich) + '</div>';
     if (e.massHinweis)
         h += '<div class="plan-mass">⚖ ' + esc(e.massHinweis) + '</div>';
     if (e.stroemung)

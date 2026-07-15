@@ -166,6 +166,23 @@ describe('Filter-Verknüpfung: Fisch-Chips grauen aus', () => {
   });
 });
 
+describe('Fangbuch-Rückkopplung', () => {
+  afterEach(() => { app.state.fbMem = []; });
+
+  test('Empfehlung nennt eigene Fänge am Spot, sonst nichts', async () => {
+    await loadRegion(ctx, 'mainz');
+    app.state.WX = { temp: 20, wind: 8, dirDeg: 200, dir: 'SW', press: 1015, trendVal: -1, code: 3 };
+    app.state.PEGEL = { value: 250, station: 'X', dist: 3, wt: 18 };
+    const m = new Date(Date.UTC(2026, 6, 15, 12, 0));
+    app.state.fbMem = [];
+    const ohne = app.empfehlung(m);
+    assert.ok(!ohne.persoenlich, 'ohne Fänge darf keine Zeile erscheinen');
+    app.state.fbMem = [{ id: 1, fisch: 'Zander', laenge: 58, spot: ohne.kandidat.spot.name, koeder: 'Gummi', datum: '1.7.2026', entnommen: false }];
+    const mit = app.empfehlung(m);
+    assert.match(mit.persoenlich || '', /Fangbuch.*1 Fang.*Zander/, 'Fangbuch-Zeile fehlt oder falsch');
+  });
+});
+
 describe('Post-Schonzeit-Hunger', () => {
   test('Bonus kurz nach Schonzeitende, später weg', async () => {
     await loadRegion(ctx, 'mainz');
