@@ -3,12 +3,12 @@ import { byId } from './dom.js';
 import { state, store } from './state.js';
 import { WT_OPT, istFliess } from './tackle.js';
 import { schilfToggle } from './reed.js';
-import { openPlan } from './plan.js';
+import { openPlan, tagDatum, tagLabel, MAX_TAG } from './plan.js';
 import { menuZu } from './sicht.js';
-import { openWetter, wxDlg } from './weather.js';
+import { openWetter, wxDlg, wxAt } from './weather.js';
 import { fullscreenToggle } from './fullscreen.js';
 import { fokusFor } from './saison.js';
-import { NOW, fmtDate, fmtMD, haversine, hhmm, inSchonzeit, mondPhase, solunar, sunTimes } from './astro.js';
+import { NOW, fmtDate, fmtMD, haversine, hhmm, inSchonzeit, mondPhase, mondStaerke, solunar, sunTimes } from './astro.js';
 import { regionCenter } from './ui.js';
 import { openOffline } from './map.js';
 import { openTrip, inTrip, setTripBtn } from './trip.js';
@@ -239,23 +239,49 @@ catch (e) { } openPack(); };
 packDlg.addEventListener('click', e => { if (e.target === packDlg)
     packDlg.hidden = true; });
 export const biteDlg = byId('biteDlg');
+let biteTag = 0;
 export function openBite() {
-    const c = regionCenter(), now = new Date();
-    const win = solunar(c.lat, c.lng, now);
-    const st = sunTimes(c.lat, c.lng, now);
-    let h = '<p style="color:var(--muted);margin-bottom:10px">' + mondPhase(now) + ' '
-        + (st ? '· ☀ ' + hhmm(st.rise) + '–' + hhmm(st.set) : '') + ' · für ' + (state.REGION ? esc(state.REGION.kurz || state.REGION.name) : 'aktuelle Region') + '</p>';
+    biteTag = 0;
+    renderBite();
+    biteDlg.hidden = false;
+}
+function renderBite() {
+    const c = regionCenter();
+    const heute = biteTag === 0;
+    const now = new Date();
+    const tag = tagDatum(biteTag, now);
+    const win = solunar(c.lat, c.lng, tag);
+    const st = sunTimes(c.lat, c.lng, tag);
+    const lbl = byId('biteTagLabel');
+    if (lbl)
+        lbl.textContent = tagLabel(biteTag, now);
+    const tt = byId('biteTitel');
+    if (tt)
+        tt.textContent = heute ? 'Beißzeiten heute' : 'Beißzeiten ' + tagLabel(biteTag, now).replace(/^Morgen · /, 'morgen, ');
+    const pv = byId('bitePrev');
+    if (pv)
+        pv.disabled = biteTag <= 0;
+    const nx = byId('biteNext');
+    if (nx)
+        nx.disabled = biteTag >= MAX_TAG;
+    const ms = mondStaerke(tag.getTime());
+    const mondTxt = ms > 0.6 ? ' · Neu-/Vollmond – Fenster verstärkt' : ms < 0.25 ? ' · Halbmond – Fenster schwächer' : '';
+    let h = '<p style="color:var(--muted);margin-bottom:10px">' + mondPhase(tag) + ' '
+        + (st ? '· ☀ ' + hhmm(st.rise) + '–' + hhmm(st.set) : '') + esc(mondTxt) + ' · für ' + (state.REGION ? esc(state.REGION.kurz || state.REGION.name) : 'aktuelle Region') + '</p>';
     if (!win.length) {
-        h += '<p>Für heute lassen sich keine Fenster berechnen (Polartag/-nacht?).</p>';
+        h += '<p>Für diesen Tag lassen sich keine Fenster berechnen (Polartag/-nacht?).</p>';
     }
     else {
         h += '<p style="margin-bottom:10px">Beste Beißfenster – <b>Major</b> (Mond hoch/tief, ~2 h) sind stärker als <b>Minor</b> (Sonnenauf-/-untergang):</p>';
         const nowMs = now.getTime();
-        const druckGut = state.WX && state.WX.trendVal <= -1.0; /* fallender Druck verstärkt */
-        const druckSchlecht = state.WX && state.WX.trendVal >= 1.5; /* steigend dämpft */
+        /* Luftdruck für DIESEN Tag: Mitte des ersten Major-Fensters aus der Stundenvorhersage. */
+        const mid = win.find(w => w.type === 'major');
+        const wxTag = wxAt(mid ? new Date((mid.from.getTime() + mid.to.getTime()) / 2) : tag);
+        const druckGut = !!wxTag && wxTag.trendVal <= -1.0; /* fallender Druck verstärkt */
+        const druckSchlecht = !!wxTag && wxTag.trendVal >= 1.5; /* steigend dämpft */
         win.forEach(wdw => {
-            const aktiv = nowMs >= wdw.from && nowMs <= wdw.to;
-            const vorbei = nowMs > wdw.to;
+            const aktiv = heute && nowMs >= wdw.from && nowMs <= wdw.to;
+            const vorbei = heute && nowMs > wdw.to;
             const top = wdw.type === 'major' && druckGut; /* Major + fallender Druck = Top */
             const farbe = top ? '#f0c14b' : wdw.type === 'major' ? 'var(--amber)' : 'var(--dusk)';
             h += '<div style="display:flex;align-items:center;gap:9px;margin:7px 0;' + (vorbei ? 'opacity:.45' : '') + '">'
@@ -265,17 +291,29 @@ export function openBite() {
                 + (aktiv ? '<span style="margin-left:auto;color:var(--forelle);font-weight:700">● jetzt!</span>' : '')
                 + '</div>';
         });
-        if (state.WX) {
+        if (wxTag) {
             h += '<p style="margin-top:10px;padding:8px;border-radius:8px;background:var(--panel-2);font-size:12px">'
-                + (druckGut ? '📉 <b>Luftdruck fällt (' + state.WX.trendVal.toFixed(1) + ' hPa/3h)</b> – Major-Fenster sind heute als ★ Top markiert, beste Karten!'
+                + (druckGut ? '📉 <b>Luftdruck fällt (' + wxTag.trendVal.toFixed(1) + ' hPa/3h)</b> – Major-Fenster sind als ★ Top markiert, beste Karten!'
                     : druckSchlecht ? '📈 Luftdruck steigt – nach der Front oft zäh, Fenster eher schwächer als sonst.'
-                        : '➡ Luftdruck stabil – Fenster gelten wie berechnet.') + '</p>';
+                        : '➡ Luftdruck stabil – Fenster gelten wie berechnet.')
+                + (heute ? '' : ' <span style="color:var(--muted)">(aus der Vorhersage)</span>') + '</p>';
+        }
+        else {
+            h += '<p style="margin-top:10px;padding:8px;border-radius:8px;background:var(--panel-2);font-size:12px;color:var(--muted)">'
+                + 'Für diesen Tag liegt keine Wettervorhersage vor – die Fenster sind rein astronomisch berechnet (das stimmt, aber Druck und Wind fehlen).</p>';
         }
         h += '<p style="color:var(--muted);margin-top:10px;font-size:11px">Solunar-Theorie: Fische sind rund um Mond-Höchst-/Tiefstand am aktivsten. Näherungswerte – kein Ersatz für eigene Beobachtung. Druckabfall &amp; Dämmerung verstärken die Fenster.</p>';
     }
     byId('biteBody').innerHTML = h;
-    biteDlg.hidden = false;
 }
+byId('bitePrev').onclick = () => { if (biteTag > 0) {
+    biteTag--;
+    renderBite();
+} };
+byId('biteNext').onclick = () => { if (biteTag < MAX_TAG) {
+    biteTag++;
+    renderBite();
+} };
 byId('biteClose').onclick = () => { biteDlg.hidden = true; };
 biteDlg.addEventListener('click', e => { if (e.target === biteDlg)
     biteDlg.hidden = true; });

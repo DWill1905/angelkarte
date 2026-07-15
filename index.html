@@ -756,7 +756,12 @@
 
 <div class="mydlg-wrap" id="biteDlg" hidden>
   <div class="mydlg">
-    <h3 data-ic="fish">Beißzeiten heute</h3>
+    <h3 data-ic="fish" id="biteTitel">Beißzeiten heute</h3>
+    <div class="plan-tage" style="margin:-4px -16px 10px;border-radius:0">
+      <button id="bitePrev" type="button" aria-label="Vorheriger Tag">◀</button>
+      <span id="biteTagLabel">Heute</span>
+      <button id="biteNext" type="button" aria-label="Nächster Tag">▶</button>
+    </div>
     <div id="biteBody" style="font-size:13px;line-height:1.55;max-height:60dvh;overflow-y:auto"></div>
     <div class="mydlg-btns"><button id="biteClose">Schließen</button></div>
   </div>

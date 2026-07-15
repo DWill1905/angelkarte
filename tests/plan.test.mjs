@@ -191,6 +191,28 @@ describe('Tages-Blätterer', () => {
     }
   });
 
+  test('Beißzeiten-Werkzeug lässt sich durch die Tage blättern', async () => {
+    await loadRegion(ctx, 'mainz');
+    app.state.WX = { temp: 20, wind: 8, dirDeg: 200, dir: 'SW', press: 1015, trendVal: -2.0, code: 3 };
+    doc.getElementById('tBite').click();
+    const label = () => doc.getElementById('biteTagLabel').textContent;
+    const body = () => doc.getElementById('biteBody').innerHTML;
+    const prev = doc.getElementById('bitePrev');
+    const next = doc.getElementById('biteNext');
+    assert.equal(doc.getElementById('biteDlg').hidden, false, 'Dialog nicht offen');
+    assert.match(label(), /Heute/);
+    assert.equal(prev.disabled, true, 'am ersten Tag darf man nicht zurück');
+    const heute = body();
+    next.click();
+    assert.match(label(), /Morgen/);
+    assert.match(doc.getElementById('biteTitel').textContent, /Beißzeiten morgen/);
+    assert.notEqual(body(), heute, 'Fenster müssen sich am Folgetag ändern');
+    /* „jetzt!" gibt es nur heute – an anderen Tagen wäre das gelogen. */
+    assert.ok(!/jetzt!/.test(body()), 'Jetzt-Marker darf an Folgetagen nicht erscheinen');
+    for (let i = 0; i < app.MAX_TAG; i++) next.click();
+    assert.equal(next.disabled, true, 'am letzten Vorhersagetag ist Schluss');
+  });
+
   test('Blättern ändert Tag und Beißfenster; Grenzen sind gesperrt', async () => {
     await loadRegion(ctx, 'mainz');
     app.state.WX = { temp: 20, wind: 8, dirDeg: 200, dir: 'SW', press: 1015, trendVal: -1, code: 3 };
