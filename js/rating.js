@@ -14,6 +14,7 @@ import { hhmm, inSchonzeitAt, mondStaerke, solunar, sunTimes } from './astro.js'
 import { WT_OPT, wasserTyp } from './tackle.js';
 import { istAuflandig } from './geo.js';
 import { hotspotAktiv } from './saison.js';
+import { wxAt } from './weather.js';
 /* Quellen: Blinker, simfisch, zanderfang, outdoorverliebt u. a. (Recherche Juli 2026).
    Kernaussagen: Zander lichtscheu → Trübung/Wolken/Welle helfen; Aal/Wels wärmeliebend & nachtaktiv,
    lieben schwül-bedeckte Lagen; Barsch/Forelle/Rapfen/Döbel Sichträuber; Zander/Barsch druckempfindlich. */
@@ -209,7 +210,7 @@ export function bewerteSpot(s, art, jetzt = new Date(), hotspot = null) {
     }
     const p = PROFIL[art];
     const wasser = wasserTyp(s);
-    const wx = state.WX;
+    const wx = wxAt(jetzt);
     const pegel = state.PEGEL;
     const wt = pegel?.wt ?? wx?.wt ?? null;
     const monat = jetzt.getMonth() + 1;

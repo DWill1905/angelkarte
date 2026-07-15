@@ -166,6 +166,51 @@ describe('Filter-Verknüpfung: Fisch-Chips grauen aus', () => {
   });
 });
 
+describe('Tages-Blätterer', () => {
+  const NOW = new Date(2026, 6, 15, 18, 0);
+
+  test('tagDatum/tagLabel: heute, morgen, Wochentag', () => {
+    assert.equal(app.tagLabel(0, NOW).startsWith('Heute'), true);
+    assert.equal(app.tagLabel(1, NOW).startsWith('Morgen'), true);
+    assert.match(app.tagLabel(3, NOW), /^(Mo|Di|Mi|Do|Fr|Sa|So) \d+\.\d+\.$/);
+    assert.equal(app.tagDatum(0, NOW).getTime(), NOW.getTime(), 'heute = jetzt');
+    const m = app.tagDatum(1, NOW);
+    assert.equal(m.getDate(), 16, 'morgen ist der 16.');
+    assert.equal(m.getHours(), 12, 'Folgetage nutzen 12:00 als Anker');
+  });
+
+  test('bewertZeit trifft an Folgetagen ein starkes Beißfenster', async () => {
+    await loadRegion(ctx, 'mainz');
+    const s = app.state.SPOTS.find((x) => !x.my);
+    const z = app.bewertZeit(1, s.lat, s.lng, NOW);
+    assert.equal(z.getDate(), 16, 'Zeitpunkt liegt am Folgetag');
+    const win = app.solunar(s.lat, s.lng, app.tagDatum(1, NOW)).filter((w) => w.type === 'major');
+    if (win.length) {
+      const drin = win.some((w) => z >= w.from && z <= w.to);
+      assert.ok(drin, 'Bewertungszeitpunkt sollte in einem Major-Fenster liegen');
+    }
+  });
+
+  test('Blättern ändert Tag und Beißfenster; Grenzen sind gesperrt', async () => {
+    await loadRegion(ctx, 'mainz');
+    app.state.WX = { temp: 20, wind: 8, dirDeg: 200, dir: 'SW', press: 1015, trendVal: -1, code: 3 };
+    app.state.PEGEL = { value: 250, station: 'X', dist: 3, wt: 18 };
+    app.openPlan();
+    const prev = doc.getElementById('planPrev');
+    const next = doc.getElementById('planNext');
+    const body = () => doc.getElementById('planBody').innerHTML;
+    assert.equal(prev.disabled, true, 'am ersten Tag darf man nicht zurück');
+    assert.match(body(), /plan-fenster-liste/, 'Beißfenster-Liste fehlt');
+    const heute = body();
+    next.click();
+    assert.match(doc.getElementById('planTagLabel').textContent, /Morgen/);
+    assert.notEqual(body(), heute, 'Inhalt muss sich beim Blättern ändern');
+    assert.match(body(), /Chance im besten Fenster/, 'KPI-Text für Folgetage falsch');
+    for (let i = 0; i < app.MAX_TAG; i++) next.click();
+    assert.equal(next.disabled, true, 'am letzten Vorhersagetag ist Schluss');
+  });
+});
+
 describe('RLP-Schonzeiten laut Beiblatt SGD Süd (Stand 2025)', () => {
   const F = (m, d) => new Date(Date.UTC(2026, m - 1, d, 12, 0));
 

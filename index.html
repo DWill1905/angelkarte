@@ -194,6 +194,18 @@
   .fbtool.plan{background:linear-gradient(180deg,rgba(166,212,232,.20),rgba(166,212,232,.10));
     border-color:var(--dusk);color:var(--text);font-weight:700;width:100%;justify-content:center;
     padding:12px;font-size:13.5px}
+  .plan-tage{display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--ink);
+    border-bottom:1px solid var(--line);flex-shrink:0}
+  .plan-tage button{width:34px;height:30px;border-radius:8px;border:1px solid var(--shoal);
+    background:rgba(22,50,60,.6);color:var(--text);font-size:12px;cursor:pointer;flex:0 0 auto}
+  .plan-tage button:disabled{opacity:.3;cursor:default}
+  .plan-tage span{flex:1;text-align:center;font-size:12.5px;font-weight:700;color:var(--dusk)}
+  .plan-fenster-liste{margin:0 0 12px}
+  .plan-fl-h{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700;margin:0 0 5px}
+  .plan-fl{display:grid;grid-template-columns:auto 1fr;gap:4px 9px;font-size:12px;line-height:1.45}
+  .plan-fl .z{font-family:'Space Mono',monospace;color:#eaf6ff;white-space:nowrap}
+  .plan-fl .l{color:var(--muted)}
+  .plan-fl .major .z{color:var(--amber);font-weight:700}
   .plan-hero{margin-bottom:12px;padding-bottom:11px;border-bottom:1px solid var(--line)}
   .plan-kpi{display:flex;align-items:baseline;gap:12px}
   .plan-proz{font-family:'Space Mono',monospace;font-size:30px;font-weight:700;color:#f4faf9;line-height:1}
@@ -786,6 +798,11 @@
     <div class="plan-head">
       <h3 data-ic="target">Heute würde ich hier anfangen</h3>
       <button id="planClose" class="plan-x" type="button" aria-label="Schließen">✕</button>
+    </div>
+    <div class="plan-tage">
+      <button id="planPrev" type="button" aria-label="Vorheriger Tag">◀</button>
+      <span id="planTagLabel">Heute</span>
+      <button id="planNext" type="button" aria-label="Nächster Tag">▶</button>
     </div>
     <div class="plan-filterbar">
       <div class="plan-flabel">Zielfisch</div>

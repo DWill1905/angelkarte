@@ -279,6 +279,8 @@ export interface AppState {
   userMarker: any;
   uidLast: number;
   WX: Wetter | null;
+  /** Stundenreihe von Open-Meteo (lokale Zeitstempel) – Basis für andere Tage im Planer. */
+  WXH: any | null;
   PEGEL: Pegel | null;
   wxKey: string;
   fbMem: Fang[];

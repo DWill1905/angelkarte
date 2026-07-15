@@ -14,6 +14,7 @@ import { hhmm, inSchonzeitAt, mondStaerke, solunar, sunTimes } from './astro.js'
 import { WT_OPT, wasserTyp } from './tackle.js';
 import { istAuflandig } from './geo.js';
 import { hotspotAktiv } from './saison.js';
+import { wxAt } from './weather.js';
 import type { Hotspot, Spot, Wasser } from './types';
 
 export type Bewertbar = 'ja' | 'nein' | 'unbekannt';
@@ -277,7 +278,7 @@ export function bewerteSpot(s: Spot, art: string, jetzt: Date = new Date(), hots
 
   const p = PROFIL[art];
   const wasser = wasserTyp(s);
-  const wx = state.WX;
+  const wx = wxAt(jetzt);
   const pegel = state.PEGEL;
   const wt = pegel?.wt ?? wx?.wt ?? null;
   const monat = jetzt.getMonth() + 1;

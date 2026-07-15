@@ -3,6 +3,7 @@ import { byId } from './dom.js';
 import { state } from './state.js';
 import { haversine } from './astro.js';
 import { ICON, esc } from './util.js';
+import type { Wetter } from './types';
 
 
 export async function loadWeather(){
@@ -16,7 +17,8 @@ export async function loadWeather(){
   try{
     const u='https://api.open-meteo.com/v1/forecast?latitude='+ctr.lat.toFixed(3)+'&longitude='+ctr.lng.toFixed(3)
       +'&current=temperature_2m,wind_speed_10m,wind_direction_10m,surface_pressure,weather_code'
-      +'&hourly=surface_pressure,weather_code,wind_gusts_10m&past_days=1&forecast_days=1&timezone=auto';
+      +'&hourly=temperature_2m,wind_speed_10m,wind_direction_10m,surface_pressure,weather_code,wind_gusts_10m'
+      +'&past_days=1&forecast_days=7&timezone=auto';
     const d=await (await fetch(u)).json();
     const c=d.current;
     let trend='', trendVal=0;
@@ -28,6 +30,9 @@ export async function loadWeather(){
     const dirs=['N','NO','O','SO','S','SW','W','NW'];
     const dir=dirs[Math.round((c.wind_direction_10m||0)/45)%8];
     state.WX={temp:c.temperature_2m,wind:c.wind_speed_10m,dirDeg:c.wind_direction_10m||0,dir,press:c.surface_pressure,trendVal,code:c.weather_code};
+    /* Stundenreihe merken – damit der Planer auch andere Tage mit ECHTER Vorhersage rechnen kann
+       statt das heutige Wetter auf morgen zu übertragen. Zeitstempel sind lokal (timezone=auto). */
+    state.WXH=d.hourly&&d.hourly.time?d.hourly:null;
     wxChipSetzen();
     /* Gewitter-/Sturmwarnung: WMO-Codes 95/96/99 = Gewitter, Böen > 60 km/h */
     checkStorm(d,c);
@@ -35,6 +40,32 @@ export async function loadWeather(){
       +' · '+Math.round(c.surface_pressure)+' hPa'+trend;
     loadPegel(ctr,el);
   }catch(e){ el.textContent=''; state.wxKey=''; }
+}
+
+/** Wetter für einen Zeitpunkt.
+    - innerhalb der laufenden Stunde: die gemessenen Aktuellwerte (genauer als jede Vorhersage)
+    - sonst: die Stundenvorhersage von Open-Meteo (timezone=auto -> LOKALE Zeitstempel)
+    - keine Stundenreihe geladen (offline/Tests): Aktuellwerte, wie bisher
+    - Stundenreihe da, aber der Zeitpunkt liegt außerhalb: null – dann sagt die App ehrlich
+      „keine Daten" statt heutiges Wetter auf einen anderen Tag zu übertragen. */
+export function wxAt(d: Date): Wetter | null {
+  const now=new Date();
+  if(Math.abs(d.getTime()-now.getTime())<45*60e3) return state.WX;
+  const h=state.WXH;
+  if(!h||!h.time) return state.WX;
+  const pad=(n)=>String(n).padStart(2,'0');
+  const key=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'T'+pad(d.getHours())+':00';
+  const i=h.time.indexOf(key);
+  if(i<0) return null;
+  const press=h.surface_pressure?h.surface_pressure[i]:null;
+  const temp=h.temperature_2m?h.temperature_2m[i]:null;
+  const wind=h.wind_speed_10m?h.wind_speed_10m[i]:null;
+  if(temp==null||wind==null||press==null) return null;
+  const dirs=['N','NO','O','SO','S','SW','W','NW'];
+  const dirDeg=(h.wind_direction_10m&&h.wind_direction_10m[i])||0;
+  const trendVal=(i>=3&&h.surface_pressure&&h.surface_pressure[i-3]!=null)?press-h.surface_pressure[i-3]:0;
+  return {temp,wind,dirDeg,dir:dirs[Math.round(dirDeg/45)%8],press,trendVal,
+    code:h.weather_code?h.weather_code[i]:null};
 }
 
 export function checkStorm(d,c){

@@ -14,7 +14,7 @@
    Die Gewichte stehen offen im Code. Das ist kein Orakel, sondern eine
    nachvollziehbare Vorauswahl – die Entscheidung trifft der Angler. */
 import { state } from './state.js';
-import { hhmm, inSchonzeitAt, inWindowAt, solunar, sunTimes } from './astro.js';
+import { hhmm, inSchonzeitAt, inWindowAt, mondStaerke, solunar, sunTimes } from './astro.js';
 import { WT_OPT, tackleFor, wasserTyp } from './tackle.js';
 import { bewerteSpot, sterneAus, sterneText, artZeitprofil, stroemungsLage } from './rating.js';
 import { jahreszeit } from './saison.js';
@@ -404,7 +404,7 @@ function leerText() {
     return '<p style="color:var(--muted)">Kein Startpunkt' + suffix + ' empfehlbar – '
         + 'keine passende Kombination, oder die Art ist gerade geschont. Filter oben lösen oder erweitern.</p>';
 }
-function renderPlanBody(e) {
+function renderPlanBody(e, offset = 0) {
     const fak = [...e.faktoren].sort((a, b) => b.punkte - a.punkte);
     let h = '';
     if (e.gesperrt === 'sturm')
@@ -413,7 +413,7 @@ function renderPlanBody(e) {
     h += '<div class="plan-hero">'
         + '<div class="plan-kpi"><span class="plan-proz">' + e.chance + '\u202F%</span>'
         + '<span class="plan-sterne">' + sterneText(e.sterne) + '</span></div>'
-        + '<div class="plan-basis">Chance jetzt für ' + esc(e.kandidat.art) + ' · Datenbasis '
+        + '<div class="plan-basis">Chance ' + (offset === 0 ? 'jetzt' : 'im besten Fenster') + ' für ' + esc(e.kandidat.art) + ' · Datenbasis '
         + e.kandidat.bewertet + '/' + e.kandidat.gesamt + ' Signale</div>'
         + '</div>';
     if (e.kandidat.gesamt && e.kandidat.bewertet / e.kandidat.gesamt < 0.8) {
@@ -469,13 +469,71 @@ function goToKandidat() {
             setTimeout(() => m.openPopup(), 750);
     }
 }
+/* --- Tages-Blätterer -------------------------------------------------------
+   Beißfenster sind rein astronomisch und damit für JEDEN Tag exakt berechenbar.
+   Das Wetter dagegen reicht nur so weit wie die Vorhersage (7 Tage) – deshalb
+   ist MAX_TAG bewusst begrenzt statt unbegrenzt weiterblättern zu lassen. */
+export const MAX_TAG = 6;
+let planTag = 0;
+/** Datum für einen Tages-Offset. Heute = jetzt; Folgetage = 12:00 als neutraler Anker. */
+export function tagDatum(offset, jetzt = new Date()) {
+    if (offset <= 0)
+        return jetzt;
+    const d = new Date(jetzt.getFullYear(), jetzt.getMonth(), jetzt.getDate() + offset, 12, 0, 0, 0);
+    return d;
+}
+/** Bewertungszeitpunkt: heute „jetzt", an Folgetagen die Mitte des stärksten Beißfensters. */
+export function bewertZeit(offset, lat, lng, jetzt = new Date()) {
+    const tag = tagDatum(offset, jetzt);
+    if (offset <= 0)
+        return tag;
+    const win = solunar(lat, lng, tag).filter((w) => w.type === 'major');
+    if (!win.length)
+        return tag;
+    const w = win[0];
+    return new Date((w.from.getTime() + w.to.getTime()) / 2);
+}
+const WOCHENTAG = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
+export function tagLabel(offset, jetzt = new Date()) {
+    const d = tagDatum(offset, jetzt);
+    if (offset === 0)
+        return 'Heute · ' + WOCHENTAG[d.getDay()] + ' ' + d.getDate() + '.' + (d.getMonth() + 1) + '.';
+    if (offset === 1)
+        return 'Morgen · ' + WOCHENTAG[d.getDay()] + ' ' + d.getDate() + '.' + (d.getMonth() + 1) + '.';
+    return WOCHENTAG[d.getDay()] + ' ' + d.getDate() + '.' + (d.getMonth() + 1) + '.';
+}
+/** Beißfenster-Liste für einen Tag – funktioniert ohne jede Wetterabfrage. */
+export function fensterHtml(lat, lng, tag, offset) {
+    const win = solunar(lat, lng, tag);
+    if (!win.length)
+        return '';
+    const zeilen = win.map((w) => `<div class="z ${w.type}">${hhmm(w.from)}–${hhmm(w.to)}</div>`
+        + `<div class="l ${w.type}">${esc(w.label)}${w.type === 'major' ? ' · stark' : ''}</div>`).join('');
+    const ms = mondStaerke(tag.getTime());
+    const mond = ms > 0.6 ? ' · Neu-/Vollmond verstärkt die Fenster' : ms < 0.25 ? ' · Halbmond, Fenster schwächer' : '';
+    return '<div class="plan-fenster-liste"><div class="plan-fl-h">Beißfenster '
+        + (offset === 0 ? 'heute' : offset === 1 ? 'morgen' : tagLabel(offset)) + esc(mond)
+        + '</div><div class="plan-fl">' + zeilen + '</div></div>';
+}
 /** Empfehlung mit den aktuellen Seiten-Filtern neu berechnen und anzeigen. */
 function rerenderPlan() {
     const body = byId('planBody');
     const go = byId('planGo');
     if (!body)
         return;
-    const e = empfehlung(new Date(), { fisch: planFisch, gewaesser: planGew });
+    const lbl = byId('planTagLabel');
+    if (lbl)
+        lbl.textContent = tagLabel(planTag);
+    const pv = byId('planPrev');
+    const nx = byId('planNext');
+    if (pv)
+        pv.disabled = planTag <= 0;
+    if (nx)
+        nx.disabled = planTag >= MAX_TAG;
+    /* Bewertungszeitpunkt: heute „jetzt", an Folgetagen das stärkste Fenster des Tages. */
+    const ctr = state.SPOTS.find((s) => !s.my) || { lat: 50, lng: 8 };
+    const zeitpunkt = bewertZeit(planTag, ctr.lat, ctr.lng);
+    const e = empfehlung(zeitpunkt, { fisch: planFisch, gewaesser: planGew });
     if (!e) {
         body.innerHTML = leerText();
         letzterKandidat = null;
@@ -484,7 +542,9 @@ function rerenderPlan() {
         return;
     }
     letzterKandidat = e.kandidat;
-    body.innerHTML = renderPlanBody(e);
+    const sp = e.kandidat.spot;
+    body.innerHTML = renderPlanBody(e, planTag)
+        + fensterHtml(sp.lat, sp.lng, tagDatum(planTag), planTag);
     if (go) {
         go.hidden = false;
         go.onclick = goToKandidat;
@@ -498,6 +558,7 @@ export function openPlan() {
     planFisch.length = 0;
     state.fishSel.forEach((id) => planFisch.push(id));
     planGew.length = 0;
+    planTag = 0;
     buildPlanFilter();
     rerenderPlan();
     dlg.hidden = false;
@@ -512,4 +573,16 @@ if (planDlg) {
         c.onclick = () => { planDlg.hidden = true; };
     planDlg.addEventListener('click', (ev) => { if (ev.target === planDlg)
         planDlg.hidden = true; });
+    const pv = byId('planPrev');
+    const nx = byId('planNext');
+    if (pv)
+        pv.onclick = () => { if (planTag > 0) {
+            planTag--;
+            rerenderPlan();
+        } };
+    if (nx)
+        nx.onclick = () => { if (planTag < MAX_TAG) {
+            planTag++;
+            rerenderPlan();
+        } };
 }
