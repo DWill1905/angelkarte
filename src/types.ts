@@ -205,6 +205,12 @@ export interface Pegel {
   station: string;
   /** Entfernung in km. */
   dist: number;
+  /** Kartenzentrum (wxKey), zu dem dieser Pegel gehört – gegen veraltete Werte nach Regionswechsel. */
+  key?: string;
+  /** Station, von der die Wassertemperatur stammt – der nächste Pegel führt oft kein WT. */
+  wtStation?: string;
+  /** Entfernung der WT-Station in km. */
+  wtDist?: number;
   /** Pegeländerung der letzten 24 h in cm (nachgetragen). */
   trend?: number;
   wt?: number;
@@ -289,6 +295,8 @@ export interface AppState {
   satAn: boolean;
   /** Stundenreihe von Open-Meteo (lokale Zeitstempel) – Basis für andere Tage im Planer. */
   WXH: any | null;
+  /** Tagesmittel der Lufttemperatur (letzte ~3 Wochen) – Basis der Wassertemperatur-Schätzung. */
+  WXD: { time: string[]; mean: (number | null)[] } | null;
   PEGEL: Pegel | null;
   wxKey: string;
   fbMem: Fang[];

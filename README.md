@@ -17,7 +17,9 @@ Schonzeiten-Status, Fangbuch, Beißzeiten-/Köder-/Blei-Beratern und einem
   Jahres-Kalender, regionsabhängige Regeln – gegen die Landesverordnungen abgeglichen
 - **Fangbuch** (lokal): Maßcheck, Bearbeiten, CSV-Export, Musterauswertung, Bestenliste
 - **Wetter & Pegel** im Header (Open-Meteo + PEGELONLINE, keylos): Temperatur, Wind,
-  Luftdruck mit 3h-Trend, nächster Pegel im Umkreis, Gewitter-/Sturmwarnung
+  Luftdruck mit 3h-Trend, nächster Pegel im Umkreis, Gewitter-/Sturmwarnung;
+  Wassertemperatur von der nächsten WT-Station (auch wenn der nächste Pegel keine führt),
+  sonst als gekennzeichnete Schätzung aus dem Lufttemperatur-Verlauf (±2 °C)
 - **Sonne, Mond & blaue Stunde** im Header inkl. Nachtangel-Fenster
 - **Werkzeuge** (Menue): „Heute passt es?"-Score, Koederberater, Beisszeiten/Solunar,
   Packliste, Knoten-Referenz, Bleigewicht-Berater

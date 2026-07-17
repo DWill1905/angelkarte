@@ -18,6 +18,7 @@ import { haversine, hhmm, inSchonzeitAt, inWindowAt, mondStaerke, solunar, sunTi
 import { WT_OPT, tackleFor, wasserTyp } from './tackle.js';
 import { bewerteSpot, sterneAus, sterneText, artZeitprofil, stroemungsLage } from './rating.js';
 import { jahreszeit } from './saison.js';
+import { wtSchaetzung } from './weather.js';
 import { fischArtenFor, FISH } from './data.js';
 import type { Hotspot, Spot } from './types';
 
@@ -373,7 +374,11 @@ export function empfehlung(jetzt: Date = new Date(), filter: PlanFilter = {}): E
     luecken.push(`Für ${k.art} ist keine Schonzeit/kein Mindestmaß hinterlegt – vor Entnahme den Erlaubnisschein prüfen.`);
   }
   if (!state.WX) luecken.push('Kein Wetter verfügbar (offline?) – Wind und Luftdruck fließen nicht ein.');
-  if (!state.PEGEL) luecken.push('Kein Pegel/Wassertemperatur in Reichweite – Zielfischwahl beruht nur auf Bestand und Saison.');
+  if (!state.PEGEL) {
+    luecken.push('Kein Pegel/Wassertemperatur in Reichweite – ' + (wtSchaetzung(null)
+      ? 'die Bewertung nutzt eine Schätzung aus der Lufttemperatur (±2 °C), die Zielfischwahl beruht auf Bestand und Saison.'
+      : 'Zielfischwahl beruht nur auf Bestand und Saison.'));
+  }
   if (k.spot.zugang === 'boot') luecken.push('Dieses Gewässer ist praktisch nur vom Boot zu beangeln.');
   if (k.spot.verif === 'C') luecken.push('Beleglage schwach: Gastkarte und Zugang vorher beim Verein klären.');
 

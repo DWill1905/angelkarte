@@ -12,7 +12,7 @@ import { startApp, loadRegion } from './setup.mjs';
 let ctx, app, doc;
 before(async () => { ctx = await startApp(); app = ctx.app; doc = ctx.document; });
 after(() => ctx?.close());
-beforeEach(() => { app.state.WX = null; app.state.PEGEL = null; });
+beforeEach(() => { app.state.WX = null; app.state.PEGEL = null; app.state.WXD = null; });
 
 const GUT = () => { app.state.WX = { temp: 19, wind: 14, dirDeg: 225, dir: 'SW', press: 1006, trendVal: -2.3 }; app.state.PEGEL = { value: 120, station: 'X', dist: 5, wt: 16 }; };
 const STURM = () => { app.state.WX = { temp: 31, wind: 42, dirDeg: 0, dir: 'N', press: 1026, trendVal: 2.8 }; app.state.PEGEL = { value: 120, station: 'X', dist: 5, wt: 26 }; };
@@ -222,5 +222,67 @@ describe('Darstellung im Popup', () => {
     const html = app.popupHtml(spotVon('Woblitzsee'));
     assert.match(html, /rate-mass/);
     assert.match(html, /Entnahmefenster/);
+  });
+});
+
+/* WXD-Fixture: n Tage Tagesmittel-Lufttemperatur, jüngster Wert zuletzt. */
+const WXD = (werte) => ({ time: werte.map((_, i) => `2026-07-${String(i + 1).padStart(2, '0')}`), mean: werte });
+
+describe('Wassertemperatur-Schätzung aus der Lufttemperatur', () => {
+  test('ohne Datenbasis: null', () => {
+    app.state.WXD = null;
+    assert.equal(app.wtSchaetzung(null), null);
+    app.state.WXD = WXD([20, 21, 19]); /* zu kurz */
+    assert.equal(app.wtSchaetzung(null), null);
+  });
+
+  test('konstante Luft: Schätzwert nahe Lufttemperatur (+ saisonaler Strahlungsoffset), Trend stabil', () => {
+    app.state.WXD = WXD(Array(21).fill(14));
+    const e = app.wtSchaetzung('fluss');
+    assert.ok(e, 'Schätzung muss vorliegen');
+    assert.ok(e.wert >= 14 && e.wert <= 16.5, `14 °C Luft → 14–16,5 °C Wasser, war ${e.wert}`);
+    assert.equal(e.trend, 0);
+  });
+
+  test('tiefe Seen reagieren träger als flache', () => {
+    /* Ramp von 8 auf 20 °C: der flache See ist schon fast oben, der tiefe hinkt nach. */
+    const ramp = Array.from({ length: 21 }, (_, i) => 8 + (12 * i) / 20);
+    app.state.WXD = WXD(ramp);
+    const flach = app.wtSchaetzung('see-flach');
+    const tief = app.wtSchaetzung('see-tief');
+    assert.ok(flach.wert > tief.wert + 1, `flach ${flach.wert} muss deutlich über tief ${tief.wert} liegen`);
+    assert.ok(flach.trend > 0 && tief.trend > 0, 'Erwärmung muss als positiver Trend ankommen');
+  });
+
+  test('Frost-Clamp: die Schätzung geht nie unter 1 °C', () => {
+    app.state.WXD = WXD(Array(21).fill(-12));
+    const e = app.wtSchaetzung('see-flach');
+    assert.ok(e.wert >= 1, `war ${e.wert}`);
+  });
+
+  test('Bewertung nutzt die Schätzung als gekennzeichneten Fallback mit reduziertem Gewicht', async () => {
+    await loadRegion(ctx, 'mecklenburg');
+    app.state.WX = { temp: 15, wind: 14, dirDeg: 225, dir: 'SW', press: 1006, trendVal: -2.3 }; /* kein wt! */
+    app.state.PEGEL = null;
+    app.state.WXD = WXD(Array(21).fill(14)); /* → ~14–16 °C, im Hecht-Optimum (4–18) */
+    const b = app.bewerteSpot(spotVon('Woblitzsee'), 'Hecht');
+    const wtGrund = b.gruende.find((g) => /geschätzt aus Lufttemperatur/.test(g.text) && /Optimum/.test(g.text));
+    assert.ok(wtGrund, 'WT-Faktor mit Schätz-Kennzeichnung fehlt: ' + b.gruende.map((g) => g.text).join(' | '));
+    assert.equal(wtGrund.status, 'ja');
+    assert.equal(wtGrund.moeglich, 1.5, 'geschätzt zählt 1.5 statt 2');
+    const trendGrund = b.gruende.find((g) => /aus Lufttemperatur geschätzt/.test(g.text));
+    assert.ok(trendGrund, 'auch der Trend muss gekennzeichnet sein');
+    assert.equal(trendGrund.moeglich, 0.75, 'geschätzter Trend zählt 0.75 statt 1');
+  });
+
+  test('Messwert schlägt Schätzung', async () => {
+    await loadRegion(ctx, 'mecklenburg');
+    GUT(); /* PEGEL.wt = 16 (gemessen) */
+    app.state.WXD = WXD(Array(21).fill(30));
+    const b = app.bewerteSpot(spotVon('Woblitzsee'), 'Hecht');
+    assert.ok(!b.gruende.some((g) => /geschätzt/.test(g.text)), 'mit Messwert darf nichts geschätzt sein');
+    const wtGrund = b.gruende.find((g) => /Wassertemperatur 16/.test(g.text));
+    assert.ok(wtGrund, 'gemessene 16 °C müssen bewertet werden');
+    assert.equal(wtGrund.moeglich, 2);
   });
 });

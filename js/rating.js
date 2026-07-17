@@ -14,7 +14,7 @@ import { hhmm, inSchonzeitAt, mondStaerke, solunar, sunTimes } from './astro.js'
 import { WT_OPT, wasserTyp } from './tackle.js';
 import { istAuflandig } from './geo.js';
 import { hotspotAktiv } from './saison.js';
-import { wxAt } from './weather.js';
+import { wtSchaetzung, wxAt } from './weather.js';
 /* Quellen: Blinker, simfisch, zanderfang, outdoorverliebt u. a. (Recherche Juli 2026).
    Kernaussagen: Zander lichtscheu → Trübung/Wolken/Welle helfen; Aal/Wels wärmeliebend & nachtaktiv,
    lieben schwül-bedeckte Lagen; Barsch/Forelle/Rapfen/Döbel Sichträuber; Zander/Barsch druckempfindlich. */
@@ -218,7 +218,20 @@ export function bewerteSpot(s, art, jetzt = new Date(), hotspot = null) {
     const wasser = wasserTyp(s);
     const wx = wxAt(jetzt);
     const pegel = state.PEGEL;
-    const wt = pegel?.wt ?? wx?.wt ?? null;
+    /* Wassertemperatur: gemessen (PEGELONLINE) vor geschätzt (Lufttemperatur-Verlauf).
+       Die Schätzung ist klar gekennzeichnet und zählt mit reduziertem Gewicht – sie ist
+       besser als „unbekannt", aber kein Messwert. */
+    let wt = pegel?.wt ?? wx?.wt ?? null;
+    let wtTrend = pegel?.wtTrend ?? null;
+    let wtGeschaetzt = false;
+    if (wt == null) {
+        const est = wtSchaetzung(wasser);
+        if (est) {
+            wt = est.wert;
+            wtTrend = est.trend;
+            wtGeschaetzt = true;
+        }
+    }
     const monat = jetzt.getMonth() + 1;
     const lat = hotspot?.lat ?? s.lat ?? 51;
     const lng = hotspot?.lng ?? s.lng ?? 10;
@@ -232,24 +245,28 @@ export function bewerteSpot(s, art, jetzt = new Date(), hotspot = null) {
             add('ja', `Frisch aus der Schonzeit (seit ${tage} ${tage === 1 ? 'Tag' : 'Tagen'}) – ${art} frisst nach dem Laichen aggressiv`, 1, 1);
         }
     }
-    /* 1) Wassertemperatur (Gewicht 2) */
+    /* 1) Wassertemperatur (Gewicht 2; geschätzt aus Lufttemperatur nur 1.5) */
     const opt = WT_OPT[art];
+    const G1 = wtGeschaetzt ? 1.5 : 2;
+    const f1 = G1 / 2;
+    const wtLbl = wtGeschaetzt ? `≈ ${Math.round(wt)} °C (geschätzt aus Lufttemperatur)` : `${Math.round(wt)} °C`;
     if (wt == null || !opt) {
-        add('unbekannt', wt == null ? 'Wassertemperatur unbekannt (kein Pegel in Reichweite)' : 'Kein Temperaturprofil für diese Art', 0, 0);
+        add('unbekannt', wt == null ? 'Wassertemperatur unbekannt (kein Pegel in Reichweite, keine Schätzbasis)' : 'Kein Temperaturprofil für diese Art', 0, 0);
     }
     else if (wt >= opt[0] && wt <= opt[1]) {
-        add('ja', `Wassertemperatur ${Math.round(wt)} °C liegt im Optimum (${opt[0]}–${opt[1]} °C)`, 2, 2);
+        add('ja', `Wassertemperatur ${wtLbl} liegt im Optimum (${opt[0]}–${opt[1]} °C)`, G1, G1);
     }
     else if (wt < opt[0]) {
-        add('nein', `${Math.round(wt)} °C – zu kalt, ${art} ist träge`, 0.4, 2);
+        add('nein', `${wtLbl} – zu kalt, ${art} ist träge`, 0.4 * f1, G1);
     }
     else {
-        add('nein', `${Math.round(wt)} °C – über dem Optimum, tiefe Zonen suchen`, 0.6, 2);
+        add('nein', `${wtLbl} – über dem Optimum, tiefe Zonen suchen`, 0.6 * f1, G1);
     }
-    /* 1b) Wassertemperatur-Trend (Gewicht 1) – Erwärmung aktiviert, Kälteeinbruch bremst. */
+    /* 1b) Wassertemperatur-Trend (Gewicht 1; geschätzt nur 0.75) – Erwärmung aktiviert, Kälteeinbruch bremst. */
     {
-        const zt = wtTrendBewertung(art, wt, pegel?.wtTrend ?? null, p);
-        add(zt.status, zt.text, zt.erreicht, zt.moeglich);
+        const zt = wtTrendBewertung(art, wt, wtTrend, p);
+        const ft = wtGeschaetzt ? 0.75 : 1;
+        add(zt.status, wtGeschaetzt && zt.status !== 'unbekannt' ? zt.text + ' (aus Lufttemperatur geschätzt)' : zt.text, zt.erreicht * ft, zt.moeglich * ft);
     }
     /* 2) Beißzeit (Gewicht 2) */
     const z = zeitBewertung(lat, lng, jetzt, p?.daemmerung ?? false, p?.nacht ?? false);
@@ -494,7 +511,8 @@ export function ratingHtml(s, hotspot = null) {
       ${sturm ? '<div class="rate-sturm">⚠ Sturm – Angeln ist heute unverantwortlich. Die Bewertung ist gedeckelt.</div>' : ''}
       ${zeilen}
       <div class="verif"><span class="ik">i</span> Modellwert aus Wassertemperatur, Beißzeit, Luftdruck, Wind, Wasserstand,
-        Gewässertyp und Jahreszeit – <b>keine Fangwahrscheinlichkeit</b>. Die Gewichte stehen offen im Quelltext.</div>
+        Gewässertyp und Jahreszeit – <b>keine Fangwahrscheinlichkeit</b>. Ohne Messstation wird die Wassertemperatur
+        aus dem Lufttemperatur-Verlauf geschätzt (±2 °C) und schwächer gewichtet. Die Gewichte stehen offen im Quelltext.</div>
     </div>
   </details>`;
 }
