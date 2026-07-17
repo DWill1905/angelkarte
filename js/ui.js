@@ -88,7 +88,7 @@ export function buildSaisonBar() {
         + 'Krautfelder und Tiefenkanten werden <b>nicht</b> eingezeichnet – dafür gibt es keine verlässlichen Daten. '
         + 'Die genaue Kante findest du mit Echolot, das Kraut mit der Polbrille.</div>';
     const setzen = (offen) => { info.hidden = !offen; tip.setAttribute('aria-expanded', String(offen)); };
-    tip.onclick = () => setzen(info.hidden);
+    tip.onclick = () => setzen(Boolean(info.hidden));
     const close = byId('saisonClose');
     if (close)
         close.onclick = () => setzen(false);

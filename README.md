@@ -1,7 +1,7 @@
 # Angelkarte
 
 Interaktive Angelkarten-PWA (Leaflet) für Raubfischangler – **keyfrei**, offline-fähig,
-läuft als statische Seite auf GitHub Pages. Vier Regionen mit recherchierten Spots,
+läuft als statische Seite auf GitHub Pages. Sechs Regionen mit recherchierten Spots,
 Schonzeiten-Status, Fangbuch, Beißzeiten-/Köder-/Blei-Beratern und einem
 „Heute passt es?"-Score.
 
@@ -10,8 +10,8 @@ Schonzeiten-Status, Fangbuch, Beißzeiten-/Köder-/Blei-Beratern und einem
 ## Features
 
 - **Karte** mit Spots, Flussstrecken, Hotspots und eigenen Spots (Long-Press/Rechtsklick)
-- **4 Regionen** (umschaltbar, alles regionsabhängig): Erzgebirge, Rhein & Rheinhessen,
-  Gießen/Lahntal, Mecklenburgische Kleinseenplatte
+- **6 Regionen** (umschaltbar, alles regionsabhängig): Erzgebirge, Rhein & Rheinhessen,
+  Gießen/Lahntal, Elbe/Magdeburg, Main/Frankfurt–Offenbach, Mecklenburgische Kleinseenplatte
 - **Filter** nach Kategorie, Zielfisch und „nur Ufer" (blendet reine Bootsseen aus)
 - **Schonzeiten & Maße** mit Live-Maßcheck im Fangbuch (inkl. Entnahmefenster),
   Jahres-Kalender, regionsabhängige Regeln – gegen die Landesverordnungen abgeglichen
@@ -47,6 +47,14 @@ fehlendes Pflichtfeld faellt beim Bauen auf, nicht am Wasser.
 | `map.ts` | Marker, Filter, Popups, Standort, Spot-Liste |
 | `myspots.ts` | Eigene Spots (Long-Press/Rechtsklick) |
 | `weather.ts` | Wetter & Pegel (Open-Meteo + PEGELONLINE) |
+| `geo.ts` | Geometrie fuer Wind- und Ufer-Logik (Peilung, auflandig) |
+| `rating.ts` | Spotbewertung: Sterne/Prozent + nachvollziehbare Gruende |
+| `plan.ts` | Planer: konkrete Spot-/Zeit-Empfehlung, Tages-Blaetterer, Tagesplan |
+| `saison.ts` | Jahreszeit-Fokus & saisonale Hotspot-Dimmung |
+| `tackle.ts` | Tackle-Empfehlung pro Gewaesser (kuratiert + abgeleitet) |
+| `sicht.ts` | Einfach-/Pro-Sicht (reduziert Entscheidungen, nie Sicherheit) |
+| `reed.ts` | Schilf-/Roehricht-Layer aus OSM (Overpass) |
+| `fullscreen.ts` | Vollbildmodus der Karte (inkl. iOS-Fallback) |
 | `tools.ts` | Werkzeuge-Menue (Score, Koeder, Beisszeiten, Packliste, Knoten, Blei) |
 | `regeln.ts` | Regeln-Tab & Schonzeit-Kalender |
 | `fangbuch.ts` | Fangbuch inkl. Backup/Restore |
@@ -80,8 +88,9 @@ node tools/check-state.mjs      # nackte State-Referenzen finden (z.B. fbMem sta
 Voraussetzungen fuer die Werkzeuge (einmalig pro Umgebung):
 
 ```
-npm install typescript --no-save --prefix /tmp/ts-install
-npm install esbuild    --no-save --prefix /tmp/esbuild-install   # nur fuer den Test-Harness
+npm install typescript@5 --no-save --prefix /tmp/ts-install      # TS 7 (nativer tsc) typt lib.dom anders
+npm install esbuild      --no-save --prefix /tmp/esbuild-install # nur fuer den Test-Harness
+npm install jsdom        --no-save --prefix /tmp/jsdom-install   # nur fuer den Test-Harness
 ```
 
 ## Tests
@@ -95,6 +104,10 @@ Abhaengigkeit) plus jsdom:
 | `tests/daten.test.mjs` | Regionsdaten: Pflichtfelder, Koordinaten, Kartenlinks, Manifest |
 | `tests/fangbuch.test.mjs` | Speichern, Maszcheck, Statistik, Backup/Restore |
 | `tests/app.test.mjs` | Regionswechsel, Popups, Filter, Trip-Liste, Sperrzonen-Warnung |
+| `tests/plan.test.mjs` | Planer: Empfehlung, Tages-Blaetterer, Tagesplan |
+| `tests/rating.test.mjs` | Spotbewertung (Sterne/Prozent/Gruende) |
+| `tests/saison.test.mjs`, `sicht`, `tackle`, `fullscreen` | Saison-Fokus, Einfach/Pro-Sicht, Tackle, Vollbild |
+| `tests/regression.test.mjs` | Regressionen aus echten Bugs |
 
 Die Datentests pruefen **Regeln statt konkreter Zahlen**, damit neue Regionen automatisch
 mitgeprueft werden. `tools/test.mjs` kompiliert vorher TypeScript und laeuft im Deploy-Waechter

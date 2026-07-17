@@ -81,7 +81,7 @@ export function buildSaisonBar(): void {
     + 'Die genaue Kante findest du mit Echolot, das Kraut mit der Polbrille.</div>';
 
   const setzen = (offen: boolean) => { info.hidden = !offen; tip.setAttribute('aria-expanded', String(offen)); };
-  tip.onclick = () => setzen(info.hidden);
+  tip.onclick = () => setzen(Boolean(info.hidden));
   const close = byId('saisonClose');
   if (close) (close as HTMLElement).onclick = () => setzen(false);
 }

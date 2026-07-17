@@ -7,17 +7,29 @@
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
+import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
-import { JSDOM } from 'jsdom';
+
+/* jsdom: normal auflösbar (irgendein node_modules oberhalb) oder aus dem
+   /tmp-Install wie tsc/esbuild. */
+const JSDOM = (() => {
+  for (const base of [import.meta.url, '/tmp/jsdom-install/noop.js']) {
+    try { return createRequire(base)('jsdom').JSDOM; } catch (e) {}
+  }
+  console.error('✖ jsdom fehlt: npm install jsdom --no-save --prefix /tmp/jsdom-install');
+  process.exit(1);
+})();
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export const ROOT = path.join(__dirname, '..');
 const ESBUILD = '/tmp/esbuild-install/node_modules/.bin/esbuild';
-const BUNDLE = '/tmp/ak-suite-bundle.js';
+/* Pro Prozess ein eigenes Bundle: der Test-Runner startet die Testdateien
+   parallel, ein geteilter Pfad wäre ein Race (gegenseitiges Löschen/Überschreiben). */
+const BUNDLE = `/tmp/ak-suite-bundle-${process.pid}.js`;
 
 /** Baut einmalig das Test-Bundle inklusive Hooks aufs window. */
 export function buildBundle() {
-  const entry = path.join(ROOT, 'js', '_suite-entry.js');
+  const entry = path.join(ROOT, 'js', `_suite-entry-${process.pid}.js`);
   fs.writeFileSync(entry, `
 import './app.js';
 import { state } from './state.js';
@@ -47,6 +59,7 @@ window.__app = { state, popupHtml, mapsLink, spotVisible, sperrWarnung, locApply
   } finally {
     fs.unlinkSync(entry);
   }
+  process.on('exit', () => { try { fs.unlinkSync(BUNDLE); } catch (e) {} });
   return BUNDLE;
 }
 
