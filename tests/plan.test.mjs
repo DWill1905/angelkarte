@@ -958,6 +958,19 @@ describe('Darstellung', () => {
     assert.match(body, /kein Orakel/, 'Der Ehrlichkeits-Disclaimer fehlt');
   });
 
+  test('"Warum dort" zeigt Stärke als Balken, nicht als nackte Dezimalzahl', async () => {
+    await loadRegion(ctx, 'mecklenburg');
+    SOMMER_MV();
+    app.openPlan();
+    const body = doc.getElementById('planBody').innerHTML;
+    assert.ok(!/\+0\.\d/.test(body), 'keine rohen Dezimal-Punktwerte mehr im Markup - liest sich wie Debug-Output');
+    const bars = [...doc.querySelectorAll('#planBody .plan-f .pt-bar span')];
+    assert.ok(bars.length > 1, 'keine Balken gefunden');
+    const widths = bars.map((b) => parseInt(b.style.width, 10));
+    assert.ok(widths.some((w) => w === 100), 'der stärkste Grund sollte den vollen Balken zeigen');
+    assert.ok(widths.every((w) => w > 0 && w <= 100), 'Balkenbreite sollte immer zwischen 0 und 100% liegen');
+  });
+
   test('der Menü-Eintrag steht ganz oben', () => {
     const btns = [...doc.querySelectorAll('#toolsDlg .fbtool')].map((b) => b.id);
     assert.equal(btns[0], 'tPlan', 'Die Kernfunktion gehört an die erste Stelle');

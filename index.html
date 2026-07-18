@@ -227,10 +227,14 @@
   .plan-pers{font-size:12px;color:var(--dusk);margin:-6px 0 12px;padding-left:2px}
   .plan-sec{margin-top:12px}
   .plan-sec h4{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dusk);margin-bottom:5px}
-  .plan-f{display:flex;gap:8px;padding:3px 0;font-size:12.5px}
-  .plan-f .pt{font-family:'Space Mono',monospace;min-width:34px;text-align:right}
-  .plan-f.pos .pt{color:var(--ok)}
-  .plan-f.neg .pt{color:var(--warn)}
+  .plan-f{display:flex;align-items:center;gap:8px;padding:3px 0;font-size:12.5px}
+  /* Balken statt nackter Zahl: zeigt die relative Staerke des Grundes, ohne wie Debug-Output
+     zu wirken - die Reihenfolge (schon sortiert) plus die Balkenlaenge sagen dasselbe wie
+     vorher die Dezimalzahl, nur lesbarer. */
+  .plan-f .pt-bar{flex:0 0 auto;width:30px;height:6px;border-radius:3px;background:rgba(255,255,255,.12);overflow:hidden}
+  .plan-f .pt-bar span{display:block;height:100%;border-radius:3px;min-width:2px}
+  .plan-f.pos .pt-bar span{background:var(--ok)}
+  .plan-f.neg .pt-bar span{background:var(--warn)}
   .plan-luecke{font-size:12px;color:var(--muted);padding:3px 0 3px 14px;position:relative}
   .plan-luecke::before{content:'•';position:absolute;left:2px}
   .plan-alt{font-size:12.5px;padding:3px 0;color:var(--muted)}

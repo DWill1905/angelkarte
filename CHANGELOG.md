@@ -1,5 +1,15 @@
 # Changelog
 
+## SW v114 – 2026-07-18
+
+### Changed
+- **"Warum dort" im Planer zeigt Stärke als Balken statt nackter Dezimalzahl.** Usability-
+  Review (2/4): die Gründe-Liste zeigte rohe Punktwerte wie `+3`, `+0.8`, `-12` neben jedem
+  Grund – transparent, aber liest sich wie Debug-Output statt wie eine Begründung für jemanden,
+  der einfach nur wissen will, wohin er fahren soll. Die Zahl ist jetzt ein kleiner Balken,
+  dessen Länge die Stärke relativ zum stärksten Grund zeigt (weiterhin nach Stärke sortiert) –
+  nichts wird verheimlicht, der genaue Wert steht weiterhin offen im Quelltext. Ein neuer Test.
+
 ## SW v113 – 2026-07-18
 
 ### Changed

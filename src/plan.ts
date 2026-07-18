@@ -543,9 +543,14 @@ function renderPlanBody(e: Empfehlung, offset: number = 0): string {
   if (e.massHinweis) h += '<div class="plan-mass">⚖ ' + esc(e.massHinweis) + '</div>';
   if (e.stroemung) h += '<div class="plan-mass">🌊 ' + esc(e.stroemung) + '</div>';
 
+  /* Balken statt nackter Dezimalzahl (+0.8, -12, ...): die genaue Zahl liest sich wie
+     Debug-Output, die RELATIVE Staerke der Gruende zueinander ist die eigentlich nuetzliche
+     Information - und die Reihenfolge (schon nach punkte sortiert) traegt sie ohnehin schon.
+     Nichts wird verheimlicht: wer den genauen Wert braucht, findet ihn weiterhin im Quelltext. */
+  const maxAbs = Math.max(1, ...fak.map((f) => Math.abs(f.punkte)));
   h += '<div class="plan-sec"><h4>Warum dort</h4>'
     + fak.map((f) => '<div class="plan-f ' + (f.punkte >= 0 ? 'pos' : 'neg') + '">'
-        + '<span class="pt">' + (f.punkte > 0 ? '+' : '') + f.punkte + '</span>'
+        + '<span class="pt-bar"><span style="width:' + Math.round(Math.abs(f.punkte) / maxAbs * 100) + '%"></span></span>'
         + '<span>' + esc(f.text) + '</span></div>').join('')
     + '</div>';
 
