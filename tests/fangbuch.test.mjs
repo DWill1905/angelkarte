@@ -185,6 +185,30 @@ describe('Regionale Tageslimits im Maßcheck', () => {
     assert.match(html, /Wochenlimit erreicht: 10\/10/, 'Main-Wochenlimit wird nicht erkannt');
     assert.doesNotMatch(html, /Tageslimit erreicht/, 'Heute wurde nichts entnommen - Tageslimit darf nicht greifen');
   });
+
+  test('Elbe: Tageslimit (3 Hecht/Zander/Karpfen/Quappe gesamt) war komplett unenforced', async () => {
+    await loadRegion(ctx, 'elbe');
+    await entnommenEintragen('Hecht', 55);
+    await entnommenEintragen('Zander', 55);
+    await entnommenEintragen('Karpfen', 45);
+    doc.getElementById('fbFisch').value = 'Quappe';
+    app.checkFang();
+    const html = doc.getElementById('fbCheck').innerHTML;
+    assert.match(html, /Tageslimit erreicht: 3\/3/, 'Elbe-Tageslimit wird nicht erkannt');
+    assert.match(html, /Hecht\/Zander\/Karpfen\/Quappe/);
+    assert.match(html, /bad/);
+  });
+
+  test('Elbe: Barsch zählt nicht zum Hecht/Zander/Karpfen/Quappe-Limit (nicht gelistet)', async () => {
+    await loadRegion(ctx, 'elbe');
+    for (let i = 0; i < 5; i++) await entnommenEintragen('Barsch', 25);
+    doc.getElementById('fbFisch').value = 'Hecht';
+    doc.getElementById('fbLaenge').value = '55';
+    app.checkFang();
+    const html = doc.getElementById('fbCheck').innerHTML;
+    assert.match(html, /Entnahme heute: 0\/3/, 'Barsch darf das Hecht/Zander/Karpfen/Quappe-Limit nicht auffüllen');
+    assert.doesNotMatch(html, /Tageslimit erreicht/);
+  });
 });
 
 describe('parseFangDatum – beide Formate', () => {

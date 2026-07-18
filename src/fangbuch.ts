@@ -425,6 +425,15 @@ export function checkFang(){
     if(wocheN>=10){bad=true;msgs.push('⛔ Wochenlimit erreicht: '+wocheN+'/10 Raubfische in den letzten 7 Tagen.');}
     else if(wocheN>0) msgs.push('Diese Woche: '+wocheN+'/10.');
   }
+  if(state.REGION.id==='elbe'&&['Hecht','Zander','Karpfen','Quappe'].includes(fisch)){
+    /* Erlaubnisschein-Regel (siehe Regeln-Tab "Erlaubnis & Fangbegrenzung"): max. 3 Fische
+       der Arten Hecht/Zander/Karpfen/Quappe pro Tag gesamt - bisher komplett unenforced,
+       obwohl die Region sie selbst nennt (dieselbe Luecke wie zuvor bei Main). */
+    const gelistet=['Hecht','Zander','Karpfen','Quappe'];
+    const n=state.fbMem.filter(e=>e.datum===heute&&e.entnommen&&gelistet.includes(e.fisch)).length;
+    if(n>=3){bad=true;msgs.push('⛔ Tageslimit erreicht: '+n+'/3 entnommene Fische (Hecht/Zander/Karpfen/Quappe).');}
+    else msgs.push('Entnahme heute: '+n+'/3 (Hecht/Zander/Karpfen/Quappe).');
+  }
   el.innerHTML=msgs.length?'<div class="fbcheck '+(bad?'bad':'ok')+'">'+msgs.map(esc).join('<br>')+'</div>':'';
 }
 selectById('fbFisch').onchange=checkFang;

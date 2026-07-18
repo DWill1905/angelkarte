@@ -1,5 +1,16 @@
 # Changelog
 
+## SW v121 – 2026-07-18
+
+### Fixed
+- **Elbe-Region: Tageslimit für Hecht/Zander/Karpfen/Quappe war komplett unenforced.** Der
+  Regeln-Tab nennt selbst „Max. 3 Fische der Arten Hecht/Zander/Karpfen/Quappe pro Tag
+  gesamt" – `checkFang()` hatte dafür (anders als bereits für Mecklenburg, Erzgebirge und
+  Main) überhaupt keinen Block, dieselbe Lücke wie beim kürzlich behobenen Main-Limit.
+  Ergänzt: Tageszähler wie bei den anderen Regionen, unabhängig davon, ob die Schonzeit der
+  jeweiligen Art gerade läuft. Barsch zählt bewusst nicht mit (in der Elbe-Regel nicht
+  gelistet). Zwei neue Tests.
+
 ## SW v120 – 2026-07-18
 
 ### Fixed
