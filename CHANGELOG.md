@@ -1,5 +1,17 @@
 # Changelog
 
+## SW v113 – 2026-07-18
+
+### Changed
+- **Sterne + Prozent nicht mehr doppelt für denselben Wert.** Usability-Check: jede Fisch-Zeile
+  im Popup und die Hero-Zahl im Planer zeigten Sterne UND Prozent nebeneinander für exakt
+  dieselbe Chance ("★★★★★ 88 %") – dieselbe Dopplung, die im Code an anderer Stelle bewusst
+  vermieden wird ("keine zwei Prozentwerte für dieselbe Sache"). Beide Stellen zeigen jetzt nur
+  noch die Prozentzahl. `sterneAus()`/`sterneText()` bleiben bestehen (weiterhin direkt
+  getestet, `sterne`-Feld wird intern noch für Grenzwert-Verhalten wie Sturm-Deckelung
+  geprüft) – nur die doppelte Anzeige ist weg, inklusive der jetzt toten `.rate-sterne`/
+  `.plan-sterne`-CSS.
+
 ## SW v112 – 2026-07-18
 
 ### Added

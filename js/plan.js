@@ -16,7 +16,7 @@
 import { state } from './state.js';
 import { fmtMD, haversine, hhmm, inSchonzeitAt, inWindowAt, mondStaerke, solunar, sunTimes } from './astro.js';
 import { FUTTERKORB_ARTEN, OHNE_ANFUETTERN, WT_OPT, tackleFor, wasserTyp } from './tackle.js';
-import { bewerteSpot, sterneAus, sterneText, artZeitprofil, stroemungsLage } from './rating.js';
+import { bewerteSpot, sterneAus, artZeitprofil, stroemungsLage } from './rating.js';
 import { jahreszeit } from './saison.js';
 import { wtSchaetzung } from './weather.js';
 import { fischArtenFor, FISH } from './data.js';
@@ -440,10 +440,10 @@ function renderPlanBody(e, offset = 0) {
     let h = '';
     if (e.gesperrt === 'sturm')
         h += '<div class="rate-sturm">⚠ Sturm – Angeln ist heute unverantwortlich.</div>';
-    /* KPIs zuerst: die Chance ist das wichtigste Entscheidungskriterium. */
+    /* KPIs zuerst: die Chance ist das wichtigste Entscheidungskriterium. Nur die Prozentzahl,
+       keine Sterne mehr daneben fuer denselben Wert (dieselbe Dopplung wie im Popup entfernt). */
     h += '<div class="plan-hero">'
-        + '<div class="plan-kpi"><span class="plan-proz">' + e.chance + '\u202F%</span>'
-        + '<span class="plan-sterne">' + sterneText(e.sterne) + '</span></div>'
+        + '<div class="plan-kpi"><span class="plan-proz">' + e.chance + '\u202F%</span></div>'
         + '<div class="plan-basis">Chance ' + (offset === 0 ? 'jetzt' : 'im besten Fenster') + ' für ' + esc(e.kandidat.art) + ' · Datenbasis '
         + e.kandidat.bewertet + '/' + e.kandidat.gesamt + ' Signale</div>'
         + '</div>';

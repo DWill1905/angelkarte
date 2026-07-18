@@ -487,9 +487,11 @@ export function ratingHtml(s, hotspot = null) {
     const sturm = top.find((b) => b.gesperrt === 'sturm');
     const zeilen = top.map((b, i) => {
         const offen = i === 0 && !b.geschont;
+        /* Nur noch eine Zahl statt Sterne + Prozent nebeneinander fuer denselben Wert -
+           dieselbe Dopplung, die anderswo im Code bewusst vermieden wird (siehe Kommentar
+           weiter unten zu "keine zwei Prozentwerte fuer dieselbe Sache"). */
         const kopf = `<summary class="rate-kopf">
         <span class="rate-art">${esc(b.art)}</span>
-        <span class="rate-sterne" aria-label="${b.sterne} von 5 Sternen">${sterneText(b.sterne)}</span>
         <span class="rate-proz${b.geschont ? ' zu' : ''}">${b.geschont ? 'geschont' : b.prozent + '\u202F%'}</span>
       </summary>`;
         /* Progressive Disclosure: bekannte Signale zeigen, Qualitäts-Metadaten (fehlende Signale +
