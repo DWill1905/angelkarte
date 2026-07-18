@@ -4,6 +4,23 @@ Fachliche und technische Änderungen an der Angelkarte-App, neueste zuerst.
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.0.0/); SW-Version
 bezieht sich auf `angelkarte-shell-vN` in `sw.js`.
 
+## SW v99 – 2026-07-18
+
+### Fixed
+- **Elbe-Kunstköderverbot (15.2.–30.4.) war komplett unmodelliert.** Fünf der sechs
+  Elbe/Magdeburg-Spots nennen wörtlich „15.02.–30.04. Kunstköderverbot" bzw. „Kunstköder &
+  tote Köderfische verboten" in ihrem eigenen `note`-Feld, und die Region bestätigt es noch
+  einmal auf Regionsebene (`koederfisch`: „Vom 15.02.–30.04. sind tote Köderfische UND
+  Kunstköder verboten (Raubfischschonung)"). Anders als RLPs strukturell identische
+  Frühjahrsschonzeit (dort über `rlpFruehjahr` abgedeckt) gab es dafür keinerlei Mechanismus –
+  der Planer hätte in diesem Fenster ganz normal Gummifisch auf Zander/Hecht/Wels/Barsch
+  empfohlen. Neues, generisches Feld `kkVerbot: {von, bis}` ergänzt `rlpFruehjahr` (bleibt
+  unverändert, um dessen bestehende Tests nicht zu riskieren) um ein region-eigenes
+  Zeitfenster; threaded durch `plan.ts` (Köder-Override + Lücken-Hinweis mit den echten
+  Daten) und `map.ts` (Popup-Badge). Auf allen sechs Elbe-Spots gesetzt (auch „Zollelbe
+  Magdeburg", das die Regel nicht wörtlich wiederholt, aber als Elbe-Nebenarm unter dieselbe
+  Regionsregel fällt). Neuer Regressionstest, data/*.json neu generiert.
+
 ## SW v98 – 2026-07-18
 
 ### Fixed

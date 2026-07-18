@@ -14,7 +14,7 @@
    Die Gewichte stehen offen im Code. Das ist kein Orakel, sondern eine
    nachvollziehbare Vorauswahl – die Entscheidung trifft der Angler. */
 import { state } from './state.js';
-import { haversine, hhmm, inSchonzeitAt, inWindowAt, mondStaerke, solunar, sunTimes } from './astro.js';
+import { fmtMD, haversine, hhmm, inSchonzeitAt, inWindowAt, mondStaerke, solunar, sunTimes } from './astro.js';
 import { FUTTERKORB_ARTEN, OHNE_ANFUETTERN, WT_OPT, tackleFor, wasserTyp } from './tackle.js';
 import { bewerteSpot, sterneAus, sterneText, artZeitprofil, stroemungsLage } from './rating.js';
 import { jahreszeit } from './saison.js';
@@ -369,13 +369,21 @@ export function empfehlung(jetzt: Date = new Date(), filter: PlanFilter = {}): E
   const zf: Zielfisch = { art: k.art, grund };
   let { koeder, jig } = koederSatz(k.spot, k.art);
   /* RLP-Frühjahrsschonzeit (15.4.–31.5.): an §18-Gewässern Kunstköderverbot – Empfehlung auf
-     Naturköder/Fliege umstellen, statt zu illegaler Methode zu raten. */
-  const kkVerbot = !!k.spot.rlpFruehjahr && inWindowAt(jetzt, [4, 15], [5, 31]) && !(k.art && FRIEDFISCH[k.art]);
+     Naturköder/Fliege umstellen, statt zu illegaler Methode zu raten.
+     kkVerbot (generisch, z. B. Elbe/Magdeburg 15.2.–30.4.) deckt dieselbe Regelidee mit
+     eigenem, region-spezifischem Zeitfenster ab – zwei Regionen, zwei Fenster, ein Grundsatz:
+     nie zu einer am Erlaubnisschein verbotenen Methode raten. */
+  const kkFenster = k.spot.kkVerbot;
+  const kkVerbotRLP = !!k.spot.rlpFruehjahr && inWindowAt(jetzt, [4, 15], [5, 31]);
+  const kkVerbotRegional = !!kkFenster && inWindowAt(jetzt, kkFenster.von, kkFenster.bis);
+  const kkVerbot = (kkVerbotRLP || kkVerbotRegional) && !(k.art && FRIEDFISCH[k.art]);
   if (kkVerbot) { koeder = 'Naturköder ruhig am Grund (Tauwurm/Grundelfetzen) – keine aktive Köderführung'; jig = null; }
 
   const luecken: string[] = [];
-  if (kkVerbot) {
+  if (kkVerbotRLP) {
     luecken.push('Frühjahrsschonzeit 15.4.–31.5.: keine Kunstköder (Spinner/Blinker/Gummi) und keine aktive Köderführung; künstliche Fliege nur an der Fliegenrute. Genauen Abschnitt auf dem Erlaubnisschein prüfen.');
+  } else if (kkVerbotRegional && kkFenster) {
+    luecken.push(`Kunstköder-/Köderfischverbot ${fmtMD(kkFenster.von)}–${fmtMD(kkFenster.bis)} (Raubfischschonung): keine Kunstköder und keine toten Köderfische. Erlaubnisschein prüfen.`);
   }
   if (!state.SCHON.some((x) => x.fisch === k.art)) {
     luecken.push(`Für ${k.art} ist keine Schonzeit/kein Mindestmaß hinterlegt – vor Entnahme den Erlaubnisschein prüfen.`);

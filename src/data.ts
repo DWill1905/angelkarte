@@ -716,7 +716,7 @@ export const REGION_RLP: Region = {id:'mainz',geprueft:'2026-07',name:'Rhein & R
   hinweis:'Angaben ohne Gewähr, recherchiert 07/2026 (FischGDV RP, LFV RLP, Anglerforen). Maßgeblich: Erlaubnisschein mit Strom-km-Angaben und Beschilderung. Mindestmaße RLP vor Entnahme gegenprüfen.'};
 /* ===== Region Elbe / Magdeburg (Sachsen-Anhalt) – recherchiert 07/2026 ===== */
 export const SPOTS_EL: Spot[] = [
-  {name:'Buhnenfeld Herrenkrug',wasser:'fluss',verif:'B',nr:'Magdeburger Anglerverein · Elbe rechtes Ufer',cat:'raub',
+  {name:'Buhnenfeld Herrenkrug',kkVerbot:{von:[2,15],bis:[4,30]},wasser:'fluss',verif:'B',nr:'Magdeburger Anglerverein · Elbe rechtes Ufer',cat:'raub',
    arten:['Zander','Hecht','Wels','Rapfen','Barsch','Karpfen','Aal','Brachse'],
    lat:52.1535,lng:11.6720,
    fisch:'Zander, Hecht, Wels, Rapfen, Barsch, Karpfen, Aal, Brasse',
@@ -728,7 +728,7 @@ export const SPOTS_EL: Spot[] = [
      {name:'Buhnenkopf-Strömungskante',saison:'Juni–Winter, Zander',lat:52.1540,lng:11.6710,tipp:'Am Buhnenkopf bildet die Strömungskante Verwirbelungen an der Oberfläche – dort steht der Zander. Gummi 20 m flussab an der Kante führen.'}
    ],warn:true,zugang:'ufer'},
 
-  {name:'Elbe Magdeburg-Prester',wasser:'fluss',verif:'B',nr:'Magdeburger Anglerverein · oberhalb Abzweig Alte Elbe',cat:'raub',
+  {name:'Elbe Magdeburg-Prester',kkVerbot:{von:[2,15],bis:[4,30]},wasser:'fluss',verif:'B',nr:'Magdeburger Anglerverein · oberhalb Abzweig Alte Elbe',cat:'raub',
    arten:['Zander','Hecht','Wels','Rapfen','Barsch','Aal'],
    lat:52.1034,lng:11.6748,
    fisch:'Zander, Hecht, Wels, Rapfen, Barsch, Aal',
@@ -740,7 +740,7 @@ export const SPOTS_EL: Spot[] = [
      {name:'Erste/letzte Buhne am Alte-Elbe-Abzweig',saison:'Dämmerung, Zander',lat:52.1050,lng:11.6770,tipp:'Die Rand-Buhnen eines Feldes und die Altarm-Mündung sind Top-Ansitzplätze mit Köderfisch. Lage grob – Buhnenreihe abgehen.'}
    ],warn:true,zugang:'ufer'},
 
-  {name:'Rothenseer Abstiegskanal',wasser:'kanal',verif:'B',nr:'Magdeburger Anglerverein · Kanal',cat:'raub',
+  {name:'Rothenseer Abstiegskanal',kkVerbot:{von:[2,15],bis:[4,30]},wasser:'kanal',verif:'B',nr:'Magdeburger Anglerverein · Kanal',cat:'raub',
    arten:['Zander','Barsch','Hecht','Rotauge'],
    lat:52.2057,lng:11.6875,
    fisch:'Zander, Barsch, Hecht, Weißfisch',
@@ -750,7 +750,7 @@ export const SPOTS_EL: Spot[] = [
    kartenLinks:[{label:'Magdeburger Anglerverein',url:'https://www.magdeburger-anglerverein.de'},{label:'hejfish (online)',url:'https://www.hejfish.com'}],
    hotspots:[],warn:true,zugang:'ufer'},
 
-  {name:'Industriehafen Magdeburg',wasser:'kanal',verif:'B',nr:'Magdeburger Anglerverein · Hafenbecken',cat:'raub',
+  {name:'Industriehafen Magdeburg',kkVerbot:{von:[2,15],bis:[4,30]},wasser:'kanal',verif:'B',nr:'Magdeburger Anglerverein · Hafenbecken',cat:'raub',
    arten:['Zander','Barsch','Hecht','Rotauge'],
    lat:52.1648,lng:11.6688,
    fisch:'Zander, Barsch, Hecht, Weißfisch',
@@ -760,7 +760,7 @@ export const SPOTS_EL: Spot[] = [
    kartenLinks:[{label:'Magdeburger Anglerverein',url:'https://www.magdeburger-anglerverein.de'},{label:'hejfish (online)',url:'https://www.hejfish.com'}],
    hotspots:[],warn:true,zugang:'ufer'},
 
-  {name:'Zollelbe Magdeburg',wasser:'kanal',verif:'B',nr:'Magdeburger Anglerverein · Nebenarm',cat:'raub',
+  {name:'Zollelbe Magdeburg',kkVerbot:{von:[2,15],bis:[4,30]},wasser:'kanal',verif:'B',nr:'Magdeburger Anglerverein · Nebenarm',cat:'raub',
    arten:['Barsch','Zander','Hecht','Rotauge'],
    lat:52.1305,lng:11.6496,
    fisch:'Barsch (im Herbst massenhaft), Zander, Hecht, Weißfisch',
@@ -770,7 +770,7 @@ export const SPOTS_EL: Spot[] = [
    kartenLinks:[{label:'Magdeburger Anglerverein',url:'https://www.magdeburger-anglerverein.de'},{label:'hejfish (online)',url:'https://www.hejfish.com'}],
    hotspots:[],warn:true,zugang:'ufer'},
 
-  {name:'Buhnenfelder Rothensee–Rogätz',wasser:'fluss',verif:'B',nr:'Elbe · zusammenhängende Buhnenfelder nördl. Magdeburg',cat:'raub',
+  {name:'Buhnenfelder Rothensee–Rogätz',kkVerbot:{von:[2,15],bis:[4,30]},wasser:'fluss',verif:'B',nr:'Elbe · zusammenhängende Buhnenfelder nördl. Magdeburg',cat:'raub',
    arten:['Zander','Hecht','Barsch','Aal','Rapfen','Wels','Brachse'],
    lat:52.2600,lng:11.7150,
    fisch:'Zander, Hecht, Barsch, Aal, Rapfen, Wels, dicke Brassen/Alande',

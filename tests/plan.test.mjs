@@ -346,6 +346,25 @@ describe('RLP-Kunstköderverbot', () => {
   });
 });
 
+describe('Elbe-Kunstköderverbot (15.2.–30.4., eigenes Fenster)', () => {
+  test('im Fenster Naturköder + Warnung, sonst Gummifisch', async () => {
+    await loadRegion(ctx, 'elbe');
+    app.state.WX = { temp: 8, wind: 8, dirDeg: 200, dir: 'SW', press: 1015, trendVal: -1, code: 3 };
+    app.state.PEGEL = { value: 200, station: 'X', dist: 3, wt: 7 };
+    /* Wels statt Zander/Hecht: die haben in SN_EL eine eigene Schonzeit genau in diesem
+       Fenster und wären als geschont gar nicht erst als Kandidat dabei. Wels ist ganzjährig
+       offen und damit die passende Sonde für DIESES Verbot (Raubfischschonung, nicht Schonzeit). */
+    const opt = { fisch: ['Wels'], gewaesser: ['Buhnenfeld Herrenkrug'] };
+    const maerz = app.empfehlung(new Date(Date.UTC(2026, 2, 10, 10, 0)), opt);
+    assert.match(maerz.koeder, /Naturköder/, 'März: sollte Naturköder sein (Elbe-Fenster 15.2.–30.4.)');
+    assert.ok(maerz.luecken.some((l) => /Kunstköder/.test(l) && /15\.02\.–30\.04\./.test(l)), 'März: Warnung mit korrektem Fenster fehlt');
+    app.state.WX = { temp: 20, wind: 8, dirDeg: 200, dir: 'SW', press: 1015, trendVal: -1, code: 3 };
+    app.state.PEGEL = { value: 200, station: 'X', dist: 3, wt: 22 };
+    const juli = app.empfehlung(new Date(Date.UTC(2026, 6, 15, 10, 0)), opt);
+    assert.match(juli.koeder, /Gummifisch/, 'Juli: Kunstköder wieder erlaubt');
+  });
+});
+
 describe('Trübung im Scoring', () => {
   test('trübes Wasser hilft dem lichtscheuen Zander bei Sonne/Flaute', async () => {
     await loadRegion(ctx, 'mecklenburg');

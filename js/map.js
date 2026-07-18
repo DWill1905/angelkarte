@@ -3,7 +3,7 @@ import { state } from './state.js';
 import { tackleHtml } from './tackle.js';
 import { ratingHtml } from './rating.js';
 import { fokusFor, hotspotAktiv, istKante, spotImFokus } from './saison.js';
-import { haversine } from './astro.js';
+import { fmtMD, haversine } from './astro.js';
 import { CATS, FISH, fischArtenFor } from './data.js';
 import { openTools } from './tools.js';
 import { sunLine } from './ui.js';
@@ -73,6 +73,8 @@ function badgesHtml(s) {
         b.push('<span class="pop-badge np">🏞 Nationalpark – Befahrensregeln</span>');
     if (s.rlpFruehjahr)
         b.push('<span class="pop-badge stop">⚠ 15.4.–31.5. Kunstköder &amp; aktive Führung verboten</span>');
+    if (s.kkVerbot)
+        b.push(`<span class="pop-badge stop">⚠ ${fmtMD(s.kkVerbot.von)}–${fmtMD(s.kkVerbot.bis)} Kunstköder &amp; Köderfisch verboten</span>`);
     if (s.flussmitte)
         b.push('<span class="pop-badge info">🪧 Karte nur bis Flussmitte (RLP)</span>');
     return b.length ? `<div class="pop-badges">${b.join('')}</div>` : '';

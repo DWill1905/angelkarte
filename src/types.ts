@@ -73,6 +73,10 @@ export interface Spot {
   nationalpark?: boolean;
   /** Unterliegt der RLP-Frühjahrsschonzeit (15.4.–31.5.): Kunstköderverbot, nur Naturköder/Fliege. */
   rlpFruehjahr?: boolean;
+  /** Regionales Kunstköder-/Köderfischverbot (Raubfischschonung) mit eigenem Zeitfenster,
+      zusätzlich zu den art-spezifischen Schonzeiten – z. B. Elbe/Magdeburg 15.2.–30.4.
+      (RLP nutzt dafür weiterhin `rlpFruehjahr`, fest verdrahtet auf 15.4.–31.5.). */
+  kkVerbot?: { von: MonatTag; bis: MonatTag };
   /** RLP-Rheinkarte gilt nur bis zur Flussmitte (Ländergrenze) – andere Uferseite braucht eigenen Schein. */
   flussmitte?: boolean;
   /** Boot/Belly-Boot komplett verboten (z. B. Trinkwassertalsperre) – nicht nur Motor-/Schleppangeln-Regeln.

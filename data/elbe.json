@@ -28,6 +28,16 @@
  "spots": [
   {
    "name": "Buhnenfeld Herrenkrug",
+   "kkVerbot": {
+    "von": [
+     2,
+     15
+    ],
+    "bis": [
+     4,
+     30
+    ]
+   },
    "wasser": "fluss",
    "verif": "B",
    "nr": "Magdeburger Anglerverein · Elbe rechtes Ufer",
@@ -72,6 +82,16 @@
   },
   {
    "name": "Elbe Magdeburg-Prester",
+   "kkVerbot": {
+    "von": [
+     2,
+     15
+    ],
+    "bis": [
+     4,
+     30
+    ]
+   },
    "wasser": "fluss",
    "verif": "B",
    "nr": "Magdeburger Anglerverein · oberhalb Abzweig Alte Elbe",
@@ -114,6 +134,16 @@
   },
   {
    "name": "Rothenseer Abstiegskanal",
+   "kkVerbot": {
+    "von": [
+     2,
+     15
+    ],
+    "bis": [
+     4,
+     30
+    ]
+   },
    "wasser": "kanal",
    "verif": "B",
    "nr": "Magdeburger Anglerverein · Kanal",
@@ -146,6 +176,16 @@
   },
   {
    "name": "Industriehafen Magdeburg",
+   "kkVerbot": {
+    "von": [
+     2,
+     15
+    ],
+    "bis": [
+     4,
+     30
+    ]
+   },
    "wasser": "kanal",
    "verif": "B",
    "nr": "Magdeburger Anglerverein · Hafenbecken",
@@ -178,6 +218,16 @@
   },
   {
    "name": "Zollelbe Magdeburg",
+   "kkVerbot": {
+    "von": [
+     2,
+     15
+    ],
+    "bis": [
+     4,
+     30
+    ]
+   },
    "wasser": "kanal",
    "verif": "B",
    "nr": "Magdeburger Anglerverein · Nebenarm",
@@ -210,6 +260,16 @@
   },
   {
    "name": "Buhnenfelder Rothensee–Rogätz",
+   "kkVerbot": {
+    "von": [
+     2,
+     15
+    ],
+    "bis": [
+     4,
+     30
+    ]
+   },
    "wasser": "fluss",
    "verif": "B",
    "nr": "Elbe · zusammenhängende Buhnenfelder nördl. Magdeburg",
