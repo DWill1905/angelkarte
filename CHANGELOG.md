@@ -4,6 +4,17 @@ Fachliche und technische Änderungen an der Angelkarte-App, neueste zuerst.
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.0.0/); SW-Version
 bezieht sich auf `angelkarte-shell-vN` in `sw.js`.
 
+## SW v101 – 2026-07-18
+
+### Fixed
+- **Main-Region: Tages-/Wochenlimit für Raubfisch war komplett unenforced.** Die Region
+  nennt zweimal (schonQuelle + Spot-Hinweis) die Erlaubnisschein-Regel „max. 3 Raubfische
+  (Barsch/Hecht/Zander) pro Tag, max. 10/Woche" – `checkFang()` hatte dafür (anders als
+  bereits für Mecklenburg und Erzgebirge) überhaupt keinen Block. Ergänzt: Tageszähler wie
+  bei den anderen Regionen, plus ein rollierendes 7-Tage-Wochenlimit (`parseFangDatum` über
+  alle Einträge). Zwei neue Tests, die beide Grenzen unabhängig voneinander auslösen (Wochen-
+  limit greift auch, wenn heute noch nichts entnommen wurde, und umgekehrt).
+
 ## SW v100 – 2026-07-18
 
 ### Fixed

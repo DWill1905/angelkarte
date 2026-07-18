@@ -116,6 +116,38 @@ describe('Regionale Tageslimits im Maßcheck', () => {
     assert.match(html, /Davon über 30 cm: 3\/5/);
     assert.doesNotMatch(html, /Teilquote über 30 cm erreicht/);
   });
+
+  test('Main: Tageslimit (3 Raubfische) greift unabhängig vom Wochenlimit', async () => {
+    await loadRegion(ctx, 'main');
+    await entnommenEintragen('Barsch', 25);
+    await entnommenEintragen('Hecht', 55);
+    await entnommenEintragen('Zander', 50);
+    doc.getElementById('fbFisch').value = 'Barsch';
+    app.checkFang();
+    const html = doc.getElementById('fbCheck').innerHTML;
+    assert.match(html, /Tageslimit erreicht: 3\/3/, 'Main-Tageslimit wird nicht erkannt');
+    assert.match(html, /bad/);
+  });
+
+  test('Main: Wochenlimit (10) greift auch, wenn das Tageslimit (3) längst nicht erreicht ist', async () => {
+    await loadRegion(ctx, 'main');
+    /* Direkt ins Fangbuch schreiben statt ueber die UI: das Wochenlimit braucht Faenge an
+       verschiedenen Tagen, das Formular stempelt aber immer das heutige Datum. Alle 10 Faenge
+       liegen 1-6 Tage zurueck (nie heute), damit das Tageslimit garantiert unberuehrt bleibt. */
+    const heute = new Date();
+    for (let i = 0; i < 10; i++) {
+      const d = new Date(heute); d.setDate(d.getDate() - (1 + (i % 6)));
+      app.state.fbMem.push({ id: 100 + i, fisch: 'Zander', laenge: 55, spot: 'x', koeder: 'y',
+        datum: d.toLocaleDateString('de-DE'), entnommen: true });
+    }
+    doc.querySelector('[data-view="fangbuch"]').click();
+    doc.getElementById('fbFisch').value = 'Barsch';
+    doc.getElementById('fbLaenge').value = '25';
+    app.checkFang();
+    const html = doc.getElementById('fbCheck').innerHTML;
+    assert.match(html, /Wochenlimit erreicht: 10\/10/, 'Main-Wochenlimit wird nicht erkannt');
+    assert.doesNotMatch(html, /Tageslimit erreicht/, 'Heute wurde nichts entnommen - Tageslimit darf nicht greifen');
+  });
 });
 
 describe('parseFangDatum – beide Formate', () => {

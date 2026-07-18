@@ -453,6 +453,34 @@ export function checkFang() {
         else if (ueber30 > 0)
             msgs.push('Davon über 30 cm: ' + ueber30 + '/5.');
     }
+    if (state.REGION.id === 'main' && ['Barsch', 'Hecht', 'Zander'].includes(fisch)) {
+        /* Erlaubnisschein-Regel (siehe schonQuelle): max. 3 Raubfische/Tag UND max. 10/Woche -
+           bisher komplett unenforced, obwohl die Region sie selbst zweimal nennt (Regeln-Tab +
+           Spot-Hinweis). Wochenfenster: rollierend die letzten 7 Tage (heute eingeschlossen). */
+        const raub = ['Barsch', 'Hecht', 'Zander'];
+        const heuteN = state.fbMem.filter(e => e.datum === heute && e.entnommen && raub.includes(e.fisch)).length;
+        const vor7Tagen = new Date();
+        vor7Tagen.setDate(vor7Tagen.getDate() - 6);
+        vor7Tagen.setHours(0, 0, 0, 0);
+        const wocheN = state.fbMem.filter(e => {
+            if (!e.entnommen || !raub.includes(e.fisch))
+                return false;
+            const d = parseFangDatum(e.datum);
+            return !!d && d >= vor7Tagen;
+        }).length;
+        if (heuteN >= 3) {
+            bad = true;
+            msgs.push('⛔ Tageslimit erreicht: ' + heuteN + '/3 entnommene Raubfische (Barsch/Hecht/Zander).');
+        }
+        else
+            msgs.push('Entnahme heute: ' + heuteN + '/3 Raubfische (Barsch/Hecht/Zander).');
+        if (wocheN >= 10) {
+            bad = true;
+            msgs.push('⛔ Wochenlimit erreicht: ' + wocheN + '/10 Raubfische in den letzten 7 Tagen.');
+        }
+        else if (wocheN > 0)
+            msgs.push('Diese Woche: ' + wocheN + '/10.');
+    }
     el.innerHTML = msgs.length ? '<div class="fbcheck ' + (bad ? 'bad' : 'ok') + '">' + msgs.map(esc).join('<br>') + '</div>' : '';
 }
 selectById('fbFisch').onchange = checkFang;
