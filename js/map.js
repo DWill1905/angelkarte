@@ -67,6 +67,8 @@ function badgesHtml(s) {
         b.push('<span class="pop-badge stop">⛔ Verbrennungsmotor verboten</span>');
     if (s.schleppen === false)
         b.push('<span class="pop-badge stop">⚓ Schleppangeln verboten</span>');
+    if (s.keinBoot)
+        b.push('<span class="pop-badge stop">⛔ Boot/Belly-Boot verboten</span>');
     if (s.nationalpark)
         b.push('<span class="pop-badge np">🏞 Nationalpark – Befahrensregeln</span>');
     if (s.rlpFruehjahr)

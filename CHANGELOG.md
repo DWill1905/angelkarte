@@ -4,6 +4,21 @@ Fachliche und technische Änderungen an der Angelkarte-App, neueste zuerst.
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.0.0/); SW-Version
 bezieht sich auf `angelkarte-shell-vN` in `sw.js`.
 
+## SW v94 – 2026-07-18
+
+### Fixed
+- **Tackle-Empfehlung riet an drei Trinkwassertalsperren zum verbotenen Belly-Boot.**
+  Talsperre Saidenbach, Vorsperre Dittersbach und Talsperre Rauschenbach (alle Erzgebirge)
+  haben `zugang:'ufer'` und keine kuratierte `tackle`-Empfehlung – die generische Ableitung
+  in `zugangAus()` (tackle.ts) endete deshalb pauschal mit „... ein Belly-Boot erweitert den
+  Radius deutlich". Genau das verbietet die Gewässerordnung dieser TWT: Saidenbachs eigener
+  Spot-Hinweis sagt wörtlich „kein Boot, kein Waten", Rauschenbachs „Kein Boot, kein Baden",
+  und die Regeln-Karte der Region nennt Saidenbach/Dittersbach explizit unter „Kein Boot,
+  kein Belly, kein Waten, kein Baden". Neues Spot-Flag `keinBoot` eingeführt: unterdrückt die
+  Belly-Boot-Empfehlung (ersetzt sie durch einen Hinweis auf das Verbot) und zeigt ein
+  Popup-Badge, analog zu den bestehenden Motor-/Schleppangeln-Badges. Auf allen drei
+  Talsperren gesetzt.
+
 ## SW v93 – 2026-07-18
 
 ### Fixed

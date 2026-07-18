@@ -24,6 +24,7 @@
   {
    "name": "Talsperre Saidenbach",
    "zugang": "ufer",
+   "keinBoot": true,
    "rig": "H-Spinnrute 20–60 g, Geflecht + FC-Vorfach. Erlaubte Köder: Kunstköder, Wurm, Mais/Teig – KEINE Maden, kein Fleisch, kein Anfüttern (TWT!).",
    "arten": [
     "Barsch",
@@ -76,6 +77,7 @@
    "name": "Vorsperre Dittersbach",
    "zugang": "ufer",
    "verif": "B",
+   "keinBoot": true,
    "rig": "Spinnrute mittel, Stahl- oder dickes FC-Vorfach (Hecht). TWT-Köderregeln wie Saidenbach.",
    "arten": [
     "Barsch",
@@ -104,6 +106,7 @@
    "name": "Talsperre Rauschenbach",
    "zugang": "ufer",
    "verif": "B",
+   "keinBoot": true,
    "rig": "H-Spinnrute 20–60 g für weite Würfe an die Abbruchkanten; TWT-Köderregeln beachten. Uferangeln, kein Boot.",
    "arten": [
     "Barsch",

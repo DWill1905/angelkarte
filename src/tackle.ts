@@ -116,6 +116,9 @@ function zugangAus(s: Spot, w: Wasser): string {
   }
   if (w === 'fluss') return 'Vom Ufer gut zu beangeln – Strecke machen und jede Buhne/Kante gründlich abfischen, statt an einer Stelle zu verharren.';
   if (w === 'kanal') return 'Vom Ufer: Kanten und Spundwände senkrecht abklopfen (Vertikal/DropShot).';
+  /* Trinkwassertalsperren u.ä. verbieten jedes Wasserfahrzeug, auch das Belly-Boot – die
+     generische Ufer-Empfehlung darf hier nicht pauschal zum verbotenen Gerät raten. */
+  if (s.keinBoot) return 'Vom Ufer beangelbar – Krautkanten, Einläufe und Stege ansteuern. Boot/Belly-Boot hier verboten (Gewässerordnung) – Strecke machen statt Reichweite mit Gerät erkaufen.';
   return 'Vom Ufer beangelbar – Krautkanten, Einläufe und Stege ansteuern; ein Belly-Boat erweitert den Radius deutlich.';
 }
 

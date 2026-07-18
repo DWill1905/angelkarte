@@ -75,6 +75,9 @@ export interface Spot {
   rlpFruehjahr?: boolean;
   /** RLP-Rheinkarte gilt nur bis zur Flussmitte (Ländergrenze) – andere Uferseite braucht eigenen Schein. */
   flussmitte?: boolean;
+  /** Boot/Belly-Boot komplett verboten (z. B. Trinkwassertalsperre) – nicht nur Motor-/Schleppangeln-Regeln.
+      Unterdrückt die generische Belly-Boot-Empfehlung in zugangAus() und zeigt ein Popup-Badge. */
+  keinBoot?: boolean;
   /** Kuratierte Tackle-Empfehlung. Fehlt sie, wird sie abgeleitet. */
   tackle?: Tackle;
   /** Maximaltiefe in Metern, falls belegt (steuert Jigkopf & Rutenwahl). */
