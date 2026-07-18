@@ -567,9 +567,12 @@ export function ratingHtml(s: Spot, hotspot: Hotspot | null = null): string {
     <div class="rating-body">
       ${sturm ? '<div class="rate-sturm">⚠ Sturm – Angeln ist heute unverantwortlich. Die Bewertung ist gedeckelt.</div>' : ''}
       ${zeilen}
-      <div class="verif"><span class="ik">i</span> <span>Modellwert aus Wassertemperatur, Beißzeit, Luftdruck, Wind, Wasserstand,
-        Gewässertyp und Jahreszeit – <b>keine Fangwahrscheinlichkeit</b>. Ohne Messstation wird die Wassertemperatur
-        aus dem Lufttemperatur-Verlauf geschätzt (±2 °C) und schwächer gewichtet. Die Gewichte stehen offen im Quelltext.</span></div>
+      <details class="rate-verif-toggle">
+        <summary>Wie wird das berechnet?</summary>
+        <div class="verif"><span class="ik">i</span> <span>Modellwert aus Wassertemperatur, Beißzeit, Luftdruck, Wind, Wasserstand,
+          Gewässertyp und Jahreszeit – <b>keine Fangwahrscheinlichkeit</b>. Ohne Messstation wird die Wassertemperatur
+          aus dem Lufttemperatur-Verlauf geschätzt (±2 °C) und schwächer gewichtet. Die Gewichte stehen offen im Quelltext.</span></div>
+      </details>
     </div>
   </details>`;
 }

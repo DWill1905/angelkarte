@@ -202,6 +202,15 @@ describe('Darstellung im Popup', () => {
     assert.match(html, /keine Fangwahrscheinlichkeit/i);
   });
 
+  test('die Modell-Erklärung steckt eingeklappt hinter einem Tipp-Toggle (Usability: nicht auf jedem Popup 3-4 Zeilen)', async () => {
+    await loadRegion(ctx, 'mecklenburg');
+    GUT();
+    const html = app.popupHtml(spotVon('Woblitzsee'));
+    assert.match(html, /<details class="rate-verif-toggle">\s*<summary>/, 'Erklärung sollte in einem eingeklappten <details> stecken');
+    assert.ok(!/<details class="rate-verif-toggle"[^>]*\bopen\b/.test(html), 'Toggle sollte standardmäßig zu sein');
+    assert.match(html, /keine Fangwahrscheinlichkeit/i, 'Inhalt bleibt trotzdem im Markup - Transparenz ist nur einen Klick weiter, nicht weg');
+  });
+
   test('Sperrzonen bekommen keinen Bewertungsblock', async () => {
     await loadRegion(ctx, 'main');
     const sperr = app.state.SPOTS.find((s) => s.cat === 'sperr');

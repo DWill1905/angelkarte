@@ -179,7 +179,7 @@
   body.sicht-einfach .rating .rate-art-block:not(:first-of-type){display:none}
   body.sicht-einfach .rating .rate-g{display:none}
   body.sicht-einfach .rating .rate-hinweis{display:none}
-  body.sicht-einfach .rating > .rating-body > .verif{display:none}
+  body.sicht-einfach .rating > .rating-body > .rate-verif-toggle{display:none}
   body.sicht-einfach .rate-kopf{cursor:default}
   body.sicht-einfach .rate-kopf::after{content:none}
   body.sicht-einfach .pop-row[data-wind]{display:none}
@@ -502,8 +502,17 @@
   .fbcheck.ok{background:rgba(124,201,143,.14);color:#a8dcae;border:1px solid rgba(124,201,143,.25)}
   .fbcheck.bad{background:rgba(214,69,69,.16);color:#f0b6a8;font-weight:600;border:1px solid rgba(214,69,69,.3)}
   .verif{font-size:10px;color:#5b6b66;margin-top:7px;letter-spacing:.03em}
-  .rating-body .verif{font-size:10.5px;color:#45554f;margin-top:8px;background:#eef3f2;border-radius:6px;
+  .rating-body .verif{font-size:10.5px;color:#45554f;margin-top:6px;background:#eef3f2;border-radius:6px;
     padding:6px 8px;display:flex;gap:6px;align-items:flex-start;line-height:1.45;font-style:normal;flex-wrap:wrap}
+  /* Die Modell-Erklaerung steht jetzt hinter einem Tipp-Toggle statt immer offen dazustehen -
+     auf jedem einzelnen Popup nahm sie 3-4 Zeilen ein, obwohl der Text nie variiert. Wer es
+     genau wissen will, klappt auf; die Transparenz bleibt (nur einen Klick weiter). */
+  .rate-verif-toggle{margin-top:8px}
+  .rate-verif-toggle summary{cursor:pointer;list-style:none;font-size:10.5px;color:var(--muted);
+    font-weight:600;display:flex;align-items:center;gap:4px}
+  .rate-verif-toggle summary::-webkit-details-marker{display:none}
+  .rate-verif-toggle summary::after{content:'\203A';margin-left:2px;font-weight:400}
+  .rate-verif-toggle[open] summary::after{content:'–'}
   .ic{width:1.05em;height:1.05em;display:inline-block;vertical-align:-.15em;flex-shrink:0}
   .chip .ic,.fbtool .ic{width:1.15em;height:1.15em;vertical-align:-.18em;margin-right:2px}
   .mydlg h3 .ic{width:1em;height:1em;vertical-align:-.1em;margin-right:5px;color:var(--dusk)}

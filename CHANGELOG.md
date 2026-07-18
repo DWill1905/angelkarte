@@ -1,5 +1,18 @@
 # Changelog
 
+## SW v115 – 2026-07-18
+
+### Changed
+- **Modell-Erklärung im Popup jetzt hinter einem Tipp-Toggle.** Usability-Review (3/4): das
+  Popup ist der dichteste Bildschirm der App – bei einem Spot mit mehreren Zielarten stand die
+  immer gleiche, 3-4-zeilige Erklärung ("Modellwert aus Wassertemperatur, Beißzeit, ...") auf
+  jedem einzelnen Popup fest offen da, obwohl sich ihr Inhalt nie ändert. Steckt jetzt in einem
+  eingeklappten `<details class="rate-verif-toggle">` ("Wie wird das berechnet? ›") direkt
+  unter der Artenliste – ein Klick weiter statt immer sichtbar, spürbar kompakteres Popup.
+  Transparenz bleibt vollständig erhalten, nur die Standard-Sichtbarkeit ändert sich. Die
+  „Einfache Sicht" blendet den Toggle weiterhin komplett aus (CSS-Selektor entsprechend
+  angepasst). Ein neuer Test.
+
 ## SW v114 – 2026-07-18
 
 ### Changed
