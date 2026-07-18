@@ -191,3 +191,34 @@ describe('Bug: sunTimes lieferte das Datum des Vortages', () => {
     assert.ok(dauer(winter) > 7 && dauer(winter) < 8.5, `Winter: ${dauer(winter).toFixed(1)} h`);
   });
 });
+
+describe('Bug: Mond-Transitzeiten wanderten je nach Tageszeit des Aufrufs auf einen anderen Tag', () => {
+  /* moonTimes() berechnete die Mondposition (fuer Rektaszension/Sternzeit) aus dem vollen
+     Zeitstempel von `date` statt nur dessen Kalendertag - derselbe Tag lieferte je nachdem,
+     ob man ihn morgens oder abends abfragte, unterschiedliche (teils auf den Folgetag
+     verschobene) Transit-/Gegentransitzeiten. Der Tagesplan (tagesplan.test in plan.test.mjs)
+     zeigte dadurch abends teils ein Fenster, das angeblich "morgen frueh" lag, tatsaechlich
+     aber ein falsch datiertes Fenster von "heute frueh" war. */
+  const ORT = [50.6965, 13.5057]; // Talsperre Rauschenbach, wo der Bug live auffiel
+
+  test('gibt für denselben Kalendertag dieselbe Transitzeit, egal zu welcher Uhrzeit man fragt', () => {
+    const mittags = app.moonTimes(...ORT, new Date(Date.UTC(2026, 6, 18, 12)));
+    const abends = app.moonTimes(...ORT, new Date(Date.UTC(2026, 6, 18, 21, 53)));
+    const fruehMorgens = app.moonTimes(...ORT, new Date(Date.UTC(2026, 6, 18, 1, 0)));
+    assert.equal(mittags.transit.getTime(), abends.transit.getTime(),
+      `Transit driftet: ${mittags.transit.toISOString()} vs ${abends.transit.toISOString()}`);
+    assert.equal(mittags.antitransit.getTime(), abends.antitransit.getTime(),
+      `Gegentransit driftet: ${mittags.antitransit.toISOString()} vs ${abends.antitransit.toISOString()}`);
+    assert.equal(mittags.transit.getTime(), fruehMorgens.transit.getTime());
+    assert.equal(mittags.antitransit.getTime(), fruehMorgens.antitransit.getTime());
+  });
+
+  test('solunar() liefert für "heute" dieselben Major-Fenster, egal zu welcher Uhrzeit man es abfragt', () => {
+    const winMittags = app.solunar(...ORT, new Date(Date.UTC(2026, 6, 18, 12)))
+      .filter((w) => w.type === 'major').map((w) => w.from.getTime() + '-' + w.to.getTime());
+    const winSpaetAbends = app.solunar(...ORT, new Date(Date.UTC(2026, 6, 18, 23, 30)))
+      .filter((w) => w.type === 'major').map((w) => w.from.getTime() + '-' + w.to.getTime());
+    assert.deepEqual(winSpaetAbends.sort(), winMittags.sort(),
+      'Major-Fenster sollten für denselben Kalendertag stabil sein, unabhängig von der Abfragezeit');
+  });
+});

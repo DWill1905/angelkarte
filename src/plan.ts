@@ -664,7 +664,12 @@ export function tagesplan(offset: number, jetzt: Date = new Date()): Stopp[] {
   if (!spots.length) return [];
   const tag = tagDatum(offset, jetzt);
   const c = spots[0];
-  const fenster = solunar(c.lat, c.lng, tag);
+  /* Für "heute" (offset 0) nur noch kommende/laufende Fenster - ein Tagesplan, der am Abend
+     als "Stopp 1" ein Fenster von 01:26 Uhr vorschlaegt, das schon lange vorbei ist, waere
+     keine Handlungsempfehlung mehr, sondern nur verwirrend. An Folgetagen ist der komplette
+     Tag ohnehin noch "Zukunft", da ist nichts zu filtern. */
+  const fensterRoh = solunar(c.lat, c.lng, tag);
+  const fenster = offset === 0 ? fensterRoh.filter((f) => f.to > jetzt) : fensterRoh;
   if (!fenster.length) return [];
   const wt = state.PEGEL?.wt ?? state.WX?.wt ?? null;
 

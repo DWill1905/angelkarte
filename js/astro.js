@@ -70,7 +70,15 @@ export function mondStaerke(d) {
     `_lat` bleibt nur der Symmetrie zu sunTimes(lat, lng, date) wegen erhalten. */
 export function moonTimes(_lat, lng, date) {
     const rad = Math.PI / 180;
-    const d = (date - Date.UTC(2000, 0, 1, 12)) / 864e5; /* Tage seit J2000 */
+    /* Bug: `d` wurde bisher aus der vollen Uhrzeit von `date` berechnet, nicht nur dem
+       Kalendertag - dieselbe "Mond-Tiefststand"-Anfrage lieferte je nach Tageszeit des
+       Aufrufs unterschiedliche (teils auf den Folgetag verschobene) Transitzeiten, weil
+       die Mondposition zu einem anderen Zeitpunkt abgetastet wurde, `base` (Tagesanker)
+       aber gleich blieb. Erst auf Mittag UTC des Kalendertags normalisieren, dann erst
+       Mondlaenge/Rektaszension/Sternzeit daraus ableiten - macht das Ergebnis stabil
+       unabhaengig davon, um welche Uhrzeit man "heute" abfragt. */
+    const anker = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 12);
+    const d = (anker - Date.UTC(2000, 0, 1, 12)) / 864e5; /* Tage seit J2000 */
     /* Mondlänge (vereinfachte Meeus-Näherung, für Transit-Zeitpunkt ausreichend) */
     const L = (218.316 + 13.176396 * d) % 360;
     const Mm = (134.963 + 13.064993 * d) % 360;

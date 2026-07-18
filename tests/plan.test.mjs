@@ -222,6 +222,35 @@ describe('Tagesplan über gemerkte Spots', () => {
     app.state.trip = [{ region: 'mainz', name: sperr.name, notiz: '' }];
     assert.equal(app.tagesplan(0).length, 0, 'Sperrzone darf nicht im Tagesplan landen');
   });
+
+  test('für "heute" werden bereits vergangene Fenster nicht mehr vorgeschlagen', async () => {
+    /* Bug: am Abend zeigte "Stopp 1" teils ein Fenster von z.B. 01:26 Uhr - laengst vorbei,
+       aber trotzdem an erster Stelle einer angeblichen Handlungsempfehlung fuer "heute". */
+    await loadRegion(ctx, 'mainz');
+    app.state.WX = { temp: 20, wind: 8, dirDeg: 200, dir: 'SW', press: 1015, trendVal: -1, code: 3 };
+    app.state.PEGEL = { value: 250, station: 'X', dist: 3, wt: 18 };
+    const drei = app.state.SPOTS.filter((s) => s.cat !== 'sperr' && s.cat !== 'info' && !s.my && (s.arten || []).length).slice(0, 3);
+    app.state.trip = drei.map((s) => ({ region: 'mainz', name: s.name, notiz: '' }));
+
+    const spaetAmAbend = new Date(); spaetAmAbend.setHours(22, 30, 0, 0);
+    const plan = app.tagesplan(0, spaetAmAbend);
+    plan.forEach((s) => {
+      assert.ok(s.bis > spaetAmAbend,
+        `Stopp mit bereits abgelaufenem Fenster (${s.von.toISOString()}–${s.bis.toISOString()}) wäre um ${spaetAmAbend.toISOString()} keine Handlungsempfehlung mehr`);
+    });
+  });
+
+  test('an Folgetagen wird nichts gefiltert - der ganze Tag ist ohnehin Zukunft', async () => {
+    await loadRegion(ctx, 'mainz');
+    app.state.WX = { temp: 20, wind: 8, dirDeg: 200, dir: 'SW', press: 1015, trendVal: -1, code: 3 };
+    app.state.PEGEL = { value: 250, station: 'X', dist: 3, wt: 18 };
+    const drei = app.state.SPOTS.filter((s) => s.cat !== 'sperr' && s.cat !== 'info' && !s.my && (s.arten || []).length).slice(0, 3);
+    app.state.trip = drei.map((s) => ({ region: 'mainz', name: s.name, notiz: '' }));
+
+    const spaetAmAbend = new Date(); spaetAmAbend.setHours(23, 0, 0, 0);
+    const planMorgen = app.tagesplan(1, spaetAmAbend);
+    assert.ok(planMorgen.length > 0, 'Folgetag sollte trotz später Uhrzeit heute nicht leer sein - der Tag liegt komplett in der Zukunft');
+  });
 });
 
 describe('Tages-Blätterer', () => {

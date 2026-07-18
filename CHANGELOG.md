@@ -1,5 +1,29 @@
 # Changelog
 
+## SW v120 – 2026-07-18
+
+### Fixed
+- **Mond-Transitzeiten wanderten je nach Tageszeit des Aufrufs auf einen anderen Tag.**
+  Beim Testen des Tagesplans am Abend fiel auf: „Stopp 1" schlug ein Fenster von z. B.
+  06:27 Uhr vor – wirkte wie ein längst verpasstes Fenster von heute früh, war aber in
+  Wahrheit ein falsch datiertes Fenster, weil `moonTimes()` (`astro.ts`) die Mondposition
+  aus dem **vollen Zeitstempel** von `date` berechnete statt nur dessen Kalendertag. Dieselbe
+  Abfrage für „heute" lieferte je nachdem, ob man sie morgens oder abends stellte,
+  unterschiedliche – teils auf den Folgetag verschobene – Transit-/Gegentransitzeiten
+  (Mond-Höchststand/-Tiefststand), obwohl der Sonnenanteil der Fenster stabil blieb.
+  `moonTimes()` normalisiert `date` jetzt zuerst auf Mittag UTC des Kalendertags, bevor
+  daraus Mondlänge/Rektaszension/Sternzeit abgeleitet werden – stabil unabhängig von der
+  Abfragezeit. Betraf potenziell jede Stelle, die „heute" ohne Mittags-Anker abfragt
+  (Tagesplan, Planer, Beißzeiten heute); die Wochen-Vorschau war durch ihren eigenen
+  Mittags-Anker bereits zufällig verschont.
+- **Tagesplan konnte bereits abgelaufene Fenster für „heute" vorschlagen.** Zusätzlich zum
+  Datierungsfehler oben: `tagesplan()` filterte Solunar-Fenster nicht danach, ob sie schon
+  vorbei sind – ein Fenster von heute früh landete am Abend weiterhin als „Stopp 1" einer
+  angeblichen Handlungsempfehlung. Für „heute" werden jetzt nur noch Fenster berücksichtigt,
+  die noch laufen oder erst noch kommen; an Folgetagen wird nichts gefiltert (der ganze Tag
+  ist ohnehin Zukunft). Vier neue Tests insgesamt (zwei direkt an `moonTimes()`/`solunar()`,
+  zwei am Tagesplan).
+
 ## SW v119 – 2026-07-18
 
 ### Added

@@ -46,7 +46,7 @@ import { empfehlung, kandidaten, openPlan, zielfischFor, startzeitFor, peilung, 
 import { bewerteSpot, bewerteAlle, sterneAus, sterneText } from './rating.js';
 import { jahreszeit } from './saison.js';
 import { saison } from './tackle.js';
-import { daysUntilMD, fmtDate, fmtMD, haversine, inSchonzeit, inWindow, masseAus, mondStaerke, solunar, sunTimes } from './astro.js';
+import { daysUntilMD, fmtDate, fmtMD, haversine, inSchonzeit, inWindow, masseAus, mondStaerke, moonTimes, solunar, sunTimes } from './astro.js';
 import { wtSchaetzung, loadWeather } from './weather.js';
 window.__app = { state, popupHtml, mapsLink, spotVisible, sperrWarnung, locApply, cacheViewport, openOffline,
   fbInsights, fbModellCheck, fbRestore, parseFangDatum, beissfensterJetzt, fbRender, fbSortiert, fbCsv, checkFang, fangTeilenText,
@@ -57,7 +57,7 @@ window.__app = { state, popupHtml, mapsLink, spotVisible, sperrWarnung, locApply
   peilung, himmelsrichtung, winkelDiff, istAuflandig,
   bewerteSpot, bewerteAlle, sterneAus, sterneText, jahreszeit, saison, computeScore, tagesScore,
   ladeNotiz, speichereNotiz, checkErlaubnisAblauf, openPack, wochenIcs,
-  inWindow, inSchonzeit, daysUntilMD, masseAus, fmtMD, fmtDate, solunar, haversine, sunTimes, mondStaerke,
+  inWindow, inSchonzeit, daysUntilMD, masseAus, fmtMD, fmtDate, solunar, haversine, sunTimes, mondStaerke, moonTimes,
   wtSchaetzung, loadWeather };
 `);
   try {
