@@ -4,6 +4,19 @@ Fachliche und technische Änderungen an der Angelkarte-App, neueste zuerst.
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.0.0/); SW-Version
 bezieht sich auf `angelkarte-shell-vN` in `sw.js`.
 
+## SW v98 – 2026-07-18
+
+### Fixed
+- **Eicher See fehlte ebenfalls die RLP-Frühjahrsschonzeit-Kennzeichnung.** Gleiche Ursache
+  wie v97, noch eindeutigerer Beleg: der Spot beschreibt sich im eigenen `note`-Feld wörtlich
+  als „direkte Rheinverbindung, dadurch Wels- und Zanderbestand" – exakt der Fall, den die
+  RLP-Quelle für die Kunstköder-/Aktivführungs-Sperre (15.4.–31.5.) nennt. Zander/Hecht/Wels
+  stehen in seinen Zielarten; ohne Flag hätte der Planer in diesem Fenster Kunstköder auf
+  diese Arten empfohlen. Flag ergänzt; data/*.json neu generiert. Andere Altrhein-Seen der
+  Region (Niederrheinsee Gimbsheim: „klarer Baggersee", Freizeit-/Badesee; Altrheinsee Eich:
+  keine eigene Verbindungsangabe) blieben bewusst unverändert – dort fehlt der textuelle Beleg
+  für eine offene Rheinverbindung.
+
 ## SW v97 – 2026-07-18
 
 ### Fixed

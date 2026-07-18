@@ -473,7 +473,7 @@ export const SPOTS_RLP: Spot[] = [
    hotspots:[
      {name:'Treburer Buhnenfeld (km 487–493)',saison:'Jun–Okt bei Normalpegel',lat:49.9550,lng:8.3250,tipp:'6 km Buhnenfeld auf der Nonnenaue – Fahrrad mitnehmen und Kilometer machen, die hinteren Buhnen sehen kaum Angler. Lage ungefähr, hessischer Schein nötig.'}
    ],warn:true},
-  {name:'Eicher See',wasser:'see-tief',zugang:'ufer',nr:'Anglervereinigung Worms',cat:'raub',
+  {name:'Eicher See',rlpFruehjahr:true,wasser:'see-tief',zugang:'ufer',nr:'Anglervereinigung Worms',cat:'raub',
    schonzeitInfo:'Vereinsbestimmungen der AVW gelten zusätzlich zur FischGDV – Karte genau lesen.',
    arten:['Zander','Hecht','Wels','Barsch','Karpfen','Schleie','Aal','Brachse'],
    lat:49.7646,lng:8.4290,
