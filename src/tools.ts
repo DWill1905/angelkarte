@@ -290,6 +290,25 @@ function wxDesc(code){
   if(code>=95) return {t:'Gewitter',e:'⛈'};
   return {t:'wechselhaft',e:'🌥'};
 }
+/** Tagesscore für den Wochen-Ausblick: transparent, additiv, nutzt nur bereits geladene
+    Daten (keine weiteren Anfragen). Gewichte offen im Code, wie überall sonst in der App.
+    Sturm ist ein Ausschlusskriterium (wie in rating.ts/computeScore), kein bloßer Abzug. */
+export function tagesScore(day, wx, idx){
+  let punkte=0; const gruende=[];
+  if(day.majors.length){ punkte+=2; gruende.push(day.majors.length>1?day.majors.length+' Major-Fenster':'Major-Fenster'); }
+  const ms=mondStaerke(day.date.getTime());
+  if(ms>0.6){ punkte+=1; gruende.push('Neu-/Vollmond verstärkt'); }
+  /* Drucktrend am staerksten Major-Fenster des Tages – dieselbe Herleitung wie im
+     Beisszeiten-Werkzeug (renderBite): trendVal <= -1.0 gilt dort als "verstaerkt". */
+  const mid=day.majors[0];
+  const wxTag=mid?wxAt(new Date((mid.from.getTime()+mid.to.getTime())/2)):null;
+  if(wxTag&&typeof wxTag.trendVal==='number'&&wxTag.trendVal<=-1.0){ punkte+=1.5; gruende.push('fallender Luftdruck'); }
+  let sturm=false;
+  const windMax=wx&&wx.wind_speed_10m_max?wx.wind_speed_10m_max[idx]:null;
+  if(windMax!=null&&windMax>=35){ sturm=true; punkte=Math.min(punkte,0.5); gruende.length=0; gruende.push('Sturm angesagt ('+Math.round(windMax)+' km/h)'); }
+  return {punkte,gruende,sturm};
+}
+
 export const foreDlg=byId('foreDlg');
 export async function openForecast(){
   const c=regionCenter();
@@ -313,10 +332,27 @@ export async function openForecast(){
     const r=await fetch(u); if(r.ok){ const j=await r.json(); if(j.daily&&j.daily.time) wx=j.daily; }
   }catch(e){}
   const WD=['So','Mo','Di','Mi','Do','Fr','Sa'];
+  /* Score je Tag – nur zum Ranking, nie als eigene Zahl angezeigt (sonst zwei Prozentwerte
+     fuer dieselbe Sache, wie beim Planer schon vermieden). */
+  const scores=days.map((day,i)=>tagesScore(day,wx,i));
+  /* Sturmtage sind kein Kandidat fuer "bester Tag" (Ausschluss, kein Abzug - wie ueberall
+     sonst in der App). Sind ausnahmslos alle 7 Tage Sturm, gibt es ehrlich keinen besten Tag. */
+  const offeneTage=scores.map((_,i)=>i).filter(i=>!scores[i].sturm);
+  const bestIdx=offeneTage.length
+    ? offeneTage.reduce((best,i)=>scores[i].punkte>scores[best].punkte?i:best,offeneTage[0])
+    : -1;
+  const beste=bestIdx>=0?scores[bestIdx]:null;
+
   let h='<p style="color:var(--muted);margin-bottom:10px">7-Tage-Ausblick für '+(state.REGION?esc(state.REGION.kurz||state.REGION.name):'aktuelle Region')
     +'. <b>Major-Fenster</b> (Mond hoch/tief) sind die stärksten Beißzeiten.'+(wx?'':' <span style="color:var(--warn)">Wetter offline nicht verfügbar – nur Solunar.</span>')+'</p>';
+  if(beste&&beste.punkte>0&&beste.gruende.length){
+    h+='<div style="padding:8px 10px;margin-bottom:10px;border-radius:8px;background:rgba(240,193,75,.12);border:1px solid rgba(240,193,75,.35)">'
+      +'🏆 <b>Bester Tag: '+WD[days[bestIdx].date.getDay()]+' '+esc(fmtDate(days[bestIdx].date))+'</b>'
+      +' – '+esc(beste.gruende.join(', '))+'</div>';
+  }
   days.forEach((day,i)=>{
     const isToday=i===0;
+    const istBester=i===bestIdx&&beste&&beste.punkte>0;
     let wxCell='';
     if(wx){
       const wd=wxDesc(wx.weather_code?wx.weather_code[i]:null);
@@ -334,10 +370,11 @@ export async function openForecast(){
       +'<div style="display:flex;align-items:baseline;gap:8px">'
       +'<b style="min-width:74px">'+WD[day.date.getDay()]+' '+fmtDate(day.date)+(isToday?' <span style="color:var(--dusk)">heute</span>':'')+'</b>'
       +'<span style="font-family:\'Space Mono\',monospace;font-size:12px">'+winStr+'</span>'
+      +(istBester?'<span style="margin-left:6px">🏆</span>':'')
       +'<span style="margin-left:auto">'+day.mond.split(' ')[0]+'</span>'
       +'</div>'+wxCell+'</div>';
   });
-  h+='<p style="color:var(--muted);margin-top:10px;font-size:11px">Solunar-Fenster sind astronomisch berechnet (offline verfügbar). Wetter von Open-Meteo. Näherungswerte – Wasserstand, Front-Durchgang und eigene Beobachtung schlagen jede Vorhersage.</p>';
+  h+='<p style="color:var(--muted);margin-top:10px;font-size:11px">Solunar-Fenster sind astronomisch berechnet (offline verfügbar). "Bester Tag" ist ein Modellwert aus Major-Fenstern, Mondphase und Luftdrucktrend (Gewichte offen im Quelltext) – Wasserstand, Front-Durchgang und eigene Beobachtung schlagen jede Vorhersage.</p>';
   body.innerHTML=h;
 }
 byId('foreClose').onclick=()=>{foreDlg.hidden=true;};

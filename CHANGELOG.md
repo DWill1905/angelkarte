@@ -1,5 +1,19 @@
 # Changelog
 
+## SW v102 – 2026-07-18
+
+### Added
+- **„Bester Tag" im 7-Tage-Ausblick.** Der Wochen-Ausblick (Werkzeuge → Wochenvorschau)
+  listete bisher nur alle 7 Tage nebeneinander – man musste selbst vergleichen. Jetzt wird
+  aus den ohnehin schon geladenen Daten (Solunar-Fenster, Mondstärke, Luftdrucktrend am
+  stärksten Major-Fenster, Windvorhersage) ein transparenter, additiver Tagesscore berechnet
+  (`tagesScore()`, Gewichte offen im Quelltext) und der beste Tag mit 🏆 und den konkreten
+  Gründen hervorgehoben ("Bester Tag: Mi 22.7. – Major-Fenster, fallender Luftdruck").
+  Sturmtage sind ein Ausschlusskriterium, kein Abzug (wie überall sonst im Modell) – an
+  ihnen wird nie als „bester Tag" geworben. Ohne Wetterdaten (offline) bleibt es ehrlich bei
+  reiner Solunar-Wertung, kein erfundener Druckbonus. Keine neue Netzwerkanfrage nötig – nutzt
+  ausschließlich Daten, die der Wochen-Ausblick ohnehin schon lädt. Vier neue Tests.
+
 Fachliche und technische Änderungen an der Angelkarte-App, neueste zuerst.
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.0.0/); SW-Version
 bezieht sich auf `angelkarte-shell-vN` in `sw.js`.
