@@ -434,13 +434,24 @@ export function checkFang() {
             msgs.push('Entnahme-Zähler heute: ' + n + '/3 (Hecht/Zander/Aal/Karpfen).');
     }
     if (state.REGION.id === 'erzgebirge' && fisch === 'Barsch') {
-        const n = state.fbMem.filter(e => e.datum === heute && e.entnommen && e.fisch === 'Barsch').length;
+        /* Regel hat zwei Teile (siehe Regeln-Tab): max. 10/Tag gesamt, davon max. 5 über 30 cm.
+           Vorher wurde nur die Gesamtzahl geprüft - ein Angler mit z.B. 6 Barschen über 30 cm
+           sah "6/10", obwohl die Teilquote schon gerissen war. */
+        const heuteBarsch = state.fbMem.filter(e => e.datum === heute && e.entnommen && e.fisch === 'Barsch');
+        const n = heuteBarsch.length;
+        const ueber30 = heuteBarsch.filter(e => { const l = parseInt(String(e.laenge), 10); return !isNaN(l) && l >= 30; }).length;
         if (n >= 10) {
             bad = true;
             msgs.push('⛔ Barsch-Tageslimit erreicht (' + n + '/10 entnommen).');
         }
         else
             msgs.push('Barsch-Entnahme heute: ' + n + '/10.');
+        if (ueber30 >= 5) {
+            bad = true;
+            msgs.push('⛔ Teilquote über 30 cm erreicht (' + ueber30 + '/5) – weitere nur unter 30 cm entnehmen.');
+        }
+        else if (ueber30 > 0)
+            msgs.push('Davon über 30 cm: ' + ueber30 + '/5.');
     }
     el.innerHTML = msgs.length ? '<div class="fbcheck ' + (bad ? 'bad' : 'ok') + '">' + msgs.map(esc).join('<br>') + '</div>' : '';
 }

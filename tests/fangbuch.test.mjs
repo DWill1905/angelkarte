@@ -77,6 +77,47 @@ describe('Automatischer Fang-Kontext', () => {
   });
 });
 
+describe('Regionale Tageslimits im Maßcheck', () => {
+  /** Wie fangEintragen, aber mit steuerbarem "entnommen" - der Standardhelfer lässt die
+      Checkbox unverändert, die Tageslimits zählen aber nur entnommene Fänge. */
+  async function entnommenEintragen(fisch, laenge) {
+    doc.querySelector('[data-view="fangbuch"]').click();
+    doc.getElementById('fbFisch').value = fisch;
+    doc.getElementById('fbLaenge').value = String(laenge);
+    doc.getElementById('fbEntnommen').checked = true;
+    const sp = doc.getElementById('fbSpot');
+    if (sp.options.length) sp.selectedIndex = 0;
+    await doc.getElementById('fbSave').onclick();
+    await tick(ctx.window, 40);
+  }
+
+  test('Erzgebirge Barsch: Teilquote über 30 cm greift, auch wenn das 10er-Gesamtlimit noch offen ist', async () => {
+    await loadRegion(ctx, 'erzgebirge');
+    for (let i = 0; i < 5; i++) await entnommenEintragen('Barsch', 32);
+    doc.getElementById('fbFisch').value = 'Barsch';
+    doc.getElementById('fbLaenge').value = '31';
+    app.checkFang();
+    const html = doc.getElementById('fbCheck').innerHTML;
+    assert.match(html, /Teilquote über 30 cm erreicht \(5\/5\)/, 'Teilquote wird nicht erkannt');
+    assert.match(html, /bad/, 'Hinweis muss als Verstoß (bad) markiert sein');
+    /* Gesamtlimit (10) ist mit 5 Faengen noch laengst nicht erreicht - die Sperre kommt
+       hier ausschliesslich aus der 30-cm-Teilquote. */
+    assert.doesNotMatch(html, /Barsch-Tageslimit erreicht/);
+  });
+
+  test('Erzgebirge Barsch: unter der Teilquote bleibt es ein reiner Zähler', async () => {
+    await loadRegion(ctx, 'erzgebirge');
+    for (let i = 0; i < 3; i++) await entnommenEintragen('Barsch', 32);
+    await entnommenEintragen('Barsch', 22);
+    doc.getElementById('fbFisch').value = 'Barsch';
+    doc.getElementById('fbLaenge').value = '20';
+    app.checkFang();
+    const html = doc.getElementById('fbCheck').innerHTML;
+    assert.match(html, /Davon über 30 cm: 3\/5/);
+    assert.doesNotMatch(html, /Teilquote über 30 cm erreicht/);
+  });
+});
+
 describe('parseFangDatum – beide Formate', () => {
   test('deutsches Format (so wird gespeichert)', () => {
     const d = app.parseFangDatum('9.7.2026');

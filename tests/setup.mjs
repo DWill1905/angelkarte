@@ -34,7 +34,7 @@ export function buildBundle() {
 import './app.js';
 import { state } from './state.js';
 import { popupHtml, mapsLink, spotVisible, sperrWarnung, locApply } from './map.js';
-import { fbInsights, fbModellCheck, fbRestore, parseFangDatum, beissfensterJetzt, fbRender, fbSortiert, fbCsv } from './fangbuch.js';
+import { fbInsights, fbModellCheck, fbRestore, parseFangDatum, beissfensterJetzt, fbRender, fbSortiert, fbCsv, checkFang } from './fangbuch.js';
 import { toggleTrip, inTrip, openTrip, tripReady } from './trip.js';
 import { schilfLaden, schilfAus, schilfAktiv } from './reed.js';
 import { computeScore } from './tools.js';
@@ -47,7 +47,7 @@ import { saison } from './tackle.js';
 import { daysUntilMD, fmtDate, fmtMD, haversine, inSchonzeit, inWindow, masseAus, solunar, sunTimes } from './astro.js';
 import { wtSchaetzung, loadWeather } from './weather.js';
 window.__app = { state, popupHtml, mapsLink, spotVisible, sperrWarnung, locApply,
-  fbInsights, fbModellCheck, fbRestore, parseFangDatum, beissfensterJetzt, fbRender, fbSortiert, fbCsv,
+  fbInsights, fbModellCheck, fbRestore, parseFangDatum, beissfensterJetzt, fbRender, fbSortiert, fbCsv, checkFang,
   toggleTrip, inTrip, openTrip, tripReady, schilfLaden, schilfAus, schilfAktiv,
   fullscreenToggle, fullscreenAktiv, setzeSicht, aktuelleSicht, ladeSicht, sichtReady,
   empfehlung, kandidaten, openPlan, zielfischFor, startzeitFor, tagDatum, tagLabel, bewertZeit, tagesplan, MAX_TAG,
