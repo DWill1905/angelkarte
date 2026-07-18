@@ -213,13 +213,73 @@ export async function packState() { try {
 catch (e) {
     return {};
 } }
+/* ===== Erlaubnisschein-Ablauf: Datum lokal merken, rechtzeitig warnen =====
+   Viele Erlaubnisscheine/Jahreskarten laufen jährlich ab – leicht zu vergessen, bis man
+   ohne gültigen Schein am Wasser steht. Freiwillige Angabe, nichts wird erfunden: ohne
+   gesetztes Datum bleibt die Warnung schlicht aus. */
+async function erlaubnisDatum() {
+    if (!state.REGION)
+        return '';
+    try {
+        return (await store.get('erlaubnis:' + state.REGION.id)).value || '';
+    }
+    catch (e) {
+        return '';
+    }
+}
+async function setErlaubnisDatum(v) {
+    if (!state.REGION)
+        return;
+    try {
+        await store.set('erlaubnis:' + state.REGION.id, v);
+    }
+    catch (e) { }
+}
+/** Vergleicht das gespeicherte Ablaufdatum mit heute (Tagesbasis, Mitternacht - "heute"
+    gilt noch nicht als abgelaufen) und zeigt/versteckt die Kopfwarnung entsprechend. */
+export async function checkErlaubnisAblauf() {
+    const warn = byId('erlaubnisWarn');
+    if (!warn || !state.REGION)
+        return;
+    const iso = await erlaubnisDatum();
+    if (!iso) {
+        warn.classList.remove('show');
+        warn.innerHTML = '';
+        return;
+    }
+    const ablauf = new Date(iso + 'T00:00:00');
+    if (isNaN(ablauf.getTime())) {
+        warn.classList.remove('show');
+        warn.innerHTML = '';
+        return;
+    }
+    const heute = new Date();
+    heute.setHours(0, 0, 0, 0);
+    const tage = Math.round((ablauf.getTime() - heute.getTime()) / 86400000);
+    const dtxt = ablauf.toLocaleDateString('de-DE');
+    if (tage < 0) {
+        warn.innerHTML = '⛔ Erlaubnisschein seit ' + dtxt + ' abgelaufen – vor dem nächsten Trip erneuern!';
+        warn.classList.add('show');
+    }
+    else if (tage <= 14) {
+        warn.innerHTML = '⚠ Erlaubnisschein läuft am ' + dtxt + ' ab (' + tage + (tage === 1 ? ' Tag' : ' Tage') + ') – bald erneuern.';
+        warn.classList.add('show');
+    }
+    else {
+        warn.classList.remove('show');
+        warn.innerHTML = '';
+    }
+}
 export async function openPack() {
     if (!state.REGION) {
         return;
     }
     const items = state.REGION.packliste || [];
     const checked = await packState();
+    const erlDatum = await erlaubnisDatum();
     let h = '<p style="color:var(--muted);margin-bottom:10px">Für ' + esc(state.REGION.kurz || state.REGION.name) + ' – Haken bleiben gespeichert.</p>';
+    h += '<label class="fbentn" style="margin:5px 0 12px;display:flex;align-items:center;gap:8px"><span>📅 Erlaubnisschein gültig bis</span>'
+        + '<input type="date" id="packErlDatum" value="' + esc(erlDatum) + '" style="font:inherit;padding:3px 6px;border-radius:6px;border:1px solid var(--line);background:var(--panel-2);color:inherit"></label>';
     items.forEach((it, i) => {
         h += '<label class="fbentn" style="margin:5px 0"><input type="checkbox" data-pi="' + i + '"' + (checked[i] ? ' checked' : '') + '> <span>' + it + '</span></label>';
     });
@@ -234,6 +294,9 @@ export async function openPack() {
             catch (e) { }
         };
     });
+    const erlEl = byId('packErlDatum');
+    if (erlEl)
+        erlEl.onchange = async () => { await setErlaubnisDatum(erlEl.value); await checkErlaubnisAblauf(); };
     packDlg.hidden = false;
 }
 byId('packClose').onclick = () => { packDlg.hidden = true; };

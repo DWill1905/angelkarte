@@ -164,7 +164,7 @@
 
   /* --- Einfache Sicht: Vertiefungen ausblenden ---
      NIEMALS ausgeblendet: .pop-note/.pop-warn (Warnungen), Erlaubnis-Zeile, .pop-links,
-     .rate-mass (Maß/Entnahmefenster), #sperrWarn, #stormWarn. Das ist die Grenze. */
+     .rate-mass (Maß/Entnahmefenster), #sperrWarn, #stormWarn, #erlaubnisWarn. Das ist die Grenze. */
   body.sicht-einfach .pop-details{display:none}
   body.sicht-einfach .tackle{display:none}
   body.sicht-einfach .rating .rate-art-block:not(:first-of-type){display:none}
@@ -630,6 +630,7 @@
 </div>
 
 <div class="banner" id="stormWarn" style="background:linear-gradient(90deg,#4a1614,#5a1e18);color:#ffd7cf;font-weight:600"></div>
+<div class="banner" id="erlaubnisWarn"></div>
 <div class="banner" id="swUpdate" style="background:#16323c"></div>
 <div class="banner" id="banner"></div>
 

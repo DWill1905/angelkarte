@@ -1,5 +1,17 @@
 # Changelog
 
+## SW v105 – 2026-07-18
+
+### Added
+- **Erlaubnisschein-Ablauf-Reminder.** Jahreskarten/Erlaubnisscheine laufen meist jährlich ab
+  – leicht zu vergessen, bis man ohne gültigen Schein am Wasser steht. Die Packliste (pro
+  Region, wo Haken schon lokal gespeichert werden) hat jetzt ein optionales Datumsfeld
+  „Erlaubnisschein gültig bis". Ist ein Datum gesetzt, prüft die App bei jedem Regionswechsel
+  automatisch dagegen und zeigt eine Kopfwarnung (wie Sturm-/Sperrzonen-Warnung): „läuft in
+  N Tagen ab" ab 14 Tagen vorher, „ist abgelaufen" danach – ohne gesetztes Datum bleibt sie
+  ehrlich aus, nichts wird erfunden. Immer sichtbar, auch in der Einfachen Sicht (rechtlich
+  relevant, keine Vertiefung). Fünf neue Tests.
+
 ## SW v104 – 2026-07-18
 
 ### Added

@@ -107,7 +107,7 @@ describe('Robustheit: kein Popup wirft, egal welcher Spot', () => {
 describe('Struktur: keine toten Verweise', () => {
   test('jede im Code angesprochene Element-ID existiert oder wird dynamisch erzeugt', () => {
     const vorhanden = new Set([...doc.querySelectorAll('[id]')].map((e) => e.id));
-    const dynamisch = new Set(['swReload', 'offProg', 'tripClear', 'tripRoute']); // per innerHTML erzeugt
+    const dynamisch = new Set(['swReload', 'offProg', 'tripClear', 'tripRoute', 'packErlDatum']); // per innerHTML erzeugt
     const quelltext = fs.readdirSync(path.join(ROOT, 'src'))
       .filter((f) => f.endsWith('.ts'))
       .map((f) => fs.readFileSync(path.join(ROOT, 'src', f), 'utf8'))

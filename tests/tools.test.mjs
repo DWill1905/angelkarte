@@ -9,8 +9,8 @@ import { test, describe, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { startApp, loadRegion } from './setup.mjs';
 
-let ctx, app;
-before(async () => { ctx = await startApp(); app = ctx.app; });
+let ctx, app, doc;
+before(async () => { ctx = await startApp(); app = ctx.app; doc = ctx.document; });
 after(() => ctx?.close());
 
 /** Baut einen Tag mit einem Major-Fenster genau "jetzt" (± 30 min), damit wxAt() aus
@@ -61,5 +61,61 @@ describe('tagesScore – Wochen-Ausblick', () => {
     assert.equal(s.punkte, 2 + mondBonus(day), 'nur Major-Fenster (+ evtl. Mondbonus), kein Druckbonus ohne Wetterdaten');
     assert.ok(s.gruende.includes('Major-Fenster'));
     assert.ok(!s.gruende.some((g) => /Luftdruck/.test(g)), 'ohne Wetter darf kein Druckgrund auftauchen');
+  });
+});
+
+/** Setzt das Erlaubnisschein-Datum über den echten Formularpfad (Packliste-Dialog),
+    nicht direkt am Speicher vorbei - dieselbe Route wie ein Nutzer sie nimmt. */
+async function setzeErlaubnisDatum(offsetTage) {
+  await app.openPack();
+  const input = doc.getElementById('packErlDatum');
+  const d = new Date(); d.setDate(d.getDate() + offsetTage);
+  input.value = d.toISOString().slice(0, 10);
+  await input.onchange();
+  return d.toLocaleDateString('de-DE');
+}
+
+describe('Erlaubnisschein-Ablaufwarnung', () => {
+  test('ohne gesetztes Datum bleibt die Warnung aus', async () => {
+    await loadRegion(ctx, 'elbe');
+    await app.checkErlaubnisAblauf();
+    const el = doc.getElementById('erlaubnisWarn');
+    assert.ok(!el.classList.contains('show'));
+    assert.equal(el.innerHTML, '');
+  });
+
+  test('abgelaufenes Datum zeigt eine "abgelaufen"-Warnung', async () => {
+    await loadRegion(ctx, 'main');
+    const dtxt = await setzeErlaubnisDatum(-3);
+    const el = doc.getElementById('erlaubnisWarn');
+    assert.ok(el.classList.contains('show'));
+    assert.match(el.innerHTML, /abgelaufen/);
+    assert.ok(el.innerHTML.includes(dtxt));
+  });
+
+  test('Ablauf in 5 Tagen zeigt eine Vorwarnung (innerhalb 14 Tage)', async () => {
+    await loadRegion(ctx, 'mecklenburg');
+    const dtxt = await setzeErlaubnisDatum(5);
+    const el = doc.getElementById('erlaubnisWarn');
+    assert.ok(el.classList.contains('show'));
+    assert.match(el.innerHTML, /läuft am/);
+    assert.ok(el.innerHTML.includes(dtxt));
+  });
+
+  test('Ablauf in 60 Tagen: keine Warnung (weit genug weg)', async () => {
+    await loadRegion(ctx, 'giessen');
+    await setzeErlaubnisDatum(60);
+    const el = doc.getElementById('erlaubnisWarn');
+    assert.ok(!el.classList.contains('show'));
+  });
+
+  test('Datum bleibt beim erneuten Öffnen der Packliste erhalten', async () => {
+    await loadRegion(ctx, 'mainz');
+    await app.openPack();
+    const input = doc.getElementById('packErlDatum');
+    input.value = '2027-03-01';
+    await input.onchange();
+    await app.openPack();
+    assert.equal(doc.getElementById('packErlDatum').value, '2027-03-01');
   });
 });

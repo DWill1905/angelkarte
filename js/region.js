@@ -9,6 +9,7 @@ import { buildRegeln, buildSchonUI } from './regeln.js';
 import { buildBanner, buildSaisonBar, sunLine } from './ui.js';
 import { schilfAus } from './reed.js';
 import { loadWeather } from './weather.js';
+import { checkErlaubnisAblauf } from './tools.js';
 export async function initRegions() {
     try {
         const idx = await (await fetch('data/regionen.json', { cache: 'no-cache' })).json();
@@ -74,6 +75,7 @@ export async function loadRegion(r) {
     syncFishChips();
     applyFilters();
     sperrWarnung(); /* Warnung für die neue Region neu bewerten */
+    checkErlaubnisAblauf(); /* Erlaubnisschein-Ablaufwarnung für die neue Region neu bewerten */
     schilfAus(); /* Schilfflächen der alten Region entfernen – sie liegen sonst über der neuen Karte */
     buildSaisonBar();
     const pts = state.SPOTS.map(sp => [sp.lat, sp.lng]);
