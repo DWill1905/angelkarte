@@ -8,5 +8,6 @@ interface Window {
   /* Popup-Buttons rufen diese global auf (inline onclick im HTML) */
   prefillFang: (spotName: string) => void;
   delMySpot: (id: number) => Promise<void>;
+  editMySpot: (id: number) => Promise<void>;
   toggleTripSpot: (name: string) => Promise<void>;
 }

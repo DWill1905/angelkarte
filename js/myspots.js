@@ -3,6 +3,9 @@ import { state, store } from './state.js';
 import { applyFilters, buildChips, buildMarkers } from './map.js';
 import { esc } from './util.js';
 export var myPending = null;
+/** Wird beim Bearbeiten eines bestehenden eigenen Spots gesetzt (myId), sonst null -
+    steuert in saveMySpot(), ob ein neuer Eintrag angelegt oder ein bestehender aktualisiert wird. */
+export var myEditId = null;
 export const myDlg = byId('myDlg');
 export async function loadMySpots(rid) {
     try {
@@ -20,22 +23,70 @@ export function mySpotObj(m) {
         fisch: m.tiefe ? (m.tiefe + ' m tief') : '–', methode: '–', karte: 'Eigener Spot (nur auf diesem Gerät gespeichert)',
         note: esc(m.tipp || 'Keine Notiz.') + (m.tiefe ? ' · 📏 ' + m.tiefe + ' m' : ''), warn: false, my: true, myId: m.id };
 }
-export function openMyDlg() { inputById('myName').value = ''; inputById('myTipp').value = ''; inputById('myTiefe').value = ''; myDlg.hidden = false; inputById('myName').focus(); }
-export function closeMyDlg() { myDlg.hidden = true; myPending = null; }
-export async function saveMySpot() {
-    if (!myPending || !state.REGION)
-        return closeMyDlg();
-    const m = { id: uid(),
-        name: inputById('myName').value.trim() || 'Eigener Spot',
-        tipp: inputById('myTipp').value.trim(),
-        tiefe: (() => { const t = parseFloat(inputById('myTiefe').value); return (!isNaN(t) && t > 0 && t <= 80) ? t : null; })(),
-        lat: myPending[0], lng: myPending[1] };
+export function openMyDlg() {
+    myEditId = null;
+    byId('myDlgTitle').textContent = 'Eigenen Spot speichern';
+    byId('myDlgTipp').hidden = false;
+    inputById('myName').value = '';
+    inputById('myTipp').value = '';
+    inputById('myTiefe').value = '';
+    myDlg.hidden = false;
+    inputById('myName').focus();
+}
+/** Oeffnet denselben Dialog vorbefuellt zum Bearbeiten - vorher liess sich ein eigener Spot
+    nur loeschen und komplett neu anlegen, ein Tippfehler im Namen war nicht korrigierbar,
+    ohne die Koordinate erneut per Long-Press/Rechtsklick zu treffen. */
+window.editMySpot = async function (id) {
+    if (!state.REGION)
+        return;
     const list = await loadMySpots(state.REGION.id);
-    list.push(m);
+    const m = list.find(x => x.id === id);
+    if (!m)
+        return;
+    myEditId = id;
+    myPending = null;
+    byId('myDlgTitle').textContent = 'Eigenen Spot bearbeiten';
+    byId('myDlgTipp').hidden = true;
+    inputById('myName').value = m.name || '';
+    inputById('myTipp').value = m.tipp || '';
+    inputById('myTiefe').value = m.tiefe != null ? String(m.tiefe) : '';
+    myDlg.hidden = false;
+    inputById('myName').focus();
+};
+export function closeMyDlg() { myDlg.hidden = true; myPending = null; myEditId = null; }
+export async function saveMySpot() {
+    if (!state.REGION || (!myPending && myEditId == null))
+        return closeMyDlg();
+    const name = inputById('myName').value.trim() || 'Eigener Spot';
+    const tipp = inputById('myTipp').value.trim();
+    const tiefe = (() => { const t = parseFloat(inputById('myTiefe').value); return (!isNaN(t) && t > 0 && t <= 80) ? t : null; })();
+    const list = await loadMySpots(state.REGION.id);
+    let m, editId = myEditId;
+    if (editId != null) {
+        m = list.find(x => x.id === editId);
+        if (!m)
+            return closeMyDlg();
+        m.name = name;
+        m.tipp = tipp;
+        m.tiefe = tiefe;
+    }
+    else {
+        m = { id: uid(), name, tipp, tiefe, lat: myPending[0], lng: myPending[1] };
+        list.push(m);
+    }
     try {
         await store.set('myspots:' + state.REGION.id, JSON.stringify(list));
     }
     catch { }
+    if (editId != null) {
+        const i = state.SPOTS.findIndex(sp => sp.myId === editId);
+        if (i > -1) {
+            const old = state.SPOTS[i];
+            if (old.marker && state.map.hasLayer(old.marker))
+                state.map.removeLayer(old.marker);
+            state.SPOTS.splice(i, 1);
+        }
+    }
     state.SPOTS.push(mySpotObj(m));
     buildMarkers();
     buildChips();

@@ -36,6 +36,7 @@ import { state } from './state.js';
 import { popupHtml, mapsLink, spotVisible, sperrWarnung, locApply, cacheViewport, openOffline } from './map.js';
 import { fbInsights, fbModellCheck, fbRestore, parseFangDatum, beissfensterJetzt, fbRender, fbSortiert, fbCsv, checkFang, fangTeilenText } from './fangbuch.js';
 import { toggleTrip, inTrip, openTrip, tripReady } from './trip.js';
+import { openMyDlg, closeMyDlg, saveMySpot, loadMySpots } from './myspots.js';
 import { schilfLaden, schilfAus, schilfAktiv } from './reed.js';
 import { computeScore, tagesScore, checkErlaubnisAblauf, openPack, wochenIcs } from './tools.js';
 import { ladeNotiz, speichereNotiz } from './notiz.js';
@@ -50,6 +51,7 @@ import { wtSchaetzung, loadWeather } from './weather.js';
 window.__app = { state, popupHtml, mapsLink, spotVisible, sperrWarnung, locApply, cacheViewport, openOffline,
   fbInsights, fbModellCheck, fbRestore, parseFangDatum, beissfensterJetzt, fbRender, fbSortiert, fbCsv, checkFang, fangTeilenText,
   toggleTrip, inTrip, openTrip, tripReady, schilfLaden, schilfAus, schilfAktiv,
+  openMyDlg, closeMyDlg, saveMySpot, loadMySpots,
   fullscreenToggle, fullscreenAktiv, setzeSicht, aktuelleSicht, ladeSicht, sichtReady,
   empfehlung, kandidaten, openPlan, zielfischFor, startzeitFor, tagDatum, tagLabel, bewertZeit, tagesplan, MAX_TAG,
   peilung, himmelsrichtung, winkelDiff, istAuflandig,

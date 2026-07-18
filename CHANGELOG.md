@@ -1,5 +1,17 @@
 # Changelog
 
+## SW v119 – 2026-07-18
+
+### Added
+- **Eigene Spots lassen sich jetzt bearbeiten.** Beim Weitersuchen nach Verbesserungen
+  aufgefallen: ein eigener Spot (Long-Press/Rechtsklick) ließ sich bisher nur löschen und
+  komplett neu anlegen – ein Tippfehler im Namen oder eine veraltete Notiz war nicht
+  korrigierbar, ohne die Koordinate erneut zu treffen. Neuer „Bearbeiten"-Button im Popup
+  (neben „Löschen") öffnet denselben Dialog vorbefüllt mit Name/Tiefe/Notiz; der irreführende
+  Long-Press-Tipp bleibt dabei ausgeblendet. Speichern aktualisiert den bestehenden Eintrag
+  (gleiche ID, gleiche Koordinate) statt einen zweiten anzulegen. Drei neue Tests
+  (`tests/myspots.test.mjs`, neue Datei).
+
 ## SW v118 – 2026-07-18
 
 ### Fixed

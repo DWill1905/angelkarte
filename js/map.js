@@ -119,7 +119,7 @@ export function popupHtml(s) {
       <a class="pop-btn nav" href="${mapsLink(s)}" target="_blank" rel="noopener">Route</a>
       <button class="pop-btn log" onclick="prefillFang('${s.name.replace(/'/g, "\\'")}')">Fang loggen</button>
       ${s.cat !== 'sperr' && s.cat !== 'info' ? `<button class="pop-btn trip" data-spot="${esc(s.name)}" onclick="toggleTripSpot('${s.name.replace(/'/g, "\\'")}')">☆ Merken</button>` : ''}
-      ${s.my ? '<button class="pop-btn" style="background:#4a201a;color:#f0b6a8" onclick="delMySpot(' + s.myId + ')">Löschen</button>' : ''}
+      ${s.my ? '<button class="pop-btn" onclick="editMySpot(' + s.myId + ')">Bearbeiten</button><button class="pop-btn" style="background:#4a201a;color:#f0b6a8" onclick="delMySpot(' + s.myId + ')">Löschen</button>' : ''}
     </div>`;
 }
 Object.assign(state.active, Object.fromEntries(Object.keys(CATS).map(k => [k, true])));
