@@ -75,6 +75,50 @@ async function setzeErlaubnisDatum(offsetTage) {
   return d.toLocaleDateString('de-DE');
 }
 
+describe('wochenIcs – Kalender-Export der Wochen-Vorschau', () => {
+  test('ein Major-Fenster wird zu genau einem VEVENT mit passenden Zeiten', () => {
+    const from = new Date('2026-08-01T18:30:00Z');
+    const to = new Date('2026-08-01T19:30:00Z');
+    const days = [{ date: from, majors: [{ from, to, type: 'major', label: 'Mond-Höchststand' }] }];
+    const { ics, count } = app.wochenIcs(days, 'Erzgebirge');
+    assert.equal(count, 1);
+    assert.match(ics, /BEGIN:VCALENDAR/);
+    assert.match(ics, /BEGIN:VEVENT/);
+    assert.match(ics, /SUMMARY:.*Mond-Höchststand/);
+    assert.match(ics, /DTSTART:20260801T183000Z/);
+    assert.match(ics, /DTEND:20260801T193000Z/);
+    assert.match(ics, /LOCATION:Erzgebirge/);
+  });
+
+  test('mehrere Tage/Fenster ergeben ebenso viele VEVENTs, ohne Region bleibt LOCATION weg', () => {
+    const d1 = new Date('2026-08-01T05:00:00Z'), d2 = new Date('2026-08-01T06:00:00Z');
+    const d3 = new Date('2026-08-02T18:00:00Z'), d4 = new Date('2026-08-02T19:00:00Z');
+    const days = [
+      { date: d1, majors: [{ from: d1, to: d2, type: 'major', label: 'A' }] },
+      { date: d3, majors: [{ from: d3, to: d4, type: 'major', label: 'B' }] },
+    ];
+    const { ics, count } = app.wochenIcs(days);
+    assert.equal(count, 2);
+    assert.equal((ics.match(/BEGIN:VEVENT/g) || []).length, 2);
+    assert.ok(!ics.includes('LOCATION:'));
+  });
+
+  test('Tage ohne Major-Fenster erzeugen keine VEVENTs (count 0, gültiges leeres Kalendergerüst)', () => {
+    const { ics, count } = app.wochenIcs([{ date: new Date(), majors: [] }]);
+    assert.equal(count, 0);
+    assert.match(ics, /BEGIN:VCALENDAR/);
+    assert.match(ics, /END:VCALENDAR/);
+    assert.ok(!ics.includes('BEGIN:VEVENT'));
+  });
+
+  test('Sonderzeichen im Fenster-Label werden ICS-konform escaped (kein kaputtes Kalenderformat)', () => {
+    const from = new Date(), to = new Date(from.getTime() + 3600e3);
+    const days = [{ date: from, majors: [{ from, to, type: 'major', label: 'Sonnenuntergang, Zone; Test' }] }];
+    const { ics } = app.wochenIcs(days);
+    assert.match(ics, /Sonnenuntergang\\,\s*Zone\\;\s*Test/);
+  });
+});
+
 describe('Erlaubnisschein-Ablaufwarnung', () => {
   test('ohne gesetztes Datum bleibt die Warnung aus', async () => {
     await loadRegion(ctx, 'elbe');

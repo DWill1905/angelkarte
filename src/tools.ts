@@ -351,6 +351,39 @@ export function tagesScore(day, wx, idx){
   return {punkte,gruende,sturm};
 }
 
+/* ICS-Zeitstempel in UTC (kein TZID noetig - Date-Objekte kennen ihren absoluten Zeitpunkt
+   bereits, der Kalender des Nutzers rechnet selbst in die lokale Zeitzone um). */
+function icsDate(d: Date): string {
+  return d.toISOString().replace(/[-:]/g,'').split('.')[0]+'Z';
+}
+function icsEsc(s: string): string {
+  return String(s).replace(/\\/g,'\\\\').replace(/,/g,'\\,').replace(/;/g,'\\;').replace(/\n/g,'\\n');
+}
+/** Baut eine .ics-Datei aus den Major-Fenstern des 7-Tage-Ausblicks - nur echte, bereits
+    berechnete Solunar-Fenster, keine erfundenen Termine. Minor-Fenster bleiben aussen vor
+    (sonst ueberladen 4+ Termine/Tag den Kalender). */
+export function wochenIcs(days, regionName?: string){
+  const stamp=icsDate(new Date());
+  let ics='BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Angelkarte//Wochenvorschau//DE\r\nCALSCALE:GREGORIAN\r\n';
+  let n=0;
+  days.forEach(day=>{
+    day.majors.forEach(win=>{
+      n++;
+      ics+='BEGIN:VEVENT\r\n'
+        +'UID:angelkarte-'+win.from.getTime()+'-'+n+'@angelkarte\r\n'
+        +'DTSTAMP:'+stamp+'\r\n'
+        +'DTSTART:'+icsDate(win.from)+'\r\n'
+        +'DTEND:'+icsDate(win.to)+'\r\n'
+        +'SUMMARY:'+icsEsc('🎣 Major-Fenster: '+win.label)+'\r\n'
+        +(regionName?'LOCATION:'+icsEsc(regionName)+'\r\n':'')
+        +'DESCRIPTION:'+icsEsc('Beste Beisszeit laut Solunar-Berechnung der Angelkarte-App.')+'\r\n'
+        +'END:VEVENT\r\n';
+    });
+  });
+  ics+='END:VCALENDAR\r\n';
+  return {ics,count:n};
+}
+
 export const foreDlg=byId('foreDlg');
 export async function openForecast(){
   const c=regionCenter();
@@ -418,6 +451,21 @@ export async function openForecast(){
   });
   h+='<p style="color:var(--muted);margin-top:10px;font-size:11px">Solunar-Fenster sind astronomisch berechnet (offline verfügbar). "Bester Tag" ist ein Modellwert aus Major-Fenstern, Mondphase und Luftdrucktrend (Gewichte offen im Quelltext) – Wasserstand, Front-Durchgang und eigene Beobachtung schlagen jede Vorhersage.</p>';
   body.innerHTML=h;
+
+  /* Export nur anbieten, wenn es ueberhaupt Major-Fenster zum Exportieren gibt */
+  const icsBtn=byId('foreIcs');
+  const {ics,count}=wochenIcs(days, state.REGION?(state.REGION.kurz||state.REGION.name):undefined);
+  icsBtn.hidden=count===0;
+  if(count>0){
+    icsBtn.onclick=()=>{
+      const blob=new Blob([ics],{type:'text/calendar;charset=utf-8'});
+      const url=URL.createObjectURL(blob);
+      const a=document.createElement('a');
+      a.href=url; a.download='angelkarte-woche.ics';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    };
+  }
 }
 byId('foreClose').onclick=()=>{foreDlg.hidden=true;};
 foreDlg.addEventListener('click',e=>{if(e.target===foreDlg)foreDlg.hidden=true;});

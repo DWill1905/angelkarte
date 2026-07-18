@@ -1,5 +1,19 @@
 # Changelog
 
+## SW v107 – 2026-07-18
+
+### Added
+- **Wochen-Vorschau als Kalender exportieren.** Die Major-Fenster des 7-Tage-Ausblicks
+  (Werkzeuge → Wochenvorschau) ließen sich bisher nur in der App selbst ansehen – kein
+  Reminder, wenn man gerade nicht in der App ist. Neuer Button „Als Kalender exportieren"
+  baut aus genau den Daten, die der Ausblick ohnehin schon berechnet (`wochenIcs()`,
+  wiederverwendet `days`/`majors` aus `openForecast()`), eine Standard-`.ics`-Datei und
+  bietet sie als Download an – importierbar in Kalender-Apps (iOS/Android/Outlook/Google),
+  die dann zur richtigen Zeit erinnern. Nur echte Major-Fenster werden exportiert, Minor-
+  Fenster bleiben außen vor (sonst 4+ Termine/Tag). Ohne Fenster in der aktuellen Woche
+  bleibt der Button ganz weg statt eine leere Datei anzubieten – wie beim Teilen-Button
+  beim Fangbuch. Keine neue Netzwerkanfrage, keine neue Abhängigkeit. Vier neue Tests.
+
 ## SW v106 – 2026-07-18
 
 ### Added
