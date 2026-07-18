@@ -513,6 +513,36 @@ describe('Bug: Score meldete bei Sturm "50 % – mäßig"', () => {
   });
 });
 
+describe('Bug: "Heute passt es?" zeigte 100% bei nur 1 von 5 bekannten Faktoren', () => {
+  test('dünne Datenlage zieht den Wert zur Mitte - nie 0% oder 100%, wie schon in der Spotbewertung', async () => {
+    await loadRegion(ctx, 'elbe');
+    app.state.WX = null; app.state.PEGEL = null;
+    const r = app.computeScore();
+    assert.equal(r.knownCount, 1, 'in diesem Setup sollte nur das Beißfenster bekannt sein (Solunar braucht kein WX/PEGEL)');
+    assert.ok(r.konfidenz < 0.8, `Konfidenz sollte niedrig sein (1/5): ${r.konfidenz}`);
+    assert.ok(r.pct !== 0 && r.pct !== 100, `Extremwert trotz dünner Datenlage: ${r.pct} %`);
+    assert.ok(r.pct >= 15 && r.pct <= 85, `Wert außerhalb des gedämpften Bereichs (50 ± 35): ${r.pct} %`);
+  });
+
+  test('Sturm bleibt trotz Dämpfung ein harter Ausschluss, kein Hochziehen Richtung 50%', async () => {
+    await loadRegion(ctx, 'elbe');
+    app.state.WX = { temp: 18, wind: 60, dirDeg: 0, dir: 'N', press: 1005, trendVal: 0 };
+    app.state.PEGEL = null; // dünne Datenlage UND Sturm gleichzeitig
+    const r = app.computeScore();
+    assert.equal(r.sturm, true);
+    assert.ok(r.pct <= 15, `Sturm-Deckel darf durch die Konfidenz-Dämpfung nicht aufgeweicht werden: ${r.pct} %`);
+  });
+
+  test('mit voller Datenlage bleibt der Wert ungedämpft (Konfidenz ≥ 0.8)', async () => {
+    await loadRegion(ctx, 'elbe');
+    app.state.WX = { temp: 16, wind: 10, dirDeg: 0, dir: 'N', press: 1005, trendVal: -2, wt: 15 };
+    app.state.PEGEL = { value: 180, station: 'X', dist: 1, wt: 15 };
+    const r = app.computeScore();
+    assert.equal(r.knownCount, 5);
+    assert.ok(r.konfidenz >= 0.8);
+  });
+});
+
 describe('Bug: Gewitterwarnung schaute wegen UTC-Versatz kaum voraus', () => {
   const pad = (n) => String(n).padStart(2, '0');
   const lokalStunde = (basis, versatz) => {

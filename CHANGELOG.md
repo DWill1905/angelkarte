@@ -1,5 +1,18 @@
 # Changelog
 
+## SW v118 – 2026-07-18
+
+### Fixed
+- **"Heute passt es?" zeigte 100% bei nur 1 von 5 bekannten Faktoren.** Beim Testen mit
+  fehlenden Wetter-/Pegeldaten fiel auf: `computeScore()` berechnete den Prozentwert nur aus
+  den tatsächlich bekannten Faktoren – ohne Wetter/Pegel blieb oft nur das (immer verfügbare)
+  Beißfenster übrig, das dann allein über den ganzen Wert entschied. Ein starkes Major-Fenster
+  ergab so ein selbstbewusstes „100% · Top", obwohl 4 von 5 Signalen komplett fehlten; der
+  Hinweis darauf stand nur klein und leicht übersehbar darunter. Jetzt greift dieselbe
+  Konfidenz-Dämpfung wie in der Spotbewertung (`rating.ts`): unter 80 % bekannten Faktoren
+  wird der Wert zur Mitte gezogen (nie mehr 0 % oder 100 % bei dünner Datenlage). Sturm bleibt
+  unverändert ein harter Ausschluss ohne Dämpfung. Drei neue Tests.
+
 ## SW v117 – 2026-07-18
 
 ### Fixed

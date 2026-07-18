@@ -697,17 +697,26 @@ export function computeScore() {
     const sum = known.reduce((a, f) => a + f.pts, 0);
     const maxSum = known.reduce((a, f) => a + f.max, 0);
     let pct = maxSum > 0 ? Math.round(sum / maxSum * 100) : null;
+    const sturm = !!(state.WX && typeof state.WX.wind === 'number' && state.WX.wind >= 35);
+    /* Konfidenz-Dämpfung wie in der Spotbewertung (rating.ts): bei dünner Datenlage zur
+       Mitte ziehen, statt mit vollem Selbstbewusstsein "100%" zu zeigen, obwohl z.B. nur
+       1 von 5 Faktoren bekannt ist (vorher: known.length floss nirgends in den Prozentwert
+       ein, nur in den kleinen Hinweistext darunter - leicht zu übersehen). Sturm bleibt ein
+       harter Ausschluss ohne Dämpfung, wie bei !gesperrt in rating.ts. */
+    const konfidenz = factors.length ? known.length / factors.length : 1;
+    if (!sturm && pct != null && konfidenz < 0.8) {
+        const faktor = 0.6 + 0.5 * konfidenz; // 0.8→1.0, 0.5→0.85, 0.3→0.75
+        pct = Math.round(50 + (pct - 50) * faktor);
+    }
     /* Sturm ist ein Ausschlusskriterium, kein Abzug – wie in der Spotbewertung.
        Vorher konnten 60 km/h zu "50 % – mäßig" führen, weil der Wind-Faktor an
        Fließgewässern (mit Pegel) gar nicht bewertet wurde. */
-    let sturm = false;
-    if (state.WX && typeof state.WX.wind === 'number' && state.WX.wind >= 35) {
-        sturm = true;
+    if (sturm) {
         if (pct != null)
             pct = Math.min(pct, 15);
         factors.push({ name: 'Sturm', pts: 0, max: 2, txt: 'Sturm (' + Math.round(state.WX.wind) + ' km/h) – Angeln ist heute unverantwortlich' });
     }
-    return { factors, sum, maxSum, pct, knownCount: known.length, sturm };
+    return { factors, sum, maxSum, pct, knownCount: known.length, konfidenz, sturm };
 }
 export function scoreAmpel(pct) {
     if (pct == null)
