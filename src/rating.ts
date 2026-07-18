@@ -64,7 +64,9 @@ interface ArtProfil {
   truebung?: boolean;
   /** Lichtverhalten: 'scheu' = lichtscheu (Zander), 'sicht' = Sichträuber (Barsch, Forelle …). */
   licht?: Licht;
-  /** Geschlossene Schwimmblase → empfindlich gegen abrupte Luftdruckwechsel (Zander, Barsch). */
+  /** Geschlossene Schwimmblase (Physoclisti, z. B. Zander/Barsch) → empfindlich gegen abrupte
+      Luftdruckwechsel. Salmoniden (Bachforelle, Regenbogenforelle, Äsche) sind Physostomen
+      (offener Ductus pneumaticus, Blase per Luftschlucken regelbar) und daher NICHT so gelistet. */
   druckSensibel?: boolean;
   /** Wärmeliebend – mag schwül-bedeckte Tiefdrucklagen (Aal, Wels, Karpfen …). */
   warm?: boolean;
@@ -82,8 +84,8 @@ const PROFIL: Record<string, ArtProfil> = {
   Wels:             { wasser: ['fluss', 'see-tief'], hoch: [5, 6, 7, 8, 9], daemmerung: true, truebung: true, nacht: true, warm: true },
   Aal:              { wasser: ['fluss', 'kanal', 'see-flach'], hoch: [5, 6, 7, 8, 9], daemmerung: true, truebung: true, nacht: true, warm: true },
   Rapfen:           { wasser: ['fluss'], hoch: [5, 6, 7, 8], daemmerung: false, licht: 'sicht', stroemung: 'liebt' },
-  Bachforelle:      { wasser: ['fluss'], hoch: [4, 5, 6, 9], daemmerung: false, licht: 'sicht', druckSensibel: true, stroemung: 'liebt' },
-  Regenbogenforelle:{ wasser: ['fluss', 'see-tief'], hoch: [4, 5, 6, 9, 10], daemmerung: false, licht: 'sicht', druckSensibel: true },
+  Bachforelle:      { wasser: ['fluss'], hoch: [4, 5, 6, 9], daemmerung: false, licht: 'sicht', stroemung: 'liebt' },
+  Regenbogenforelle:{ wasser: ['fluss', 'see-tief'], hoch: [4, 5, 6, 9, 10], daemmerung: false, licht: 'sicht' },
   Äsche:            { wasser: ['fluss'], hoch: [5, 6, 7, 8], daemmerung: false, licht: 'sicht', stroemung: 'liebt' },
   Karpfen:          { wasser: ['see-flach', 'see-tief', 'kanal'], hoch: [5, 6, 7, 8, 9], daemmerung: false, truebung: true, warm: true, stroemung: 'meidet' },
   Schleie:          { wasser: ['see-flach'], hoch: [5, 6, 7], daemmerung: true, truebung: true, warm: true, stroemung: 'meidet' },
