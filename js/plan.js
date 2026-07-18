@@ -15,7 +15,7 @@
    nachvollziehbare Vorauswahl – die Entscheidung trifft der Angler. */
 import { state } from './state.js';
 import { haversine, hhmm, inSchonzeitAt, inWindowAt, mondStaerke, solunar, sunTimes } from './astro.js';
-import { WT_OPT, tackleFor, wasserTyp } from './tackle.js';
+import { FUTTERKORB_ARTEN, OHNE_ANFUETTERN, WT_OPT, tackleFor, wasserTyp } from './tackle.js';
 import { bewerteSpot, sterneAus, sterneText, artZeitprofil, stroemungsLage } from './rating.js';
 import { jahreszeit } from './saison.js';
 import { wtSchaetzung } from './weather.js';
@@ -199,9 +199,14 @@ function koederSatz(s, art) {
     const jz = jahreszeit();
     const saisonFarbe = t.farben[jz].split(/[–;(,]/)[0].trim();
     const farbe = dynamischeFarbe() || saisonFarbe;
-    /* Kein Kunstköder-Setup für Fried- und Grundfische. */
-    if (art && FRIEDFISCH[art])
+    /* Kein Kunstköder-Setup für Fried- und Grundfische. Anfütterverbot (Trinkwassertalsperren
+       u.ä.) schlägt die Standard-Futterkorb-/Method-Feeder-Empfehlung – sonst rät die App zu
+       einer an diesem Gewässer verbotenen Methode. */
+    if (art && FRIEDFISCH[art]) {
+        if (s.keinAnfuettern && FUTTERKORB_ARTEN.has(art))
+            return { koeder: OHNE_ANFUETTERN, jig: null };
         return { koeder: FRIEDFISCH[art], jig: null };
+    }
     const groesse = art === 'Barsch' ? '6–8 cm' : art === 'Wels' ? '15–25 cm' : art === 'Hecht' ? '12–19 cm' : '10–14 cm';
     const jigMatch = /(\d+\s*[–-]\s*\d+\s*g|\d+\s*g)/.exec(t.jig);
     const jig = jigMatch ? jigMatch[1].replace(/\s+/g, '') : '10–21g';

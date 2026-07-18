@@ -39,7 +39,7 @@ export function fischArtenFor(ids) {
 }
 export const SPOTS_SN = [
     {
-        name: 'Talsperre Saidenbach', zugang: 'ufer', keinBoot: true,
+        name: 'Talsperre Saidenbach', zugang: 'ufer', keinBoot: true, keinAnfuettern: true,
         rig: 'H-Spinnrute 20–60 g, Geflecht + FC-Vorfach. Erlaubte Köder: Kunstköder, Wurm, Mais/Teig – KEINE Maden, kein Fleisch, kein Anfüttern (TWT!).',
         arten: ['Barsch', 'Hecht', 'Karpfen', 'Schleie', 'Brachse', 'Zander'], nr: 'C02-102', cat: 'raub', lat: 50.7358, lng: 13.2342,
         fisch: 'Barsch, Hecht, Karpfen, Schleie, Brasse, Weißfisch (Zander selten)',
@@ -55,7 +55,7 @@ export const SPOTS_SN = [
         warn: false
     },
     {
-        name: 'Vorsperre Dittersbach', zugang: 'ufer', verif: 'B', keinBoot: true,
+        name: 'Vorsperre Dittersbach', zugang: 'ufer', verif: 'B', keinBoot: true, keinAnfuettern: true,
         rig: 'Spinnrute mittel, Stahl- oder dickes FC-Vorfach (Hecht). TWT-Köderregeln wie Saidenbach.',
         arten: ['Barsch', 'Hecht', 'Karpfen', 'Schleie', 'Regenbogenforelle'], nr: 'C01-104', cat: 'raub', lat: 50.8009, lng: 13.4798,
         fisch: 'Barsch, Hecht, Karpfen, Schleie, Regenbogenforelle, Weißfisch',
@@ -66,7 +66,7 @@ export const SPOTS_SN = [
         warn: true
     },
     {
-        name: 'Talsperre Rauschenbach', zugang: 'ufer', verif: 'B', keinBoot: true,
+        name: 'Talsperre Rauschenbach', zugang: 'ufer', verif: 'B', keinBoot: true, keinAnfuettern: true,
         rig: 'H-Spinnrute 20–60 g für weite Würfe an die Abbruchkanten; TWT-Köderregeln beachten. Uferangeln, kein Boot.',
         arten: ['Barsch', 'Hecht', 'Zander', 'Karpfen', 'Schleie', 'Regenbogenforelle', 'Aal', 'Brachse'], nr: 'AVS (Gew.-Nr. vor Ort prüfen)', cat: 'raub', lat: 50.6965, lng: 13.5057,
         fisch: 'Barsch, Hecht, Zander, Karpfen, Schleie, Regenbogenforelle, Brasse, Aal, Weißfisch',

@@ -78,6 +78,10 @@ export interface Spot {
   /** Boot/Belly-Boot komplett verboten (z. B. Trinkwassertalsperre) – nicht nur Motor-/Schleppangeln-Regeln.
       Unterdrückt die generische Belly-Boot-Empfehlung in zugangAus() und zeigt ein Popup-Badge. */
   keinBoot?: boolean;
+  /** Anfüttern/Futterkorb komplett verboten (z. B. Trinkwassertalsperre). Ersetzt die
+      Method-Feeder/Futterkorb-Köderempfehlung für Karpfen/Brachse durch eine anfütter-freie
+      Alternative (tackle.ts koederVon, plan.ts koederSatz). */
+  keinAnfuettern?: boolean;
   /** Kuratierte Tackle-Empfehlung. Fehlt sie, wird sie abgeleitet. */
   tackle?: Tackle;
   /** Maximaltiefe in Metern, falls belegt (steuert Jigkopf & Rutenwahl). */

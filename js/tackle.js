@@ -172,9 +172,19 @@ function naturRuteAus(arten) {
         return 'Robuste Grund-/Aalrute, Freilaufrolle, Kopflampe';
     return 'Feeder-/Matchrute 20–60 g, feine Montage';
 }
-function koederVon(arten) {
-    return arten.map((a) => PROFILE[a]?.koeder).filter(Boolean)[0]
-        || 'Nach Zielfisch wählen – siehe Köderberater im Werkzeuge-Menü';
+/** Arten, deren Standard-Köderrat einen Futterkorb/Method-Feeder nennt – an Gewässern mit
+    Anfütterverbot (z. B. Trinkwassertalsperren) braucht es hier die anfütter-freie Alternative.
+    Exportiert, damit plan.ts (Planer-Köderempfehlung) dieselbe Regel anwendet statt einer
+    zweiten, driftgefährdeten Kopie. */
+export const FUTTERKORB_ARTEN = new Set(['Karpfen', 'Brachse', 'Brasse']);
+export const OHNE_ANFUETTERN = 'Boilie/Mais am Haar-Rig, reine Grundmontage OHNE Futterkorb/Anfüttern (Gewässerordnung)';
+function koederVon(arten, keinAnfuettern) {
+    const erste = arten.find((a) => PROFILE[a]?.koeder);
+    if (!erste)
+        return 'Nach Zielfisch wählen – siehe Köderberater im Werkzeuge-Menü';
+    if (keinAnfuettern && FUTTERKORB_ARTEN.has(erste))
+        return OHNE_ANFUETTERN;
+    return PROFILE[erste].koeder;
 }
 /** Rendert den Tackle-Block fürs Popup. */
 export function tackleHtml(s) {
@@ -223,8 +233,8 @@ export function tackleHtml(s) {
         }
         if (natur.length) {
             inner += '<div class="tk-grp"><div class="tk-grp-h">🪱 Fried-/Grundfisch · Naturköder</div>'
-                + row('Rute', naturRuteAus(natur)) + row('Köder', koederVon(natur))
-                + row('Montage', 'Grundmontage / Method-Feeder / Haar-Rig je nach Zielfisch')
+                + row('Rute', naturRuteAus(natur)) + row('Köder', koederVon(natur, s.keinAnfuettern))
+                + row('Montage', s.keinAnfuettern ? 'Reine Grundmontage / Haar-Rig – kein Futterkorb, kein Anfüttern (Gewässerordnung)' : 'Grundmontage / Method-Feeder / Haar-Rig je nach Zielfisch')
                 + '<div class="tk-free">Farbe ist hier zweitrangig – es entscheiden Futterplatz, Aroma und Präsentation.</div></div>';
         }
         inner += `<div class="tk-free"><b>Boot / Ufer</b> ${esc(zugangAus(s, w))}</div>`
