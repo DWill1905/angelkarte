@@ -536,6 +536,14 @@
   .mydlg-btns button{flex:1;border:0;border-radius:8px;padding:11px;font-size:14px;font-weight:700;cursor:pointer;background:var(--forelle);color:#3a2f10}
   .mydlg-btns .ghost{background:var(--panel-2);color:var(--text);border:1px solid var(--line)}
 
+  /* Fade-Hinweis am oberen/unteren Rand scrollbarer Dialog-Inhalte: dieselbe Opacity-Masken-
+     Technik wie bei den Chip-Reihen (chipsFadeInit), nur vertikal. Klassen fade-t/fade-b
+     werden von scrollFadeInit() in util.ts gesetzt. */
+  .dlg-scroll.fade-t{-webkit-mask-image:linear-gradient(to bottom,transparent,#000 18px);mask-image:linear-gradient(to bottom,transparent,#000 18px)}
+  .dlg-scroll.fade-b{-webkit-mask-image:linear-gradient(to top,transparent,#000 18px);mask-image:linear-gradient(to top,transparent,#000 18px)}
+  .dlg-scroll.fade-t.fade-b{-webkit-mask-image:linear-gradient(to bottom,transparent,#000 18px,#000 calc(100% - 18px),transparent);
+    mask-image:linear-gradient(to bottom,transparent,#000 18px,#000 calc(100% - 18px),transparent)}
+
   /* Vollbild-Panel für Tackle / Gewässer & Methode – Atemraum links/rechts, Leaflet-Logo bleibt hinter dem Panel */
   #detailSheet{align-items:stretch;padding:0}
   .detail-card{background:var(--paper);width:100%;max-width:520px;margin:0 auto;height:100dvh;display:flex;flex-direction:column}
@@ -766,7 +774,7 @@
 <div class="mydlg-wrap" id="leadDlg" hidden>
   <div class="mydlg">
     <h3 data-ic="weight">Bleigewicht-Berater</h3>
-    <div id="leadBody" style="font-size:12.5px;line-height:1.6;max-height:60dvh;overflow-y:auto"></div>
+    <div id="leadBody" class="dlg-scroll" style="font-size:12.5px;line-height:1.6;max-height:60dvh;overflow-y:auto"></div>
     <div class="mydlg-btns"><button id="leadClose">Schließen</button></div>
   </div>
 </div>
@@ -774,7 +782,7 @@
 <div class="mydlg-wrap" id="knotDlg" hidden>
   <div class="mydlg">
     <h3 data-ic="knot">Knoten-Kurzreferenz</h3>
-    <div id="knotBody" style="font-size:12.5px;line-height:1.6;max-height:62dvh;overflow-y:auto"></div>
+    <div id="knotBody" class="dlg-scroll" style="font-size:12.5px;line-height:1.6;max-height:62dvh;overflow-y:auto"></div>
     <div class="mydlg-btns"><button id="knotClose">Schließen</button></div>
   </div>
 </div>
@@ -782,7 +790,7 @@
 <div class="mydlg-wrap" id="packDlg" hidden>
   <div class="mydlg">
     <h3 data-ic="bag">Packliste</h3>
-    <div id="packBody" style="font-size:13px;line-height:1.7;max-height:60dvh;overflow-y:auto"></div>
+    <div id="packBody" class="dlg-scroll" style="font-size:13px;line-height:1.7;max-height:60dvh;overflow-y:auto"></div>
     <div class="mydlg-btns"><button id="packReset" class="ghost">Alle abhaken zurücksetzen</button><button id="packClose">Schließen</button></div>
   </div>
 </div>
@@ -795,7 +803,7 @@
       <span id="biteTagLabel">Heute</span>
       <button id="biteNext" type="button" aria-label="Nächster Tag">▶</button>
     </div>
-    <div id="biteBody" style="font-size:13px;line-height:1.55;max-height:60dvh;overflow-y:auto"></div>
+    <div id="biteBody" class="dlg-scroll" style="font-size:13px;line-height:1.55;max-height:60dvh;overflow-y:auto"></div>
     <div class="mydlg-btns"><button id="biteClose">Schließen</button></div>
   </div>
 </div>
@@ -803,7 +811,7 @@
 <div class="mydlg-wrap" id="foreDlg" hidden>
   <div class="mydlg">
     <h3 data-ic="sun">Wochen-Vorschau</h3>
-    <div id="foreBody" style="font-size:13px;line-height:1.55;max-height:62dvh;overflow-y:auto"></div>
+    <div id="foreBody" class="dlg-scroll" style="font-size:13px;line-height:1.55;max-height:62dvh;overflow-y:auto"></div>
     <div class="mydlg-btns"><button id="foreIcs" class="ghost" hidden>Als Kalender exportieren</button><button id="foreClose">Schließen</button></div>
   </div>
 </div>
@@ -811,7 +819,7 @@
 <div class="mydlg-wrap" id="wxDlg" hidden>
   <div class="mydlg">
     <h3 data-ic="sun">Wetter &amp; Bedingungen</h3>
-    <div id="wxBody" style="font-size:13px;line-height:1.55;max-height:62dvh;overflow-y:auto">
+    <div id="wxBody" class="dlg-scroll" style="font-size:13px;line-height:1.55;max-height:62dvh;overflow-y:auto">
       <div class="wx-block">
         <h4>Sonne &amp; Mond</h4>
         <div class="sun" id="sunline"></div>
@@ -862,7 +870,7 @@
       <span id="routeTagLabel">Heute</span>
       <button id="routeNext" type="button" aria-label="Nächster Tag">▶</button>
     </div>
-    <div id="routeBody" style="font-size:13px;line-height:1.55;max-height:60dvh;overflow-y:auto"></div>
+    <div id="routeBody" class="dlg-scroll" style="font-size:13px;line-height:1.55;max-height:60dvh;overflow-y:auto"></div>
     <div class="mydlg-btns"><button id="routeClose">Schließen</button></div>
   </div>
 </div>
@@ -870,7 +878,7 @@
 <div class="mydlg-wrap" id="tripDlg" hidden>
   <div class="mydlg">
     <h3 data-ic="bag">Meine Trip-Liste</h3>
-    <div id="tripBody" style="font-size:13px;line-height:1.55;max-height:60dvh;overflow-y:auto"></div>
+    <div id="tripBody" class="dlg-scroll" style="font-size:13px;line-height:1.55;max-height:60dvh;overflow-y:auto"></div>
     <div class="mydlg-btns"><button id="tripClose">Schließen</button></div>
   </div>
 </div>
@@ -878,7 +886,7 @@
 <div class="mydlg-wrap" id="offDlg" hidden>
   <div class="mydlg">
     <h3 data-ic="pin">Karte offline sichern</h3>
-    <div id="offBody" style="font-size:13px;line-height:1.55;max-height:60dvh;overflow-y:auto"></div>
+    <div id="offBody" class="dlg-scroll" style="font-size:13px;line-height:1.55;max-height:60dvh;overflow-y:auto"></div>
     <div class="mydlg-btns"><button id="offClose">Schließen</button></div>
   </div>
 </div>
@@ -886,7 +894,7 @@
 <div class="mydlg-wrap" id="scoreDlg" hidden>
   <div class="mydlg">
     <h3 data-ic="target">Heute passt es?</h3>
-    <div id="scoreBody" style="font-size:13px;line-height:1.55;max-height:60dvh;overflow-y:auto"></div>
+    <div id="scoreBody" class="dlg-scroll" style="font-size:13px;line-height:1.55;max-height:60dvh;overflow-y:auto"></div>
     <div class="mydlg-btns"><button id="scoreClose">Schließen</button></div>
   </div>
 </div>
@@ -894,7 +902,7 @@
 <div class="mydlg-wrap" id="kbDlg" hidden>
   <div class="mydlg">
     <h3 data-ic="target">Köderberater</h3>
-    <div id="kbBody" style="font-size:13px;line-height:1.55;max-height:55dvh;overflow-y:auto"></div>
+    <div id="kbBody" class="dlg-scroll" style="font-size:13px;line-height:1.55;max-height:55dvh;overflow-y:auto"></div>
     <div class="mydlg-btns"><button id="kbClose">Schließen</button></div>
   </div>
 </div>

@@ -1,5 +1,18 @@
 # Changelog
 
+## SW v112 – 2026-07-18
+
+### Added
+- **Scroll-Fade in allen Dialog-Inhalten.** Fünfter und letzter Fund aus dem UI/UX-Review:
+  alle scrollbaren Dialog-Inhalte (Packliste, Knoten, Bleigewicht, Beißzeiten, Wochen-Vorschau,
+  Wetter, Tagesplan, Trip-Liste, Offline-Karte, Score, Köderberater – 11 Stellen) schnitten
+  ihren Text ohne jeden Hinweis ab, dass darüber/darunter noch mehr steht. Neue Klasse
+  `.dlg-scroll` plus `scrollFadeInit()` (`util.ts`, dieselbe Opacity-Masken-Technik wie
+  `chipsFadeInit()` aus v109, nur vertikal) blendet Ober-/Unterkante ein, sobald in diese
+  Richtung noch etwas zu scrollen ist – einmalig für alle betroffenen Elemente verdrahtet.
+  Läuft nur im Browser (Guard gegen `document`), damit reine Logik-Tests, die `util.ts` ohne
+  DOM importieren (z. B. über `tackle.ts`), nicht brechen.
+
 ## SW v111 – 2026-07-18
 
 ### Changed

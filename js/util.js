@@ -40,3 +40,23 @@ export function chipsFadeInit(el) {
     new MutationObserver(update).observe(el, { childList: true });
     update();
 }
+/** Fade-Hinweis am oberen/unteren Rand scrollbarer Dialog-Inhalte (".dlg-scroll"): dieselbe
+    Opacity-Masken-Technik wie chipsFadeInit(), nur vertikal. Die Dialoge (Packliste, Knoten,
+    Wochen-Vorschau, ...) sind statisches HTML und existieren schon beim Laden - einmalig für
+    alle .dlg-scroll-Elemente verdrahtet statt an jeder einzelnen Dialog-Baustelle. */
+export function scrollFadeInit(el) {
+    const update = () => {
+        el.classList.toggle('fade-t', el.scrollTop > 2);
+        el.classList.toggle('fade-b', el.scrollTop + el.clientHeight < el.scrollHeight - 2);
+    };
+    el.addEventListener('scroll', update, { passive: true });
+    if (typeof ResizeObserver !== 'undefined')
+        new ResizeObserver(update).observe(el);
+    new MutationObserver(update).observe(el, { childList: true, subtree: true });
+    update();
+}
+/* util.ts wird auch von reinen Logik-Tests importiert, die ohne DOM laufen (z.B. tackle.ts
+   ueber esc/ICON) - ohne diese Absicherung wirft der Modul-Top-Level dort sofort. */
+if (typeof document !== 'undefined') {
+    document.querySelectorAll('.dlg-scroll').forEach(scrollFadeInit);
+}
