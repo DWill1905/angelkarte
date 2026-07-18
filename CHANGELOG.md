@@ -1,5 +1,16 @@
 # Changelog
 
+## SW v103 – 2026-07-18
+
+### Added
+- **Ausklappbare Rangliste im Planer.** Die „Alternativen"-Liste zeigte immer nur die 3
+  nächstbesten Orte – wer mehr Auswahl wollte, hatte keine. `kandidaten()` berechnet ohnehin
+  schon alle Ort-/Art-Kombinationen der Region; die ersten 3 Alternativen stehen wie bisher
+  offen da, bis zu 9 weitere stecken jetzt in einem ausklappbaren `<details>`-Block
+  („+N weitere Gewässer"), demselben Progressive-Disclosure-Muster wie in der Spotbewertung
+  und im Tackle-Block. Keine neue Berechnung, keine neue Anfrage – nur mehr von dem, was der
+  Planer ohnehin schon weiß. Neuer Test.
+
 ## SW v102 – 2026-07-18
 
 ### Added

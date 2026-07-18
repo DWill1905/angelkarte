@@ -431,7 +431,9 @@ export function empfehlung(jetzt: Date = new Date(), filter: PlanFilter = {}): E
     stroemung: stroemungBlei(k.spot), persoenlich,
     faktoren: k.faktoren, chance: k.basis, chanceFenster, sterne: sterneAus(k.basis, sturm),
     gesperrt: sturm ? 'sturm' : undefined,
-    luecken, alternativen: besteJeOrt(liste.filter((x) => x.ort !== k.ort)).slice(0, 3),
+    /* 12 statt 3: die ersten 3 stehen offen da, der Rest steckt in der ausklappbaren
+       Rangliste (renderPlanBody) - Tiefe auf Wunsch, ohne den Normalfall zu ueberladen. */
+    luecken, alternativen: besteJeOrt(liste.filter((x) => x.ort !== k.ort)).slice(0, 12),
   };
 }
 
@@ -549,8 +551,14 @@ function renderPlanBody(e: Empfehlung, offset: number = 0): string {
       + '</div>';
   }
   if (e.alternativen.length) {
+    const altZeile = (a: Kandidat) => '<div class="plan-alt">' + esc(a.ort) + ' · ' + esc(a.art) + ' <b>' + a.basis + '\u202F%</b></div>';
+    const sichtbar = e.alternativen.slice(0, 3);
+    const rest = e.alternativen.slice(3);
     h += '<div class="plan-sec"><h4>Alternativen</h4>'
-      + e.alternativen.map((a) => '<div class="plan-alt">' + esc(a.ort) + ' · ' + esc(a.art) + ' <b>' + a.basis + '\u202F%</b></div>').join('')
+      + sichtbar.map(altZeile).join('')
+      + (rest.length
+          ? `<details class="plan-rangliste"><summary>+${rest.length} weitere Gewässer</summary>${rest.map(altZeile).join('')}</details>`
+          : '')
       + '</div>';
   }
   h += '<div class="verif" style="margin-top:12px">Eine begründete Vorauswahl aus Saison, Wind, Luftdruck, '

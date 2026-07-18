@@ -273,6 +273,24 @@ describe('Tages-Blätterer', () => {
   });
 });
 
+describe('Alternativen-Rangliste im Planer', () => {
+  test('mehr als 3 Alternativen stecken in einer ausklappbaren Rangliste', async () => {
+    await loadRegion(ctx, 'mainz');
+    app.state.WX = { temp: 20, wind: 8, dirDeg: 200, dir: 'SW', press: 1015, trendVal: -1, code: 3 };
+    app.state.PEGEL = { value: 250, station: 'X', dist: 3, wt: 18 };
+    /* Ohne Fisch-/Gewaesserfilter liefert die Rhein-Region genug Kandidaten fuer eine Rangliste. */
+    const e = app.empfehlung(new Date(Date.UTC(2026, 6, 15, 12, 0)), {});
+    assert.ok(e.alternativen.length > 3, 'Testvoraussetzung: braucht mehr als 3 Alternativen');
+    app.openPlan();
+    const body = doc.getElementById('planBody').innerHTML;
+    assert.match(body, /plan-rangliste/, 'Rangliste fehlt trotz genug Kandidaten');
+    assert.match(body, new RegExp('\\+' + (e.alternativen.length - 3) + ' weitere Gewässer'));
+    /* Die ersten 3 stehen weiterhin offen da (nicht erst nach Aufklappen sichtbar). */
+    const vorDetails = body.split('<details class="plan-rangliste">')[0];
+    assert.equal((vorDetails.match(/class="plan-alt"/g) || []).length, 3);
+  });
+});
+
 describe('RLP-Schonzeiten laut Beiblatt SGD Süd (Stand 2025)', () => {
   const F = (m, d) => new Date(Date.UTC(2026, m - 1, d, 12, 0));
 
