@@ -184,6 +184,7 @@
   },
   {
    "name": "Altrhein Heidenfahrt",
+   "rlpFruehjahr": true,
    "wasser": "see-flach",
    "zugang": "ufer",
    "verif": "B",

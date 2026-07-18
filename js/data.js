@@ -406,7 +406,7 @@ export const SPOTS_RLP = [
         rig: 'Jigköpfe 15–30 g je nach Strömung; fürs Posenangeln hinter den Rampen leichte Matchrute',
         kartenLinks: [{ label: 'LFV RLP – Rheinkarte', url: 'https://lfv-rhl-rhh.de/fischerei-erlaubnisscheine/rhein/' }],
         note: '⚠ Dieser Abschnitt liegt genau ZWISCHEN zwei Angelverboten: stromauf endet das NSG Mombacher Rheinufer bei km 506,0, stromab beginnt das NSG Haderaue-Königsklinger Aue bei km 508,0 (dort ganzjährig verboten). Die km-Marken der Karte sind nur auf ±~300 m genau – im Grenzbereich also Beschilderung und Erlaubnisschein prüfen. Zwei Rampen an der chemischen Fabrik plus eine kleine stromauf – die ruhigen Bereiche dahinter sind die Friedfisch-Geheimecken. Parkplatz am Kiosk Rheinblick.', warn: true },
-    { name: 'Altrhein Heidenfahrt', wasser: 'see-flach', zugang: 'ufer', verif: 'B', nr: '~Strom-km 512 · Sommersperre', cat: 'fried',
+    { name: 'Altrhein Heidenfahrt', rlpFruehjahr: true, wasser: 'see-flach', zugang: 'ufer', verif: 'B', nr: '~Strom-km 512 · Sommersperre', cat: 'fried',
         arten: ['Zander', 'Barsch', 'Hecht', 'Karpfen', 'Schleie', 'Brachse', 'Aal'],
         lat: 50.0121, lng: 8.1021,
         fisch: 'Zander, Barsch, Hecht, Karpfen, Schleie, Brassen, Aal',
