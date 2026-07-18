@@ -20,7 +20,11 @@ import { wtSchaetzung, wxAt } from './weather.js';
    lieben schwül-bedeckte Lagen; Barsch/Forelle/Rapfen/Döbel Sichträuber; Zander/Barsch druckempfindlich. */
 const PROFIL = {
     Hecht: { wasser: ['see-flach', 'see-tief', 'fluss'], hoch: [3, 4, 5, 9, 10, 11], daemmerung: false, licht: 'sicht' },
-    Zander: { wasser: ['fluss', 'kanal', 'see-tief'], hoch: [6, 7, 8, 9, 10, 11, 12], daemmerung: true, truebung: true, licht: 'scheu', druckSensibel: true },
+    /* Zander gilt auch im Hochwinter (Jan/Feb) als Hochsaison ("Winterzander") – konsistent mit
+       dem Winter-Fokus (saison.ts) und dem Winter-Köderrat (tools.ts KB), die beide explizit
+       Zander-Taktik für Dez–Feb geben. Die Schonzeit (separat geprüft) sperrt die betroffenen
+       Tage ohnehin unabhängig von diesem Saisonwert. */
+    Zander: { wasser: ['fluss', 'kanal', 'see-tief'], hoch: [1, 2, 6, 7, 8, 9, 10, 11, 12], daemmerung: true, truebung: true, licht: 'scheu', druckSensibel: true },
     Barsch: { wasser: ['see-flach', 'see-tief', 'fluss', 'kanal'], hoch: [5, 8, 9, 10, 11], daemmerung: false, licht: 'sicht', druckSensibel: true },
     Wels: { wasser: ['fluss', 'see-tief'], hoch: [5, 6, 7, 8, 9], daemmerung: true, truebung: true, nacht: true, warm: true },
     Aal: { wasser: ['fluss', 'kanal', 'see-flach'], hoch: [5, 6, 7, 8, 9], daemmerung: true, truebung: true, nacht: true, warm: true },
