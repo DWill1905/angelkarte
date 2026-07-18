@@ -1,5 +1,16 @@
 # Changelog
 
+## SW v116 – 2026-07-18
+
+### Changed
+- **Erstbesuch startet in der Einfachen statt der Pro-Sicht.** Letzter Punkt aus dem Usability-
+  Review (4/4): ein neuer Nutzer landete bisher direkt in der dichtesten Ansicht der App (Pro)
+  und musste den Umschalter im Menü erst selbst entdecken, um es sich einfacher zu machen –
+  dabei ist "Einfach" für den Erstkontakt die bessere Startrampe. `ladeSicht()` defaultet jetzt
+  auf `'einfach'`, aber nur wenn wirklich nichts gespeichert ist – wer die Sicht schon einmal
+  gewählt hat (egal welche), bekommt beim nächsten Besuch weiterhin genau diese. Bestehende
+  Nutzer sind also nicht betroffen. Test entsprechend umbenannt/angepasst.
+
 ## SW v115 – 2026-07-18
 
 ### Changed

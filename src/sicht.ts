@@ -42,7 +42,12 @@ export async function setzeSicht(s: Sicht): Promise<void> {
 }
 
 export async function ladeSicht(): Promise<Sicht> {
-  let s: Sicht = 'pro';
+  /* Usability-Review (4/4): ein Erstbesuch landete bisher direkt in der dichtesten Ansicht
+     der App (Pro) und musste den Umschalter im Menü erst selbst entdecken, um es sich
+     einfacher zu machen - dabei ist "Einfach" fuer den Erstkontakt die bessere Startrampe.
+     Wer die Sicht schon einmal gewaehlt hat, bekommt weiterhin genau die - nur der Default
+     fuer echte Erstbesuche (kein Eintrag im Storage) dreht sich um. */
+  let s: Sicht = 'einfach';
   try {
     const r = await store.get(KEY);
     if (r.value === 'einfach' || r.value === 'pro') s = r.value;

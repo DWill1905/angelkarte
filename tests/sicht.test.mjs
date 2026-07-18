@@ -25,10 +25,13 @@ const wirdVersteckt = (sel) => {
 };
 
 describe('Umschalten und Persistenz', () => {
-  test('Standard ist die Pro-Sicht', async () => {
+  test('Standard bei echtem Erstbesuch (nichts gespeichert) ist die Einfache Sicht', async () => {
+    /* Usability-Entscheidung: der dichteste Bildschirm (Pro) soll nicht das erste sein, was
+       ein neuer Nutzer sieht - "Einfach" ist die bessere Startrampe. Wer schon einmal gewaehlt
+       hat, siehe Test weiter unten ("nach einem Neustart..."), bekommt weiterhin seine Wahl. */
     const c = await startApp();
     await c.app.sichtReady;
-    assert.equal(c.app.aktuelleSicht(), 'pro');
+    assert.equal(c.app.aktuelleSicht(), 'einfach');
     c.close();
   });
 
