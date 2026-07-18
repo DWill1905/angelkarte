@@ -396,8 +396,8 @@ export function checkFang() {
     }
     const fisch = selectById('fbFisch').value;
     let len = parseInt(inputById('fbLaenge').value, 10);
-    if (!isNaN(len) && (len < 0 || len > 250))
-        len = NaN; /* unplausibel ignorieren */
+    if (!isNaN(len) && (len < 0 || len > 300))
+        len = NaN; /* unplausibel ignorieren – Wels kann in D legitim >250 cm erreichen */
     const sc = state.SCHON.find(x => x.fisch === fisch);
     let msgs = [], bad = false;
     if (!sc) {
@@ -454,7 +454,7 @@ byId('fbSave').onclick = async () => {
         await fbReady; /* verhindert, dass fbLoad einen frischen Eintrag überschreibt */
         const fisch = selectById('fbFisch').value;
         let laenge = parseInt(inputById('fbLaenge').value, 10);
-        const laengeOut = (isNaN(laenge) || laenge < 0 || laenge > 250) ? '' : laenge;
+        const laengeOut = (isNaN(laenge) || laenge < 0 || laenge > 300) ? '' : laenge;
         const jetzt = new Date();
         state.fbMem.push({
             id: uid(), fisch, laenge: laengeOut,

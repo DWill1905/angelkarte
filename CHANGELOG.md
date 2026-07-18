@@ -4,6 +4,18 @@ Fachliche und technische Änderungen an der Angelkarte-App, neueste zuerst.
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.0.0/); SW-Version
 bezieht sich auf `angelkarte-shell-vN` in `sw.js`.
 
+## SW v93 – 2026-07-18
+
+### Fixed
+- **Fangbuch-Längenfeld zu knapp für Wels.** Das Plausibilitäts-Limit für die Fanglänge lag
+  bei 250 cm (fangbuch.ts, zweifach: Maßcheck und Speichern) bzw. sogar nur 200 cm im
+  `max`-Attribut des HTML-Eingabefelds (index.html). Wels (Silurus glanis) erreicht in
+  deutschen Gewässern regelmäßig über 2 m und legitim auch über 2,5 m – die App führt Wels
+  selbst als Zielfisch mit „XXL"-Ködertaktik. Ein echter Rekordfang wäre am Eingabefeld
+  hängengeblieben oder beim Speichern still auf „keine Länge" zurückgefallen, ohne
+  Fehlermeldung. Beide Grenzen auf 300 cm angehoben (weiterhin genug Abstand, um
+  Zahlendreher/Tippfehler abzufangen).
+
 ## SW v92 – 2026-07-18
 
 ### Fixed
