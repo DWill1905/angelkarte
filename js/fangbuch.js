@@ -331,6 +331,57 @@ export function fbSortiert() {
         return (b.id || 0) - (a.id || 0); /* gleicher Tag: zuletzt eingetragen zuerst */
     });
 }
+/** Baut den teilbaren Text zu einem Fang – nur Fakten, die tatsächlich geloggt wurden,
+    nichts wird ergänzt oder geschönt. */
+export function fangTeilenText(e) {
+    let kopf = '🎣 ' + e.fisch + (e.laenge ? ', ' + e.laenge + ' cm' : '');
+    const zeilen = [kopf];
+    const orts = [e.spot, e.datum].filter(Boolean);
+    if (orts.length)
+        zeilen.push(orts.join(' · '));
+    const kontext = [];
+    if (e.ctx) {
+        if (e.ctx.wt != null)
+            kontext.push('Wasser ' + e.ctx.wt + '°C');
+        if (typeof e.ctx.trend === 'number' && e.ctx.trend <= -1.5)
+            kontext.push('fallender Luftdruck');
+        if (e.ctx.fenster)
+            kontext.push(e.ctx.fenster === 'major' ? 'Major-Fenster' : 'Minor-Fenster');
+    }
+    if (e.koeder)
+        kontext.push(e.koeder);
+    if (kontext.length)
+        zeilen.push(kontext.join(' · '));
+    zeilen.push('📍 geloggt mit der Angelkarte-App');
+    return zeilen.join('\n');
+}
+/** Teilt einen Fang über die native Share-Sheet, sonst Zwischenablage. Der Aufrufer blendet
+    den Button aus, wenn keins von beidem verfügbar ist – kein totes UI-Element. */
+async function teileFang(id) {
+    const entry = state.fbMem.find(x => x.id === id);
+    if (!entry)
+        return;
+    const text = fangTeilenText(entry);
+    const nav = navigator;
+    const st = byId('fbStatus');
+    if (typeof nav.share === 'function') {
+        try {
+            await nav.share({ text });
+        }
+        catch (e) { /* Nutzer hat abgebrochen – kein Fehler */ }
+    }
+    else if (nav.clipboard && typeof nav.clipboard.writeText === 'function') {
+        try {
+            await nav.clipboard.writeText(text);
+            if (st)
+                st.textContent = '📋 In die Zwischenablage kopiert';
+        }
+        catch (e) {
+            if (st)
+                st.textContent = '❌ Konnte nicht in die Zwischenablage kopieren';
+        }
+    }
+}
 export function fbRender() {
     const list = byId('fbList');
     byId('fbStatus').textContent =
@@ -346,12 +397,19 @@ export function fbRender() {
         const d = document.createElement('div');
         d.className = 'fb-entry';
         const cx = e.ctx ? [e.ctx.zeit, e.ctx.mond, e.ctx.fenster ? (e.ctx.fenster === 'major' ? '★ Major' : '☆ Minor') : null, e.ctx.druck ? e.ctx.druck + ' hPa' + (e.ctx.trend <= -1.5 ? '⇘' : e.ctx.trend >= 1.5 ? '⇗' : '') : null, e.ctx.wind, e.ctx.temp != null ? e.ctx.temp + '°C' : null, e.ctx.pegel ? 'Pegel ' + e.ctx.pegel : null, e.ctx.wt != null ? 'W ' + e.ctx.wt + '°C' : null].filter(Boolean).join(' · ') : '';
+        const teilenVerfuegbar = typeof navigator.share === 'function' || !!(navigator.clipboard && navigator.clipboard.writeText);
         d.innerHTML = `<div class="info"><div class="fish">${esc(e.fisch)} ${e.laenge ? '· ' + esc(e.laenge) + ' cm' : ''} ${e.entnommen ? '<span title="entnommen">🪣</span>' : '<span title="zurückgesetzt">↩</span>'}</div>
       <div class="sub">${esc(e.spot)} · ${esc(e.datum)}${e.koeder ? ' · ' + esc(e.koeder) : ''}${cx ? '<br>' + esc(cx) : ''}</div></div>
+      ${teilenVerfuegbar ? `<button class="fb-share" aria-label="Fang teilen" data-id="${esc(e.id)}" style="background:none;border:0;color:var(--muted);cursor:pointer;padding:4px">${ICON('share')}</button>` : ''}
       <button class="fb-edit" aria-label="Eintrag bearbeiten" data-id="${esc(e.id)}" style="background:none;border:0;color:var(--muted);cursor:pointer;padding:4px">${ICON('edit')}</button>
       <button class="fb-del" aria-label="Eintrag löschen" data-id="${esc(e.id)}">${ICON('x')}</button>`;
         /* WICHTIG: dataset VOR dem await auslesen. Nach einem await ist die Event-Dispatch-Phase
            beendet und `ev.currentTarget` ist null – Löschen und Bearbeiten warfen dadurch. */
+        if (teilenVerfuegbar)
+            qs('.fb-share', d).onclick = ev => {
+                const id = Number(ev.currentTarget.dataset.id);
+                teileFang(id);
+            };
         qs('.fb-del', d).onclick = async (ev) => {
             const id = Number(ev.currentTarget.dataset.id);
             await fbReady;

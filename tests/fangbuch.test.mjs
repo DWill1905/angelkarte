@@ -53,6 +53,43 @@ describe('Fang speichern und anzeigen', () => {
   });
 });
 
+describe('Fang teilen', () => {
+  test('Text nennt Art, Länge, Spot, Datum – keine erfundenen Zusatzangaben', () => {
+    const e = { id: 1, fisch: 'Zander', laenge: 58, spot: 'Rhein Mainz – Stadtstrecke', datum: '9.7.2026', koeder: '', entnommen: false };
+    const t = app.fangTeilenText(e);
+    assert.match(t, /Zander/);
+    assert.match(t, /58 cm/);
+    assert.match(t, /Rhein Mainz – Stadtstrecke/);
+    assert.match(t, /9\.7\.2026/);
+    assert.doesNotMatch(t, /Wasser|Luftdruck|Fenster/, 'ohne ctx dürfen keine Bedingungen erfunden werden');
+  });
+
+  test('Kontext (Wassertemp, Drucktrend, Beißfenster) fließt nur ein, wenn geloggt', () => {
+    const e = {
+      id: 2, fisch: 'Hecht', laenge: 70, spot: 'Woblitzsee', datum: '10.7.2026', koeder: 'Gummifisch', entnommen: true,
+      ctx: { wt: 19, trend: -2.1, fenster: 'major' },
+    };
+    const t = app.fangTeilenText(e);
+    assert.match(t, /Wasser 19°C/);
+    assert.match(t, /fallender Luftdruck/);
+    assert.match(t, /Major-Fenster/);
+    assert.match(t, /Gummifisch/);
+  });
+
+  test('steigender statt fallender Druck taucht nicht als "fallender Luftdruck" auf', () => {
+    const e = { id: 3, fisch: 'Barsch', laenge: 25, spot: 'x', datum: '1.1.2026', ctx: { trend: 1.8 } };
+    assert.doesNotMatch(app.fangTeilenText(e), /fallender Luftdruck/);
+  });
+
+  test('ohne navigator.share/clipboard bleibt der Teilen-Button aus dem Fangbuch verborgen', async () => {
+    await loadRegion(ctx, 'elbe');
+    await fangEintragen({ fisch: 'Zander', laenge: '55' });
+    /* jsdom kennt navigator.share/clipboard nicht - genau der Fall, den die App abfangen muss. */
+    assert.equal(doc.getElementById('fbList').querySelectorAll('.fb-share').length, 0,
+      'ohne Share-API darf kein totes Icon im Fangbuch stehen');
+  });
+});
+
 describe('Automatischer Fang-Kontext', () => {
   test('Wetter, Pegel und Beißfenster werden mitgeloggt', async () => {
     await loadRegion(ctx, 'elbe');

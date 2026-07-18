@@ -20,7 +20,8 @@ export const ICONS={
   ruler:'<path d="M4 14l10-10 6 6L10 20z"/><path d="M8 8l2 2M11 5l2 2M6 11l2 2"/>',
   bolt:'<path d="M13 2L5 14h6l-1 8 8-12h-6l1-8z"/>',
   x:'<path d="M6 6l12 12M18 6L6 18"/>',
-  edit:'<path d="M14 4l6 6M4 20l1-4L16 5l3 3L8 19l-4 1z"/>'
+  edit:'<path d="M14 4l6 6M4 20l1-4L16 5l3 3L8 19l-4 1z"/>',
+  share:'<circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.1M8.2 13.2l7.6 4.1"/>'
 };
 export function ICON(name: string, cls?: string): string {
   return '<svg class="ic'+(cls?' '+cls:'')+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(ICONS[name]||'')+'</svg>';

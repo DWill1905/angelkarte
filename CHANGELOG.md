@@ -1,5 +1,16 @@
 # Changelog
 
+## SW v106 – 2026-07-18
+
+### Added
+- **Fang teilen.** Jeder Fangbuch-Eintrag bekommt ein Teilen-Icon, das Art, Länge, Spot,
+  Datum und – falls geloggt – Wassertemperatur/Drucktrend/Beißfenster/Köder zu einem kurzen
+  Text zusammenfasst (`fangTeilenText()`) und über die native Share-Sheet (`navigator.share`)
+  weitergibt, mit Zwischenablage als Fallback. Nur echte, geloggte Fakten – ohne Kontext
+  bleibt der Text schlicht kürzer, nichts wird ergänzt. Ohne Share-API oder Zwischenablage
+  (z. B. ältere Browser) bleibt der Button ganz weg statt tot dazustehen. Neues Icon (share)
+  im SVG-Set. Vier neue Tests.
+
 ## SW v105 – 2026-07-18
 
 ### Added
