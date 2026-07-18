@@ -501,6 +501,13 @@ function buildPlanFilter(): void {
       }));
     });
   }
+  /* Zusammenfassung in der <summary>-Zeile, damit ein aktiver Filter auch eingeklappt
+     sichtbar bleibt statt sich hinter "Zielfisch & Gewässer einschränken" zu verstecken. */
+  const countEl = byId('planFilterCount');
+  if (countEl) {
+    const n = planFisch.length + planGew.length;
+    countEl.textContent = n ? n + ' aktiv' : '';
+  }
 }
 
 function leerText(): string {

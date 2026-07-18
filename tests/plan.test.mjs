@@ -146,6 +146,24 @@ describe('Planer-Seite: Fisch- und Gewässerfilter', () => {
     assert.ok(gew && gew.querySelectorAll('.chip').length > 1, 'keine Gewässer-Chips');
     const c = doc.getElementById('planClose'); if (c && c.click) c.click();
   });
+
+  test('Filter stecken eingeklappt in <details>, "N aktiv" bleibt auch zu sichtbar', async () => {
+    await loadRegion(ctx, 'mainz');
+    app.openPlan();
+    const details = doc.getElementById('planFilterbar');
+    assert.equal(details.tagName, 'DETAILS', 'Filterbar sollte ein <details> sein (Progressive Disclosure)');
+    assert.equal(details.open, false, 'Filter sollten standardmäßig eingeklappt sein - die Antwort ist die Kernaussage');
+    const count = doc.getElementById('planFilterCount');
+    assert.equal(count.textContent, '', 'ohne aktiven Filter darf nichts stehen');
+
+    const fishChip = doc.querySelectorAll('#planFishChips .chip')[1]; // [0] ist "Alle"
+    fishChip.click();
+    assert.match(count.textContent, /1 aktiv/);
+
+    fishChip.click(); // wieder abwählen
+    assert.equal(count.textContent, '', 'nach Abwahl wieder leer');
+    const c = doc.getElementById('planClose'); if (c && c.click) c.click();
+  });
 });
 
 describe('Filter-Verknüpfung: Fisch-Chips grauen aus', () => {

@@ -1,5 +1,17 @@
 # Changelog
 
+## SW v111 – 2026-07-18
+
+### Changed
+- **Planer ("Heute würde ich hier anfangen"): Filter eingeklappt, Antwort zuerst.** Die
+  Zielfisch- und Gewässer-Chips standen fest offen vor der eigentlichen Empfehlung – auf
+  Mobile musste man erst an zwei vollen, umbrechenden Chip-Zeilen vorbeiscrollen, bevor die
+  90-%-Antwort überhaupt sichtbar war. Ausgerechnet das Werkzeug, das die schnellste Antwort
+  liefern soll. Die Filter stecken jetzt in einem `<details>` (`#planFilterbar`), eingeklappt
+  per Default – dieselbe Progressive-Disclosure wie beim Tackle-Block und der ausklappbaren
+  Rangliste. Eine "N aktiv"-Anzeige in der Kopfzeile bleibt auch eingeklappt sichtbar, damit
+  ein gesetzter Filter nicht aus dem Blick gerät. Vierter Fund aus demselben UI/UX-Review.
+
 ## SW v110 – 2026-07-18
 
 ### Fixed

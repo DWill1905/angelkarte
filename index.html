@@ -555,7 +555,18 @@
   .plan-head h3 .ic{width:1em;height:1em;vertical-align:-.1em;margin-right:5px;color:var(--dusk)}
   .plan-x{background:none;border:0;color:var(--muted);font-size:20px;line-height:1;cursor:pointer;padding:4px 8px;border-radius:8px}
   .plan-x:hover{background:rgba(22,50,60,.5);color:var(--text)}
-  .plan-filterbar{padding:0 12px 10px;border-bottom:1px solid var(--line)}
+  /* Als <details> kollabiert: die Antwort (.plan-body) ist die Kernaussage dieser Seite und
+     soll nicht erst hinter zwei vollen Chip-Zeilen stehen - eingeklappt bleibt nur die
+     Zusammenfassungszeile stehen, wie beim Tackle-Block und der Rangliste im Planer. */
+  .plan-filterbar{padding:0 12px;border-bottom:1px solid var(--line)}
+  .plan-filterbar[open]{padding-bottom:10px}
+  .plan-filterbar summary{cursor:pointer;list-style:none;padding:10px 2px;font-size:12px;font-weight:700;
+    letter-spacing:.02em;color:var(--dusk);display:flex;align-items:center;gap:6px}
+  .plan-filterbar summary::-webkit-details-marker{display:none}
+  .plan-filterbar summary::after{content:'\203A';margin-left:auto;font-weight:400;font-size:14px;color:var(--muted)}
+  .plan-filterbar[open] summary::after{content:'–'}
+  #planFilterCount{color:var(--dusk)}
+  #planFilterCount:not(:empty)::before{content:'· '}
   .plan-flabel{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700;margin:8px 2px 5px}
   .plan-chips{flex-wrap:wrap;overflow-x:visible;padding:2px 0;background:transparent;box-shadow:none}
   .plan-gew{max-height:104px;overflow-y:auto}
@@ -831,12 +842,13 @@
       <span id="planTagLabel">Heute</span>
       <button id="planNext" type="button" aria-label="Nächster Tag">▶</button>
     </div>
-    <div class="plan-filterbar">
+    <details class="plan-filterbar" id="planFilterbar">
+      <summary>Zielfisch &amp; Gewässer einschränken<span id="planFilterCount"></span></summary>
       <div class="plan-flabel">Zielfisch</div>
       <div class="chips sub plan-chips" id="planFishChips"></div>
       <div class="plan-flabel">Gewässer der Region</div>
       <div class="chips sub plan-chips plan-gew" id="planGewChips"></div>
-    </div>
+    </details>
     <div id="planBody" class="plan-body"></div>
     <div class="plan-foot"><button id="planGo" hidden>Auf der Karte zeigen</button></div>
   </div>
