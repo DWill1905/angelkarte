@@ -4,6 +4,17 @@ Fachliche und technische Änderungen an der Angelkarte-App, neueste zuerst.
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.0.0/); SW-Version
 bezieht sich auf `angelkarte-shell-vN` in `sw.js`.
 
+## SW v90 – 2026-07-18
+
+### Fixed
+- **Planer-Köderempfehlung: Karausche/Rotfeder hätten einen Gummifisch bekommen.**
+  Folgefehler des vorigen Fixes: `plan.ts`s `koederSatz()` schlägt für alles, was nicht in
+  der `FRIEDFISCH`-Tabelle steht, einen 10–14-cm-Gummifisch am Jigkopf vor – richtig für
+  Raubfisch, falsch für einen kleinen Weißfisch. Karausche und Rotfeder fehlten in dieser
+  Tabelle; da sie jetzt (seit v89) ein vollständiges Artprofil haben, konnten sie leichter
+  als Planer-Empfehlung obenauf landen. Beide ergänzt: Made/Wurm bzw. Made/Brotflocke an
+  feiner Posenmontage statt Kunstköder.
+
 ## SW v89 – 2026-07-18
 
 ### Fixed

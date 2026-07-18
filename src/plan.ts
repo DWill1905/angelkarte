@@ -303,6 +303,8 @@ const FRIEDFISCH: Record<string, string> = {
   Barbe: 'Feeder mit Käse oder Tauwurm',
   Döbel: 'Brotflocke oder kleiner Wobbler',
   Rotauge: 'Made an feiner Pose',
+  Rotfeder: 'Made oder Brotflocke an feiner Pose – Rotfeder steht oft hoch im Wasser, flach anbieten',
+  Karausche: 'Made oder Wurm an feiner Posenmontage, wenig anfüttern',
   Aal: 'Tauwurmbündel am Grund',
 };
 
