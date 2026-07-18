@@ -429,7 +429,15 @@ handle.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleS
 /* ===== Offline-Kacheln: aktuellen Ausschnitt sichern (OSM-policy-konform, kein Bulk) ===== */
 function lon2tile(lon,z){return Math.floor((lon+180)/360*Math.pow(2,z));}
 function lat2tile(lat,z){const r=lat*Math.PI/180;return Math.floor((1-Math.log(Math.tan(r)+1/Math.cos(r))/Math.PI)/2*Math.pow(2,z));}
-export async function cacheViewport(prog){
+/** Kombiniert zwei AbortSignals zu einem (kein AbortSignal.any() -> breitere Browser-
+    Unterstuetzung). Bricht ab, sobald EINES der beiden abbricht. */
+function kombiniertesSignal(a: AbortSignal, b: AbortSignal): AbortSignal {
+  const ctrl=new AbortController();
+  const abbrechen=()=>ctrl.abort();
+  if(a.aborted||b.aborted) ctrl.abort(); else { a.addEventListener('abort',abbrechen,{once:true}); b.addEventListener('abort',abbrechen,{once:true}); }
+  return ctrl.signal;
+}
+export async function cacheViewport(prog, signal?: AbortSignal){
   if(!state.map||!('caches' in window)) return {total:0,done:0,noSupport:true};
   const b=state.map.getBounds(), z0=Math.round(state.map.getZoom());
   const zooms=[z0]; if(z0+1<=16) zooms.push(z0+1);
@@ -445,23 +453,37 @@ export async function cacheViewport(prog){
   const cache=await caches.open('angelkarte-tiles-v1');
   let done=0, ok=0;
   for(const url of urls){
+    /* Dialog geschlossen (Nutzer will nicht mehr warten) - nicht im Hintergrund
+       weiterladen, das kostet nur Akku/Datenvolumen ohne dass es noch wer sieht. */
+    if(signal&&signal.aborted) break;
     try{
       const hit=await cache.match(url);
       if(hit){ ok++; }
-      else{ const r=await fetch(url,{mode:'no-cors'}); await cache.put(url,r); ok++; }
+      else{
+        /* Einzelne haengende Kachel darf nicht den ganzen Vorgang blockieren - 8s Timeout je Kachel. */
+        const fetchSignal=signal?kombiniertesSignal(signal,AbortSignal.timeout(8000)):AbortSignal.timeout(8000);
+        const r=await fetch(url,{mode:'no-cors',signal:fetchSignal}); await cache.put(url,r); ok++;
+      }
     }catch(e){}
     done++; if(prog) prog(done,urls.length);
   }
-  return {total:urls.length,done,ok};
+  return {total:urls.length,done,ok,abgebrochen:!!(signal&&signal.aborted)};
 }
 export const offDlg=byId('offDlg');
+/* Laeuft der aktuelle Sicherungsvorgang noch, wenn der Dialog geschlossen wird? Dann
+   abbrechen statt im Hintergrund weiterzuladen (siehe cacheViewport). */
+let offlineAbort: AbortController|null=null;
 export async function openOffline(){
   const body=byId('offBody');
   offDlg.hidden=false;
   if(!('caches' in window)){ body.innerHTML='<p>Offline-Speichern wird von diesem Browser nicht unterstützt.</p>'; return; }
+  if(offlineAbort) offlineAbort.abort(); // ein evtl. noch laufender vorheriger Versuch
+  offlineAbort=new AbortController();
+  const mySignal=offlineAbort.signal;
   body.innerHTML='<p style="color:var(--muted)">Sichere den aktuellen Kartenausschnitt (aktuelle + eine tiefere Zoomstufe) für die Offline-Nutzung …</p><p id="offProg" style="font-family:\'Space Mono\',monospace;margin-top:8px">0 %</p>';
   const prog=(d,t)=>{const el=byId('offProg'); if(el) el.textContent=Math.round(d/t*100)+' %  ('+d+'/'+t+' Kacheln)';};
-  const res=await cacheViewport(prog);
+  const res=await cacheViewport(prog,mySignal);
+  if(mySignal.aborted) return; // Dialog wurde inzwischen geschlossen - keine Meldung mehr reinschreiben
   if(res.noSupport){ body.innerHTML='<p>Offline-Speichern nicht unterstützt.</p>'; return; }
   if(res.tooMany){
     body.innerHTML='<p>⚠ Der Ausschnitt umfasst zu viele Kacheln ('+res.total+'). Bitte näher heranzoomen (auf dein Angelrevier) und erneut sichern – so bleibt es fair gegenüber dem OpenStreetMap-Kachelserver.</p>';
@@ -471,6 +493,7 @@ export async function openOffline(){
     +'<p style="color:var(--muted);margin-top:8px;font-size:11.5px">Hinweis: Nur der aktuell sichtbare Bereich wird gesichert (kein Massen-Download – das verstößt gegen die OSM-Nutzungsregeln). Für weitere Reviere jeweils dorthin zoomen und erneut sichern.</p>';
 }
 if(offDlg){
-  byId('offClose').onclick=()=>{offDlg.hidden=true;};
-  offDlg.addEventListener('click',e=>{if(e.target===offDlg)offDlg.hidden=true;});
+  const offAbbrechen=()=>{ offDlg.hidden=true; if(offlineAbort) offlineAbort.abort(); };
+  byId('offClose').onclick=offAbbrechen;
+  offDlg.addEventListener('click',e=>{if(e.target===offDlg)offAbbrechen();});
 }

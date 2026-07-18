@@ -1,5 +1,19 @@
 # Changelog
 
+## SW v117 – 2026-07-18
+
+### Fixed
+- **"Karte offline sichern" ließ sich nicht abbrechen und hatte kein Timeout je Kachel.**
+  Beim Testen der App fiel auf: `cacheViewport()` lud die Kacheln streng sequentiell ohne
+  jede Abbruchmöglichkeit – Schließen des Dialogs (`offClose`, Klick daneben) setzte nur
+  `hidden=true`, der Download lief im Hintergrund unbeirrt weiter (Akku/Datenvolumen für
+  nichts, da niemand mehr hinschaut) und eine einzelne hängende Kachelanfrage konnte den
+  gesamten Vorgang unbegrenzt blockieren. Jetzt bekommt jede Kachelanfrage ein 8-Sekunden-
+  Timeout, und ein `AbortController` wird beim Schließen des Dialogs aktiv abgebrochen –
+  `cacheViewport()` bricht die Schleife sofort ab, `openOffline()` schreibt danach keine
+  verspätete Erfolgsmeldung mehr in einen geschlossenen Dialog. Zwei neue Tests (mit
+  gestellter „hängender" Kachelanfrage, die erst durch das Abort-Signal auflöst).
+
 ## SW v116 – 2026-07-18
 
 ### Changed
