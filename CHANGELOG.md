@@ -1,5 +1,17 @@
 # Changelog
 
+## SW v108 – 2026-07-18
+
+### Fixed
+- **Popup-Disclaimer "Modellwert aus ..." zerfiel in überlappende Spalten.** Der Hinweistext
+  unter "Chancen heute" (jedes Spot-Popup) enthält ein `<b>keine Fangwahrscheinlichkeit</b>`
+  mitten im Fließtext. In Kombination mit `display:flex` auf `.rating-body .verif` (ohne
+  `flex-wrap`) zerlegte der Browser den Text an der `<b>`-Grenze in mehrere Flex-Items, die
+  nebeneinander statt als durchlaufender Absatz gerendert wurden – auf jedem Popup, Desktop
+  wie Mobile. Fix: Text nach dem Info-Icon in einen eigenen `<span>` gefasst (wieder ein
+  einzelnes Flex-Item) plus `flex-wrap:wrap` als Absicherung gegen dieselbe Klasse Bug an
+  anderer Stelle. Gefunden bei einem UI/UX-Review mit echten Browser-Screenshots (Playwright).
+
 ## SW v107 – 2026-07-18
 
 ### Added
