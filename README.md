@@ -61,6 +61,7 @@ fehlendes Pflichtfeld faellt beim Bauen auf, nicht am Wasser.
 | `regeln.ts` | Regeln-Tab & Schonzeit-Kalender |
 | `fangbuch.ts` | Fangbuch inkl. Backup/Restore |
 | `trip.ts` | Trip-Planer (gemerkte Spots) |
+| `notiz.ts` | Persoenliche Notizen zu bestehenden Spots (lokal, pro Region) |
 | `app.ts` | Einstiegspunkt, laedt Module in Abhaengigkeitsreihenfolge |
 
 Geteilter Zustand liegt im `state`-Objekt aus `state.js` (Properties werden mutiert, nie neu

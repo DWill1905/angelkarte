@@ -1,5 +1,18 @@
 # Changelog
 
+## SW v104 – 2026-07-18
+
+### Added
+- **Persönliche Notizen an bestehenden Spots.** Bisher ging eigenes Wissen zu einem Gewässer
+  ("Zufahrt bei Nässe gesperrt", "Verein hat die Regeln verschärft", "bester Zugang ist der
+  Waldweg") nur über den Umweg "Eigener Spot" – der aber einen zweiten, unabhängigen Marker
+  anlegt statt den bestehenden Spot zu ergänzen. Jedes Popup (außer eigene Spots, die schon
+  ihre eigene Notiz haben) hat jetzt ein Notizfeld, das beim Verlassen automatisch lokal
+  gespeichert wird (`notiz.ts`, neues Modul, pro Region getrennt, nie an einen Server). In
+  der Einfachen Sicht ausgeblendet (Vertiefung, keine Sicherheitsinfo). Neue Datei zum
+  Service-Worker-Cache hinzugefügt (sonst offline nicht verfügbar); README-Modultabelle
+  ergänzt. Sechs neue Tests.
+
 ## SW v103 – 2026-07-18
 
 ### Added

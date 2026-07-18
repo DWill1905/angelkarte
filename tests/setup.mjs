@@ -38,6 +38,7 @@ import { fbInsights, fbModellCheck, fbRestore, parseFangDatum, beissfensterJetzt
 import { toggleTrip, inTrip, openTrip, tripReady } from './trip.js';
 import { schilfLaden, schilfAus, schilfAktiv } from './reed.js';
 import { computeScore, tagesScore } from './tools.js';
+import { ladeNotiz, speichereNotiz } from './notiz.js';
 import { fullscreenToggle, fullscreenAktiv } from './fullscreen.js';
 import { setzeSicht, aktuelleSicht, ladeSicht, sichtReady } from './sicht.js';
 import { empfehlung, kandidaten, openPlan, zielfischFor, startzeitFor, peilung, himmelsrichtung, winkelDiff, istAuflandig, tagDatum, tagLabel, bewertZeit, tagesplan, MAX_TAG } from './plan.js';
@@ -53,6 +54,7 @@ window.__app = { state, popupHtml, mapsLink, spotVisible, sperrWarnung, locApply
   empfehlung, kandidaten, openPlan, zielfischFor, startzeitFor, tagDatum, tagLabel, bewertZeit, tagesplan, MAX_TAG,
   peilung, himmelsrichtung, winkelDiff, istAuflandig,
   bewerteSpot, bewerteAlle, sterneAus, sterneText, jahreszeit, saison, computeScore, tagesScore,
+  ladeNotiz, speichereNotiz,
   inWindow, inSchonzeit, daysUntilMD, masseAus, fmtMD, fmtDate, solunar, haversine, sunTimes, mondStaerke,
   wtSchaetzung, loadWeather };
 `);

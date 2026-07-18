@@ -11,6 +11,7 @@ import './reed.js';
 import './map.js';
 import './myspots.js';
 import './weather.js';
+import './notiz.js';
 import './tools.js';
 import './regeln.js';
 import './fangbuch.js';

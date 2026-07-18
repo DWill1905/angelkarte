@@ -109,6 +109,11 @@ export function popupHtml(s) {
       </div>
     </details>` : ''}
     ${tackleHtml(s)}
+    ${!s.my ? `<div class="pop-notiz">
+      <b>✎ Meine Notiz</b>
+      <textarea class="notiz-ta" data-notiz-spot="${esc(s.name)}" rows="2"
+        placeholder="Eigenes Wissen zu diesem Spot – nur auf diesem Gerät gespeichert…"></textarea>
+    </div>` : ''}
     <div class="verif">${s.verif === 'C' ? '⚠ Beleglage schwach – Bestand dokumentiert, Zugang/Gastkarte ungesichert' : s.verif === 'B' ? '⚠ Datenlage teils unbelegt – vor Ort verifizieren' : '✓ Kerndaten belegt (Ortsdaten/Primärquellen)'}${state.REGION && state.REGION.geprueft ? ' · Daten geprüft ' + esc(monatLabel(state.REGION.geprueft)) : ''}</div>
     <div class="pop-actions">
       <a class="pop-btn nav" href="${mapsLink(s)}" target="_blank" rel="noopener">Route</a>

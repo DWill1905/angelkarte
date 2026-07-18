@@ -12,6 +12,7 @@ import { NOW, fmtDate, fmtMD, haversine, hhmm, inSchonzeit, mondPhase, mondStaer
 import { regionCenter } from './ui.js';
 import { openOffline, satToggle } from './map.js';
 import { openTrip, inTrip, setTripBtn } from './trip.js';
+import { ladeNotiz, speichereNotiz } from './notiz.js';
 import { esc } from './util.js';
 export function season() { const m = NOW.getMonth() + 1; return m === 12 || m <= 2 ? 'winter' : m <= 5 ? 'fruehjahr' : m <= 8 ? 'sommer' : 'herbst'; }
 export const KB = {
@@ -723,6 +724,13 @@ state.map.on('popupopen', e => {
         const c = state.map.getCenter();
         const ref = state.userPos || [c.lat, c.lng];
         el.textContent = '~' + haversine(ref[0], ref[1], la, ln).toFixed(1) + ' km ' + (state.userPos ? 'von dir' : 'von Kartenmitte');
+    }
+    const notizEl = e.popup.getElement().querySelector('.notiz-ta');
+    if (notizEl) {
+        const name = notizEl.dataset.notizSpot || '';
+        ladeNotiz(name).then(txt => { if (notizEl.value === '')
+            notizEl.value = txt; }); /* Popup evtl. laengst zu/neu geoeffnet */
+        notizEl.onblur = () => { speichereNotiz(name, notizEl.value); };
     }
 });
 state.map.on('popupclose', () => document.body.classList.remove('popup-offen'));
