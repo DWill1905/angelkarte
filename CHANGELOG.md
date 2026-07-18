@@ -1,5 +1,17 @@
 # Changelog
 
+## SW v109 – 2026-07-18
+
+### Added
+- **Scroll-Fade an den Chip-Reihen.** Die horizontal scrollbaren Kategorie-/Zielfisch-Chips
+  (Karte + Planer) hatten eine unsichtbare Scrollbar und keinerlei Hinweis, dass rechts noch
+  mehr Chips folgen – auf schmalen Bildschirmen sah die Reihe aus, als würde sie einfach
+  aufhören. Neue `chipsFadeInit()` (`util.ts`) blendet die Ränder per CSS-Maske aus, sobald
+  in diese Richtung noch etwas zu scrollen ist (kein Hintergrundfarb-Abgleich nötig, reine
+  Opacity), und reagiert automatisch auf Scrollen, Größenänderung und Neuaufbau der Chips
+  (MutationObserver) – kein Aufruf an jeder Baustelle nötig, einmal pro Chip-Reihe verdrahtet.
+  Gefunden beim selben UI/UX-Review wie der Popup-Fix in v108.
+
 ## SW v108 – 2026-07-18
 
 ### Fixed

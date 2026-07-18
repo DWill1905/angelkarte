@@ -27,3 +27,18 @@ export function ICON(name: string, cls?: string): string {
   return '<svg class="ic'+(cls?' '+cls:'')+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(ICONS[name]||'')+'</svg>';
 }
 
+/** Fade-Hinweis an den Rändern horizontal scrollbarer Chip-Reihen: reine Opacity-Maske
+    (kein Hintergrundfarb-Abgleich nötig), reagiert auf Scrollen, Größenänderung und
+    Neuaufbau der Chips (MutationObserver) - einmal pro Element aufrufen, läuft danach
+    von selbst mit. */
+export function chipsFadeInit(el: HTMLElement): void {
+  const update=()=>{
+    el.classList.toggle('fade-l', el.scrollLeft>2);
+    el.classList.toggle('fade-r', el.scrollLeft+el.clientWidth<el.scrollWidth-2);
+  };
+  el.addEventListener('scroll', update, {passive:true});
+  if (typeof ResizeObserver !== 'undefined') new ResizeObserver(update).observe(el);
+  new MutationObserver(update).observe(el, {childList:true});
+  update();
+}
+

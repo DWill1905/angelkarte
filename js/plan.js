@@ -353,11 +353,13 @@ export function empfehlung(jetzt = new Date(), filter = {}) {
 }
 /* ---------- Darstellung: eigene Planer-Seite mit Fisch- & Gewässerfilter ---------- */
 import { byId } from './dom.js';
-import { esc } from './util.js';
+import { chipsFadeInit, esc } from './util.js';
 let letzterKandidat = null;
 /* Seiten-lokale Auswahl (verändert NICHT den Kartenfilter). Leer = „alle". */
 const planFisch = [];
 const planGew = [];
+chipsFadeInit(byId('planFishChips'));
+chipsFadeInit(byId('planGewChips'));
 /** Beangelbare Gewässer (Spot-Namen) der aktuellen Region, ohne Sperr/Info/eigene. */
 function beangelbareGewaesser() {
     return state.SPOTS

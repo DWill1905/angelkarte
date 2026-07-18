@@ -7,7 +7,7 @@ import { fmtMD, haversine } from './astro.js';
 import { CATS, FISH, fischArtenFor } from './data.js';
 import { openTools } from './tools.js';
 import { sunLine } from './ui.js';
-import { ICON, esc } from './util.js';
+import { ICON, chipsFadeInit, esc } from './util.js';
 import { loadWeather } from './weather.js';
 /* Basiskarten. OSM ist Standard (beschriftet, gut für Orientierung); das Luftbild zeigt
    Buhnenfelder, Krautkanten und Altarm-Struktur, die in OSM schlicht nicht drin sind. */
@@ -257,6 +257,7 @@ export function buildMarkers() {
 }
 /* Kategorie-Chips (pro Region neu aufgebaut, leere Kategorien ausgeblendet) */
 export const chipsEl = byId('chips');
+chipsFadeInit(chipsEl);
 export function buildChips() {
     chipsEl.innerHTML = '';
     Object.keys(CATS).forEach(k => state.active[k] = true);
@@ -279,6 +280,7 @@ export function buildChips() {
 }
 /* Zielfisch-Chips (Mehrfachauswahl) */
 export const fishEl = byId('fishChips');
+chipsFadeInit(fishEl);
 export function fishChip(label, id) {
     const b = document.createElement('button');
     b.className = 'chip';
