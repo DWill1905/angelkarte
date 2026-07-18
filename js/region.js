@@ -32,10 +32,18 @@ export async function initRegions() {
     catch (e) { }
     const start = state.REGIONS.find(r => r.id === saved) || state.REGIONS[0];
     sel.value = start.id;
-    sel.onchange = async () => { loadRegion(state.REGIONS.find(r => r.id === sel.value)); try {
-        await store.set('region', sel.value);
-    }
-    catch (e) { } };
+    /* Bei langen Namen schneidet die CSS-Ellipsis den Titel sichtbar ab (schmale Header,
+       z.B. Mobile) - title-Attribut liefert den vollen Namen als Tooltip/Screenreader-Text nach. */
+    sel.title = start.name;
+    sel.onchange = async () => {
+        const r = state.REGIONS.find(x => x.id === sel.value);
+        sel.title = r.name;
+        loadRegion(r);
+        try {
+            await store.set('region', sel.value);
+        }
+        catch (e) { }
+    };
     loadRegion(start);
 }
 export async function loadRegion(r) {

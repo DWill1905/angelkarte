@@ -1,5 +1,16 @@
 # Changelog
 
+## SW v110 – 2026-07-18
+
+### Fixed
+- **Regionstitel im Header wurde bei langen Namen hart abgeschnitten.** Der Header hat auf
+  schmalen Bildschirmen (z. B. iPhone) nur ~190px für den Regionsnamen – lange Namen wie
+  "Erzgebirge / Freiberg (Sachsen)" wurden ohne jedes Zeichen mittendrin abgeschnitten, man
+  sah nicht, dass da noch mehr steht. `.region-title` bekommt jetzt `text-overflow:ellipsis`
+  ("…" statt hartem Cut), zusätzlich liefert ein `title`-Attribut auf dem Select den vollen
+  Namen als Tooltip nach (Desktop-Hover, Screenreader) – wird bei jedem Regionswechsel
+  mitgepflegt. Dritter Fund aus demselben UI/UX-Review wie v108/v109.
+
 ## SW v109 – 2026-07-18
 
 ### Added
