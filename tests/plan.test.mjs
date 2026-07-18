@@ -365,6 +365,28 @@ describe('Elbe-Kunstköderverbot (15.2.–30.4., eigenes Fenster)', () => {
   });
 });
 
+describe('Erzgebirge-Kunstköderverbot (LVSA, 1.2.–30.4.)', () => {
+  test('im Fenster Naturköder + Warnung, sonst Gummifisch', async () => {
+    await loadRegion(ctx, 'erzgebirge');
+    app.state.WX = { temp: 8, wind: 8, dirDeg: 200, dir: 'SW', press: 1015, trendVal: -1, code: 3 };
+    /* Barsch hat in SCHON_SN keine eigene Schonzeit - passende Sonde fuer die
+       Raubfisch-Sperrfrist statt einer art-spezifischen Schonzeit. */
+    const opt = { fisch: ['Barsch'], gewaesser: ['Mühlteich (Brand-Erbisdorf)'] };
+    const maerz = app.empfehlung(new Date(Date.UTC(2026, 2, 10, 10, 0)), opt);
+    assert.match(maerz.koeder, /Naturköder/, 'März: sollte Naturköder sein (LVSA-Fenster 1.2.–30.4.)');
+    assert.ok(maerz.luecken.some((l) => /Kunstköder/.test(l) && /01\.02\.–30\.04\./.test(l)), 'März: Warnung mit korrektem Fenster fehlt');
+    const juli = app.empfehlung(new Date(Date.UTC(2026, 6, 15, 10, 0)), opt);
+    assert.match(juli.koeder, /Gummifisch/, 'Juli: Kunstköder wieder erlaubt');
+  });
+
+  test('gilt NICHT am privaten Angelteich Gränitz', async () => {
+    await loadRegion(ctx, 'erzgebirge');
+    app.state.WX = { temp: 8, wind: 8, dirDeg: 200, dir: 'SW', press: 1015, trendVal: -1, code: 3 };
+    const spot = app.state.SPOTS.find((s) => s.name.includes('Gränitz'));
+    assert.ok(spot && !spot.kkVerbot, 'Gränitz ist Privatgewässer - LVSA-Sperrfrist gilt hier laut eigenem Hinweis nicht');
+  });
+});
+
 describe('Trübung im Scoring', () => {
   test('trübes Wasser hilft dem lichtscheuen Zander bei Sonne/Flaute', async () => {
     await loadRegion(ctx, 'mecklenburg');

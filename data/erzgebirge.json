@@ -26,6 +26,16 @@
    "zugang": "ufer",
    "keinBoot": true,
    "keinAnfuettern": true,
+   "kkVerbot": {
+    "von": [
+     2,
+     1
+    ],
+    "bis": [
+     4,
+     30
+    ]
+   },
    "rig": "H-Spinnrute 20–60 g, Geflecht + FC-Vorfach. Erlaubte Köder: Kunstköder, Wurm, Mais/Teig – KEINE Maden, kein Fleisch, kein Anfüttern (TWT!).",
    "arten": [
     "Barsch",
@@ -80,6 +90,16 @@
    "verif": "B",
    "keinBoot": true,
    "keinAnfuettern": true,
+   "kkVerbot": {
+    "von": [
+     2,
+     1
+    ],
+    "bis": [
+     4,
+     30
+    ]
+   },
    "rig": "Spinnrute mittel, Stahl- oder dickes FC-Vorfach (Hecht). TWT-Köderregeln wie Saidenbach.",
    "arten": [
     "Barsch",
@@ -110,6 +130,16 @@
    "verif": "B",
    "keinBoot": true,
    "keinAnfuettern": true,
+   "kkVerbot": {
+    "von": [
+     2,
+     1
+    ],
+    "bis": [
+     4,
+     30
+    ]
+   },
    "rig": "H-Spinnrute 20–60 g für weite Würfe an die Abbruchkanten; TWT-Köderregeln beachten. Uferangeln, kein Boot.",
    "arten": [
     "Barsch",
@@ -432,6 +462,16 @@
    "name": "Mühlteich (Brand-Erbisdorf)",
    "zugang": "ufer",
    "verif": "B",
+   "kkVerbot": {
+    "von": [
+     2,
+     1
+    ],
+    "bis": [
+     4,
+     30
+    ]
+   },
    "rig": "Grundrute mit Freilaufrolle (Karpfen), zweite Rute fein auf Schleie – abends Tauwurm am Grund für Aal.",
    "arten": [
     "Karpfen",
@@ -458,6 +498,16 @@
   {
    "name": "Schlüsselteich (Freiberg)",
    "zugang": "ufer",
+   "kkVerbot": {
+    "von": [
+     2,
+     1
+    ],
+    "bis": [
+     4,
+     30
+    ]
+   },
    "rig": "Feederrute mittel, Method-Körbe, 10er–12er Haken – stadtnah reicht leichtes Gepäck.",
    "arten": [
     "Karpfen",
@@ -504,6 +554,16 @@
    "name": "Erzengler Teich",
    "zugang": "ufer",
    "verif": "B",
+   "kkVerbot": {
+    "von": [
+     2,
+     1
+    ],
+    "bis": [
+     4,
+     30
+    ]
+   },
    "nr": "RWA – AVS-Nr. prüfen",
    "cat": "fried",
    "arten": [
@@ -530,6 +590,16 @@
    "name": "Berthelsdorfer Hüttenteich",
    "zugang": "ufer",
    "verif": "B",
+   "kkVerbot": {
+    "von": [
+     2,
+     1
+    ],
+    "bis": [
+     4,
+     30
+    ]
+   },
    "nr": "RWA – AVS-Nr. prüfen",
    "cat": "fried",
    "arten": [

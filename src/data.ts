@@ -40,7 +40,7 @@ export function fischArtenFor(ids: string[]): string[] {
 
 export const SPOTS_SN: Spot[] = [
   {
-    name:'Talsperre Saidenbach',zugang:'ufer',keinBoot:true,keinAnfuettern:true,
+    name:'Talsperre Saidenbach',zugang:'ufer',keinBoot:true,keinAnfuettern:true,kkVerbot:{von:[2,1],bis:[4,30]},
     rig:'H-Spinnrute 20–60 g, Geflecht + FC-Vorfach. Erlaubte Köder: Kunstköder, Wurm, Mais/Teig – KEINE Maden, kein Fleisch, kein Anfüttern (TWT!).',
     arten:['Barsch','Hecht','Karpfen','Schleie','Brachse','Zander'], nr:'C02-102', cat:'raub', lat:50.7358, lng:13.2342,
     fisch:'Barsch, Hecht, Karpfen, Schleie, Brasse, Weißfisch (Zander selten)',
@@ -56,7 +56,7 @@ export const SPOTS_SN: Spot[] = [
     warn:false
   },
   {
-    name:'Vorsperre Dittersbach',zugang:'ufer',verif:'B',keinBoot:true,keinAnfuettern:true,
+    name:'Vorsperre Dittersbach',zugang:'ufer',verif:'B',keinBoot:true,keinAnfuettern:true,kkVerbot:{von:[2,1],bis:[4,30]},
     rig:'Spinnrute mittel, Stahl- oder dickes FC-Vorfach (Hecht). TWT-Köderregeln wie Saidenbach.',
     arten:['Barsch','Hecht','Karpfen','Schleie','Regenbogenforelle'], nr:'C01-104', cat:'raub', lat:50.8009, lng:13.4798,
     fisch:'Barsch, Hecht, Karpfen, Schleie, Regenbogenforelle, Weißfisch',
@@ -67,7 +67,7 @@ export const SPOTS_SN: Spot[] = [
     warn:true
   },
   {
-    name:'Talsperre Rauschenbach',zugang:'ufer',verif:'B',keinBoot:true,keinAnfuettern:true,
+    name:'Talsperre Rauschenbach',zugang:'ufer',verif:'B',keinBoot:true,keinAnfuettern:true,kkVerbot:{von:[2,1],bis:[4,30]},
     rig:'H-Spinnrute 20–60 g für weite Würfe an die Abbruchkanten; TWT-Köderregeln beachten. Uferangeln, kein Boot.',
     arten:['Barsch','Hecht','Zander','Karpfen','Schleie','Regenbogenforelle','Aal','Brachse'], nr:'AVS (Gew.-Nr. vor Ort prüfen)', cat:'raub', lat:50.6965, lng:13.5057,
     fisch:'Barsch, Hecht, Zander, Karpfen, Schleie, Regenbogenforelle, Brasse, Aal, Weißfisch',
@@ -154,7 +154,7 @@ export const SPOTS_SN: Spot[] = [
     warn:true
   },
   {
-    name:'Mühlteich (Brand-Erbisdorf)',zugang:'ufer',verif:'B',
+    name:'Mühlteich (Brand-Erbisdorf)',zugang:'ufer',verif:'B',kkVerbot:{von:[2,1],bis:[4,30]},
     rig:'Grundrute mit Freilaufrolle (Karpfen), zweite Rute fein auf Schleie – abends Tauwurm am Grund für Aal.',
     arten:['Karpfen','Schleie','Aal','Barsch'], nr:'AVS', cat:'fried', lat:50.7999, lng:13.2761,
     fisch:'Karpfen, Graskarpfen, Schleie, Aal, Barsch',
@@ -165,7 +165,7 @@ export const SPOTS_SN: Spot[] = [
     warn:false
   },
   {
-    name:'Schlüsselteich (Freiberg)',zugang:'ufer',
+    name:'Schlüsselteich (Freiberg)',zugang:'ufer',kkVerbot:{von:[2,1],bis:[4,30]},
     rig:'Feederrute mittel, Method-Körbe, 10er–12er Haken – stadtnah reicht leichtes Gepäck.',
     arten:['Karpfen','Brachse','Schleie','Aal','Barsch'], nr:'AVS', cat:'fried', lat:50.9226, lng:13.3427,
     fisch:'Karpfen, Brachse, Schleie, Aal, Barsch',
@@ -187,7 +187,7 @@ export const SPOTS_SN: Spot[] = [
     warn:false
   },
   {
-    name:'Erzengler Teich',zugang:'ufer',verif:'B', nr:'RWA – AVS-Nr. prüfen', cat:'fried',
+    name:'Erzengler Teich',zugang:'ufer',verif:'B',kkVerbot:{von:[2,1],bis:[4,30]}, nr:'RWA – AVS-Nr. prüfen', cat:'fried',
     arten:['Karpfen','Schleie','Barsch'],
     lat:50.8524, lng:13.3419,
     fisch:'Karpfen, Schleie, Barsch (Bestand vor Ort prüfen)',
@@ -199,7 +199,7 @@ export const SPOTS_SN: Spot[] = [
     warn:false
   },
   {
-    name:'Berthelsdorfer Hüttenteich',zugang:'ufer',verif:'B', nr:'RWA – AVS-Nr. prüfen', cat:'fried',
+    name:'Berthelsdorfer Hüttenteich',zugang:'ufer',verif:'B',kkVerbot:{von:[2,1],bis:[4,30]}, nr:'RWA – AVS-Nr. prüfen', cat:'fried',
     arten:['Karpfen','Schleie','Barsch'],
     lat:50.8761, lng:13.3591,
     fisch:'Karpfen, Schleie, Barsch (Bestand vor Ort prüfen)',

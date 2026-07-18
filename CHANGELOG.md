@@ -4,6 +4,25 @@ Fachliche und technische Änderungen an der Angelkarte-App, neueste zuerst.
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.0.0/); SW-Version
 bezieht sich auf `angelkarte-shell-vN` in `sw.js`.
 
+## SW v100 – 2026-07-18
+
+### Fixed
+- **Erzgebirge-Kunstköderverbot (LVSA, 1.2.–30.4.) war ebenfalls unmodelliert.** Dritte
+  Region mit demselben Muster nach RLP und Elbe: die Regeln-Karte nennt „01.02.–30.04.:
+  Angeln mit raubfischtauglichen Ködern in allen LVSA-Gewässern untersagt (faktisch
+  Kunstköderverbot), gilt NICHT am privaten Angelteich Gränitz" – auch als Banner sichtbar.
+  Ohne Mechanismus dahinter hätte der Planer in diesem Fenster Gummifisch auf Barsch/Aal an
+  jedem AVS/LVSA-Gewässer empfohlen. `kkVerbot:{von:[2,1],bis:[4,30]}` auf den sieben
+  eindeutig AVS/LVSA-verwalteten Spots gesetzt (3 Trinkwassertalsperren + 4 Friedfisch-Teiche
+  Mühlteich/Schlüsselteich/Erzengler Teich/Berthelsdorfer Hüttenteich); Richter's Angelteich
+  Gränitz bewusst ausgenommen (trägt bereits `schonzeitInfo`: „LVSA-Sperrfrist gilt hier
+  NICHT"). Die vier Mulde-/Flöha-Flussstrecken bewusst NICHT angefasst: für die beiden
+  Salmonidenstrecken gilt laut Regeln-Karte zusätzlich eine eigene, umfassendere Komplettsperre
+  (01.01.–30.04.) statt eines reinen Kunstköderverbots – ob das auch für die „allgemeinen"
+  Strecken gilt, lässt sich aus den vorliegenden Daten nicht sicher genug ableiten; hier lieber
+  nichts behaupten als etwas Falsches. Zwei neue Tests (Fenster wirkt; Gränitz bleibt
+  ausgenommen), data/*.json neu generiert.
+
 ## SW v99 – 2026-07-18
 
 ### Fixed
