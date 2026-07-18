@@ -35,6 +35,8 @@ const PROFIL = {
     Döbel: { wasser: ['fluss'], hoch: [5, 6, 7, 8, 9], daemmerung: false, licht: 'sicht', stroemung: 'liebt' },
     Rotauge: { wasser: ['see-flach', 'see-tief', 'fluss', 'kanal'], hoch: [4, 5, 6, 7, 8, 9, 10], daemmerung: false, stroemung: 'meidet' },
     Quappe: { wasser: ['fluss', 'see-tief'], hoch: [11, 12, 1, 2], daemmerung: true, nacht: true },
+    Karausche: { wasser: ['see-flach'], hoch: [5, 6, 7, 8, 9], daemmerung: false, truebung: true, warm: true, stroemung: 'meidet' },
+    Rotfeder: { wasser: ['see-flach', 'see-tief', 'kanal'], hoch: [5, 6, 7, 8, 9], daemmerung: false, truebung: true, warm: true, stroemung: 'meidet' },
 };
 /** Zeitprofil einer Art (aus PROFIL) für die art-spezifische Startzeit-Empfehlung im Planer. */
 export function artZeitprofil(art) {

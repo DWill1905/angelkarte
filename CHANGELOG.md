@@ -4,6 +4,18 @@ Fachliche und technische Änderungen an der Angelkarte-App, neueste zuerst.
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.0.0/); SW-Version
 bezieht sich auf `angelkarte-shell-vN` in `sw.js`.
 
+## SW v89 – 2026-07-18
+
+### Fixed
+- **Karausche und Rotfeder fehlten im Artprofil der Spotbewertung.** Beide Arten haben ein
+  Wassertemperatur-Optimum in `tackle.ts` (`WT_OPT`) und stehen als Zielfisch in Spot-Daten
+  (z. B. Vereinssee Ober-Olm), aber `rating.ts`s `bewerteAlle()` filtert Arten auf
+  `PROFIL[art]` – ohne Eintrag tauchten sie in „Chancen heute" nie auf. Für Karausche wog das
+  besonders schwer: sie ist am Ober-Olm-See ganzjährig geschont, aber die App verspricht selbst,
+  dass geschonte Arten immer mit 0 % und Hinweis erscheinen – das griff für sie nie. Profile
+  ergänzt (Karausche wie Schleie: stehendes Gewässer, wärmeliebend, meidet Strömung; Rotfeder
+  wie Rotauge, aber ohne Fließgewässer – klassischer Weiher-/Seefisch).
+
 ## SW v88 – 2026-07-18
 
 ### Fixed
