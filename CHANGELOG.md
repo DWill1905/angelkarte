@@ -4,6 +4,19 @@ Fachliche und technische Änderungen an der Angelkarte-App, neueste zuerst.
 Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.0.0/); SW-Version
 bezieht sich auf `angelkarte-shell-vN` in `sw.js`.
 
+## SW v92 – 2026-07-18
+
+### Fixed
+- **„Heute passt es?"-Score widersprach der Spotbewertung beim Luftdruck.** Die Grenze
+  zwischen „stabil" und „steigt" lag in `computeScore()` (tools.ts) bei 1,0 hPa/3h – überall
+  sonst im Code (Spotbewertung in rating.ts, Wetter-Chip und Trendpfeil in weather.ts, sogar
+  der Köderberater `kbHtml()` im selben File) liegt diese Grenze bei 1,5. Für Trendwerte
+  zwischen 1,0 und 1,5 hPa/3h zeigte der Score „Druck steigt – nach Front oft zäh" (0 von 2
+  Punkten), während die Spotbewertung denselben Messwert zeitgleich als „Luftdruck stabil"
+  einordnete. Grenze auf 1,5 vereinheitlicht. Ein Regressionstest
+  („der Score widerspricht der Spotbewertung nicht mehr") existierte bereits für die
+  gleiche Fehlerklasse beim Sturm-Faktor – dieser Fall war bisher nicht abgedeckt.
+
 ## SW v91 – 2026-07-18
 
 ### Fixed

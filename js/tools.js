@@ -418,7 +418,7 @@ export function computeScore() {
             pt = 2;
             txt = 'Fallender Druck (' + state.WX.trendVal.toFixed(1) + ' hPa/3h) – Fresslaune';
         }
-        else if (state.WX.trendVal < 1.0) {
+        else if (state.WX.trendVal < 1.5) {
             pt = 1;
             txt = 'Druck stabil (' + state.WX.trendVal.toFixed(1) + ' hPa/3h) – neutral';
         }

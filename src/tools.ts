@@ -352,7 +352,7 @@ export function computeScore(){
   if(state.WX && typeof state.WX.trendVal==='number'){
     let pt,txt;
     if(state.WX.trendVal<=-1.5){pt=2;txt='Fallender Druck ('+state.WX.trendVal.toFixed(1)+' hPa/3h) – Fresslaune';}
-    else if(state.WX.trendVal<1.0){pt=1;txt='Druck stabil ('+state.WX.trendVal.toFixed(1)+' hPa/3h) – neutral';}
+    else if(state.WX.trendVal<1.5){pt=1;txt='Druck stabil ('+state.WX.trendVal.toFixed(1)+' hPa/3h) – neutral';}
     else{pt=0;txt='Druck steigt ('+state.WX.trendVal.toFixed(1)+' hPa/3h) – nach Front oft zäh';}
     factors.push({name:'Luftdruck',pts:pt,max:2,txt});
   } else factors.push({name:'Luftdruck',pts:null,max:2,txt:'Keine Wetterdaten geladen'});
