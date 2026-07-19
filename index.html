@@ -310,7 +310,6 @@
   body.map-fs .view.active{padding:0}
   /* Sperrzonen-Warnung bleibt sichtbar – sie darf nie hinter dem Vollbild verschwinden. */
   body.map-fs #sperrWarn{padding-top:calc(8px + env(safe-area-inset-top))}
-  body.map-fs .fsbtn{top:calc(12px + env(safe-area-inset-top))}
   body.map-fs .locbtn{bottom:calc(28px + env(safe-area-inset-bottom))}
   body.map-fs .sheet{bottom:calc(14px + env(safe-area-inset-bottom))}
   @media(max-width:767px){
@@ -338,6 +337,7 @@
   #sperrWarn b{color:#ffb3a0}
   @keyframes warnIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
   @media(prefers-reduced-motion:reduce){ #sperrWarn,.banner.show{animation:none} }
+  .map-wrap{position:relative;flex:1;min-height:0;display:flex}
   #map{flex:1;min-height:0;background:#2a5966;z-index:0}
   .leaflet-container{font:inherit}
   .marker-cluster-small,.marker-cluster-medium,.marker-cluster-large{background:rgba(124,77,255,.3)}
@@ -868,14 +868,16 @@
   <div class="chips sub" id="fishChips" role="group" aria-label="Nach Zielfisch filtern"></div>
   <div id="saisonInfo" hidden><div id="saisonBody"></div><div id="schilfStatus" style="margin-top:6px;font-size:11px"></div></div>
   <div id="sperrWarn" role="alert" hidden></div>
-  <div id="map"></div>
-  <div class="legende" id="legende">
-    <button class="leg-toggle" id="legToggle" type="button" aria-expanded="false" aria-controls="legBody">Legende</button>
-    <div class="leg-body" id="legBody" hidden></div>
+  <div class="map-wrap">
+    <div id="map"></div>
+    <div class="legende" id="legende">
+      <button class="leg-toggle" id="legToggle" type="button" aria-expanded="false" aria-controls="legBody">Legende</button>
+      <div class="leg-body" id="legBody" hidden></div>
+    </div>
+    <button class="toolsfab" id="toolsFab" type="button" title="Werkzeuge" aria-label="Werkzeuge" data-ic="tools"></button>
+    <button class="locbtn" id="locbtn" title="Meinen Standort anzeigen" aria-label="Meinen Standort anzeigen" data-ic="locate">Standort</button>
+    <button class="fsbtn" id="fsBtn" type="button" aria-pressed="false" title="Karte im Vollbild" aria-label="Karte im Vollbild"></button>
   </div>
-  <button class="toolsfab" id="toolsFab" type="button" title="Werkzeuge" aria-label="Werkzeuge" data-ic="tools"></button>
-  <button class="locbtn" id="locbtn" title="Meinen Standort anzeigen" aria-label="Meinen Standort anzeigen" data-ic="locate">Standort</button>
-  <button class="fsbtn" id="fsBtn" type="button" aria-pressed="false" title="Karte im Vollbild" aria-label="Karte im Vollbild"></button>
   <div class="sheet collapsed" id="sheet">
     <div class="sheet-handle" id="sheetHandle" role="button" tabindex="0" aria-label="Spotliste ein-/ausklappen">
       <h2>Plätze <span id="spotCount"></span><span id="spotSort" style="color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0"></span></h2>

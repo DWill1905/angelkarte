@@ -1,5 +1,19 @@
 # Changelog
 
+## SW v143 – 2026-07-19 (Design-Audit Runde 1/10)
+
+### Fixed
+- **Vollbild-Button überlagerte die Kategorie-Chips auf dem Handy.** `#fsBtn` war
+  `position:absolute` relativ zu `#view-karte` positioniert (`top:12px`), nicht relativ zur
+  Karte selbst. Da die Chip-Filterzeilen *vor* der Karte im Layout stehen, landete der Button
+  optisch nicht über der Karte, sondern über der ersten Chip-Reihe – auf schmalen Viewports
+  wurde dadurch der letzte sichtbare Chip ("Friedfisch") von einem schwebenden Button verdeckt.
+  Karte, Legende, Werkzeuge-, Standort- und Vollbild-Button stecken jetzt gemeinsam in einem
+  neuen `.map-wrap`-Container, der als Positionierungs-Bezugsrahmen dient – die Buttons
+  richten sich nun korrekt an der Karte aus, nicht am gesamten Kartenreiter. Betrifft auch
+  den Vollbildmodus (dort war dieselbe Überlagerung durch eine redundante CSS-Regel nochmal
+  festgeschrieben; die Regel war überflüssig und wurde entfernt).
+
 ## SW v142 – 2026-07-19
 
 ### Changed
