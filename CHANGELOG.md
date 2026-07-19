@@ -1,5 +1,16 @@
 # Changelog
 
+## SW v146 – 2026-07-19 (Design-Audit Runde 4/10)
+
+### Fixed
+- **Abgewählte Kategorie-Chips ("Raubfisch", "Salmoniden" …) kaum noch lesbar.** Dieselbe
+  Ursache wie beim Menü in Runde 2, hier aber auf dem wichtigsten, immer sichtbaren
+  Filter-Element der Karte: `.chip.off` dimmte per `opacity:.38` Text, Punkt-Farbe, Rahmen
+  und Füllung gemeinsam – rechnerisch blieben nur ~1,8:1 Kontrast übrig (WCAG AA: 4,5:1).
+  Jetzt bleibt die Beschriftung voll lesbar; "abgewählt" wird stattdessen wie bei den
+  Zielfisch-Chips über transparente Füllung, blasseren Rahmen und einen entsättigten
+  Farbpunkt vermittelt.
+
 ## SW v145 – 2026-07-19 (Design-Audit Runde 3/10)
 
 ### Fixed
