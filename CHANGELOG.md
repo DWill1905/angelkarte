@@ -1,5 +1,15 @@
 # Changelog
 
+## SW v166 – 2026-07-19 (Design-Audit Vorschlag 10/20)
+
+### Fixed
+- **Dieselbe Sackgasse wie bei "Anderes Gewässer" (Vorschlag 9), diesmal bei der Fischart:**
+  "Sonstige" speicherte buchstäblich "Sonstige" statt der echten Art. Freitextfeld
+  ("Welche Art?") erscheint jetzt bei Auswahl – der eingetippte Name zählt auch für die
+  Schonzeit-Prüfung (falls die Region z. B. für "Wels" echte Daten hat, obwohl die Art
+  nicht im Dropdown steht). Bearbeiten eines Eintrags mit nicht gelisteter Art stellt den
+  Namen jetzt korrekt wieder her, statt ihn zu verlieren.
+
 ## SW v165 – 2026-07-19 (Design-Audit Vorschlag 9/20)
 
 ### Fixed

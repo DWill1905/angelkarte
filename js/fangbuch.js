@@ -8,17 +8,18 @@ import { regionCenter } from './ui.js';
 import { WT_OPT } from './tackle.js';
 import { loadWeather } from './weather.js';
 export const fbSpotSel = selectById('fbSpot');
+export const fbFischSel = selectById('fbFisch');
 export function buildFbOptions() {
     /* Fischauswahl an Region anpassen: Schonzeit-Arten + generische Zusätze */
-    const fischSel = selectById('fbFisch');
-    if (fischSel) {
-        const prev = fischSel.value;
+    if (fbFischSel) {
+        const prev = fbFischSel.value;
         const arten = [...new Set(state.SCHON.map(x => x.fisch))];
-        ['Regenbogenforelle', 'Döbel', 'Rotauge', 'Brachse', 'Sonstige'].forEach(a => { if (!arten.includes(a))
+        ['Regenbogenforelle', 'Döbel', 'Rotauge', 'Brachse', SONSTIGE].forEach(a => { if (!arten.includes(a))
             arten.push(a); });
-        fischSel.innerHTML = arten.map(a => '<option>' + a + '</option>').join('');
+        fbFischSel.innerHTML = arten.map(a => '<option>' + a + '</option>').join('');
         if (arten.includes(prev))
-            fischSel.value = prev;
+            fbFischSel.value = prev;
+        syncFbFischAnd();
     }
     fbSpotSel.innerHTML = '';
     state.SPOTS.filter(s => s.cat !== 'sperr' && s.cat !== 'info').forEach(s => {
@@ -30,14 +31,28 @@ export function buildFbOptions() {
     oAnd.textContent = ANDERES;
     fbSpotSel.appendChild(oAnd);
 }
-/** "Anderes Gewässer" existierte bisher nur als Auswahlpunkt - ausgewählt, landete
-    buchstäblich "Anderes Gewässer" im Fangbuch, ohne Möglichkeit, den echten Namen
-    einzutragen. Zeigt/versteckt das Freitextfeld passend zur Auswahl. */
+/** "Anderes Gewässer"/"Sonstige" existierten bisher nur als Auswahlpunkte - ausgewählt,
+    landete buchstäblich dieser Platzhalter im Fangbuch, ohne Möglichkeit, den echten Namen
+    einzutragen. Zeigt/versteckt die passenden Freitextfelder. */
 export const ANDERES = 'Anderes Gewässer';
+export const SONSTIGE = 'Sonstige';
 export function syncFbSpotAnd() {
     const wrap = byId('fbSpotAndWrap');
     if (wrap)
         wrap.hidden = fbSpotSel.value !== ANDERES;
+}
+export function syncFbFischAnd() {
+    const wrap = byId('fbFischAndWrap');
+    if (wrap)
+        wrap.hidden = fbFischSel.value !== SONSTIGE;
+}
+/** Bei "Sonstige" + ausgefülltem Freitext zählt der eingetippte Artname - so greift z.B.
+    die Schonzeit-Prüfung unten auch dann, wenn die Region für die getippte Art (die im
+    Dropdown fehlt) tatsächlich Daten hat. */
+export function fbFischWert() {
+    const raw = fbFischSel ? fbFischSel.value : '';
+    const and = inputById('fbFischAnd').value.trim();
+    return (raw === SONSTIGE && and) ? and : raw;
 }
 fbSpotSel.onchange = syncFbSpotAnd;
 export async function fbLoad() {
@@ -442,7 +457,15 @@ export function fbRender() {
             if (!entry)
                 return;
             /* Werte ins Formular laden */
-            selectById('fbFisch').value = entry.fisch;
+            const fiSel = selectById('fbFisch');
+            if ([...fiSel.options].some(o => o.textContent === entry.fisch)) {
+                fiSel.value = entry.fisch;
+            }
+            else {
+                fiSel.value = SONSTIGE;
+                inputById('fbFischAnd').value = entry.fisch || '';
+            }
+            syncFbFischAnd();
             inputById('fbLaenge').value = String(entry.laenge || '');
             inputById('fbKoeder').value = entry.koeder || '';
             inputById('fbEntnommen').checked = !!entry.entnommen;
@@ -480,7 +503,7 @@ export function checkFang() {
         el.innerHTML = '';
         return;
     }
-    const fisch = selectById('fbFisch').value;
+    const fisch = fbFischWert();
     const lenRaw = parseInt(inputById('fbLaenge').value, 10);
     let len = lenRaw;
     if (!isNaN(len) && (len < 0 || len > 300))
@@ -600,7 +623,8 @@ export function checkFang() {
     }
     el.innerHTML = msgs.length ? '<div class="fbcheck ' + (bad ? 'bad' : 'ok') + '">' + msgs.map(esc).join('<br>') + '</div>' : '';
 }
-selectById('fbFisch').onchange = checkFang;
+selectById('fbFisch').onchange = () => { syncFbFischAnd(); checkFang(); };
+inputById('fbFischAnd').oninput = checkFang;
 inputById('fbLaenge').oninput = checkFang;
 inputById('fbEntnommen').onchange = checkFang;
 byId('fbSave').onclick = async () => {
@@ -609,7 +633,7 @@ byId('fbSave').onclick = async () => {
     state.fbSaving = true;
     try {
         await fbReady; /* verhindert, dass fbLoad einen frischen Eintrag überschreibt */
-        const fisch = selectById('fbFisch').value;
+        const fisch = fbFischWert();
         let laenge = parseInt(inputById('fbLaenge').value, 10);
         const laengeOut = (isNaN(laenge) || laenge < 0 || laenge > 300) ? '' : laenge;
         const jetzt = new Date();
@@ -632,8 +656,10 @@ byId('fbSave').onclick = async () => {
         });
         inputById('fbLaenge').value = '';
         inputById('fbKoeder').value = '';
-        inputById('fbSpotAnd').value = '';
-        syncFbSpotAnd();
+        /* fbSpotAnd/fbFischAnd absichtlich NICHT geleert - fbFisch/fbSpot bleiben nach dem
+           Speichern ebenfalls stehen, damit ein zweiter Fang am selben Ort/derselben Art ohne
+           erneute Eingabe geloggt werden kann. Leeren würde nur diese beiden Freitextfelder aus
+           der Reihe brechen. */
         inputById('fbEntnommen').checked = false;
         await fbPersist();
         checkFang();
