@@ -1,5 +1,15 @@
 # Changelog
 
+## SW v136 – 2026-07-19
+
+### Changed
+- **Formularelemente vereinheitlicht.** Der Regions-Select im Header hatte schon einen
+  eigenen Pfeil, die Fangbuch-Selects (Fischart, Gewässer) liefen bisher mit dem
+  Browser-Standardpfeil – uneinheitlich. Jetzt bekommen alle `<select>` denselben Chevron.
+  Zahlenfelder (Länge, Tiefe) ohne native Spinner-Pfeile, die nicht zum sonst durchgehend
+  eigenen Formular-Look passten. Fokus-Zustand auf einen einzigen, bewussten Stil bereinigt
+  (vorher: alter Salmo-Outline + neuerer Dusk-Glow gleichzeitig aktiv).
+
 ## SW v135 – 2026-07-19
 
 ### Changed
