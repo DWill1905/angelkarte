@@ -1,5 +1,14 @@
 # Changelog
 
+## SW v164 – 2026-07-19 (Design-Audit Vorschlag 8/20)
+
+### Fixed
+- **Tab-Navigation scrollte horizontale Chip-Reihen nicht automatisch mit.** Ein per
+  Tastatur fokussierter Filter-Chip (Kategorie, Zielfisch) konnte komplett außerhalb des
+  sichtbaren Bereichs landen – für Tastatur-Nutzer unmöglich zu erkennen, wo der Fokus
+  gerade steht. `chipsFadeInit()` (läuft bereits für alle vier Chip-Reihen) scrollt den
+  fokussierten Chip jetzt automatisch in Sicht. Mit echter Tab-Navigation verifiziert.
+
 ## SW v163 – 2026-07-19 (Design-Audit Vorschlag 7/20)
 
 ### Added

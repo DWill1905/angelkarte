@@ -45,6 +45,13 @@ export function chipsFadeInit(el: HTMLElement): void {
   if (typeof ResizeObserver !== 'undefined') new ResizeObserver(update).observe(el);
   new MutationObserver(update).observe(el, {childList:true});
   update();
+  /* Tab-Navigation scrollte die Reihe nicht automatisch mit - ein fokussierter Chip konnte
+     komplett ausserhalb des sichtbaren Bereichs landen, ohne jede visuelle Spur für
+     Tastatur-Nutzer. */
+  el.addEventListener('focusin', (e) => {
+    const t = e.target as HTMLElement;
+    if (t && t.classList.contains('chip')) t.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+  });
 }
 
 /** Fade-Hinweis am oberen/unteren Rand scrollbarer Dialog-Inhalte (".dlg-scroll"): dieselbe
