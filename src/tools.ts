@@ -461,7 +461,7 @@ export async function openForecast(){
       const blob=new Blob([ics],{type:'text/calendar;charset=utf-8'});
       const url=URL.createObjectURL(blob);
       const a=document.createElement('a');
-      a.href=url; a.download='angelkarte-woche.ics';
+      a.href=url; a.download='beisszeit-woche.ics';
       document.body.appendChild(a); a.click(); document.body.removeChild(a);
       URL.revokeObjectURL(url);
     };

@@ -1,5 +1,12 @@
 # Changelog
 
+## SW v154 – 2026-07-19
+
+### Fixed
+- **Letzter Namens-Rest der Umbenennung:** Die aus der Wochen-Vorschau exportierte
+  Kalenderdatei hieß noch `angelkarte-woche.ics`, obwohl PRODID und alle sichtbaren Texte
+  schon länger auf Beißzeit umgestellt sind. Jetzt `beisszeit-woche.ics`.
+
 ## SW v153 – 2026-07-19
 
 ### Fixed
