@@ -1,5 +1,19 @@
 # Changelog
 
+## SW v174 – 2026-07-19 (Design-Audit Vorschlag 18/20)
+
+### Fixed
+- **"Schilf (OSM)" und "Satellit" im Werkzeuge-Dialog zeigten nie an, ob die Ebene
+  gerade aktiv ist.** Beide Buttons setzen beim Umschalten korrekt `.on` und
+  `aria-pressed`, dafür gab es im gesamten CSS aber keine einzige Regel für
+  `.fbtool.on` – der Klick hatte eine echte Wirkung (die Kartenebene wechselte), aber
+  der Button selbst blieb optisch unverändert. Wer nicht genau auf die Karte im
+  Hintergrund achtete, konnte nicht sagen, ob "Satellit" gerade an oder aus ist. Mit
+  `.fbtool.on{background:var(--dusk);...}` behoben (gleiche Farbsprache wie bei den
+  bereits ausgewählten Zielfisch-Chips), inklusive `forced-colors`-Gegenstück
+  (`Highlight`/`HighlightText`), da dasselbe Muster bei Vorschlag 16/17 zu
+  unsichtbaren Zuständen unter Windows-Kontrastmodus geführt hatte.
+
 ## SW v173 – 2026-07-19 (Design-Audit Vorschlag 17/20)
 
 ### Fixed
