@@ -403,6 +403,7 @@
    "name": "Eicher See",
    "rlpFruehjahr": true,
    "wasser": "see-tief",
+   "tiefe": 15,
    "zugang": "ufer",
    "nr": "Anglervereinigung Worms",
    "cat": "raub",

@@ -10,6 +10,20 @@ Die ausführliche technische Historie vor 1.0.0 (jede einzelne der früheren
 `beisszeit-shell-vN`-Versionen mit Ursache, Testabdeckung, betroffenen Dateien) steht
 weiterhin in **[CHANGELOG-ARCHIV.md](CHANGELOG-ARCHIV.md)**.
 
+## [1.5.2] – 2026-07-19
+
+### Hinzugefügt
+- **Hinweis auf externe Tiefenkarten-Tools im Bleigewicht-Berater (Stillgewässer).** Weiter­führung
+  des Tiefenkarten-Audits: neben den Landes-Geoportalen (MV lizenzrechtlich nur privat nutzbar,
+  Bayern/Brandenburg nur für Großseen wie Chiemsee/Starnberger See – keiner unserer Spots) wurden
+  auch hejfish und Navionics/C-MAP geprüft. hejfish bindet zwar Navionics-Tiefenkarten pro Gewässer
+  ein, aber exklusiv für hejfishPro-Abonnenten; Navionics' SonarChart-Konturen stammen aus Boots-
+  Echolot-Crowdsourcing und dürften bei kleinen Baggerseen kaum vorhanden sein. Da sich das bei
+  keinem der beiden Anbieter pro Spot verifizieren ließ (kein Datenzugriff für einzelne
+  Gewässerseiten), gibt es keine Verlinkung pro Spot, sondern einen allgemeinen, ehrlichen Hinweis
+  im "Bleigewicht"-Werkzeug (Stillgewässer-Ansicht): Tools existieren, Abdeckung bei kleinen Seen
+  aber nicht garantiert, teils kostenpflichtig.
+
 ## [1.5.1] – 2026-07-19
 
 ### Geändert

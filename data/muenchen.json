@@ -23,6 +23,7 @@
   {
    "name": "Feringasee (Unterföhring)",
    "wasser": "see-tief",
+   "tiefe": 7,
    "verif": "B",
    "nr": "Fischwaid München e.V. · Erlbachstraße",
    "cat": "raub",
@@ -117,6 +118,7 @@
   {
    "name": "Langwieder See",
    "wasser": "see-tief",
+   "tiefe": 8,
    "verif": "B",
    "nr": "Versehrten Fischereiverein München e.V. · A8 Ausf. München-Langwied",
    "cat": "raub",
@@ -154,6 +156,7 @@
   {
    "name": "Mittlerer-Isar-Kanal (Oberföhring/St. Emmeram)",
    "wasser": "kanal",
+   "tiefe": 4,
    "verif": "B",
    "nr": "Versehrten Fischereiverein München e.V. · Ableitung ab Isarwehr Oberföhring",
    "cat": "salmo",
@@ -189,6 +192,7 @@
   {
    "name": "Hollerner See (Eching)",
    "wasser": "see-tief",
+   "tiefe": 17,
    "verif": "B",
    "nr": "Fischwaid München e.V. &amp; FV Eching · „Am Fretz 1\", 85386 Eching",
    "cat": "raub",

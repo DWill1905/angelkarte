@@ -164,7 +164,8 @@ export function openLead(){
       +'<li><b>Mittlere Tiefe 3–6 m:</b> 7–14 g</li>'
       +'<li><b>Tiefe Kanten / >6 m (z.B. Woblitz-Kuhle, Eicher See):</b> 14–21 g für schnellen, kontrollierten Abstieg</li>'
       +'<li><b>Wind/Drift vom Boot:</b> 3–5 g schwerer, sonst verliert man den Grundkontakt</li>'
-      +'<li><b>Vertikal vom Boot:</b> so schwer, dass die Schnur senkrecht bleibt</li></ul></div>';
+      +'<li><b>Vertikal vom Boot:</b> so schwer, dass die Schnur senkrecht bleibt</li></ul>'
+      +'<p style="color:var(--muted);font-size:11px;margin-top:8px">🗺 Mehr Struktur sehen? hejfishPro und der Navionics Chart Viewer zeigen für viele Seen Tiefenkarten – bei kleinen Baggerseen ist die Abdeckung aber nicht garantiert, teils kostenpflichtig.</p></div>';
   }
   h+='<p style="color:var(--muted);font-size:11px">Grundkontakt ist König: Der Köder soll den Boden touchieren, aber nicht durchpflügen. Lieber 3 g zu leicht als 10 g zu schwer.</p>';
   byId('leadBody').innerHTML=h;

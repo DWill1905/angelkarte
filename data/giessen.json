@@ -75,6 +75,7 @@
   {
    "name": "VSA Angelsee Heuchelheim",
    "wasser": "see-tief",
+   "tiefe": 10,
    "verif": "B",
    "nr": "VSA Gießen · Lahnpark",
    "cat": "raub",
@@ -116,6 +117,7 @@
   {
    "name": "Dutenhofener See",
    "wasser": "see-tief",
+   "tiefe": 11.4,
    "verif": "B",
    "rig": "Boot mit E-Motor/Ruder empfohlen (verkrautetes Ufer). Hechtcombo mit Stahlvorfach, Welszeug für die Nacht, Zandergummi an den Kanten.",
    "nr": "Kiessee · zw. Gießen & Wetzlar",
@@ -210,6 +212,7 @@
   {
    "name": "Wißmarer See",
    "wasser": "see-flach",
+   "tiefe": 4.3,
    "verif": "B",
    "nr": "AC Wißmar · Lahnschleife bei Wettenberg",
    "cat": "raub",
