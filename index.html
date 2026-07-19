@@ -471,7 +471,11 @@
     border:1px solid var(--shoal);border-radius:var(--radius-sm);color:var(--text)}
   /* Browser-Standard-Placeholder-Grau (~1,2:1 Kontrast auf dem dunklen Eingabefeld-Hintergrund)
      war bisher nur für die Spotsuche behoben - jetzt app-weit für alle Formularfelder. */
-  ::placeholder{color:var(--muted);opacity:.85}
+  /* Ohne die zusaetzliche Abdunklung liegt der Kontrast auf dem Eingabefeld-Hintergrund
+     (var(--panel-2)) beim selben Niveau wie var(--muted) ueberall sonst im Layout -
+     mit opacity:.85 lag Platzhaltertext (z.B. "z.B. 54") merklich darunter (~3.3:1
+     statt ~4:1) und war fuer schwaches Sehen schwerer zu lesen als noetig. */
+  ::placeholder{color:var(--muted);opacity:1}
   .sheet.collapsed #spotSearch{display:none}
   .spot-list{flex:1 1 auto;min-height:0;overflow-y:auto;padding:0 8px 10px;-webkit-overflow-scrolling:touch}
   .spot-item{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:transparent;

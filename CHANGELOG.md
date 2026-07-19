@@ -1,5 +1,18 @@
 # Changelog
 
+## SW v175 – 2026-07-19 (Design-Audit Vorschlag 19/20)
+
+### Fixed
+- **Platzhaltertext in allen Eingabefeldern (z.B. "z.B. 54", "z.B. Gummifisch 12cm,
+  motoroil") hatte spürbar schlechteren Kontrast als der übrige Fließtext der App.**
+  `::placeholder` nutzt zwar dieselbe Textfarbe (`var(--muted)`) wie Labels,
+  Fußnoten & Co., zusätzlich aber `opacity:.85` – auf dem Eingabefeld-Hintergrund
+  (`var(--panel-2)`) rechnerisch nur noch rund 3,3:1 statt der sonst im Layout
+  üblichen ~4:1. Gerade bei kurzen Beispielwerten, die die erwartete Eingabeform
+  zeigen sollen, macht das den Unterschied zwischen "gut lesbar" und "muss man raten".
+  Mit `opacity:1` behoben – Platzhaltertext liegt jetzt auf demselben
+  Kontrastniveau wie var(--muted) überall sonst in der App.
+
 ## SW v174 – 2026-07-19 (Design-Audit Vorschlag 18/20)
 
 ### Fixed
