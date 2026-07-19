@@ -1,5 +1,16 @@
 # Changelog
 
+## SW v165 – 2026-07-19 (Design-Audit Vorschlag 9/20)
+
+### Fixed
+- **"Anderes Gewässer" im Fangbuch war eine Sackgasse.** Die Option existierte für nicht
+  gelistete Spots, aber wenn man sie wählte, landete buchstäblich der Text "Anderes
+  Gewässer" im Fangbuch-Eintrag – keine Möglichkeit, den echten Namen einzutragen. Jetzt
+  erscheint bei Auswahl ein Freitextfeld ("Name des Gewässers"). Als Nebeneffekt behoben:
+  Beim Bearbeiten eines Eintrags mit einem zur aktuellen Spotliste nicht passenden Namen
+  ging dieser bisher kommentarlos verloren (Select sprang auf die erste Option) – wird jetzt
+  korrekt in "Anderes Gewässer" + Freitextfeld wiederhergestellt.
+
 ## SW v164 – 2026-07-19 (Design-Audit Vorschlag 8/20)
 
 ### Fixed

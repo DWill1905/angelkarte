@@ -27,9 +27,19 @@ export function buildFbOptions() {
         fbSpotSel.appendChild(o);
     });
     const oAnd = document.createElement('option');
-    oAnd.textContent = 'Anderes Gewässer';
+    oAnd.textContent = ANDERES;
     fbSpotSel.appendChild(oAnd);
 }
+/** "Anderes Gewässer" existierte bisher nur als Auswahlpunkt - ausgewählt, landete
+    buchstäblich "Anderes Gewässer" im Fangbuch, ohne Möglichkeit, den echten Namen
+    einzutragen. Zeigt/versteckt das Freitextfeld passend zur Auswahl. */
+export const ANDERES = 'Anderes Gewässer';
+export function syncFbSpotAnd() {
+    const wrap = byId('fbSpotAndWrap');
+    if (wrap)
+        wrap.hidden = fbSpotSel.value !== ANDERES;
+}
+fbSpotSel.onchange = syncFbSpotAnd;
 export async function fbLoad() {
     try {
         const r = await store.get('fangbuch');
@@ -437,8 +447,17 @@ export function fbRender() {
             inputById('fbKoeder').value = entry.koeder || '';
             inputById('fbEntnommen').checked = !!entry.entnommen;
             const spSel = selectById('fbSpot');
-            if ([...spSel.options].some(o => o.textContent === entry.spot))
+            if ([...spSel.options].some(o => o.textContent === entry.spot)) {
                 spSel.value = entry.spot;
+            }
+            else {
+                /* Gespeicherter Gewässername passt zu keiner aktuellen Option (z.B. eigener Name,
+                   oder die Region-Spots haben sich geändert) - bisher ging er beim Bearbeiten
+                   kommentarlos verloren. */
+                spSel.value = ANDERES;
+                inputById('fbSpotAnd').value = entry.spot || '';
+            }
+            syncFbSpotAnd();
             /* alten Eintrag entfernen – Speichern legt ihn aktualisiert neu an */
             state.fbMem = state.fbMem.filter(x => x.id !== entry.id);
             await fbPersist();
@@ -594,9 +613,11 @@ byId('fbSave').onclick = async () => {
         let laenge = parseInt(inputById('fbLaenge').value, 10);
         const laengeOut = (isNaN(laenge) || laenge < 0 || laenge > 300) ? '' : laenge;
         const jetzt = new Date();
+        const spotAndText = inputById('fbSpotAnd').value.trim();
+        const spot = (fbSpotSel.value === ANDERES && spotAndText) ? spotAndText : fbSpotSel.value;
         state.fbMem.push({
             id: uid(), fisch, laenge: laengeOut,
-            spot: fbSpotSel.value,
+            spot,
             koeder: inputById('fbKoeder').value.trim(),
             datum: jetzt.toLocaleDateString('de-DE'),
             entnommen: inputById('fbEntnommen').checked,
@@ -611,6 +632,8 @@ byId('fbSave').onclick = async () => {
         });
         inputById('fbLaenge').value = '';
         inputById('fbKoeder').value = '';
+        inputById('fbSpotAnd').value = '';
+        syncFbSpotAnd();
         inputById('fbEntnommen').checked = false;
         await fbPersist();
         checkFang();

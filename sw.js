@@ -1,7 +1,7 @@
 /* Beißzeit Service Worker – Offline-Modus
    Shell + Daten: stale-while-revalidate · OSM-Tiles: cache-first (max. 600)
    API-Aufrufe (Wetter, Pegel): immer Netz */
-const CACHE='beisszeit-shell-v164';
+const CACHE='beisszeit-shell-v165';
 const TILES='angelkarte-tiles-v1';
 const SHELL=[
   './','index.html','manifest.json',
