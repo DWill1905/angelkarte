@@ -1,5 +1,23 @@
 # Changelog
 
+## SW v142 – 2026-07-19
+
+### Changed
+- **Tech-Stand-Check: TypeScript-Pin auf 5.x war überholt.** Leaflet (1.9.4) und
+  Leaflet.markercluster (1.5.3) sind bereits die jeweils neueste Version, ebenso esbuild und
+  jsdom im Test-Tooling – nichts zu tun. TypeScript war dagegen bewusst auf `5.x` gepinnt
+  („TS 7 typt lib.dom anders", laut altem README-Kommentar). Empirisch nachgestellt: TS
+  7.0.2 (nativer Go-Compiler) typecheckt den Code fehlerfrei und erzeugt **byte-identisches**
+  JS zur TS5-Version – nur ~7,5× schneller (2,8s → 0,4s für den vollen Typecheck). Pin
+  entfernt, README/Setup-Anleitung und `check-build.mjs` auf `typescript@latest`
+  umgestellt.
+- **Zwei PWA-Manifest-Lücken geschlossen:** `lang: "de"` und `id: "."` ergänzt (moderne
+  Manifest-Felder, u.a. für stabile App-Identität unabhängig von `start_url`). Zusätzlich
+  das generische `<meta name="mobile-web-app-capable">` neben dem bisher alleinigen
+  Apple-spezifischen Tag ergänzt.
+  Rein infrastrukturell, alle 441 Tests unverändert grün, `js/`-Output nach dem TS7-Rebuild
+  byte-für-byte identisch zum vorherigen Stand.
+
 ## SW v141 – 2026-07-19
 
 ### Changed

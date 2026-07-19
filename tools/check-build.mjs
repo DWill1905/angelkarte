@@ -10,7 +10,7 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const TSC = '/tmp/ts-install/node_modules/.bin/tsc';
 if (!fs.existsSync(TSC)) {
-  console.error('✖ tsc fehlt: npm install typescript@5 --no-save --prefix /tmp/ts-install');
+  console.error('✖ tsc fehlt: npm install typescript@latest --no-save --prefix /tmp/ts-install');
   process.exit(1);
 }
 

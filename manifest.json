@@ -2,6 +2,8 @@
   "name": "Beißzeit",
   "short_name": "Beißzeit",
   "description": "Interaktive Angel-App mit Spots, Schonzeiten, Fangbuch und KI-Guide",
+  "lang": "de",
+  "id": ".",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#0d1f22",

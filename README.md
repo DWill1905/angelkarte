@@ -94,7 +94,7 @@ node tools/check-state.mjs      # nackte State-Referenzen finden (z.B. fbMem sta
 Voraussetzungen fuer die Werkzeuge (einmalig pro Umgebung):
 
 ```
-npm install typescript@5 --no-save --prefix /tmp/ts-install      # TS 7 (nativer tsc) typt lib.dom anders
+npm install typescript@latest --no-save --prefix /tmp/ts-install # aktuell TS 7 (nativer Go-Compiler, ~7x schneller)
 npm install esbuild      --no-save --prefix /tmp/esbuild-install # nur fuer den Test-Harness
 npm install jsdom        --no-save --prefix /tmp/jsdom-install   # nur fuer den Test-Harness
 ```
