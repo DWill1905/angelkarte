@@ -116,7 +116,7 @@ describe('Layout-Regeln', () => {
     const stylesheet = [...doc.querySelectorAll('style')].map((s) => s.textContent).join('\n');
     assert.match(stylesheet, /body\.map-fs > header/);
     assert.match(stylesheet, /body\.map-fs > \.tabs/);
-    assert.match(stylesheet, /body\.map-fs #saisonBar/);
+    assert.match(stylesheet, /body\.map-fs #saisonInfo/);
   });
 
   test('Safe-Area des iPhones wird berücksichtigt', () => {

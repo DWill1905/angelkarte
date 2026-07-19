@@ -10,6 +10,16 @@ Die ausführliche technische Historie vor 1.0.0 (jede einzelne der früheren
 `beisszeit-shell-vN`-Versionen mit Ursache, Testabdeckung, betroffenen Dateien) steht
 weiterhin in **[CHANGELOG-ARCHIV.md](CHANGELOG-ARCHIV.md)**.
 
+## [1.0.1] – 2026-07-19
+
+### Entfernt
+- Toten Code aufgeräumt: ungenutzte CSS-Regeln (`h1`/`.tilde`-Rest ohne zugehöriges
+  Element, `.saison-i`-Badge, eine ins Leere zeigende `#saisonBar`-Selektorzeile),
+  ungenutzte CSS-Variablen (`--abyss`-Duplikat von `--ink`, `--raub`/`--fried`/
+  `--sperr` – die echten Kategoriefarben kommen aus `data.ts`) sowie ein verwaistes
+  Build-Skript (`tools/build-test-bundle.mjs`), dessen Ausgabe nirgends mehr
+  eingelesen wurde. Keine sichtbare Änderung – rein interne Aufräumarbeit.
+
 ## [1.0.0] – 2026-07-19
 
 Erste Version nach Semantic Versioning. Fasst die gesamte bisherige Entwicklung

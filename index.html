@@ -35,7 +35,7 @@
        einer sonst durchgehend dunklen App. */
     color-scheme:dark;
     /* Bathymetrie-Palette, hell: luftiges Petrol-Türkis, blau bleibt Leitfarbe */
-    --abyss:#234f5b; --ink:#234f5b;
+    --ink:#234f5b;
     --panel:#2c5966; --panel-2:#356a78;
     --shelf:#316572; --shoal:#4a828f;
     --paper:#f5f9f8;
@@ -43,9 +43,8 @@
     --dusk:#a6d4e8;   /* blaue Stunde – hell, freundlich */
     --amber:#f0bc5c;  /* Sonne/Solunar – warm */
     /* Kategorie-/Status-Farben */
-    --raub:#ee8368; --salmo:#7fd4ec; --fried:#a2d18f; --forelle:#f0bc5c; --sperr:#9aa8b0;
+    --salmo:#7fd4ec; --forelle:#f0bc5c;
     --warn:#ec6a6a; --ok:#92e0a6;
-    --forelle:#f0bc5c;
     /* Radius-Skala: bisher waren 11 verschiedene border-radius-Werte (2–14px, 999px) ohne
        System im Einsatz. Diese vier Stufen fassen die bereits dominanten Werte (10px war der
        mit Abstand häufigste) als Tokens; die übrigen Ad-hoc-Werte werden schrittweise in
@@ -65,7 +64,7 @@
        17px, obwohl sie dieselbe Hierarchie-Stufe sind (Dialog-Überschrift). Hier vereinheit-
        licht; die weit größere Zahl an Fließtext-/Datenzeilen-Größen bleibt unangetastet
        (eigener, größerer Folge-Schritt, dasselbe Vorgehen wie bei Radius/Spacing). */
-    --fs-title:17px; --fs-h1:22px;
+    --fs-title:17px;
   }
   @media(prefers-reduced-motion:no-preference){
     * { scroll-behavior:smooth; }
@@ -111,8 +110,6 @@
     background-repeat:no-repeat;background-position:right 2px center;background-size:15px}
   .region-title:focus-visible{outline:2px solid var(--dusk);outline-offset:2px;border-radius:4px}
   .region-title option{background:#16323c;color:var(--text);font-size:14px;font-weight:500}
-  h1{font-family:"Space Grotesk","Segoe UI",Calibri,sans-serif;font-size:var(--fs-h1);font-weight:700;color:#f6fbfa;letter-spacing:-.01em;line-height:1.1}
-  h1 .tilde{color:var(--dusk);font-weight:500}
   .sun{font-family:"Space Mono",ui-monospace,monospace;font-size:10.5px;color:var(--muted);margin-top:4px;letter-spacing:-.02em}
 
   .banner{
@@ -188,8 +185,6 @@
   }
   .chip.gone{display:none}
   .chip.dim{opacity:.4;filter:grayscale(.55)}
-  .saison-i{margin-left:auto;flex:0 0 auto;width:18px;height:18px;border-radius:50%;border:1px solid var(--dusk);
-    color:var(--dusk);display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;font-style:italic}
   /* --- Vollbild-Knopf --- */
   /* --- Wetter-Chip im Header --- */
   .hdr-right{position:absolute;top:calc(12px + env(safe-area-inset-top));right:14px;z-index:20;display:flex;align-items:center;gap:var(--space-2)}
@@ -352,7 +347,6 @@
   /* --- Vollbildmodus: Header, Tabs und Saison-Leiste weichen --- */
   body.map-fs > header,
   body.map-fs > .tabs{display:none}
-  body.map-fs #saisonBar,
   body.map-fs #saisonInfo,
   body.map-fs #swUpdate,
   body.map-fs #banner{display:none}
