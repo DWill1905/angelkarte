@@ -1,5 +1,24 @@
 # Changelog
 
+## SW v134 – 2026-07-19
+
+### Changed
+- **Typografie: Lato → Space Grotesk.** Lato ist die Standard-Geometrisch-Humanistische, die
+  in praktisch jeder Web-App auftaucht – kein bewusster Charakterzug. Die App nutzt für
+  Daten/Koordinaten/Prozente bereits Space Mono; Space Grotesk stammt aus derselben Familie
+  (Colophon Foundry), das ist kein Trend-Griff, sondern die konsequente Fortführung einer
+  bereits getroffenen Entscheidung. Umgestellt über die `body`-Basis (wirkt auf praktisch
+  den gesamten Fließtext) plus 10 explizite Stellen (Überschriften, Regionsname,
+  Popup-Titel). Font-Weights, die Lato bei 800/900 nutzte (Space Grotesk geht bis 700), auf
+  700 gekappt – sonst hätte der Browser ein hässliches "Fake Bold" synthetisiert.
+- **Bathymetrie-Signature auf Dialoge ausgeweitet.** Die Tiefenlinien-Textur im Header war
+  bisher ein einmaliges Deko-Element. Dieselbe Technik (gestapelte radiale Verläufe als
+  konzentrische Konturlinien) jetzt auch auf `.mydlg` (die meisten Dialoge), spiegelbildlich
+  aus der gegenüberliegenden Ecke – macht daraus ein wiederkehrendes, erkennbares Merkmal
+  statt einer Einzelverzierung.
+- `.mydlg` außerdem auf die Radius-Skala umgestellt (12px → `--radius-lg`).
+  Rein optisch, alle 441 Tests unverändert grün.
+
 ## SW v133 – 2026-07-19
 
 ### Changed

@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root{
     /* Bathymetrie-Palette, hell: luftiges Petrol-Türkis, blau bleibt Leitfarbe */
@@ -55,7 +55,7 @@
   *{margin:0;padding:0;box-sizing:border-box}
   html,body{height:100%}
   body{
-    font-family:"Lato","Segoe UI",Calibri,-apple-system,sans-serif;
+    font-family:"Space Grotesk","Segoe UI",Calibri,-apple-system,sans-serif;
     /* Tiefengradient, hell: luftiges Flachwasser oben, sanft tiefer nach unten */
     background:linear-gradient(180deg,#3d7180 0%,#316572 45%,#2a5966 100%);
     background-attachment:fixed;
@@ -80,7 +80,7 @@
   }
   header>*{position:relative;z-index:1}
   .eyebrow{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--dusk);margin-bottom:1px;font-weight:600;opacity:.7}
-  .region-title{font-family:"Lato","Segoe UI",Calibri,sans-serif;font-size:var(--fs-title);font-weight:800;color:#f6fbfa;
+  .region-title{font-family:"Space Grotesk","Segoe UI",Calibri,sans-serif;font-size:var(--fs-title);font-weight:700;color:#f6fbfa;
     background:transparent;border:0;border-radius:6px;padding:1px 22px 1px 2px;margin-top:1px;max-width:100%;
     cursor:pointer;letter-spacing:-.005em;-webkit-appearance:none;appearance:none;
     overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
@@ -88,7 +88,7 @@
     background-repeat:no-repeat;background-position:right 2px center;background-size:15px}
   .region-title:focus-visible{outline:2px solid var(--dusk);outline-offset:2px;border-radius:4px}
   .region-title option{background:#16323c;color:var(--text);font-size:14px;font-weight:500}
-  h1{font-family:"Lato","Segoe UI",Calibri,sans-serif;font-size:var(--fs-h1);font-weight:900;color:#f6fbfa;letter-spacing:-.005em;line-height:1.1}
+  h1{font-family:"Space Grotesk","Segoe UI",Calibri,sans-serif;font-size:var(--fs-h1);font-weight:700;color:#f6fbfa;letter-spacing:-.01em;line-height:1.1}
   h1 .tilde{color:var(--dusk);font-weight:500}
   .sun{font-family:"Space Mono",ui-monospace,monospace;font-size:10.5px;color:var(--muted);margin-top:4px;letter-spacing:-.02em}
 
@@ -111,7 +111,7 @@
     border-radius:var(--radius-full);opacity:.75;
   }
   .tab:hover{opacity:1;background:rgba(255,255,255,.06)}
-  .tab[aria-selected="true"]{color:#0d3540;opacity:1;background:var(--dusk);font-weight:800;box-shadow:var(--shadow-sm)}
+  .tab[aria-selected="true"]{color:#0d3540;opacity:1;background:var(--dusk);font-weight:700;box-shadow:var(--shadow-sm)}
   .tab:focus-visible{outline:2px solid var(--dusk);outline-offset:2px}
 
   .view{display:none;min-height:0;overflow:hidden;grid-row:4;position:relative;flex-direction:column}
@@ -423,7 +423,7 @@
   .pop-cat{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
     color:#fff;border-radius:var(--radius-sm);padding:2.5px 8px;margin-bottom:5px;margin-right:4px}
   .pop-nr{font-family:"Space Mono",monospace;font-size:10px;color:#4a5b5f;letter-spacing:0}
-  .pop-title{font-family:"Lato","Segoe UI",Calibri,sans-serif;font-size:var(--fs-title);font-weight:700;margin-bottom:2px;letter-spacing:-.01em}
+  .pop-title{font-family:"Space Grotesk","Segoe UI",Calibri,sans-serif;font-size:var(--fs-title);font-weight:700;margin-bottom:2px;letter-spacing:-.01em}
   .pop-badges{display:flex;flex-wrap:wrap;gap:5px;margin:5px 0 3px}
   .pop-badge{font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:var(--radius-full);line-height:1.25;white-space:nowrap}
   .pop-badge.stop{background:#fbe3df;color:#a3352a;border:1px solid #f0c2ba}
@@ -510,7 +510,7 @@
   .tackle summary .ic{width:13px;height:13px}
   .tackle-body{padding:10px 12px 8px;background:#eef3f2;color:#24424c}
   .tk-grp{margin-bottom:4px}
-  .tk-grp-h{font-size:11px;font-weight:800;letter-spacing:.02em;color:#16323c;margin:9px 0 5px;display:flex;align-items:center;gap:5px}
+  .tk-grp-h{font-size:11px;font-weight:700;letter-spacing:.02em;color:#16323c;margin:9px 0 5px;display:flex;align-items:center;gap:5px}
   .tk-grp:first-child .tk-grp-h{margin-top:0}
   .tk-row{display:grid;grid-template-columns:72px 1fr;gap:var(--space-2);padding:2.5px 0;font-size:12px;line-height:1.4}
   .tk-row .k{font-weight:700;color:#16323c}
@@ -538,7 +538,7 @@
   /* ===== Regeln ===== */
   .scrollpane{overflow-y:auto;padding:14px;flex:1 1 auto;min-height:0;-webkit-overflow-scrolling:touch}
   .card{background:var(--shelf);border:1px solid var(--shoal);border-radius:12px;padding:14px 15px;margin-bottom:12px}
-  .card h3{font-family:"Lato","Segoe UI",Calibri,sans-serif;font-weight:700;font-size:var(--fs-title);margin-bottom:9px;color:#f4faf9;letter-spacing:-.01em}
+  .card h3{font-family:"Space Grotesk","Segoe UI",Calibri,sans-serif;font-weight:700;font-size:var(--fs-title);margin-bottom:9px;color:#f4faf9;letter-spacing:-.01em}
   .rule-row{display:flex;align-items:center;justify-content:space-between;gap:10px;
     padding:8px 0;border-bottom:1px solid var(--line);font-size:13px}
   .rule-row:last-child{border-bottom:0}
@@ -555,7 +555,7 @@
 
   /* ===== Fangbuch ===== */
   .fb-form{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-md);padding:13px;margin-bottom:12px}
-  .fb-form h3{font-family:"Lato","Segoe UI",Calibri,sans-serif;font-weight:700;font-size:var(--fs-title);margin-bottom:10px;color:#f4faf9}
+  .fb-form h3{font-family:"Space Grotesk","Segoe UI",Calibri,sans-serif;font-weight:700;font-size:var(--fs-title);margin-bottom:10px;color:#f4faf9}
   .fb-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-2)}
   .fb-grid .full{grid-column:1/-1}
   label{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
@@ -620,7 +620,7 @@
   .fbentn input{width:17px;height:17px;accent-color:var(--forelle)}
   .fbtool{flex:1;border:1px solid var(--line);background:var(--panel-2);color:var(--text);border-radius:8px;padding:9px;font-size:12.5px;cursor:pointer}
   .insight{background:var(--panel-2);border:1px solid var(--line);border-radius:var(--radius-md);padding:12px;margin-top:10px;font-size:12.5px;line-height:1.6}
-  .insight h4{font-family:"Lato","Segoe UI",Calibri,sans-serif;font-weight:700;font-size:14px;margin-bottom:7px;color:#f4faf9}
+  .insight h4{font-family:"Space Grotesk","Segoe UI",Calibri,sans-serif;font-weight:700;font-size:14px;margin-bottom:7px;color:#f4faf9}
   .insight .bar{display:flex;align-items:center;gap:var(--space-2);margin:3px 0}
   .insight .bar span:first-child{min-width:92px;color:var(--muted)}
   .insight .barfill{height:9px;background:var(--forelle);border-radius:5px;min-width:3px}
@@ -635,8 +635,20 @@
   @keyframes dlgBackdrop{from{opacity:0}to{opacity:1}}
   @keyframes dlgIn{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}
   @media(prefers-reduced-motion:reduce){ .mydlg-wrap,.mydlg-wrap>*{animation:none} }
-  .mydlg{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;width:100%;max-width:380px}
-  .mydlg h3{font-family:"Lato","Segoe UI",Calibri,sans-serif;font-weight:700;font-size:var(--fs-title);margin-bottom:10px;color:#f4faf9}
+  .mydlg{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-lg);padding:16px;width:100%;max-width:380px;
+    position:relative;overflow:hidden}
+  /* Dasselbe Tiefenlinien-Signature-Element wie im Header, hier von der gegenüberliegenden
+     Ecke aus - macht die Bathymetrie-Textur zu einem wiederkehrenden Merkmal statt einer
+     einmaligen Header-Deko. */
+  .mydlg:before{
+    content:"";position:absolute;inset:0;pointer-events:none;opacity:.4;
+    background-image:
+      radial-gradient(140% 160% at -10% 118%,transparent 40%,rgba(180,220,235,.12) 40.4%,transparent 41.2%),
+      radial-gradient(140% 160% at -10% 118%,transparent 50%,rgba(180,220,235,.1) 50.4%,transparent 51.2%),
+      radial-gradient(140% 160% at -10% 118%,transparent 60%,rgba(180,220,235,.08) 60.4%,transparent 61.2%);
+  }
+  .mydlg>*{position:relative;z-index:1}
+  .mydlg h3{font-family:"Space Grotesk","Segoe UI",Calibri,sans-serif;font-weight:700;font-size:var(--fs-title);margin-bottom:10px;color:#f4faf9}
   .mydlg-btns{display:flex;gap:var(--space-2);margin-top:14px}
   .mydlg-btns button{flex:1;border:1px solid var(--line);border-radius:8px;padding:11px;font-size:14px;font-weight:700;cursor:pointer;background:var(--panel-2);color:var(--text)}
   .mydlg-btns .ghost{background:var(--panel-2);color:var(--text);border:1px solid var(--line)}
@@ -655,7 +667,7 @@
   .detail-card{background:var(--paper);width:100%;max-width:520px;margin:0 auto;height:100dvh;display:flex;flex-direction:column}
   .detail-head{display:flex;align-items:center;gap:var(--space-2);padding:calc(14px + env(safe-area-inset-top)) 16px 12px;
     background:var(--panel);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:2}
-  .detail-head h3{flex:1;font-family:"Lato","Segoe UI",Calibri,sans-serif;font-weight:800;font-size:var(--fs-title);color:#f4faf9;margin:0}
+  .detail-head h3{flex:1;font-family:"Space Grotesk","Segoe UI",Calibri,sans-serif;font-weight:700;font-size:var(--fs-title);color:#f4faf9;margin:0}
   .detail-body{flex:1;overflow-y:auto;padding:14px 16px calc(20px + env(safe-area-inset-bottom));background:var(--paper);color:var(--ink)}
   .detail-body .tackle-body,.detail-body .pop-details-body{border-radius:var(--radius-md)}
   .detail-body .pop-details-body .pop-row{margin-bottom:9px}
@@ -665,7 +677,7 @@
   .plan-card{background:var(--panel);width:100%;max-width:520px;margin:0 auto;height:100dvh;
     display:flex;flex-direction:column;border-left:1px solid var(--line);border-right:1px solid var(--line)}
   .plan-head{display:flex;align-items:center;gap:var(--space-2);padding:14px 16px 10px}
-  .plan-head h3{flex:1;margin:0;font-family:"Lato","Segoe UI",Calibri,sans-serif;font-weight:700;font-size:var(--fs-title);color:#f4faf9}
+  .plan-head h3{flex:1;margin:0;font-family:"Space Grotesk","Segoe UI",Calibri,sans-serif;font-weight:700;font-size:var(--fs-title);color:#f4faf9}
   .plan-head h3 .ic{width:1em;height:1em;vertical-align:-.1em;margin-right:5px;color:var(--dusk)}
   .plan-x{background:none;border:0;color:var(--muted);font-size:20px;line-height:1;cursor:pointer;padding:4px 8px;border-radius:8px}
   .plan-x:hover{background:rgba(22,50,60,.5);color:var(--text)}
@@ -689,7 +701,7 @@
     border:1px solid var(--line);font-size:12.5px;color:var(--dusk)}
   .plan-fenster b{color:#eaf6ff}
   .plan-foot{padding:10px 14px;border-top:1px solid var(--line)}
-  .plan-foot button{width:100%;border:0;border-radius:var(--radius-md);padding:12px;font-size:14px;font-weight:800;
+  .plan-foot button{width:100%;border:0;border-radius:var(--radius-md);padding:12px;font-size:14px;font-weight:700;
     cursor:pointer;background:linear-gradient(180deg,#eaad48,#e8a33d);color:#2a2008;box-shadow:0 2px 10px rgba(232,163,61,.4)}
   .plan-foot button[hidden]{display:none}
   footer{grid-row:6;background:rgba(18,40,47,.94);border-top:1px solid var(--shoal);
