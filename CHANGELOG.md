@@ -1,5 +1,15 @@
 # Changelog
 
+## SW v147 – 2026-07-19 (Design-Audit Runde 5/10)
+
+### Fixed
+- **"Wetter & Bedingungen"-Dialog blieb bei Netzfehlern leer.** Der kleine Wetter-Chip in der
+  Kopfzeile bekam schon in einer früheren Runde ein eigenes Warnsymbol samt Tooltip, sobald
+  der Abruf endgültig fehlschlägt. Der ausführliche Dialog, den man genau dafür aufruft – um
+  den Grund zu erfahren –, zeigte unter "Wetter & Pegel" aber schlicht nichts an
+  (`el.textContent=''`). Jetzt erscheint dort dieselbe ehrliche, bereits vorhandene Erklärung
+  ("Wetter aktuell nicht verfügbar – Sonne, Mond und Beißfenster funktionieren trotzdem").
+
 ## SW v146 – 2026-07-19 (Design-Audit Runde 4/10)
 
 ### Fixed

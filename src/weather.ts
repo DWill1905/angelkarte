@@ -91,7 +91,10 @@ export async function loadWeather(){
       if(est) el.innerHTML+=' · Wasser ≈'+Math.round(est.wert)+'°C (geschätzt aus Lufttemperatur)';
     }
   }catch(e){
-    el.textContent=''; state.wxKey='';
+    /* Der Chip im Header zeigt bei Fehlern schon ein Warnsymbol – dieses Dialogfeld blieb
+       aber leer, obwohl der Nutzer hier gezielt nach dem Grund sucht. */
+    el.textContent='⚠ Wetter aktuell nicht verfügbar – Sonne, Mond und Beißfenster funktionieren trotzdem (lokal berechnet).';
+    state.wxKey='';
     /* Chip soll sich vom Lade-Zustand unterscheiden statt stillschweigend beim „–" zu bleiben. */
     state.wxError=true; wxChipSetzen();
   }
