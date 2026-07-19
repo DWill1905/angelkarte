@@ -774,24 +774,27 @@
   /* Tastile Rückmeldung: bisher hatten nur die zwei Karten-FABs ein Press-Feedback, alle
      übrigen tappbaren Elemente fühlten sich beim Antippen "tot" an. Ein Klick-Frame reicht. */
   .chip,.tab,.spot-item,.pop-btn,.mydlg-btns button,.fbtool,.menu-item,
-  .fb-share,.fb-edit,.fb-del,.leg-toggle,.region-title{
+  .fb-share,.fb-edit,.fb-del,.leg-toggle,.region-title,.fb-save{
     transition:transform .1s ease,background .15s,border-color .15s,opacity .15s,color .15s;
   }
   .chip:active,.tab:active,.spot-item:active,.pop-btn:active,.mydlg-btns button:active,
-  .fbtool:active,.menu-item:active,.fb-share:active,.fb-edit:active,.fb-del:active,.leg-toggle:active{
+  .fbtool:active,.menu-item:active,.fb-share:active,.fb-edit:active,.fb-del:active,.leg-toggle:active,
+  .fb-save:active{
     transform:scale(.96);
   }
   @media(prefers-reduced-motion:reduce){
     .chip,.tab,.spot-item,.pop-btn,.mydlg-btns button,.fbtool,.menu-item,
-    .fb-share,.fb-edit,.fb-del,.leg-toggle,.region-title{transition:background .15s,border-color .15s,color .15s}
+    .fb-share,.fb-edit,.fb-del,.leg-toggle,.region-title,.fb-save{transition:background .15s,border-color .15s,color .15s}
     .chip:active,.tab:active,.spot-item:active,.pop-btn:active,.mydlg-btns button:active,
-    .fbtool:active,.menu-item:active,.fb-share:active,.fb-edit:active,.fb-del:active,.leg-toggle:active{transform:none}
+    .fbtool:active,.menu-item:active,.fb-share:active,.fb-edit:active,.fb-del:active,.leg-toggle:active,
+    .fb-save:active{transform:none}
   }
   /* Nur auf echten Zeigegeräten (Maus) - sonst bleibt der Hover-Zustand nach einem Tap
      auf Touchscreens gelegentlich "hängen". Filter statt fester Hintergrundfarbe, weil
      diese Gruppe unterschiedliche Basis-Hintergründe hat (Ghost, Primary-Gradient, FAB …). */
   @media(hover:hover){
-    .mydlg-btns button:hover,.fbtool:hover,.pop-btn:hover,.fb-share:hover,.fb-edit:hover,.fb-del:hover{
+    .mydlg-btns button:hover,.fbtool:hover,.pop-btn:hover,.fb-share:hover,.fb-edit:hover,.fb-del:hover,
+    .fb-save:hover{
       filter:brightness(1.12);
     }
   }
@@ -810,7 +813,7 @@
   .fb-edit:focus-visible,.fb-del:focus-visible,.leg-toggle:focus-visible,
   input:focus-visible,select:focus-visible,textarea:focus-visible,
   #menuBtn:focus-visible,.fsbtn:focus-visible,.locbtn:focus-visible,.toolsfab:focus-visible,
-  #saisonTip:focus-visible,#wxChip:focus-visible{
+  #saisonTip:focus-visible,#wxChip:focus-visible,.fb-save:focus-visible{
     outline:2px solid var(--dusk);outline-offset:2px;
   }
 

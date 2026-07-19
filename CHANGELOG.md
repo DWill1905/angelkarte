@@ -1,5 +1,14 @@
 # Changelog
 
+## SW v150 – 2026-07-19 (Design-Audit Runde 8/10)
+
+### Fixed
+- **"Fang speichern" – die wichtigste Aktion im Fangbuch – hatte gar kein Interaktions-
+  Feedback.** Anders als praktisch jeder andere Button der App fehlten dem primären
+  Speichern-Button Press-Feedback (`:active`), Hover (`:hover`) und ein sichtbarer
+  Fokus-Ring (`:focus-visible`) komplett – er stand nicht mal in der gemeinsamen Button-Liste.
+  Jetzt Teil derselben Gruppen wie alle übrigen Aktions-Buttons.
+
 ## SW v149 – 2026-07-19 (Design-Audit Runde 7/10)
 
 ### Fixed
