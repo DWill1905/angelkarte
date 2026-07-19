@@ -36,7 +36,7 @@ describe('Eigene Spots bearbeiten', () => {
     assert.equal(doc.getElementById('myName').value, 'Alte Buhne');
     assert.equal(doc.getElementById('myTiefe').value, '3.5');
     assert.equal(doc.getElementById('myTipp').value, 'Zander abends');
-    assert.equal(doc.getElementById('myDlgTitle').textContent, 'Eigenen Spot bearbeiten');
+    assert.equal(doc.getElementById('myDlgTitle').textContent.trim(), 'Eigenen Spot bearbeiten');
     assert.ok(doc.getElementById('myDlgTipp').hidden, 'Long-Press-Tipp ist beim Bearbeiten irreführend und sollte weg sein');
     app.closeMyDlg();
   });

@@ -1,7 +1,7 @@
 /* Trip-Planer: Spots vormerken, als Tagesliste abrufen (regionsübergreifend, persistent) */
 import { byId, qsa } from './dom.js';
 import { state, store } from './state.js';
-import { esc, ICON } from './util.js';
+import { esc, ICON, de1 } from './util.js';
 import { mapsLink } from './map.js';
 import { tagesplan, tagLabel, MAX_TAG } from './plan.js';
 import { hhmm } from './astro.js';
@@ -47,6 +47,7 @@ export async function toggleTrip(name) {
 }
 export function setTripBtn(btn, drin) {
     btn.textContent = drin ? '★ Gemerkt' : '☆ Merken';
+    btn.setAttribute('aria-pressed', String(drin));
     btn.classList.toggle('on', drin);
     btn.style.background = drin ? '#2f5b4a' : '';
     btn.style.color = drin ? '#b9e6cf' : '';
@@ -97,7 +98,7 @@ function renderRoute() {
             + hhmm(s.von) + '–' + hhmm(s.bis) + ' · ' + esc(s.label) + (s.typ === 'major' ? ' · stark' : '') + '</div>'
             + '<div style="font-weight:700;margin-top:1px">' + esc(s.spot.name) + '</div>'
             + '<div style="color:var(--muted);font-size:12px">' + esc(s.art) + ' · ' + s.chance + '\u202F% Chance</div>'
-            + (s.weiter != null ? '<div style="color:var(--muted);font-size:11px;margin-top:3px">↓ ' + s.weiter.toFixed(1) + ' km Luftlinie zum nächsten Stopp</div>' : '')
+            + (s.weiter != null ? '<div style="color:var(--muted);font-size:11px;margin-top:3px">↓ ' + de1(s.weiter) + ' km Luftlinie zum nächsten Stopp</div>' : '')
             + '</div>'
             + '<a class="pop-btn nav" style="padding:4px 8px;font-size:11px;align-self:flex-start" href="' + mapsLink(s.spot) + '" target="_blank" rel="noopener">Route</a>'
             + '</div>';

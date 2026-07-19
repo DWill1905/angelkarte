@@ -7,7 +7,7 @@ import { fmtMD, haversine } from './astro.js';
 import { CATS, FISH, fischArtenFor } from './data.js';
 import { openTools } from './tools.js';
 import { sunLine } from './ui.js';
-import { ICON, chipsFadeInit, esc } from './util.js';
+import { ICON, chipsFadeInit, esc, de1 } from './util.js';
 import { loadWeather } from './weather.js';
 /* Basiskarten. OSM ist Standard (beschriftet, gut für Orientierung); das Luftbild zeigt
    Buhnenfelder, Krautkanten und Altarm-Struktur, die in OSM schlicht nicht drin sind. */
@@ -118,7 +118,7 @@ export function popupHtml(s) {
     <div class="pop-actions">
       <a class="pop-btn nav" href="${mapsLink(s)}" target="_blank" rel="noopener">Route</a>
       <button class="pop-btn log" onclick="prefillFang('${s.name.replace(/'/g, "\\'")}')">Fang loggen</button>
-      ${s.cat !== 'sperr' && s.cat !== 'info' ? `<button class="pop-btn trip" data-spot="${esc(s.name)}" onclick="toggleTripSpot('${s.name.replace(/'/g, "\\'")}')">☆ Merken</button>` : ''}
+      ${s.cat !== 'sperr' && s.cat !== 'info' ? `<button class="pop-btn trip" data-spot="${esc(s.name)}" aria-pressed="false" onclick="toggleTripSpot('${s.name.replace(/'/g, "\\'")}')">☆ Merken</button>` : ''}
       ${s.my ? '<button class="pop-btn" onclick="editMySpot(' + s.myId + ')">Bearbeiten</button><button class="pop-btn" style="background:#4a201a;color:#f0b6a8" onclick="delMySpot(' + s.myId + ')">Löschen</button>' : ''}
     </div>`;
 }
@@ -355,7 +355,7 @@ export function sperrWarnung() {
         return null;
     }
     box.innerHTML = '<b>⛔ Sperrzone in der Nähe</b>'
-        + nah.map(x => '<div style="margin-top:3px">' + esc(x.s.name) + ' · ca. ' + x.d.toFixed(1) + ' km</div>').join('')
+        + nah.map(x => '<div style="margin-top:3px">' + esc(x.s.name) + ' · ca. ' + de1(x.d) + ' km</div>').join('')
         + '<div style="margin-top:5px;font-size:11px;opacity:.85">Punktangabe, keine exakte Grenze – Beschilderung vor Ort prüfen.</div>';
     box.hidden = false;
     return nah[0];
@@ -443,7 +443,7 @@ export function renderList() {
     vis.forEach((s, idx) => {
         const c = CATS[s.cat], b = document.createElement('button');
         b.className = 'spot-item' + (state.userPos && idx === 0 ? ' nearest' : '');
-        const meta = state.userPos ? s._d.toFixed(1) + ' km' + (idx === 0 ? ' ★' : '') : s.fisch.split(',')[0];
+        const meta = state.userPos ? de1(s._d) + ' km' + (idx === 0 ? ' ★' : '') : s.fisch.split(',')[0];
         b.innerHTML = `<span class="dot" style="background:${c.color}"></span>
       <span class="name">${s.name}</span><span class="meta">${meta}</span>`;
         b.onclick = () => {

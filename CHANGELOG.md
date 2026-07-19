@@ -1,5 +1,66 @@
 # Changelog
 
+## SW v152 – 2026-07-19 (Design-Audit, 20 Verbesserungen)
+
+Zweiter vollständiger Audit-Durchlauf über die ganze App (alle Ansichten, alle ~15 Dialoge,
+Menü, Popup, Formulare). 20 konkrete Befunde gesammelt und umgesetzt, jeweils gebaut,
+typegecheckt, getestet (441/441 grün) und per Playwright visuell verifiziert.
+
+### Fixed – Bedienbarkeit & Formulare
+- **"Erlaubnisschein gültig bis"-Datumsfeld war nur 17×17px groß** – der einzige Weg, das
+  Ablaufdatum des Angelscheins zu pflegen (steuert eine Sicherheits-/Rechtswarnung), kaum
+  antippbar. Jetzt echte Feldgröße mit sichtbarem Kalender-Icon.
+- **Checkbox-Ausrichtung bei mehrzeiligen Packlisten-Einträgen**: `.fbentn` zentrierte die
+  Checkbox vertikal zum ganzen (umgebrochenen) Text statt zur ersten Zeile – wirkte
+  "schwebend". Jetzt oben ausgerichtet, wie bei einzeiligen Einträgen unverändert.
+- **Unplausible Fangbuch-Länge (z. B. Tippfehler "3000") verschwand kommentarlos** beim
+  Speichern, ohne jeden Hinweis. Jetzt eine Warnung im bereits vorhandenen Live-Bereich.
+  Dieselbe Lücke im "Eigenen Spot speichern"-Dialog (Tiefe-Feld) geschlossen: die
+  min/max-Attribute waren da, griffen aber nie (kein `<form>`-Submit) – jetzt löst ein
+  unplausibler Wert die native Validierungsmeldung aus, statt leise verworfen zu werden.
+
+### Fixed – Bedienung mit Tastatur/Screenreader
+- **Kein Dialog gab beim Schließen den Fokus zurück.** Wer einen der ~15 Werkzeug-/Info-
+  Dialoge per Tastatur öffnete, landete beim Schließen "verloren" oben im Dokument statt
+  wieder auf dem auslösenden Button. Generische Lösung über einen MutationObserver auf
+  `.mydlg-wrap` – deckt automatisch auch künftige Dialoge ab. Menü bekam dieselbe
+  Fokus-Rückgabe (nur wenn der Fokus wirklich im Menü lag).
+- **Keiner der ~15 Dialoge reagierte auf Escape** – anders als Menü und Vollbild, wo das
+  schon erwartungsgemäß funktionierte. Jetzt einheitlich.
+- **Fangbuch-Status-Icons (🪣 entnommen / ↩ zurückgesetzt) hatten nur `title`** – auf
+  Touchscreens (Hauptzielgruppe der App) nie sichtbar, für Screenreader unzuverlässig.
+  `aria-label` ergänzt. "☆ Merken"-Button im Popup bekommt jetzt zusätzlich `aria-pressed`.
+- **Banner (Erlaubnis-Ablauf, SW-Update, allgemein) erschienen ohne `aria-live`** – ein
+  Screenreader-Nutzer bemerkte eine neu eingeblendete Warnung nicht automatisch. Sturm-
+  warnung bekommt `role="alert"` (dringend), die übrigen `aria-live="polite"`.
+- **Fokus-Ring app-weit hell (`--dusk`) – auf dem hellen Popup-Hintergrund nur ~1,5:1
+  Kontrast, praktisch unsichtbar.** Dort jetzt dunkel überschrieben; der Popup-Schließen-
+  Button war zudem gar nicht in der Fokus-Ring-Gruppe.
+- **`color-scheme` fehlte komplett**, wodurch native Formularelemente (Datumspicker,
+  Checkboxen, `<select>`-Dropdown) mit hellem OS-Standard-Chrome rendern – ein Fremdkörper
+  in der sonst durchgehend dunklen App. Jetzt `color-scheme: dark`.
+- **Platzhaltertext in Eingabefeldern** ("z. B. 54", "z. B. Gummifisch …") nutzte das
+  Browser-Standardgrau (~1,3:1 Kontrast auf dem Eingabefeld-Hintergrund) – nur die
+  Spotsuche war bereits gefixt. Jetzt app-weit über `::placeholder`.
+- **`.verif`-Hinweistext (Wetter- und Tagesplan-Dialog)** hatte nur einen für den hellen
+  Popup-Kontext gedachten Farbwert – in den dunklen Werkzeug-Dialogen dadurch nur ~1,4:1
+  Kontrast. Jetzt dort mit `var(--muted)` (~5:1).
+
+### Fixed – Konsistenz & Bugs
+- **Vollbild-Button-Klasse zur Fokus-/Hover-Gruppe ergänzt** sowie kleinere Nacharbeiten aus
+  der vorherigen Konsistenz-Serie (Runden 6–9): Hover/Aktiv-Feedback jetzt vollständig.
+- **Distanzen und Luftdrucktrends zeigten einen englischen Dezimalpunkt** ("20.4 km",
+  "-1.5 hPa") statt des deutschen Kommas – in einer sonst durchgehend `de-DE`-lokalisierten
+  App (Datumsformat etc.). Betraf Popup-Distanz, Spotlisten-Sortierung, Sperrzonen-Hinweis,
+  Tagesplan-Luftlinie und alle Luftdruck-Trend-Texte (9 Stellen in 4 Dateien). Reine
+  Anzeigetexte – API-Koordinaten in URLs bleiben bewusst unverändert (müssen technisch
+  bleiben).
+- **"Eigenen Spot speichern/bearbeiten" war der einzige Dialogtitel ohne Icon** (14 von 15
+  anderen hatten eines) – jetzt mit Pin-Icon, passend zum Inhalt.
+- Badges und Hinweistexte im hellen Spot-Popup zusätzlich nachgeschärft (waren nach
+  genauerer Prüfung mit der korrekten WCAG-Formel bereits ausreichend kontrastreich,
+  jetzt mit größerer Sicherheitsmarge).
+
 ## Design-Audit Runde 10/10 – 2026-07-19 (keine Code-Änderung)
 
 Abschließender Audit über alle Ansichten (Karte, Regeln, Fangbuch, alle Dialoge) zusätzlich

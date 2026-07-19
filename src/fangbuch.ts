@@ -337,7 +337,7 @@ export function fbRender(){
     const d=document.createElement('div'); d.className='fb-entry';
     const cx=e.ctx?[e.ctx.zeit,e.ctx.mond,e.ctx.fenster?(e.ctx.fenster==='major'?'★ Major':'☆ Minor'):null,e.ctx.druck?e.ctx.druck+' hPa'+(e.ctx.trend<=-1.5?'⇘':e.ctx.trend>=1.5?'⇗':''):null,e.ctx.wind,e.ctx.temp!=null?e.ctx.temp+'°C':null,e.ctx.pegel?'Pegel '+e.ctx.pegel:null,e.ctx.wt!=null?'W '+e.ctx.wt+'°C':null].filter(Boolean).join(' · '):'';
     const teilenVerfuegbar=typeof (navigator as any).share==='function'||!!((navigator as any).clipboard&&(navigator as any).clipboard.writeText);
-    d.innerHTML=`<div class="info"><div class="fish">${esc(e.fisch)} ${e.laenge?'· '+esc(e.laenge)+' cm':''} ${e.entnommen?'<span title="entnommen">🪣</span>':'<span title="zurückgesetzt">↩</span>'}</div>
+    d.innerHTML=`<div class="info"><div class="fish">${esc(e.fisch)} ${e.laenge?'· '+esc(e.laenge)+' cm':''} ${e.entnommen?'<span title="entnommen" aria-label="Fisch entnommen">🪣</span>':'<span title="zurückgesetzt" aria-label="Fisch zurückgesetzt">↩</span>'}</div>
       <div class="sub">${esc(e.spot)} · ${esc(e.datum)}${e.koeder?' · '+esc(e.koeder):''}${cx?'<br>'+esc(cx):''}</div></div>
       ${teilenVerfuegbar?`<button class="fb-share" aria-label="Fang teilen" data-id="${esc(e.id)}" style="background:none;border:0;color:var(--muted);cursor:pointer;padding:4px">${ICON('share')}</button>`:''}
       <button class="fb-edit" aria-label="Eintrag bearbeiten" data-id="${esc(e.id)}" style="background:none;border:0;color:var(--muted);cursor:pointer;padding:4px">${ICON('edit')}</button>
@@ -383,10 +383,14 @@ export function checkFang(){
   const el=byId('fbCheck');
   if(!state.REGION){el.innerHTML='';return;}
   const fisch=selectById('fbFisch').value;
-  let len=parseInt(inputById('fbLaenge').value,10);
+  const lenRaw=parseInt(inputById('fbLaenge').value,10);
+  let len=lenRaw;
   if(!isNaN(len)&&(len<0||len>300)) len=NaN; /* unplausibel ignorieren – Wels kann in D legitim >250 cm erreichen */
   const sc=state.SCHON.find(x=>x.fisch===fisch);
   let msgs=[],bad=false;
+  /* Sonst verschwindet eine unplausible Länge beim Speichern kommentarlos (siehe fbSave) -
+     ohne Hinweis merkt man das erst viel später beim Blick auf den gespeicherten Eintrag. */
+  if(!isNaN(lenRaw)&&isNaN(len)) msgs.push('⚠ '+lenRaw+' cm liegt außerhalb 0–300 cm und wird beim Speichern nicht übernommen.');
   if(!sc){
     msgs.push('ℹ Für „'+fisch+'“ liegen in dieser Region keine Schonzeit-/Maßdaten vor – bitte Erlaubnisschein prüfen. KEINE Freigabe!');
   }

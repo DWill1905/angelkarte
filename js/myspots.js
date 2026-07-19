@@ -1,7 +1,7 @@
 import { byId, inputById } from './dom.js';
 import { state, store } from './state.js';
 import { applyFilters, buildChips, buildMarkers } from './map.js';
-import { esc } from './util.js';
+import { esc, ICON } from './util.js';
 import { tripSave, updateTripBadge } from './trip.js';
 export var myPending = null;
 /** Wird beim Bearbeiten eines bestehenden eigenen Spots gesetzt (myId), sonst null -
@@ -26,7 +26,7 @@ export function mySpotObj(m) {
 }
 export function openMyDlg() {
     myEditId = null;
-    byId('myDlgTitle').textContent = 'Eigenen Spot speichern';
+    byId('myDlgTitle').innerHTML = ICON('pin') + ' Eigenen Spot speichern';
     byId('myDlgTipp').hidden = false;
     inputById('myName').value = '';
     inputById('myTipp').value = '';
@@ -46,7 +46,7 @@ window.editMySpot = async function (id) {
         return;
     myEditId = id;
     myPending = null;
-    byId('myDlgTitle').textContent = 'Eigenen Spot bearbeiten';
+    byId('myDlgTitle').innerHTML = ICON('pin') + ' Eigenen Spot bearbeiten';
     byId('myDlgTipp').hidden = true;
     inputById('myName').value = m.name || '';
     inputById('myTipp').value = m.tipp || '';
@@ -60,7 +60,14 @@ export async function saveMySpot() {
         return closeMyDlg();
     const name = inputById('myName').value.trim() || 'Eigener Spot';
     const tipp = inputById('myTipp').value.trim();
-    const tiefe = (() => { const t = parseFloat(inputById('myTiefe').value); return (!isNaN(t) && t > 0 && t <= 80) ? t : null; })();
+    const tiefeEl = inputById('myTiefe');
+    /* Das Feld hat schon min/max/type=number - ohne <form>-Submit greift die native
+       Validierung aber nie, ein unplausibler Wert wurde bisher kommentarlos verworfen. */
+    if (tiefeEl.value && !tiefeEl.checkValidity()) {
+        tiefeEl.reportValidity();
+        return;
+    }
+    const tiefe = (() => { const t = parseFloat(tiefeEl.value); return (!isNaN(t) && t > 0 && t <= 80) ? t : null; })();
     const list = await loadMySpots(state.REGION.id);
     let m, editId = myEditId, altName = null;
     if (editId != null) {

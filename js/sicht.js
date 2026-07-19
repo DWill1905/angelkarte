@@ -78,8 +78,14 @@ export function menuZu() {
     const w = byId('menuWrap');
     if (!w)
         return;
+    const hattenFokusImMenu = document.activeElement instanceof HTMLElement && w.contains(document.activeElement);
     w.classList.remove(OFFEN);
     byId('menuBtn')?.setAttribute('aria-expanded', 'false');
+    /* Fokus zurück auf den Menü-Button - aber nur, wenn er beim Schließen tatsächlich im Menü
+       lag (Tastatur/Screenreader). Der Sicherheitsnetz-Aufruf beim Start soll keinen Fokus
+       erzwingen, den der Nutzer nie gesetzt hat. */
+    if (hattenFokusImMenu)
+        byId('menuBtn')?.focus();
 }
 /* Sicherheitsnetz: Falls durch einen Cache-Mix ein alter Zustand hängen bleibt,
    startet das Menü in jedem Fall geschlossen. */

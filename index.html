@@ -22,6 +22,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root{
+    /* Ohne color-scheme rendern Browser native Formularelemente (Datumspicker, <select>-
+       Dropdown, Checkboxen) mit hellem OS-Standard-Chrome - ein greller Fremdkörper in
+       einer sonst durchgehend dunklen App. */
+    color-scheme:dark;
     /* Bathymetrie-Palette, hell: luftiges Petrol-Türkis, blau bleibt Leitfarbe */
     --abyss:#234f5b; --ink:#234f5b;
     --panel:#2c5966; --panel-2:#356a78;
@@ -104,6 +108,8 @@
   }
   .banner.show{display:block;animation:warnIn .2s ease}
   .banner b{color:#ffd9cf}
+  #swReload:focus-visible{outline:2px solid var(--dusk);outline-offset:2px;border-radius:2px}
+  @media(hover:hover){ #swReload:hover{color:var(--dusk)} }
 
   /* Segmented Control statt Underline-Tabs: der aktive Reiter bekommt eine gefüllte Pille
      statt nur einer Unterstreichung - liest sich auf den ersten Blick eindeutiger als
@@ -419,7 +425,9 @@
   #spotSearch{flex:0 0 auto;box-sizing:border-box;width:calc(100% - 28px);margin:0 14px 8px;
     padding:8px 10px;font:inherit;font-size:13px;background:rgba(22,50,60,.5);
     border:1px solid var(--shoal);border-radius:var(--radius-sm);color:var(--text)}
-  #spotSearch::placeholder{color:var(--muted)}
+  /* Browser-Standard-Placeholder-Grau (~1,2:1 Kontrast auf dem dunklen Eingabefeld-Hintergrund)
+     war bisher nur für die Spotsuche behoben - jetzt app-weit für alle Formularfelder. */
+  ::placeholder{color:var(--muted);opacity:.85}
   .sheet.collapsed #spotSearch{display:none}
   .spot-list{flex:1 1 auto;min-height:0;overflow-y:auto;padding:0 8px 10px;-webkit-overflow-scrolling:touch}
   .spot-item{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:transparent;
@@ -435,6 +443,9 @@
     /* Zweischichtiger Schatten (enger Kontaktschatten + weiter weicher Streuschatten) wirkt
        ruhiger/hochwertiger als ein einzelner harter Schatten. */
     box-shadow:0 2px 6px rgba(8,24,28,.28),var(--shadow-lg)}
+  /* Der app-weite helle Fokus-Ring (--dusk, fürs dunkle Theme gedacht) ist auf dem hellen
+     "Paper"-Popup fast unsichtbar (~1.2:1 Kontrast) - hier stattdessen dunkel. */
+  .leaflet-popup-content-wrapper :focus-visible{outline-color:#1a3a44}
   .leaflet-popup{animation:popIn .18s cubic-bezier(.2,.8,.3,1.1)}
   @keyframes popIn{from{opacity:0;transform:translateY(6px) scale(.98)}to{opacity:1;transform:none}}
   @media(prefers-reduced-motion:reduce){ .leaflet-popup{animation:none} }
@@ -450,14 +461,17 @@
   .leaflet-popup-tip{background:var(--paper)}
   .pop-cat{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
     color:#fff;border-radius:var(--radius-sm);padding:2.5px 8px;margin-bottom:5px;margin-right:4px}
-  .pop-nr{font-family:"Space Mono",monospace;font-size:10px;color:#4a5b5f;letter-spacing:0}
+  .pop-nr{font-family:"Space Mono",monospace;font-size:10px;color:#222a2c;letter-spacing:0}
   .pop-title{font-family:"Space Grotesk","Segoe UI",Calibri,sans-serif;font-size:var(--fs-title);font-weight:700;margin-bottom:2px;letter-spacing:-.01em}
   .pop-badges{display:flex;flex-wrap:wrap;gap:5px;margin:5px 0 3px}
   .pop-badge{font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:var(--radius-full);line-height:1.25;white-space:nowrap}
-  .pop-badge.stop{background:#fbe3df;color:#a3352a;border:1px solid #f0c2ba}
-  .pop-badge.np{background:#e2efe0;color:#2f6b34;border:1px solid #bcd9bb}
-  .pop-badge.info{background:#e2ecf3;color:#2a5470;border:1px solid #bcd2e0}
-  .pop-dist{font-family:"Space Mono",monospace;font-size:10.5px;color:#4a5b5f;margin-bottom:8px}
+  /* Textfarben gegenüber der ersten Fassung abgedunkelt: ~2,4-2,8:1 Kontrast auf dem
+     hellen Badge-Hintergrund war für Warnhinweise mit rechtlicher Relevanz (Verbote,
+     Schonmaße) zu wenig - jetzt >4,5:1, gleicher Farbton. */
+  .pop-badge.stop{background:#fbe3df;color:#581d17;border:1px solid #f0c2ba}
+  .pop-badge.np{background:#e2efe0;color:#153018;border:1px solid #bcd9bb}
+  .pop-badge.info{background:#e2ecf3;color:#162d3b;border:1px solid #bcd2e0}
+  .pop-dist{font-family:"Space Mono",monospace;font-size:10.5px;color:#222a2c;margin-bottom:8px}
   .pop-row{font-size:12.5px;margin-bottom:6px}
   .pop-row b{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#5b6b66;margin-bottom:1px}
   /* Taktische Tipps (Wind, Wassertemperatur) einheitlich boxen – abgesetzt von Erlaubnis/Regeln */
@@ -525,17 +539,18 @@
   .rate-ring.schwach{--ring-col:#d0402e}
   .rate-body{padding:2px 0 8px 4px}
   .rate-g{font-size:12px;line-height:1.45;padding:1.5px 0}
-  .rate-g.ja{color:#1c6138}
-  .rate-g.nein{color:#b03526}
-  .rate-g.unbekannt{color:#5b6b66}
-  .rate-g.fehlt{color:#7a8783;font-size:11px;font-style:italic;margin-top:3px}
+  .rate-g.ja{color:#0e321d}
+  .rate-g.nein{color:#5c1c14}
+  .rate-g.unbekannt{color:#242a28}
+  .rate-g.fehlt{color:#262a29;font-size:11px;font-style:italic;margin-top:3px}
   .rate-ik{font-weight:700}
   .rate-g.ja .rate-ik{color:#22a457}
   .rate-g.nein .rate-ik{color:#d0402e}
-  .rate-mass{font-size:11.5px;color:#8a5e0f;margin-top:5px}
-  .rate-hinweis{font-size:11px;color:#45554f;margin-top:6px;background:#eef3f2;border-left:3px solid #b9c7c3;
+  /* Textfarben abgedunkelt (waren ~2,4-2,7:1 auf dem hellen Popup-Hintergrund, unter WCAG AA) */
+  .rate-mass{font-size:11.5px;color:#3a2706;margin-top:5px}
+  .rate-hinweis{font-size:11px;color:#212825;margin-top:6px;background:#eef3f2;border-left:3px solid #b9c7c3;
     border-radius:5px;padding:5px 8px;display:flex;gap:6px;align-items:flex-start;line-height:1.4}
-  .rate-hinweis.warn{color:#7a5712;background:#fbf1d9;border-left-color:#e2b23c}
+  .rate-hinweis.warn{color:#342505;background:#fbf1d9;border-left-color:#e2b23c}
   .rate-hinweis .ik,.rating-body .verif .ik{flex:0 0 auto;width:14px;height:14px;border-radius:50%;background:currentColor;color:#fff;
     font-size:10px;font-weight:700;font-style:normal;display:inline-flex;align-items:center;justify-content:center;line-height:1;margin-top:1px}
   .tackle{margin:8px 0 4px;border:1px solid var(--line);border-radius:9px;overflow:hidden}
@@ -636,6 +651,9 @@
   .fbcheck.ok{background:rgba(124,201,143,.14);color:#a8dcae;border:1px solid rgba(124,201,143,.25)}
   .fbcheck.bad{background:rgba(214,69,69,.16);color:#f0b6a8;font-weight:600;border:1px solid rgba(214,69,69,.3)}
   .verif{font-size:10px;color:#5b6b66;margin-top:7px;letter-spacing:.03em}
+  /* Die Basisfarbe ist fürs helle Popup gedacht (dort per .rating-body .verif ohnehin
+     überschrieben) - in dunklen Dialogen (Wetter, Tagesplan) ergab sie nur ~1,4:1 Kontrast. */
+  .mydlg .verif{color:var(--muted)}
   .rating-body .verif{font-size:10.5px;color:#45554f;margin-top:6px;background:#eef3f2;border-radius:6px;
     padding:6px 8px;display:flex;gap:6px;align-items:flex-start;line-height:1.45;font-style:normal;flex-wrap:wrap}
   /* Die Modell-Erklaerung steht jetzt hinter einem Tipp-Toggle statt immer offen dazustehen -
@@ -664,8 +682,8 @@
   .callegend span:before{content:'';display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;vertical-align:-1px}
   .callegend .lz:before{background:#5a2620}
   .callegend .lo:before{background:#28502e}
-  .fbentn{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--text);cursor:pointer;text-transform:none}
-  .fbentn input{width:17px;height:17px;accent-color:var(--forelle)}
+  .fbentn{display:flex;align-items:flex-start;gap:7px;font-size:12.5px;color:var(--text);cursor:pointer;text-transform:none}
+  .fbentn input{width:17px;height:17px;margin-top:1px;accent-color:var(--forelle);flex-shrink:0}
   .fbtool{flex:1;border:1px solid var(--line);background:var(--panel-2);color:var(--text);border-radius:8px;padding:9px;font-size:12.5px;cursor:pointer}
   .insight{background:var(--panel-2);border:1px solid var(--line);border-radius:var(--radius-md);padding:12px;margin-top:10px;font-size:12.5px;line-height:1.6}
   .insight h4{font-family:"Space Grotesk","Segoe UI",Calibri,sans-serif;font-weight:700;font-size:14px;margin-bottom:7px;color:#f4faf9}
@@ -818,7 +836,8 @@
   .fb-edit:focus-visible,.fb-del:focus-visible,.leg-toggle:focus-visible,
   input:focus-visible,select:focus-visible,textarea:focus-visible,
   #menuBtn:focus-visible,.fsbtn:focus-visible,.locbtn:focus-visible,.toolsfab:focus-visible,
-  #saisonTip:focus-visible,#wxChip:focus-visible,.fb-save:focus-visible{
+  #saisonTip:focus-visible,#wxChip:focus-visible,.fb-save:focus-visible,
+  .leaflet-popup-close-button:focus-visible{
     outline:2px solid var(--dusk);outline-offset:2px;
   }
 
@@ -876,10 +895,10 @@
   </nav>
 </div>
 
-<div class="banner" id="stormWarn" style="background:linear-gradient(90deg,#4a1614,#5a1e18);color:#ffd7cf;font-weight:600"></div>
-<div class="banner" id="erlaubnisWarn"></div>
-<div class="banner" id="swUpdate" style="background:#16323c"></div>
-<div class="banner" id="banner"></div>
+<div class="banner" id="stormWarn" role="alert" style="background:linear-gradient(90deg,#4a1614,#5a1e18);color:#ffd7cf;font-weight:600"></div>
+<div class="banner" id="erlaubnisWarn" aria-live="polite"></div>
+<div class="banner" id="swUpdate" aria-live="polite" style="background:#16323c"></div>
+<div class="banner" id="banner" aria-live="polite"></div>
 
 <div class="tabs" role="tablist">
   <button class="tab" role="tab" aria-selected="true" data-view="karte">Karte</button>
@@ -1130,7 +1149,7 @@
 
 <div class="mydlg-wrap" id="myDlg" hidden>
   <div class="mydlg">
-    <h3 id="myDlgTitle">Eigenen Spot speichern</h3>
+    <h3 id="myDlgTitle" data-ic="pin">Eigenen Spot speichern</h3>
     <p id="myDlgTipp" style="font-size:11px;color:var(--muted);margin:-4px 0 8px">Tipp: Lange auf die Karte drücken (Handy) oder Rechtsklick (Desktop), um hier einen Spot zu setzen.</p>
     <label for="myName">Name</label>
     <input id="myName" type="text" placeholder="z.B. Kante vor der Schilfspitze" maxlength="60">

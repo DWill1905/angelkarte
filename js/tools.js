@@ -13,7 +13,7 @@ import { regionCenter } from './ui.js';
 import { openOffline, satToggle } from './map.js';
 import { openTrip, inTrip, setTripBtn } from './trip.js';
 import { ladeNotiz, speichereNotiz } from './notiz.js';
-import { esc } from './util.js';
+import { esc, de1 } from './util.js';
 export function season() { const m = NOW.getMonth() + 1; return m === 12 || m <= 2 ? 'winter' : m <= 5 ? 'fruehjahr' : m <= 8 ? 'sommer' : 'herbst'; }
 export const KB = {
     Hecht: { fruehjahr: 'Nach der Schonzeit in den erwärmten Flachbuchten: mittelgroße Gummis 12–16 cm, flach laufende Wobbler.',
@@ -68,7 +68,7 @@ export function kbHtml() {
     unbekannt.forEach(f => { h += '<p style="margin-bottom:9px;color:var(--muted)"><b>' + f + ':</b> Friedfisch/Sonderart – kein Raubfisch-Köderprofil hinterlegt. Grundmontage mit Naturköder (Wurm, Mais, Made), an Struktur und in der Dämmerung.</p>'; });
     if (state.WX) {
         if (state.WX.trendVal <= -1.5)
-            h += '<p style="margin-bottom:9px"><b>Druck fällt (' + state.WX.trendVal.toFixed(1) + ' hPa/3h):</b> Fresslaune – aktiver und schneller führen, jetzt ans Wasser!</p>';
+            h += '<p style="margin-bottom:9px"><b>Druck fällt (' + de1(state.WX.trendVal) + ' hPa/3h):</b> Fresslaune – aktiver und schneller führen, jetzt ans Wasser!</p>';
         else if (state.WX.trendVal >= 1.5)
             h += '<p style="margin-bottom:9px"><b>Druck steigt:</b> nach der Front oft zäh – Köder verkleinern, langsamer führen, Tiefe suchen.</p>';
     }
@@ -278,8 +278,8 @@ export async function openPack() {
     const checked = await packState();
     const erlDatum = await erlaubnisDatum();
     let h = '<p style="color:var(--muted);margin-bottom:10px">Für ' + esc(state.REGION.kurz || state.REGION.name) + ' – Haken bleiben gespeichert.</p>';
-    h += '<label class="fbentn" style="margin:5px 0 12px;display:flex;align-items:center;gap:8px"><span>📅 Erlaubnisschein gültig bis</span>'
-        + '<input type="date" id="packErlDatum" value="' + esc(erlDatum) + '" style="font:inherit;padding:3px 6px;border-radius:6px;border:1px solid var(--line);background:var(--panel-2);color:inherit"></label>';
+    h += '<label class="fbentn" style="margin:5px 0 12px;align-items:center;gap:8px"><span>📅 Erlaubnisschein gültig bis</span>'
+        + '<input type="date" id="packErlDatum" value="' + esc(erlDatum) + '" style="font-size:13px;padding:6px 8px;min-height:32px;min-width:132px;border-radius:6px;border:1px solid var(--line);background:var(--panel-2);color:inherit;cursor:pointer"></label>';
     items.forEach((it, i) => {
         h += '<label class="fbentn" style="margin:5px 0"><input type="checkbox" data-pi="' + i + '"' + (checked[i] ? ' checked' : '') + '> <span>' + it + '</span></label>';
     });
@@ -361,7 +361,7 @@ function renderBite() {
         });
         if (wxTag) {
             h += '<p style="margin-top:10px;padding:8px;border-radius:8px;background:var(--panel-2);font-size:12px">'
-                + (druckGut ? '📉 <b>Luftdruck fällt (' + wxTag.trendVal.toFixed(1) + ' hPa/3h)</b> – Major-Fenster sind als ★ Top markiert, beste Karten!'
+                + (druckGut ? '📉 <b>Luftdruck fällt (' + de1(wxTag.trendVal) + ' hPa/3h)</b> – Major-Fenster sind als ★ Top markiert, beste Karten!'
                     : druckSchlecht ? '📈 Luftdruck steigt – nach der Front oft zäh, Fenster eher schwächer als sonst.'
                         : '➡ Luftdruck stabil – Fenster gelten wie berechnet.')
                 + (heute ? '' : ' <span style="color:var(--muted)">(aus der Vorhersage)</span>') + '</p>';
@@ -579,15 +579,15 @@ export function computeScore() {
         let pt, txt;
         if (state.WX.trendVal <= -1.5) {
             pt = 2;
-            txt = 'Fallender Druck (' + state.WX.trendVal.toFixed(1) + ' hPa/3h) – Fresslaune';
+            txt = 'Fallender Druck (' + de1(state.WX.trendVal) + ' hPa/3h) – Fresslaune';
         }
         else if (state.WX.trendVal < 1.5) {
             pt = 1;
-            txt = 'Druck stabil (' + state.WX.trendVal.toFixed(1) + ' hPa/3h) – neutral';
+            txt = 'Druck stabil (' + de1(state.WX.trendVal) + ' hPa/3h) – neutral';
         }
         else {
             pt = 0;
-            txt = 'Druck steigt (' + state.WX.trendVal.toFixed(1) + ' hPa/3h) – nach Front oft zäh';
+            txt = 'Druck steigt (' + de1(state.WX.trendVal) + ' hPa/3h) – nach Front oft zäh';
         }
         factors.push({ name: 'Luftdruck', pts: pt, max: 2, txt });
     }
@@ -844,7 +844,7 @@ state.map.on('popupopen', e => {
         const [la, ln] = el.dataset.dist.split(',').map(Number);
         const c = state.map.getCenter();
         const ref = state.userPos || [c.lat, c.lng];
-        el.textContent = '~' + haversine(ref[0], ref[1], la, ln).toFixed(1) + ' km ' + (state.userPos ? 'von dir' : 'von Kartenmitte');
+        el.textContent = '~' + de1(haversine(ref[0], ref[1], la, ln)) + ' km ' + (state.userPos ? 'von dir' : 'von Kartenmitte');
     }
     const notizEl = e.popup.getElement().querySelector('.notiz-ta');
     if (notizEl) {

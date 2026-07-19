@@ -1,6 +1,11 @@
 /* Helfer: HTML-Escape + Icon-Set (Lucide-Stil, inline SVG) */
 export function esc(x: unknown): string {const d=document.createElement('div');d.textContent=String(x==null?'':x);return d.innerHTML;}
 
+/** Eine Nachkommastelle im deutschen Format (Komma statt Punkt) - .toFixed(1) liefert
+    immer "20.4", nie "20,4", unabhängig vom Locale. Nur für Anzeigetexte gedacht, NICHT für
+    API-Parameter (Koordinaten in URLs müssen den technischen Punkt behalten). */
+export function de1(n: number): string { return n.toFixed(1).replace('.', ','); }
+
 /* ===== Icon-Set (Lucide-Stil, inline SVG, currentColor) ===== */
 export const ICONS={
   tools:'<path d="M14.7 6.3a4 4 0 0 1-5.4 5.4L4 17v3h3l5.3-5.3a4 4 0 0 0 5.4-5.4l-2.1 2.1-2.5-.5-.5-2.5z"/>',

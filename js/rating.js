@@ -119,7 +119,7 @@ function zeitBewertung(lat, lng, jetzt, daemmerungsfisch, nachtfisch = false) {
     if (kommt) {
         const std = (kommt.from.getTime() - t) / 3600000;
         if (std <= 3)
-            return { punkte: 0.6, text: `Beißfenster in ${std < 1 ? Math.round(std * 60) + ' min' : std.toFixed(1) + ' h'} (${hhmm(kommt.from)})`, status: 'ja' };
+            return { punkte: 0.6, text: `Beißfenster in ${std < 1 ? Math.round(std * 60) + ' min' : de1(std) + ' h'} (${hhmm(kommt.from)})`, status: 'ja' };
         return { punkte: 0.2, text: `Nächstes Beißfenster erst ${hhmm(kommt.from)}`, status: 'nein' };
     }
     if (dusk && bisDusk > 0 && bisDusk <= 3) {
@@ -284,11 +284,11 @@ export function bewerteSpot(s, art, jetzt = new Date(), hotspot = null) {
     }
     else if (wx.trendVal <= -1.5) {
         if (p?.warm)
-            add('ja', `Luftdruck fällt (${wx.trendVal.toFixed(1)} hPa/3 h) – schwül vor der Front, top für ${art}`, 1.5, 1.5);
+            add('ja', `Luftdruck fällt (${de1(wx.trendVal)} hPa/3 h) – schwül vor der Front, top für ${art}`, 1.5, 1.5);
         else if (p?.druckSensibel && wx.trendVal <= -3)
-            add('ja', `Luftdruck fällt schnell (${wx.trendVal.toFixed(1)} hPa/3 h) – ${art} reagiert empfindlich, oft zickig`, 0.9, 1.5);
+            add('ja', `Luftdruck fällt schnell (${de1(wx.trendVal)} hPa/3 h) – ${art} reagiert empfindlich, oft zickig`, 0.9, 1.5);
         else
-            add('ja', `Luftdruck fällt (${wx.trendVal.toFixed(1)} hPa/3 h) – die stärkste Phase`, 1.5, 1.5);
+            add('ja', `Luftdruck fällt (${de1(wx.trendVal)} hPa/3 h) – die stärkste Phase`, 1.5, 1.5);
     }
     else if (wx.trendVal >= 1.5) {
         add('nein', p?.druckSensibel ? `Luftdruck steigt stark – der empfindliche ${art} ist oft zurückhaltend` : 'Luftdruck steigt stark – Fische oft zurückhaltend', p?.druckSensibel ? 0.2 : 0.4, 1.5);
@@ -474,7 +474,7 @@ export function sterneText(n) {
     return '★'.repeat(n) + '☆'.repeat(Math.max(0, 5 - n));
 }
 /* ---------- Darstellung im Popup ---------- */
-import { esc } from './util.js';
+import { esc, de1 } from './util.js';
 const IKON = { ja: '✔', nein: '✖', unbekannt: '–' };
 /** Rendert den Bewertungsblock: Zielarten mit Sternen, Prozent und Gründen. */
 export function ratingHtml(s, hotspot = null) {

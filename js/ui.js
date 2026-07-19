@@ -93,3 +93,33 @@ export function buildSaisonBar() {
     if (close)
         close.onclick = () => setzen(false);
 }
+/* Fokus-Rückgabe für alle ~15 Werkzeug-/Info-Dialoge (.mydlg-wrap): wer den Dialog per
+   Tastatur öffnet, landet beim Schließen ohne dies wieder auf dem auslösenden Button statt
+   "verloren" ganz oben im Dokument. Generisch über einen MutationObserver auf `hidden`,
+   damit nicht jede der zahlreichen Öffnen-/Schließen-Stellen einzeln angefasst werden muss. */
+(function initDialogFocusReturn() {
+    const trigger = new WeakMap();
+    qsa('.mydlg-wrap').forEach((dlg) => {
+        new MutationObserver(() => {
+            if (!dlg.hidden) {
+                const active = document.activeElement;
+                if (active instanceof HTMLElement && active !== document.body)
+                    trigger.set(dlg, active);
+            }
+            else {
+                const t = trigger.get(dlg);
+                if (t && document.body.contains(t))
+                    t.focus();
+            }
+        }).observe(dlg, { attributes: true, attributeFilter: ['hidden'] });
+    });
+    /* Keine der ~15 .mydlg-wrap-Dialoge reagierte bisher auf Escape - anders als Menü und
+       Vollbild, wo das schon erwartungsgemäß funktioniert. */
+    document.addEventListener('keydown', (e) => {
+        if (e.key !== 'Escape')
+            return;
+        const open = qsa('.mydlg-wrap').find((d) => !d.hidden);
+        if (open)
+            open.hidden = true;
+    });
+})();
