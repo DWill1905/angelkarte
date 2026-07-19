@@ -1,5 +1,17 @@
 # Changelog
 
+## SW v126 – 2026-07-19
+
+### Changed
+- **Design-Audit Phase 2 (1/2): Fangbuch-Checkbox nicht mehr in Versalien.** `<label>` ist
+  global auf `text-transform:uppercase` gesetzt (gedacht für kurze, einzeilige Eyebrow-
+  Feldlabel wie „FISCHART"). Die Checkbox-Beschriftung „Fisch entnommen (nicht
+  zurückgesetzt)" ist als `<label class="fbentn">` aber ein ganzer Satz und erbte dieselbe
+  Regel – dadurch lief sie in Versalien über zwei Zeilen, was mehrzeilig deutlich schwerer
+  zu lesen ist. `.fbentn` bekommt jetzt `text-transform:none`; sonst kein weiteres Label
+  in der App betroffen (alle anderen sind kurze, einzeilige Feldlabel, wo Versalien
+  korrekt sind).
+
 ## SW v125 – 2026-07-19
 
 ### Changed
