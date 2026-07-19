@@ -1,7 +1,7 @@
 # Beißzeit
 
 Interaktive Angel-PWA (Leaflet) für Raubfischangler – **keyfrei**, offline-fähig,
-läuft als statische Seite auf GitHub Pages. Sechs Regionen mit recherchierten Spots,
+läuft als statische Seite auf GitHub Pages. Sieben Regionen mit recherchierten Spots,
 Schonzeiten-Status, Fangbuch, Beißzeiten-/Köder-/Blei-Beratern und einem
 „Heute passt es?"-Score.
 
@@ -13,8 +13,9 @@ sichtbare App-Name wurde auf Beißzeit geändert.*
 ## Features
 
 - **Karte** mit Spots, Flussstrecken, Hotspots und eigenen Spots (Long-Press/Rechtsklick)
-- **6 Regionen** (umschaltbar, alles regionsabhängig): Erzgebirge, Rhein & Rheinhessen,
-  Gießen/Lahntal, Elbe/Magdeburg, Main/Frankfurt–Offenbach, Mecklenburgische Kleinseenplatte
+- **7 Regionen** (umschaltbar, alles regionsabhängig): Erzgebirge, Rhein & Rheinhessen,
+  Gießen/Lahntal, Elbe/Magdeburg, Main/Frankfurt–Offenbach, München/Isar, Mecklenburgische
+  Kleinseenplatte
 - **Filter** nach Kategorie, Zielfisch und „nur Ufer" (blendet reine Bootsseen aus)
 - **Schonzeiten & Maße** mit Live-Maßcheck im Fangbuch (inkl. Entnahmefenster),
   Jahres-Kalender, regionsabhängige Regeln – gegen die Landesverordnungen abgeglichen

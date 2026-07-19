@@ -2,7 +2,7 @@
    Shell + Daten: stale-while-revalidate · OSM-Tiles: cache-first (max. 600)
    API-Aufrufe (Wetter, Pegel): immer Netz
    CACHE-Version folgt SemVer (https://semver.org/lang/de/), siehe CHANGELOG.md */
-const CACHE='beisszeit-shell-v1.0.1';
+const CACHE='beisszeit-shell-v1.1.0';
 const TILES='angelkarte-tiles-v1';
 const SHELL=[
   './','index.html','manifest.json',
@@ -12,7 +12,7 @@ const SHELL=[
   'js/region.js','js/ui.js','js/map.js','js/tackle.js','js/geo.js','js/plan.js','js/sicht.js','js/rating.js','js/reed.js','js/saison.js','js/myspots.js','js/weather.js',
   'js/tools.js','js/regeln.js','js/fangbuch.js','js/trip.js','js/fullscreen.js','js/notiz.js',
   /* Regionsdaten */
-  'data/regionen.json','data/erzgebirge.json','data/elbe.json','data/main.json','data/mecklenburg.json','data/mainz.json','data/giessen.json',
+  'data/regionen.json','data/erzgebirge.json','data/elbe.json','data/main.json','data/mecklenburg.json','data/mainz.json','data/giessen.json','data/muenchen.json',
   'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css',
   'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js',
   'https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.min.css',

@@ -892,6 +892,106 @@ export const REGION_MA: Region = {id:'main',geprueft:'2026-07',name:'Main / Fran
   ],
   hinweis:'Angaben ohne Gewähr, recherchiert 07/2026 (fisch-hitparade, hejfish/Fischerhütte, angelguide, Zunft-Erlaubnisbestimmungen). Die Erlaubnisschein-Lage am Main ist durch historische Fischereirechte komplex – maßgeblich sind DEIN Erlaubnisschein (Strom-km!), die Beschilderung und die HFischV.'};
 
+/* Isar-Kanalgewässer und Baggerseen um München (Donau-Einzugsgebiet). Die Isar selbst
+   ist innerhalb Münchens praktisch nicht gastanglertauglich: Die Isarfischer e.V. (seit
+   1950, ~1100 Mitglieder) haben laut eigener Auskunft keine Kapazität mehr für neue
+   Mitglieder und keine Warteliste; die städtische Jahreskarten-Anzahl ist auf 450/Jahr
+   begrenzt. Deshalb hier bewusst die real gastkarten-zugänglichen Gewässer: der
+   Mittlere-Isar-Kanal (Ableitung der Isar am Wehr Oberföhring) plus vier Baggerseen im
+   Münchner Norden/Westen – alle mit echten Tageskarten für Nicht-Mitglieder. */
+export const SPOTS_BY: Spot[] = [
+  {name:'Feringasee (Unterföhring)',wasser:'see-tief',verif:'B',nr:'Fischwaid München e.V. · Erlbachstraße',cat:'raub',
+   arten:['Hecht','Zander','Barsch','Karpfen','Schleie','Regenbogenforelle'],
+   lat:48.1929,lng:11.6649,
+   fisch:'Hecht, Zander, Barsch, Karpfen, Schleie, schnellwüchsige Regenbogenforelle',
+   methode:'Ehemaliger Kiessee mit klarem Wasser nordöstlich von München, seit 1980 eines der wichtigsten Gewässer des Vereins. Spinnfischen ist laut Vereinsangaben die erfolgreichste Methode – Hecht ist der Hauptzielfisch, dazu gute Karpfen/Schleien und schnell wachsende Forellen. Lage ungefähr (Zufahrt/Parkplätze nur über die Erlbachstraße).',
+   karte:'Tageskarte Fischwaid München e.V. – seit 2025 ausschließlich online über hejfish',
+   note:'Kein eigener Nachweis einer Nachtangel-Sonderregel gefunden – allgemeine bayerische Regeln gelten, Vereinsordnung vor Ort/online prüfen.',
+   kartenLinks:[{label:'hejfish – Fischwaid München',url:'https://www.hejfish.com/m/fischereiverein-fischwaid-muenchen-e-v-2022'},{label:'Verein – Gewässer',url:'https://www.fischwaid-muenchen.de/?page_id=42'}],
+   hotspots:[],warn:false,zugang:'ufer'},
+
+  {name:'Ismaninger Speichersee',wasser:'see-flach',verif:'B',nr:'Fischwaid München e.V. · zw. Ismaning &amp; Neufinsing',cat:'raub',
+   arten:['Hecht','Zander','Wels','Karpfen','Barsch','Schleie','Brachse','Regenbogenforelle'],
+   lat:48.2231,lng:11.7069,
+   fisch:'Hecht, Zander, Wels, Karpfen, Barsch, Schleie, Brachse, Regenbogenforelle (insges. rund 25 nachgewiesene Fischarten)',
+   methode:'Mit 5,8 km² der mit Abstand größte Baggersee/Speichersee der Region – flach und weitläufig statt tiefe Kiesgrube. Hecht, Barsch und Karpfen sind laut Vereinsangaben am häufigsten. Lage ungefähr, Koordinate markiert den zugänglichen Bereich nahe Ismaning – nicht das gesamte Gewässer ist befischbar (siehe Hinweis).',
+   karte:'Tageskarte Fischwaid München e.V. – seit 2025 ausschließlich online über hejfish',
+   note:'⚠ Gastangler dürfen laut Vereinsordnung nur EINE Handangel mit einer Bissanzeige führen, ausschließlich vom Ufer (kein Boot, kein Waten/Wathose). Hecht-Mindestmaß hier vereinsseitig 60 cm statt der bayernweiten 50 cm. EU-Vogelschutzgebiet (Ramsar-Fläche seit 1976, bis zu 100.000 Wasservögel im Sommer) – Betriebsgelände und Vogelschutzzone am Südufer des Westteils sind komplett gesperrt, im Ostteil zeitweise Einschränkungen, Beschilderung beachten. Nachtangeln auf Aal laut Quellenlage bis 1 Uhr erlaubt.',
+   kartenLinks:[{label:'hejfish – Fischwaid München',url:'https://www.hejfish.com/m/fischereiverein-fischwaid-muenchen-e-v-2022'},{label:'Verein – Speichersee',url:'https://www.fischwaid-muenchen.de/?page_id=2128'}],
+   hotspots:[],warn:true,zugang:'ufer',schonzeitInfo:'Hecht hier vereinsseitig ab 60 cm (bayernweit 50 cm) – strengere Vereinsregel gilt vorrangig.'},
+
+  {name:'Langwieder See',wasser:'see-tief',verif:'B',nr:'Versehrten Fischereiverein München e.V. · A8 Ausf. München-Langwied',cat:'raub',
+   arten:['Hecht','Zander','Wels','Karpfen','Barsch','Rotauge','Brachse','Schleie','Aal','Regenbogenforelle'],
+   lat:48.1825,lng:11.3985,
+   fisch:'Hecht, Zander, Wels, Karpfen, Barsch, Rotauge, Brachse, Schleie, Aal, Regenbogenforelle',
+   methode:'18 ha großer Kiessee im Münchner Westen (Stadtbezirk Aubing-Lochhausen-Langwied), in den 1930ern durch Kiesaushub für den Autobahnbau entstanden, bis ca. 8 m tief. Typisches Hechtgewässer mit gutem Karpfen-, Barsch- und auch Zanderbestand. Grundangeln gilt laut Erfahrungsberichten als erfolgreichste Methode. Lage ungefähr, Zufahrt über die A8-Ausfahrt „München-Langwied".',
+   karte:'Tageskarte Versehrten Fischereiverein München e.V., Saison 01.05.–30.09., ~20 € + 10 € Pfand (Verkaufsstellen u.a. AKM Angel- u. Ködermarkt München, Fisherman\'s Partner München/Parsdorf)',
+   note:'⚠ Aalangeln nur vom verankerten Boot, bis Mitternacht erlaubt – vom Ufer aus laut Vereinsordnung nicht gestattet. Allgemeines Nachtangelverbot: 1,5 h nach Sonnenuntergang bis 1 h vor Sonnenaufgang (für alle anderen Arten/Methoden). Zusätzlich Freizeitsee (Baden, Rudern) – am Wochenende/Sommer entsprechend belebt.',
+   kartenLinks:[],
+   hotspots:[],warn:true,zugang:'ufer'},
+
+  {name:'Mittlerer-Isar-Kanal (Oberföhring/St. Emmeram)',wasser:'kanal',verif:'B',nr:'Versehrten Fischereiverein München e.V. · Ableitung ab Isarwehr Oberföhring',cat:'salmo',
+   arten:['Bachforelle','Regenbogenforelle','Saibling','Barbe','Döbel','Hecht','Barsch','Aal'],
+   lat:48.1706,lng:11.6210,
+   fisch:'Bachforelle, Regenbogenforelle, Saibling, Barbe, Döbel, dazu Hecht &amp; Barsch, in der Dämmerung Aal',
+   methode:'Künstlicher, strömungsstarker Kanal – zweigt am Isarwehr Oberföhring von der Isar ab und führt einen Großteil ihres Wassers Richtung Kraftwerke/Unterföhring. Bis 4 m tief, Brücken ohne Pfeiler. Strömungsliebende Salmoniden (Bach-/Regenbogenforelle, Saibling – vermutlich Bachsaibling) sind der Hauptreiz, dazu Barbe und Döbel für Friedfischangler. Parkplätze bei St. Emmeram. Lage ungefähr.',
+   karte:'Tageskarte Versehrten Fischereiverein München e.V., Saison 01.05.–15.10., ~15 € + 10 € Pfand (Verkaufsstellen u.a. AKM Angel- u. Ködermarkt München, Fisherman\'s Partner München/Parsdorf)',
+   note:'⚠ Nachtangeln hier laut Vereinsordnung verboten (1,5 h nach Sonnenuntergang bis 1 h vor Sonnenaufgang) – abweichend von der sonst freien Nachtangel-Regel in Bayern. Starke Strömung: festes Schuhwerk/Wathose, bei Hochwasser der Isar meiden.',
+   kartenLinks:[],
+   hotspots:[],warn:true,zugang:'ufer'},
+
+  {name:'Hollerner See (Eching)',wasser:'see-tief',verif:'B',nr:'Fischwaid München e.V. &amp; FV Eching · „Am Fretz 1", 85386 Eching',cat:'raub',
+   arten:['Hecht','Zander','Wels','Karpfen','Schleie','Regenbogenforelle','Seeforelle','Barsch','Aal','Brachse','Döbel'],
+   lat:48.3103,lng:11.6255,
+   fisch:'Hecht, Zander, Wels, Karpfen, Schleie, Regenbogenforelle, Seeforelle, Renke, Barsch, Aal, Brachse, Döbel',
+   methode:'41 ha großer, bis 17 m tiefer ehemaliger Kiessee mit auffällig türkisem, klarem Wasser nördlich von München (bei Unterschleißheim/Eching) – seit 1999 gemeinsam von Fischwaid München und dem Fischereiverein Eching bewirtschaftet. Tiefstes und klarstes der hier gelisteten Gewässer, entsprechend anspruchsvoll (Sichtangeln möglich, aber auch scheue Fische). Lage ungefähr, Parkplatz-Zufahrt „Am Fretz 1".',
+   karte:'Tageskarte Fischwaid München e.V. – seit 2025 ausschließlich online über hejfish',
+   note:'Als tiefes, isoliertes Gewässer (kein Flussanschluss) gilt für Seeforelle hier vermutlich die kürzere Schonzeit für geschlossene Gewässer (01.10.–15.01. statt 01.10.–15.03.) – im Zweifel Vereinsordnung/Erlaubnisschein prüfen. Klares Wasser: feine Vorfächer, Naturkost im Vorteil.',
+   kartenLinks:[{label:'hejfish – Fischwaid München',url:'https://www.hejfish.com/m/fischereiverein-fischwaid-muenchen-e-v-2022'}],
+   hotspots:[],warn:false,zugang:'ufer',schonzeitInfo:'Seeforelle hier vermutlich schon ab 16.01. wieder fangbar (geschlossenes Gewässer) statt erst ab 16.03.'}
+];
+
+/* Schonzeiten: AVBayFiG (Ausführungsverordnung Bayerisches Fischereigesetz), Fassung
+   seit 01.01.2023, Donau-Einzugsgebiet (gilt für München/Isar). Seit der Reform 2023
+   unterscheiden sich Fristen teils nach Einzugsgebiet (Donau/Rhein/Elbe/Weser) – die
+   Werte hier gelten NUR für den Donau-Raum. */
+export const SCHON_BY: Schonzeit[] = [
+  {fisch:'Hecht', von:[2,15], bis:[4,30], mm:'ab 50 cm (Ismaninger Speichersee vereinsseitig ab 60 cm)'},
+  {fisch:'Zander', von:[2,15], bis:[4,30], mm:'ab 50 cm'},
+  {fisch:'Rapfen', von:[3,1], bis:[4,30], mm:'ab 40 cm'},
+  {fisch:'Barbe', von:[5,1], bis:[6,30], mm:'ab 40 cm'},
+  {fisch:'Schleie', von:[5,1], bis:[6,30], mm:'ab 26 cm'},
+  {fisch:'Bachforelle', von:[10,1], bis:[3,15], mm:'ab 26 cm'},
+  {fisch:'Regenbogenforelle', von:[12,15], bis:[3,15], mm:'ab 26 cm'},
+  {fisch:'Seeforelle', von:[10,1], bis:[3,15], mm:'ab 60 cm (in geschlossenen Gewässern/Baggerseen laut Quellenlage nur bis 15.01. geschont)'},
+  {fisch:'Karpfen', von:null, bis:null, mm:'ab 35 cm, keine Schonzeit'},
+  {fisch:'Aal', von:null, bis:null, mm:'– (kein Mindestmaß; im Donau-Einzugsgebiet auch keine Schonzeit – die gilt nur im Rhein-/Elbe-/Weser-Gebiet); seit 2023 kein Neubesatz mehr erlaubt'},
+  {fisch:'Wels', von:null, bis:null, mm:'– (kein Maß, keine Schonzeit)'},
+  {fisch:'Barsch', von:null, bis:null, mm:'– (kein Maß, keine Schonzeit)'},
+  {fisch:'Brachse', von:null, bis:null, mm:'– (kein Maß, keine Schonzeit)'},
+  {fisch:'Rotauge', von:null, bis:null, mm:'– (kein Maß, keine Schonzeit)'},
+  {fisch:'Döbel', von:null, bis:null, mm:'– (kein Maß, keine Schonzeit)'},
+  {fisch:'Renke', von:null, bis:null, mm:'– (bayernweit kein einheitliches Maß, an Alpenseen z.T. eigene Vereinsregeln – hier ohne verlässliche Quelle, Vereinsordnung prüfen)'},
+  {fisch:'Saibling', von:null, bis:null, mm:'– (Bachsaibling seit 2023 ohne Mindestmaß/Schonzeit; Seesaibling in Bayern grundsätzlich ab 25 cm, 01.10.–31.12. geschont – am Isarkanal vermutlich Bachsaibling gemeint)'}
+];
+
+export const REGION_BY: Region = {id:'muenchen',geprueft:'2026-07',name:'München / Isar (Bayern)',nachtangeln:'frei',kurz:'München (Isar)',
+  packliste:['Fischereischein nach bestandener Fischerprüfung + Fischereiabgabe – Bayern hat KEINE Prüfungsbefreiung für deutsche Feriengäste; nur wer keinen Wohnsitz in Deutschland hat, bekommt einen 3-Monate-Jahresfischereischein ohne Prüfung','Erlaubnisschein je Gewässer (Fischwaid München über hejfish, Versehrtenfischer München direkt/Verkaufsstellen) – die Isar-Stadtstrecke selbst ist für Gäste praktisch nicht zugänglich (siehe Hinweis)','Spinn-/Jigrute 20–40 g für Hecht/Zander an den Seen','Leichte Forellenausrüstung + ggf. Wathose für den Mittleren-Isar-Kanal','Stahl-/Titanvorfach (Hecht/Wels)','Kescher, Abhakmatte, Maßband, Kopflampe'],
+  koederfisch:['Lebender Köderfisch ist in ganz Deutschland verboten (Tierschutzgesetz) – nur tote Köderfische verwenden.','Köderfische nur aus demselben Gewässer entnehmen (keine Verschleppung/Faunenverfälschung).','Aal darf seit 2023 in Bayern nicht mehr besetzt werden – Bestände an den gelisteten Gewässern sind entsprechend unterschiedlich stark.'],
+  schonQuelle:'Quelle: AVBayFiG (Ausführungsverordnung zum Bayerischen Fischereigesetz), Fassung seit 01.01.2023, Werte für das Donau-Einzugsgebiet (München/Isar). Im Rhein-/Elbe-/Weser-Einzugsgebiet gelten teils andere Fristen (v.a. beim Aal). Vereins-/Gewässerordnungen dürfen strenger sein als das Landesrecht und sind maßgeblich (z.B. Hecht-Mindestmaß 60 cm am Ismaninger Speichersee statt bayernweit 50 cm).',
+  fusszeile:'Erlaubnisscheine: <a href="https://www.fischwaid-muenchen.de" target="_blank" rel="noopener">Fischwaid München e.V.</a> (Feringasee, Speichersee, Hollerner See – Tageskarten über hejfish) · <a href="https://www.versehrtenfischer-muenchen.de" target="_blank" rel="noopener">Versehrten Fischereiverein München e.V.</a> (Langwieder See, Mittlerer-Isar-Kanal)',
+  spots:SPOTS_BY,schon:SCHON_BY,
+  banner:[
+    {von:[2,15],bis:[4,30],text:'<b>Hecht- &amp; Zander-Schonzeit aktiv</b> (15.02.–30.04., Donau-Einzugsgebiet) – am Ismaninger Speichersee gilt für Hecht zusätzlich ein vereinseigenes Mindestmaß von 60 cm.'},
+    {von:[10,1],bis:[12,31],text:'<b>Forellen-/Saibling-Schonzeiten aktiv:</b> Bachforelle bis 15.03., Regenbogenforelle ab 15.12., Seeforelle bis 15.03. (an Baggerseen ggf. nur bis 15.01.).'}
+  ],
+  regeln:[
+    {titel:'Isar-Stadtstrecke: eingeschränkter Zugang',punkte:['Die Isarfischer e.V. (seit 1950, ~1100 Mitglieder) nehmen laut eigener Auskunft aktuell keine neuen Mitglieder auf und führen keine Warteliste','Jahreskarten für die Isar im Stadtgebiet sind auf 450 Stück begrenzt','Praktikabler Gast-Zugang zur Isar besteht über den Mittleren-Isar-Kanal (Ableitung ab Wehr Oberföhring) mit echter Tageskarte']},
+    {titel:'Fischereischein &amp; Erlaubnis in Bayern',punkte:['Fischereischein nur nach bestandener Fischerprüfung – anders als z.B. Mecklenburg-Vorpommern keine generelle Prüfungsbefreiung für deutsche Feriengäste','Ausnahme: Personen ohne Wohnsitz in Deutschland können einen Jahresfischereischein für Touristen ohne Prüfung beantragen (max. 3 Monate Gültigkeit pro Jahr, max. auf 3 Zeitabschnitte aufteilbar)','Zusätzlich zum Fischereischein an jedem Gewässer ein eigener Erlaubnisschein nötig – kein bayernweiter Generalschein']},
+    {titel:'Ismaninger Speichersee: Naturschutz &amp; Gastregeln',punkte:['EU-Vogelschutzgebiet (Ramsar-Fläche seit 1976) – Süduferbereich des Westteils komplett gesperrt','Gastangler: nur eine Handangel mit einer Bissanzeige, ausschließlich vom Ufer','Kein Waten/keine Wathose am gesamten See']}
+  ],
+  hinweis:'Angaben ohne Gewähr, recherchiert 07/2026 (Fischwaid München e.V., Versehrten Fischereiverein München e.V., LBV, diverse Angel-Gewässerdatenbanken). Maßgeblich sind immer der jeweilige Erlaubnisschein, die Gewässerordnung des Vereins und die Beschilderung vor Ort. Koordinaten der Seen/des Kanals sind Näherungswerte (Zufahrts-/Parkplatzbereich), keine vermessenen Angelstellen.'};
+
 export const REGIONS_EMBEDDED: Region[] = [
  {id:'erzgebirge',geprueft:'2026-07',name:'Erzgebirge / Freiberg (Sachsen)',nachtangeln:'lvsa',kurz:'Erzgebirge',packliste:['Erlaubnisschein + Personalausweis','Fangbuch (vor Angelbeginn ausfüllen!)','Maßband &amp; Hakenlöser','TWT: KEINE Maden/Fleisch – nur erlaubte Köder','Salmo-Strecke: Wathose + Einzelhaken + Sprengringzange','Kescher, Kopflampe (Nachtangeln 1h nach SU)'],
   koederfisch:['Lebender Köderfisch ist in ganz Deutschland verboten (Tierschutzgesetz) – nur tote Köderfische verwenden.','Köderfische nur aus demselben Gewässer entnehmen (keine Verschleppung/Faunenverfälschung).','In Trinkwassertalsperren: Maden &amp; Fleisch als Köder verboten – Köderfisch dort tabu.','Fangbegrenzung Köderfische laut Erlaubnisschein beachten.'],
@@ -913,6 +1013,7 @@ export const REGIONS_EMBEDDED: Region[] = [
  REGION_HE,
  REGION_EL,
  REGION_MA,
+ REGION_BY,
  {id:'mecklenburg',geprueft:'2026-07',name:'Mecklenburgische Kleinseenplatte (MV)',nachtangeln:'frei',kurz:'Kleinseenplatte',packliste:['Fischereischein + Fischereiabgabe MV (10€) + ggf. Touristenschein','Anker-Pflicht – Schleppen & Driften verboten, max. 2 Handangeln','Tageslimit: max. 3 Edelfische gesamt (Aal, Hecht, Zander, Karpfen)','Mind. 5–10 m Abstand zum Schilf (Naturschutz) – nicht ans Schilf fahren','Urlauber-Fischereischein ohne Prüfung möglich (Ausgabe: Amt/Rathaus/Tourist-Info)','Echolot (Scharkanten weit draußen)','Stahl-/Titanvorfach (hohe Hechtdichte)','Mückenschutz (Wald überflutet)','Kescher, Kopflampe, Regenjacke'],
   koederfisch:['Lebender Köderfisch verboten (Tierschutzgesetz).','Köderfische nur aus dem befischten Gewässer (Seenverbund Obere Havel).','Barsch &amp; kleine Plötze sind top Hecht-/Zanderköder – als Fischfetzen oder ganzer toter Köfi am System.','Kein Anfüttern in Schongebieten/Nationalpark-Zonen.'],
   schonQuelle:'⚠ KARTENREGELN der Seenfischerei Obere Havel – teils strenger als MV-Landesrecht und NUR auf deren Gewässern gültig!',

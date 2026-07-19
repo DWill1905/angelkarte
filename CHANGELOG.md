@@ -10,6 +10,19 @@ Die ausführliche technische Historie vor 1.0.0 (jede einzelne der früheren
 `beisszeit-shell-vN`-Versionen mit Ursache, Testabdeckung, betroffenen Dateien) steht
 weiterhin in **[CHANGELOG-ARCHIV.md](CHANGELOG-ARCHIV.md)**.
 
+## [1.1.0] – 2026-07-19
+
+### Hinzugefügt
+- **Neue Region: München / Isar (Bayern)**, 5 recherchierte Spots (Feringasee,
+  Ismaninger Speichersee, Langwieder See, Mittlerer-Isar-Kanal, Hollerner See) mit
+  echten Tageskarten-Quellen (Fischwaid München e.V. über hejfish, Versehrten
+  Fischereiverein München e.V.). Schonzeiten/Mindestmaße nach AVBayFiG (Stand
+  01.01.2023, Donau-Einzugsgebiet – seit der Reform gelten dort teils andere
+  Fristen als im Rhein-/Elbe-/Weser-Gebiet, z. B. beim Aal). Die Isar-Stadtstrecke
+  selbst ist für Gastangler praktisch nicht zugänglich (Isarfischer e.V. nimmt
+  aktuell keine neuen Mitglieder auf) – das ist im Regeln-Tab transparent vermerkt,
+  statt eine unrealistische Zugangsmöglichkeit zu suggerieren.
+
 ## [1.0.1] – 2026-07-19
 
 ### Entfernt
