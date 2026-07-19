@@ -1,5 +1,15 @@
 # Changelog
 
+## SW v125 – 2026-07-19
+
+### Changed
+- **Design-Audit Phase 1 (3/3): Tablet-Breakpoint auf 768px gesenkt.** Das schwebende
+  Seitenpanel für die Spotliste existierte bereits (`@media(min-width:820px)`), griff aber
+  erst ab 820px – ein iPad im Hochformat (768–834px, je nach Modell) fiel noch unter das
+  gestreckte Mobil-Layout mit voller Kartenbreite ohne Seitenpanel. Breakpoint auf die
+  Standard-Tablet-Portraitbreite 768px gesenkt (beide Hälften des Media-Query-Paars,
+  `min-width:820px`/`max-width:819px` → `768px`/`767px`).
+
 ## SW v124 – 2026-07-19
 
 ### Changed

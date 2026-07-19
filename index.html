@@ -265,7 +265,7 @@
   body.map-fs .fsbtn{top:calc(12px + env(safe-area-inset-top))}
   body.map-fs .locbtn{bottom:calc(28px + env(safe-area-inset-bottom))}
   body.map-fs .sheet{bottom:calc(14px + env(safe-area-inset-bottom))}
-  @media(max-width:819px){
+  @media(max-width:767px){
     body.map-fs .sheet{bottom:0}
   }
 
@@ -603,10 +603,13 @@
   footer a{color:var(--dusk)}
   .rechtlich{font-size:11px;color:#8fa6ac;padding:2px 2px 10px;line-height:1.5}
 
-  @media(min-width:820px){
+  @media(min-width:768px){
     /* iPad/Desktop: Karte behält das robuste Spalten-Layout (KEIN flex-wrap –
        sonst kollabiert die leere Karten-Div auf iOS-Safari auf 0 Höhe).
-       Die Spotliste wird zum schwebenden, einklappbaren Seitenpanel. */
+       Die Spotliste wird zum schwebenden, einklappbaren Seitenpanel.
+       Breakpoint bewusst auf 768px (Standard-Tablet-Portraitbreite, z.B. iPad) statt 820px –
+       vorher fiel z.B. ein iPad im Hochformat (768–834px) noch unter das gestreckte
+       Mobil-Layout, das die volle Kartenbreite ohne Seitenpanel verschenkt. */
     #map{flex:1;min-height:0;height:auto}
     .sheet{position:absolute;top:auto;right:14px;bottom:14px;width:320px;
       max-height:calc(100% - 28px);border:1px solid var(--line);border-radius:14px;
