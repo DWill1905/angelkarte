@@ -85,6 +85,11 @@
   header{
     position:relative;background:linear-gradient(180deg,#437684,#3a6b78);
     border-bottom:1px solid var(--shoal);padding:calc(8px + env(safe-area-inset-top)) 14px 8px;
+    /* Burger/Sonnentipp/Wetter-Chip sind absolut positioniert (top:12px, 44px hoch -
+       Fuss bei 56px) und zaehlen dadurch nicht zur Content-Hoehe des Headers, die sich
+       allein aus Eyebrow+Regionsname ergibt (~50px). Ohne Mindesthoehe ragten die Buttons
+       6px in die Tab-Leiste darunter hinein - der Abstand wirkte gequetscht. */
+    min-height:calc(66px + env(safe-area-inset-top));
   }
   /* Signature: Bathymetrie-Höhenlinien als feine Textur im Header */
   header:before{

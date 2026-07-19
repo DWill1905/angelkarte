@@ -1,5 +1,19 @@
 # Changelog
 
+## SW v177 – 2026-07-19
+
+### Fixed
+- **Der Abstand zwischen Burger-Menü-Button (und den beiden Icons rechts im Header)
+  und der Tab-Leiste darunter wirkte gequetscht.** Ursache: Burger, Sonnentipp und
+  Wetter-Chip sind absolut positioniert (`top:12px`, 44px hoch → unterer Rand bei
+  56px), zählen dadurch aber nicht zur Content-Höhe des Headers – die ergab sich
+  bisher rein aus Eyebrow-Zeile und Regionsname (~50px). Die Buttons ragten dadurch
+  6px in die Tab-Leiste hinein, praktisch ohne sichtbaren Abstand. Mit einer
+  `min-height` auf dem Header behoben, passend zur tatsächlichen Ausdehnung der
+  Buttons berechnet – jetzt bleibt durchgängig ein spürbarer Abstand (per
+  Playwright verifiziert: Burger endet bei 56px, Tab-Leiste beginnt jetzt bei 66px
+  statt vorher bereits bei 50px).
+
 ## SW v176 – 2026-07-19 (Design-Audit Vorschlag 20/20)
 
 ### Fixed
