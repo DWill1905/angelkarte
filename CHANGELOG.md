@@ -1,5 +1,19 @@
 # Changelog
 
+## SW v127 – 2026-07-19
+
+### Changed
+- **Design-Audit Phase 2 (2/2): Radius-Tokens eingeführt.** 11 verschiedene border-radius-
+  Werte (2–14px, 999px) waren ohne System im Einsatz. Neue Tokens `--radius-sm:6px`,
+  `--radius-md:10px`, `--radius-lg:14px`, `--radius-full:999px` in `:root`; die bereits
+  dominante Gruppe (13× exakt 10px: Chips, Header-Icons, Popups, Karten, Fangbuch-Formular
+  u.a.) sowie die einzelnen 14px- und 999px-Stellen darauf umgestellt – reine
+  Tokenisierung ohne visuelle Änderung, per Playwright-Vergleich verifiziert. Die
+  restlichen Ad-hoc-Werte (8, 9, 7, 6, 5, 4, 3, 2, 11, 12px) bewusst nicht in diesem
+  Rutsch angefasst: sie auf die Skala zu konsolidieren heißt pro Komponente eine echte
+  Wertentscheidung zu treffen, das verdient einen eigenen Review-Durchgang statt
+  pauschales Runden.
+
 ## SW v126 – 2026-07-19
 
 ### Changed
