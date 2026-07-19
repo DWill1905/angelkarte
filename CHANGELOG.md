@@ -1,5 +1,20 @@
 # Changelog
 
+## SW v123 – 2026-07-19
+
+### Changed
+- **Design-Audit Phase 1 (1/3): Button-Hierarchie in Dialogen korrigiert.** In mehreren
+  Dialogen (Werkzeuge, Bissfenster-Wochenvorschau, Trip-Liste, Tagesplan, Karte offline
+  sichern, "Heute passt es?", Köderberater, Bleigewicht-Berater, Knoten-Kurzreferenz) war
+  „Schließen" per Default-Styling amber/hervorgehoben, während echte Aktionen daneben
+  („Heute passt es?", „Beißzeiten heute", „Als Kalender exportieren", „Speichern") grau/
+  sekundär blieben – die Farbe zeigte auf die unwichtigste Aktion im Dialog. `.mydlg-btns
+  button` ist jetzt standardmäßig neutral gestylt, eine neue `.primary`-Klasse markiert
+  bewusst die jeweils wichtigste Aktion: bei reinen Info-Dialogen (nur „Schließen" als
+  einzige Aktion) bleibt Schließen primär, bei Dialogen mit echten Aktionen wandert die
+  Hervorhebung auf „Als Kalender exportieren" bzw. „Speichern" (Eigenen Spot speichern),
+  „Schließen"/„Abbrechen" werden neutral.
+
 ## SW v122 – 2026-07-18
 
 ### Fixed

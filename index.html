@@ -544,8 +544,9 @@
   .mydlg{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;width:100%;max-width:380px}
   .mydlg h3{font-family:"Lato","Segoe UI",Calibri,sans-serif;font-weight:700;font-size:17px;margin-bottom:10px;color:#f4faf9}
   .mydlg-btns{display:flex;gap:8px;margin-top:14px}
-  .mydlg-btns button{flex:1;border:0;border-radius:8px;padding:11px;font-size:14px;font-weight:700;cursor:pointer;background:var(--forelle);color:#3a2f10}
+  .mydlg-btns button{flex:1;border:1px solid var(--line);border-radius:8px;padding:11px;font-size:14px;font-weight:700;cursor:pointer;background:var(--panel-2);color:var(--text)}
   .mydlg-btns .ghost{background:var(--panel-2);color:var(--text);border:1px solid var(--line)}
+  .mydlg-btns .primary{background:var(--forelle);color:#3a2f10;border:0}
 
   /* Fade-Hinweis am oberen/unteren Rand scrollbarer Dialog-Inhalte: dieselbe Opacity-Masken-
      Technik wie bei den Chip-Reihen (chipsFadeInit), nur vertikal. Klassen fade-t/fade-b
@@ -786,7 +787,7 @@
   <div class="mydlg">
     <h3 data-ic="weight">Bleigewicht-Berater</h3>
     <div id="leadBody" class="dlg-scroll" style="font-size:12.5px;line-height:1.6;max-height:60dvh;overflow-y:auto"></div>
-    <div class="mydlg-btns"><button id="leadClose">Schließen</button></div>
+    <div class="mydlg-btns"><button id="leadClose" class="primary">Schließen</button></div>
   </div>
 </div>
 
@@ -794,7 +795,7 @@
   <div class="mydlg">
     <h3 data-ic="knot">Knoten-Kurzreferenz</h3>
     <div id="knotBody" class="dlg-scroll" style="font-size:12.5px;line-height:1.6;max-height:62dvh;overflow-y:auto"></div>
-    <div class="mydlg-btns"><button id="knotClose">Schließen</button></div>
+    <div class="mydlg-btns"><button id="knotClose" class="primary">Schließen</button></div>
   </div>
 </div>
 
@@ -815,7 +816,7 @@
       <button id="biteNext" type="button" aria-label="Nächster Tag">▶</button>
     </div>
     <div id="biteBody" class="dlg-scroll" style="font-size:13px;line-height:1.55;max-height:60dvh;overflow-y:auto"></div>
-    <div class="mydlg-btns"><button id="biteClose">Schließen</button></div>
+    <div class="mydlg-btns"><button id="biteClose" class="primary">Schließen</button></div>
   </div>
 </div>
 
@@ -823,7 +824,7 @@
   <div class="mydlg">
     <h3 data-ic="sun">Wochen-Vorschau</h3>
     <div id="foreBody" class="dlg-scroll" style="font-size:13px;line-height:1.55;max-height:62dvh;overflow-y:auto"></div>
-    <div class="mydlg-btns"><button id="foreIcs" class="ghost" hidden>Als Kalender exportieren</button><button id="foreClose">Schließen</button></div>
+    <div class="mydlg-btns"><button id="foreIcs" class="primary" hidden>Als Kalender exportieren</button><button id="foreClose">Schließen</button></div>
   </div>
 </div>
 
@@ -882,7 +883,7 @@
       <button id="routeNext" type="button" aria-label="Nächster Tag">▶</button>
     </div>
     <div id="routeBody" class="dlg-scroll" style="font-size:13px;line-height:1.55;max-height:60dvh;overflow-y:auto"></div>
-    <div class="mydlg-btns"><button id="routeClose">Schließen</button></div>
+    <div class="mydlg-btns"><button id="routeClose" class="primary">Schließen</button></div>
   </div>
 </div>
 
@@ -890,7 +891,7 @@
   <div class="mydlg">
     <h3 data-ic="bag">Meine Trip-Liste</h3>
     <div id="tripBody" class="dlg-scroll" style="font-size:13px;line-height:1.55;max-height:60dvh;overflow-y:auto"></div>
-    <div class="mydlg-btns"><button id="tripClose">Schließen</button></div>
+    <div class="mydlg-btns"><button id="tripClose" class="primary">Schließen</button></div>
   </div>
 </div>
 
@@ -898,7 +899,7 @@
   <div class="mydlg">
     <h3 data-ic="pin">Karte offline sichern</h3>
     <div id="offBody" class="dlg-scroll" style="font-size:13px;line-height:1.55;max-height:60dvh;overflow-y:auto"></div>
-    <div class="mydlg-btns"><button id="offClose">Schließen</button></div>
+    <div class="mydlg-btns"><button id="offClose" class="primary">Schließen</button></div>
   </div>
 </div>
 
@@ -906,7 +907,7 @@
   <div class="mydlg">
     <h3 data-ic="target">Heute passt es?</h3>
     <div id="scoreBody" class="dlg-scroll" style="font-size:13px;line-height:1.55;max-height:60dvh;overflow-y:auto"></div>
-    <div class="mydlg-btns"><button id="scoreClose">Schließen</button></div>
+    <div class="mydlg-btns"><button id="scoreClose" class="primary">Schließen</button></div>
   </div>
 </div>
 
@@ -914,7 +915,7 @@
   <div class="mydlg">
     <h3 data-ic="target">Köderberater</h3>
     <div id="kbBody" class="dlg-scroll" style="font-size:13px;line-height:1.55;max-height:55dvh;overflow-y:auto"></div>
-    <div class="mydlg-btns"><button id="kbClose">Schließen</button></div>
+    <div class="mydlg-btns"><button id="kbClose" class="primary">Schließen</button></div>
   </div>
 </div>
 
@@ -930,7 +931,7 @@
     <input id="myTipp" type="text" placeholder="z.B. Zander 18 Uhr, Gummifisch motoroil 12 cm" maxlength="160">
     <div class="mydlg-btns">
       <button id="myCancel" class="ghost">Abbrechen</button>
-      <button id="mySave">Speichern</button>
+      <button id="mySave" class="primary">Speichern</button>
     </div>
   </div>
 </div>
