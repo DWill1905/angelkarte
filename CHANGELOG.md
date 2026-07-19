@@ -1,5 +1,17 @@
 # Changelog
 
+## SW v161 – 2026-07-19 (Design-Audit Vorschlag 6/20)
+
+### Fixed
+- **Querformat-Handy: Werkzeuge-Button und Vollbild-Button lagen fast übereinander –
+  ein Tap auf "Werkzeuge" konnte stattdessen versehentlich Vollbild auslösen.** Die
+  Bottom-Offsets von `locbtn`/`toolsfab` waren für hohe Portrait-Screens bemessen; bei
+  Viewport-Höhen unter 480px (z. B. Handy im Querformat) reichte der obenverankerte
+  `fsBtn` bis in dieselbe Zone hinein. Neue `@media(max-height:480px)`-Regel staucht die
+  Abstände, sodass keine Überlappung mehr entsteht – mit tatsächlichen Klick-Tests
+  verifiziert (Werkzeuge öffnet jetzt zuverlässig das richtige Dialog, kein versehentliches
+  Vollbild mehr).
+
 ## SW v160 – 2026-07-19 (Design-Audit Vorschlag 5/20)
 
 ### Fixed

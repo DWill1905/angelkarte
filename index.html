@@ -415,6 +415,14 @@
     box-shadow:var(--shadow-md);backdrop-filter:blur(6px);transition:transform .12s ease,background .15s}
   .toolsfab:hover{background:rgba(18,40,47,1)}
   .toolsfab svg,.toolsfab .ic{width:21px;height:21px}
+  /* Querformat-Handy: die generosen Bottom-Offsets (für Portrait bemessen) liessen
+     locbtn/toolsfab bis in den oben verankerten fsBtn hineinragen - beide landeten fast
+     übereinander, ein Tap auf "Werkzeuge" konnte stattdessen Vollbild treffen. */
+  @media(max-height:480px){
+    .legende{bottom:calc(10px + env(safe-area-inset-bottom))}
+    .locbtn{bottom:calc(10px + env(safe-area-inset-bottom))}
+    .toolsfab{bottom:calc(66px + env(safe-area-inset-bottom))}
+  }
   .toolsfab:active{transform:scale(.94)}
 
   .sheet{background:linear-gradient(180deg,var(--shelf),var(--panel));border-top:1px solid var(--shoal);max-height:36dvh;
