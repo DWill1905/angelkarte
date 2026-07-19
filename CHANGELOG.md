@@ -1,5 +1,17 @@
 # Changelog
 
+## SW v149 – 2026-07-19 (Design-Audit Runde 7/10)
+
+### Fixed
+- **Filter-Chips und Dialog-Buttons ohne Hover-Feedback.** Weiterführung von Runde 6: die
+  Kategorie-/Zielfisch-Chips (das mit Abstand meistgenutzte Bedienelement der Karte) sowie
+  alle Dialog-Buttons, Werkzeug-Kacheln und Fangbuch-Aktionen (Teilen/Bearbeiten/Löschen)
+  hatten trotz vorhandenem `:active`-Tastfeedback keinen `:hover`-Zustand. Für die
+  Dialog-Buttons/-Kacheln bewusst über `@media(hover:hover)` + `filter:brightness()` gelöst
+  (funktioniert unabhängig von der jeweiligen Grundfarbe, greift nur auf echten
+  Zeigegeräten – auf Touchscreens bleibt sonst gelegentlich ein Hover-Zustand nach dem
+  Antippen "hängen").
+
 ## SW v148 – 2026-07-19 (Design-Audit Runde 6/10)
 
 ### Fixed
