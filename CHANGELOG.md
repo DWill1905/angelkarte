@@ -1,5 +1,16 @@
 # Changelog
 
+## SW v145 – 2026-07-19 (Design-Audit Runde 3/10)
+
+### Fixed
+- **Fokus-Ring fehlte bei den vier wichtigsten Karten-/Kopfzeilen-Buttons.** Eine frühere
+  Runde hatte bereits einen konsistenten, sichtbaren Fokus-Ring für Tastaturnutzung überall
+  ergänzt (`:focus-visible{outline:2px solid var(--dusk)}`) – dabei aber ausgerechnet die
+  vier freischwebenden Buttons übersehen, die direkt auf der Karte bzw. dem Luftbild sitzen
+  (`#menuBtn`, Vollbild-, Standort- und Werkzeuge-Button) sowie Wetter-Chip und
+  Gewässer-Tipp in der Kopfzeile. Genau dort ist ein unauffälliger Browser-Standard-Ring am
+  schwersten zu erkennen. Jetzt einheitlich mit demselben Fokus-Ring wie der Rest der App.
+
 ## SW v144 – 2026-07-19 (Design-Audit Runde 2/10)
 
 ### Fixed
