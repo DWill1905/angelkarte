@@ -358,6 +358,11 @@ let letzterKandidat = null;
 /* Seiten-lokale Auswahl (verändert NICHT den Kartenfilter). Leer = „alle". */
 const planFisch = [];
 const planGew = [];
+/** Feste Uhrzeit („HH:MM") statt automatisch erkanntem Zeitpunkt. Leer = automatisch
+    (heute „jetzt", an Folgetagen das stärkste Fenster – bisheriges Verhalten). Beantwortet
+    "ich will um X Uhr los, was sind meine besten Chancen auf welchen Fisch" direkt, statt
+    nur auf den nächsten erkannten Solunar-Zeitpunkt zu verweisen. */
+let planZeit = '';
 chipsFadeInit(byId('planFishChips'));
 chipsFadeInit(byId('planGewChips'));
 /** Beangelbare Gewässer (Spot-Namen) der aktuellen Region, ohne Sperr/Info/eigene. */
@@ -498,6 +503,32 @@ function renderPlanBody(e, offset = 0) {
         + 'Am Wasser entscheidest du.</div>';
     return h;
 }
+/** Rangliste "welcher Fisch, wo, wie gut" zu einem FEST gewählten Zeitpunkt – anders als
+    renderPlanBody() wird die Startzeit nicht auf ein "besseres" Fenster verschoben (das
+    widerspräche einer explizit gewählten Uhrzeit), sondern direkt zu dieser Zeit bewertet. */
+function renderZeitBody(liste, zeitpunkt, offset) {
+    const beste = besteJeOrt(liste);
+    const sturm = !!beste.length && beste[0].gesperrt === 'sturm';
+    const top = beste.slice(0, 8);
+    const rest = beste.slice(8, 20);
+    const zeile = (k, i) => '<div class="plan-rang"><span class="n">' + (i + 1) + '.</span>'
+        + '<span class="ort">' + esc(k.ort) + ' · ' + esc(k.art) + '</span>'
+        + '<span class="proz">' + k.basis + ' %</span></div>';
+    let h = '';
+    if (sturm)
+        h += '<div class="rate-sturm">⚠ Sturm – Angeln ist zu diesem Zeitpunkt unverantwortlich. Die Chancen unten sind entsprechend gedeckelt.</div>';
+    h += '<div class="plan-basis" style="margin-bottom:8px">Beste Chancen um ' + hhmm(zeitpunkt) + ' Uhr'
+        + (offset > 0 ? ', ' + tagLabel(offset).replace(/^(Heute|Morgen) · /, '') : '') + ':</div>';
+    if (!top.length)
+        return h + leerText();
+    h += top.map(zeile).join('')
+        + (rest.length
+            ? `<details class="plan-rangliste"><summary>+${rest.length} weitere</summary>${rest.map((k, i) => zeile(k, i + 8)).join('')}</details>`
+            : '');
+    h += '<div class="verif" style="margin-top:12px">Chance je Ort/Art zu diesem Zeitpunkt – dieselbe Berechnung '
+        + 'wie „Chancen heute" im Popup, kein Orakel. Die Gewichte stehen offen im Quelltext.</div>';
+    return h;
+}
 function goToKandidat() {
     const dlg = byId('planDlg');
     if (dlg)
@@ -630,10 +661,31 @@ function rerenderPlan() {
         pv.disabled = planTag <= 0;
     if (nx)
         nx.disabled = planTag >= MAX_TAG;
-    /* Bewertungszeitpunkt: heute „jetzt", an Folgetagen das stärkste Fenster des Tages. */
+    /* Bewertungszeitpunkt: bei fest gewählter Uhrzeit genau diese (am gewählten Tag);
+       sonst wie bisher heute „jetzt", an Folgetagen das stärkste Fenster des Tages. */
     const ctr = state.SPOTS.find((s) => !s.my) || { lat: 50, lng: 8 };
-    const zeitpunkt = bewertZeit(planTag, ctr.lat, ctr.lng);
-    const e = empfehlung(zeitpunkt, { fisch: planFisch, gewaesser: planGew });
+    const tag = tagDatum(planTag);
+    let zeitpunkt;
+    if (planZeit) {
+        const [hh, mm] = planZeit.split(':').map(Number);
+        zeitpunkt = new Date(tag.getFullYear(), tag.getMonth(), tag.getDate(), hh, mm, 0, 0);
+    }
+    else {
+        zeitpunkt = bewertZeit(planTag, ctr.lat, ctr.lng);
+    }
+    const filter = { fisch: planFisch, gewaesser: planGew };
+    if (planZeit) {
+        const liste = kandidaten(zeitpunkt, filter);
+        letzterKandidat = liste[0] || null;
+        body.innerHTML = renderZeitBody(liste, zeitpunkt, planTag)
+            + (liste[0] ? fensterHtml(liste[0].lat, liste[0].lng, tag, planTag) : '');
+        if (go) {
+            go.hidden = !liste.length;
+            go.onclick = goToKandidat;
+        }
+        return;
+    }
+    const e = empfehlung(zeitpunkt, filter);
     if (!e) {
         body.innerHTML = leerText();
         letzterKandidat = null;
@@ -644,7 +696,7 @@ function rerenderPlan() {
     letzterKandidat = e.kandidat;
     const sp = e.kandidat.spot;
     body.innerHTML = renderPlanBody(e, planTag)
-        + fensterHtml(sp.lat, sp.lng, tagDatum(planTag), planTag);
+        + fensterHtml(sp.lat, sp.lng, tag, planTag);
     if (go) {
         go.hidden = false;
         go.onclick = goToKandidat;
@@ -659,6 +711,13 @@ export function openPlan() {
     state.fishSel.forEach((id) => planFisch.push(id));
     planGew.length = 0;
     planTag = 0;
+    planZeit = '';
+    const zeitEl = byId('planZeit');
+    if (zeitEl)
+        zeitEl.value = '';
+    const resetEl = byId('planZeitReset');
+    if (resetEl)
+        resetEl.hidden = true;
     buildPlanFilter();
     rerenderPlan();
     dlg.hidden = false;
@@ -685,4 +744,21 @@ if (planDlg) {
             planTag++;
             rerenderPlan();
         } };
+    const zeitEl = byId('planZeit');
+    const resetEl = byId('planZeitReset');
+    if (zeitEl)
+        zeitEl.onchange = () => {
+            planZeit = zeitEl.value;
+            if (resetEl)
+                resetEl.hidden = !planZeit;
+            rerenderPlan();
+        };
+    if (resetEl)
+        resetEl.onclick = () => {
+            planZeit = '';
+            if (zeitEl)
+                zeitEl.value = '';
+            resetEl.hidden = true;
+            rerenderPlan();
+        };
 }

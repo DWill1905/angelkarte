@@ -10,6 +10,20 @@ Die ausführliche technische Historie vor 1.0.0 (jede einzelne der früheren
 `beisszeit-shell-vN`-Versionen mit Ursache, Testabdeckung, betroffenen Dateien) steht
 weiterhin in **[CHANGELOG-ARCHIV.md](CHANGELOG-ARCHIV.md)**.
 
+## [1.5.0] – 2026-07-19
+
+### Hinzugefügt
+- **Feste Uhrzeit im Planer ("Heute würde ich hier anfangen"): "Ich will um X Uhr los –
+  was sind meine besten Chancen auf welchen Fisch?"** Audit ergab: Das Bewertungsmodell
+  (`bewerteSpot()`/`kandidaten()`) konnte technisch schon für jeden beliebigen Zeitpunkt
+  rechnen, die Oberfläche zeigte aber immer nur "jetzt" (heute) bzw. das automatisch
+  erkannte beste Fenster (Folgetage) – eine gezielte Uhrzeit ließ sich nirgends eingeben.
+  Neues Uhrzeit-Feld im Planer (kombinierbar mit der bestehenden Tagesauswahl) schaltet
+  auf eine Rangliste "Ort · Zielfisch · Chance %" für exakt diesen Zeitpunkt um, statt
+  wie die normale Empfehlung auf ein "besseres" Fenster zu verschieben – das würde einer
+  bewusst gewählten Uhrzeit widersprechen. Nutzt dieselbe Berechnung wie die "Chancen
+  heute"-Anzeige im Popup, keine neue Bewertungslogik.
+
 ## [1.4.1] – 2026-07-19
 
 ### Geprüft, keine Fehler gefunden

@@ -303,6 +303,23 @@
     background:rgba(22,50,60,.6);color:var(--text);font-size:12px;cursor:pointer;flex:0 0 auto}
   .plan-tage button:disabled{opacity:.3;cursor:default}
   .plan-tage span{flex:1;text-align:center;font-size:12.5px;font-weight:700;color:var(--dusk)}
+  /* Feste Uhrzeit statt "jetzt"/"bestes Fenster": beantwortet "ich will um X angeln gehen,
+     was sind meine besten Chancen auf welchen Fisch" direkt, ohne auf einen automatisch
+     erkannten Solunar-Zeitpunkt zu warten. */
+  .plan-zeit{display:flex;align-items:center;gap:var(--space-2);padding:8px 14px;background:var(--ink);
+    border-bottom:1px solid var(--line);flex-shrink:0}
+  .plan-zeit label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+    margin:0;flex:0 0 auto}
+  .plan-zeit input[type=time]{width:auto;flex:0 0 auto;background:rgba(22,50,60,.6);
+    border:1px solid var(--shoal);border-radius:8px;padding:5px 8px;color:var(--text);
+    font:inherit;font-size:12.5px;color-scheme:dark}
+  .plan-zeit button{margin-left:auto;background:none;border:1px solid var(--shoal);border-radius:8px;
+    padding:5px 10px;color:var(--dusk);font-size:11.5px;cursor:pointer}
+  .plan-rang{font-size:12.5px;padding:6px 0;color:var(--text);display:flex;align-items:baseline;
+    gap:8px;border-bottom:1px solid rgba(255,255,255,.06)}
+  .plan-rang .n{flex:0 0 auto;width:16px;color:var(--muted);font-family:'Space Mono',monospace}
+  .plan-rang .ort{flex:1;min-width:0}
+  .plan-rang .proz{flex:0 0 auto;font-family:'Space Mono',monospace;font-weight:700;color:var(--dusk)}
   .plan-fenster-liste{margin:0 0 12px}
   .plan-fl-h{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700;margin:0 0 5px}
   .plan-fl{display:grid;grid-template-columns:auto 1fr;gap:4px 9px;font-size:12px;line-height:1.45}
@@ -1151,6 +1168,11 @@
       <button id="planPrev" type="button" aria-label="Vorheriger Tag">◀</button>
       <span id="planTagLabel">Heute</span>
       <button id="planNext" type="button" aria-label="Nächster Tag">▶</button>
+    </div>
+    <div class="plan-zeit">
+      <label for="planZeit">Uhrzeit</label>
+      <input type="time" id="planZeit" step="900">
+      <button id="planZeitReset" type="button" hidden>Jetzt</button>
     </div>
     <details class="plan-filterbar" id="planFilterbar">
       <summary>Zielfisch &amp; Gewässer einschränken<span id="planFilterCount"></span></summary>
