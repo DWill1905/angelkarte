@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3d7180"/>
+      <stop offset="55%" stop-color="#2c5966"/>
+      <stop offset="100%" stop-color="#1a3e47"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" fill="url(#bg)"/>
+  <g opacity="0.5" stroke="#b4dceb" fill="none">
+    <circle cx="470" cy="30" r="160" stroke-width="3" opacity="0.5"/>
+    <circle cx="470" cy="30" r="230" stroke-width="3" opacity="0.4"/>
+    <circle cx="470" cy="30" r="300" stroke-width="3" opacity="0.3"/>
+  </g>
+  <!-- Inhalt auf ~72% skaliert und zentriert - bleibt innerhalb der sicheren Zone,
+       die maskable Icons für den adaptiven Zuschnitt (Kreis/Quadrat/Squircle) brauchen. -->
+  <g transform="translate(256 266) scale(0.72)">
+    <path d="M -150 0
+             C -150 -70 -60 -108 40 -108
+             C 110 -108 150 -75 168 -30
+             C 150 15 110 48 40 48
+             C -60 48 -150 70 -150 0 Z"
+          fill="#f5f9f8"/>
+    <path d="M 160 -34 L 230 -78 L 195 0 L 230 82 L 160 34 Z" fill="#f5f9f8"/>
+    <path d="M -10 -104 C 20 -140 60 -140 78 -108 C 50 -100 15 -100 -10 -104 Z" fill="#f5f9f8"/>
+    <path d="M -55 42 C -50 74 -20 88 5 78 C -15 60 -35 48 -55 42 Z" fill="#f5f9f8"/>
+    <circle cx="-95" cy="-28" r="15" fill="#234f5b"/>
+    <circle cx="-91" cy="-32" r="5" fill="#f5f9f8"/>
+    <path d="M -40 -60 Q -55 0 -40 60" stroke="#dce9e7" stroke-width="5" fill="none" opacity="0.5"/>
+  </g>
+  <circle cx="380" cy="120" r="14" fill="#f0bc5c" opacity="0.9"/>
+</svg>

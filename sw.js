@@ -1,10 +1,11 @@
 /* Angelkarte Service Worker – Offline-Modus
    Shell + Daten: stale-while-revalidate · OSM-Tiles: cache-first (max. 600)
    API-Aufrufe (Wetter, Pegel): immer Netz */
-const CACHE='angelkarte-shell-v137';
+const CACHE='angelkarte-shell-v138';
 const TILES='angelkarte-tiles-v1';
 const SHELL=[
   './','index.html','manifest.json',
+  'icon.svg','icon-192.png','icon-512.png','icon-maskable-512.png','apple-touch-icon.png',
   /* ES-Module (App-Code) */
   'js/app.js','js/state.js','js/dom.js','js/util.js','js/data.js','js/astro.js','js/mapcore.js',
   'js/region.js','js/ui.js','js/map.js','js/tackle.js','js/geo.js','js/plan.js','js/sicht.js','js/rating.js','js/reed.js','js/saison.js','js/myspots.js','js/weather.js',

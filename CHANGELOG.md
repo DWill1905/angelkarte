@@ -1,5 +1,28 @@
 # Changelog
 
+## SW v138 – 2026-07-19
+
+### Fixed
+- **Regions-Select und Hauptmenü auf dem Homescreen (installierte PWA) nicht erreichbar.**
+  `header` hatte eine feste `padding-top:8px` ohne `env(safe-area-inset-top)`, während
+  `#menuBtn` und `.hdr-right` (Wetter-Chip, Gewässer-Tipp) ihre eigene Position bereits per
+  `top:calc(12px + env(safe-area-inset-top))` gegen die Notch/Statusleiste absicherten. Im
+  normalen Browser-Tab fällt das nicht auf (kein Safe-Area-Inset), aber im installierten
+  Vollbildmodus (`display:standalone` + `black-translucent`-Statusleiste) blieb der Header
+  dadurch zu kurz: die Buttons wurden per `overflow:hidden` abgeschnitten bzw. überlappten
+  mit den Kartenbuttons darunter, und Eyebrow/Regions-Select rutschten unter die
+  Statusleiste. Fix: die Safe-Area sitzt jetzt einmal an der Quelle (`header`s eigenes
+  `padding-top`), die Kind-Elemente brauchen sie in ihrem `top` nicht mehr doppelt zu
+  addieren. Mit simulierter Notch (47px) gegen die vorherige Version verifiziert – vorher
+  überlappten Menü-Button und Kartensteuerung sichtbar, jetzt sauber getrennt.
+- **Lieblos wirkendes Homescreen-Icon.** Bisher ein reines Emoji (🎣) auf dunklem
+  Quadrat als Inline-SVG – und auf iOS gab es mangels `apple-touch-icon`-Tag gar kein
+  richtiges Icon, sondern einen automatischen Screenshot der Seite. Neues Icon im
+  Bathymetrie-Look der App (Fisch-Silhouette, Tiefenlinien-Textur wie im Header,
+  Amber-Akzent) als `icon.svg`, dazu PNG-Varianten (192/512, plus maskable für Android
+  Adaptive Icons) und `apple-touch-icon.png` (180px) samt fehlendem Link-Tag. Bei 40px
+  Größe und unter Kreis-Maskierung geprüft – bleibt erkennbar.
+
 ## SW v137 – 2026-07-19
 
 ### Changed

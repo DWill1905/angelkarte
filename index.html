@@ -8,6 +8,11 @@
 <link rel="manifest" href="manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Angelkarte">
+<!-- iOS nutzt für "Zum Home-Bildschirm" NICHT das Web-App-Manifest, sondern ausschließlich
+     dieses Tag - ohne es macht iOS ersatzweise einen Screenshot der Seite zum Icon. -->
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.min.css">
@@ -66,7 +71,7 @@
   }
   header{
     position:relative;background:linear-gradient(180deg,#437684,#3a6b78);
-    border-bottom:1px solid var(--shoal);padding:8px 14px 8px;overflow:hidden;
+    border-bottom:1px solid var(--shoal);padding:calc(8px + env(safe-area-inset-top)) 14px 8px;overflow:hidden;
   }
   /* Signature: Bathymetrie-Höhenlinien als feine Textur im Header */
   header:before{
@@ -149,7 +154,7 @@
     color:var(--dusk);display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;font-style:italic}
   /* --- Vollbild-Knopf --- */
   /* --- Wetter-Chip im Header --- */
-  .hdr-right{position:absolute;top:calc(12px + env(safe-area-inset-top));right:14px;z-index:20;display:flex;align-items:center;gap:var(--space-2)}
+  .hdr-right{position:absolute;top:12px;right:14px;z-index:20;display:flex;align-items:center;gap:var(--space-2)}
   #wxChip{display:inline-flex;align-items:center;gap:6px;height:44px;padding:0 12px;
     border-radius:var(--radius-md);border:1px solid var(--shoal);background:rgba(22,50,60,.55);
     color:var(--text);font-family:'Space Mono',monospace;font-size:12.5px;cursor:pointer;white-space:nowrap}
@@ -168,7 +173,7 @@
   .wx-block .sun b{color:var(--text)}
 
   /* --- Hauptmenü --- */
-  #menuBtn{position:absolute;top:calc(12px + env(safe-area-inset-top));left:14px;z-index:20;
+  #menuBtn{position:absolute;top:12px;left:14px;z-index:20;
     width:44px;height:44px;border-radius:var(--radius-md);border:1px solid var(--shoal);
     background:rgba(22,50,60,.55);display:flex;flex-direction:column;justify-content:center;
     align-items:center;gap:var(--space-1);cursor:pointer;padding:0}
