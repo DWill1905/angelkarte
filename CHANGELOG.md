@@ -1,5 +1,26 @@
 # Changelog
 
+## SW v135 – 2026-07-19
+
+### Changed
+- **Ein paar dezente Animationen ergänzt.**
+  - Hauptmenü (Hamburger-Schublade) blendet Backdrop ein und schiebt das Panel sanft von
+    links herein, statt hart umzuschalten.
+  - Sperrzonen-Warnung und die Legende erscheinen mit einem kurzen Slide-/Pop-in statt
+    plötzlich dazustehen.
+  - Der Fortschrittsring neben der Chancen-Prozentzahl zeichnet sich beim Öffnen des Popups
+    von 0 auf den Zielwert (reines CSS via `@property`, in Browsern ohne Unterstützung
+    einfach sofort der Endwert – keine Funktionseinbuße).
+  Alles respektiert `prefers-reduced-motion`.
+
+### Fixed
+- **Ring-Animation blieb beim ersten Versuch auf 0% hängen.** `to{--pct:var(--pct)}` war
+  selbstreferenziell (das animierte Property referenzierte sich selbst) und fiel auf den
+  `@property`-Startwert (0) zurück – der Ring wirkte nach dem Laden leer. Getrennt in ein
+  statisches `--pct-target` (Inline-Wert je Fischart) und ein animiertes `--pct`, das mit
+  `forwards` den Endwert hält statt zurückzuspringen. Vor dem Push per Computed-Style-Check
+  verifiziert (nicht nur Screenshot – der hatte den Fehler beim ersten Mal übersehen).
+
 ## SW v134 – 2026-07-19
 
 ### Changed

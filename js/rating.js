@@ -495,7 +495,7 @@ export function ratingHtml(s, hotspot = null) {
         const ringTon = b.sterne >= 4 ? 'gut' : b.sterne <= 2 ? 'schwach' : 'mittel';
         const kopf = `<summary class="rate-kopf">
         <span class="rate-art">${esc(b.art)}</span>
-        ${b.geschont ? '' : `<span class="rate-ring ${ringTon}" style="--pct:${b.prozent}" aria-hidden="true"></span>`}
+        ${b.geschont ? '' : `<span class="rate-ring ${ringTon}" style="--pct-target:${b.prozent}" aria-hidden="true"></span>`}
         <span class="rate-proz${b.geschont ? ' zu' : ''}">${b.geschont ? 'geschont' : b.prozent + '\u202F%'}</span>
       </summary>`;
         /* Progressive Disclosure: bekannte Signale zeigen, Qualitäts-Metadaten (fehlende Signale +
