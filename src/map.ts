@@ -489,8 +489,15 @@ export async function openOffline(){
     body.innerHTML='<p>⚠ Der Ausschnitt umfasst zu viele Kacheln ('+res.total+'). Bitte näher heranzoomen (auf dein Angelrevier) und erneut sichern – so bleibt es fair gegenüber dem OpenStreetMap-Kachelserver.</p>';
     return;
   }
-  body.innerHTML='<p>✓ <b>'+res.ok+' Kacheln</b> für diesen Ausschnitt sind offline verfügbar. Am Wasser ohne Netz bleibt die Karte hier sichtbar.</p>'
-    +'<p style="color:var(--muted);margin-top:8px;font-size:11.5px">Hinweis: Nur der aktuell sichtbare Bereich wird gesichert (kein Massen-Download – das verstößt gegen die OSM-Nutzungsregeln). Für weitere Reviere jeweils dorthin zoomen und erneut sichern.</p>';
+  /* Einzelne fehlgeschlagene Kacheln (Timeout/Netzfehler) wurden bisher stillschweigend
+     verschluckt - "✓ 250 Kacheln" klang nach vollständiger Abdeckung, auch wenn z.B. 50
+     von 300 fehlten. Genau der Fall, in dem man sich später ohne Netz auf Lücken verlässt. */
+  const fehlend=res.total-(res.ok||0);
+  body.innerHTML = fehlend>0
+    ? '<p>⚠ <b>'+res.ok+' von '+res.total+' Kacheln</b> gesichert – '+fehlend+' konnten nicht geladen werden (z.B. Netzproblem). '
+      +'Die Karte hat dadurch Lücken. Am selben Ort erneut sichern, um die fehlenden nachzuladen.</p>'
+    : '<p>✓ <b>'+res.ok+' Kacheln</b> für diesen Ausschnitt sind offline verfügbar. Am Wasser ohne Netz bleibt die Karte hier sichtbar.</p>';
+  body.innerHTML+='<p style="color:var(--muted);margin-top:8px;font-size:11.5px">Hinweis: Nur der aktuell sichtbare Bereich wird gesichert (kein Massen-Download – das verstößt gegen die OSM-Nutzungsregeln). Für weitere Reviere jeweils dorthin zoomen und erneut sichern.</p>';
 }
 if(offDlg){
   const offAbbrechen=()=>{ offDlg.hidden=true; if(offlineAbort) offlineAbort.abort(); };

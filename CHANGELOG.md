@@ -1,5 +1,15 @@
 # Changelog
 
+## SW v167 – 2026-07-19 (Design-Audit Vorschlag 11/20)
+
+### Fixed
+- **"Karte offline sichern" verschwieg fehlgeschlagene Kacheln.** Schlugen einzelne
+  Kachel-Downloads fehl (Timeout, Netzproblem), zeigte die Erfolgsmeldung trotzdem nur
+  "✓ N Kacheln gesichert" – ohne Hinweis, dass die Abdeckung lückenhaft ist. Genau der
+  Fall, in dem man sich später ohne Netz auf eine vollständige Karte verlässt. Jetzt eine
+  eigene Warnmeldung mit genauer Anzahl fehlender Kacheln und dem Hinweis, am selben Ort
+  erneut zu sichern.
+
 ## SW v166 – 2026-07-19 (Design-Audit Vorschlag 10/20)
 
 ### Fixed
