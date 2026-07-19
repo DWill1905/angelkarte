@@ -364,19 +364,19 @@ function icsEsc(s: string): string {
     (sonst ueberladen 4+ Termine/Tag den Kalender). */
 export function wochenIcs(days, regionName?: string){
   const stamp=icsDate(new Date());
-  let ics='BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Angelkarte//Wochenvorschau//DE\r\nCALSCALE:GREGORIAN\r\n';
+  let ics='BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Beisszeit//Wochenvorschau//DE\r\nCALSCALE:GREGORIAN\r\n';
   let n=0;
   days.forEach(day=>{
     day.majors.forEach(win=>{
       n++;
       ics+='BEGIN:VEVENT\r\n'
-        +'UID:angelkarte-'+win.from.getTime()+'-'+n+'@angelkarte\r\n'
+        +'UID:beisszeit-'+win.from.getTime()+'-'+n+'@beisszeit\r\n'
         +'DTSTAMP:'+stamp+'\r\n'
         +'DTSTART:'+icsDate(win.from)+'\r\n'
         +'DTEND:'+icsDate(win.to)+'\r\n'
         +'SUMMARY:'+icsEsc('🎣 Major-Fenster: '+win.label)+'\r\n'
         +(regionName?'LOCATION:'+icsEsc(regionName)+'\r\n':'')
-        +'DESCRIPTION:'+icsEsc('Beste Beisszeit laut Solunar-Berechnung der Angelkarte-App.')+'\r\n'
+        +'DESCRIPTION:'+icsEsc('Beste Beißzeit laut Solunar-Berechnung.')+'\r\n'
         +'END:VEVENT\r\n';
     });
   });

@@ -249,7 +249,7 @@ export function fbInsights() {
 }
 /* ===== Backup: vollständiger Export/Import als JSON (reimportierbar, anders als CSV) ===== */
 export function fbBackup() {
-    const payload = { format: 'angelkarte-fangbuch', version: 1, exportiert: new Date().toISOString(), anzahl: state.fbMem.length, faenge: state.fbMem };
+    const payload = { format: 'beisszeit-fangbuch', version: 1, exportiert: new Date().toISOString(), anzahl: state.fbMem.length, faenge: state.fbMem };
     const blob = new Blob([JSON.stringify(payload, null, 1)], { type: 'application/json' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
@@ -361,7 +361,7 @@ export function fangTeilenText(e) {
         kontext.push(e.koeder);
     if (kontext.length)
         zeilen.push(kontext.join(' · '));
-    zeilen.push('📍 geloggt mit der Angelkarte-App');
+    zeilen.push('📍 geloggt mit der Beißzeit-App');
     return zeilen.join('\n');
 }
 /** Teilt einen Fang über die native Share-Sheet, sonst Zwischenablage. Der Aufrufer blendet

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* Datenintegritäts-Selbsttest für die Angelkarte-Regionsdaten.
+/* Datenintegritäts-Selbsttest für die Beißzeit-Regionsdaten.
    Prüft REGIONS_EMBEDDED (importiert aus js/data.js) auf plausible
    Schonzeit-/Maß-/Spot-Angaben. Exit-Code 1 bei Fehlern -> blockiert im Deploy. */
 import path from 'path';

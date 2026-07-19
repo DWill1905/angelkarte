@@ -1,7 +1,7 @@
 {
-  "name": "Angelkarte",
-  "short_name": "Angelkarte",
-  "description": "Interaktive Angelkarte mit Spots, Schonzeiten, Fangbuch und KI-Guide",
+  "name": "Beißzeit",
+  "short_name": "Beißzeit",
+  "description": "Interaktive Angel-App mit Spots, Schonzeiten, Fangbuch und KI-Guide",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#0d1f22",

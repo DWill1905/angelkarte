@@ -350,7 +350,7 @@ describe('Backup: Export und Import', () => {
       { datum: '1.7.2026', fisch: 'Zander', laenge: '55', spot: 'A', koeder: 'Gummi' },
       { datum: '2.7.2026', fisch: 'Hecht', laenge: '70', spot: 'B', koeder: 'Wobbler' },
     );
-    const backup = { format: 'angelkarte-fangbuch', version: 1, faenge: [
+    const backup = { format: 'beisszeit-fangbuch', version: 1, faenge: [
       { datum: '1.7.2026', fisch: 'Zander', laenge: '55', spot: 'A', koeder: 'Gummi' }, // Duplikat
       { datum: '20.6.2026', fisch: 'Wels', laenge: '120', spot: 'B', koeder: 'Köfi' },
       { datum: '25.6.2026', fisch: 'Barsch', laenge: '30', spot: 'C', koeder: 'Spinner' },

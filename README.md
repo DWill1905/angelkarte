@@ -1,9 +1,12 @@
-# Angelkarte
+# Beißzeit
 
-Interaktive Angelkarten-PWA (Leaflet) für Raubfischangler – **keyfrei**, offline-fähig,
+Interaktive Angel-PWA (Leaflet) für Raubfischangler – **keyfrei**, offline-fähig,
 läuft als statische Seite auf GitHub Pages. Sechs Regionen mit recherchierten Spots,
 Schonzeiten-Status, Fangbuch, Beißzeiten-/Köder-/Blei-Beratern und einem
 „Heute passt es?"-Score.
+
+*Repository und Live-URL heißen weiterhin `angelkarte` (siehe unten) – nur der
+sichtbare App-Name wurde auf Beißzeit geändert.*
 
 **Live:** https://dwill1905.github.io/angelkarte/
 
@@ -132,7 +135,7 @@ und blockiert bei Datenfehlern.
 ausgeliefert werden (GitHub Pages, lokaler Webserver o.ae.).
 
 Bei Aenderungen am Service Worker oder den Modulen die Cache-Version in `sw.js`
-(`angelkarte-shell-vN`) hochzaehlen, damit Clients die neue Version laden.
+(`beisszeit-shell-vN`) hochzaehlen, damit Clients die neue Version laden.
 
 ## Datenqualitaet
 

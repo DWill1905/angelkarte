@@ -1,5 +1,20 @@
 # Changelog
 
+## SW v141 – 2026-07-19
+
+### Changed
+- **App umbenannt: Angelkarte → Beißzeit.** Betrifft Titel, Manifest (`name`/`short_name`),
+  iOS-Homescreen-Titel, Service-Worker-Cache-Präfix (`angelkarte-shell-*` →
+  `beisszeit-shell-*`), ICS-Kalenderexport (PRODID/UID), Fangbuch-Teilen-Text und die
+  Doku-Kommentare/README. Bewusst **nicht** angefasst: das GitHub-Repository selbst
+  (`DWill1905/angelkarte`) und damit die Live-URL – eine Repo-Umbenennung ist ein größerer,
+  schwerer umkehrbarer Schritt (bricht bestehende Links/PWA-Installationen) und wurde nicht
+  angefragt. Ebenfalls unverändert: das Wort „Angelkarte" als Sachbegriff (Erlaubnisschein)
+  in den Regionsdaten (`src/data.ts`, `data/*.json`) – das ist der Fachbegriff für den
+  Angelschein selbst, nicht der App-Name, und hat mit der Umbenennung nichts zu tun. Nutzer
+  mit bereits installierter PWA sehen den neuen Namen/Icon erst nach einem Neu-Hinzufügen
+  zum Homescreen (iOS liest Titel/Icon nur beim Hinzufügen ein).
+
 ## SW v140 – 2026-07-19
 
 ### Changed
@@ -563,9 +578,9 @@
   reiner Solunar-Wertung, kein erfundener Druckbonus. Keine neue Netzwerkanfrage nötig – nutzt
   ausschließlich Daten, die der Wochen-Ausblick ohnehin schon lädt. Vier neue Tests.
 
-Fachliche und technische Änderungen an der Angelkarte-App, neueste zuerst.
-Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.0.0/); SW-Version
-bezieht sich auf `angelkarte-shell-vN` in `sw.js`.
+Fachliche und technische Änderungen an der Beißzeit-App (bis SW v140: Angelkarte),
+neueste zuerst. Format angelehnt an [Keep a Changelog](https://keepachangelog.com/de/1.0.0/);
+SW-Version bezieht sich auf `beisszeit-shell-vN` (bis v140: `angelkarte-shell-vN`) in `sw.js`.
 
 ## SW v101 – 2026-07-18
 
