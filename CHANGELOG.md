@@ -1,5 +1,14 @@
 # Changelog
 
+## SW v163 – 2026-07-19 (Design-Audit Vorschlag 7/20)
+
+### Added
+- **Freitextfelder ohne `name`-Attribut** ("Köder / Methode", eigener Spot "Name"/"Notiz")
+  – Browser merken sich frühere Eingaben für die native Autofill-Vorschlagsliste primär
+  über `name`, nicht über `id`. Ohne `name` bekamen wiederkehrende Nutzer keine
+  Autovervollständigung für Köderbeschreibungen o. ä. angeboten. Kostenlose, risikofreie
+  Ergänzung – reines HTML-Attribut, keine Logikänderung.
+
 ## SW v162 – 2026-07-19 (Nachbesserung zu Vorschlag 6/20)
 
 ### Fixed

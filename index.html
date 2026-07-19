@@ -990,7 +990,7 @@
         <div class="full"><label class="fbentn"><input type="checkbox" id="fbEntnommen"> Fisch entnommen (nicht zurückgesetzt)</label></div>
         <div class="full" id="fbCheck" aria-live="polite"></div>
         <div class="full"><label for="fbSpot">Gewässer</label><select id="fbSpot"></select></div>
-        <div class="full"><label for="fbKoeder">Köder / Methode</label><input id="fbKoeder" type="text" placeholder="z.B. Gummifisch 12cm, motoroil"></div>
+        <div class="full"><label for="fbKoeder">Köder / Methode</label><input id="fbKoeder" name="koeder" type="text" placeholder="z.B. Gummifisch 12cm, motoroil"></div>
       </div>
       <button class="fb-save" id="fbSave">Fang speichern</button>
       <div class="fb-status" id="fbStatus" aria-live="polite"></div>
@@ -1176,11 +1176,11 @@
     <h3 id="myDlgTitle" data-ic="pin">Eigenen Spot speichern</h3>
     <p id="myDlgTipp" style="font-size:11px;color:var(--muted);margin:-4px 0 8px">Tipp: Lange auf die Karte drücken (Handy) oder Rechtsklick (Desktop), um hier einen Spot zu setzen.</p>
     <label for="myName">Name</label>
-    <input id="myName" type="text" placeholder="z.B. Kante vor der Schilfspitze" maxlength="60">
+    <input id="myName" name="spot-name" type="text" placeholder="z.B. Kante vor der Schilfspitze" maxlength="60">
     <label for="myTiefe" style="margin-top:8px">Tiefe (m, optional – Echolot)</label>
     <input id="myTiefe" type="number" inputmode="decimal" step="0.1" min="0" max="80" placeholder="z.B. 4.5">
     <label for="myTipp" style="margin-top:8px">Notiz / Taktik</label>
-    <input id="myTipp" type="text" placeholder="z.B. Zander 18 Uhr, Gummifisch motoroil 12 cm" maxlength="160">
+    <input id="myTipp" name="spot-notiz" type="text" placeholder="z.B. Zander 18 Uhr, Gummifisch motoroil 12 cm" maxlength="160">
     <div class="mydlg-btns">
       <button id="myCancel" class="ghost">Abbrechen</button>
       <button id="mySave" class="primary">Speichern</button>
