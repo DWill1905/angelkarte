@@ -125,7 +125,7 @@
   @media(prefers-reduced-motion:reduce){ .view.active{animation:none} }
 
   /* ===== Karte ===== */
-  .chips{display:flex;gap:6px;overflow-x:auto;padding:8px 14px;background:var(--panel);
+  .chips{display:flex;gap:var(--space-2);overflow-x:auto;padding:8px 14px;background:var(--panel);
     border-bottom:1px solid var(--line);scrollbar-width:none;flex-shrink:0}
   .chips::-webkit-scrollbar{display:none}
   /* Fade-Hinweis statt Farbverlauf: blendet nur den Alpha-Kanal aus, kein Hintergrundfarb-
@@ -922,7 +922,7 @@
         <div class="full"><label for="fbKoeder">Köder / Methode</label><input id="fbKoeder" type="text" placeholder="z.B. Gummifisch 12cm, motoroil"></div>
       </div>
       <button class="fb-save" id="fbSave">Fang speichern</button>
-      <div class="fb-status" id="fbStatus"></div>
+      <div class="fb-status" id="fbStatus" aria-live="polite"></div>
     <div id="fbTools" style="display:flex;gap:var(--space-2);margin-top:8px;flex-wrap:wrap"></div>
     <input id="fbFile" type="file" accept="application/json,.json" hidden>
     <div id="fbInsights"></div>
@@ -1079,7 +1079,7 @@
 <div class="mydlg-wrap" id="offDlg" hidden>
   <div class="mydlg">
     <h3 data-ic="pin">Karte offline sichern</h3>
-    <div id="offBody" class="dlg-scroll" style="font-size:13px;line-height:1.55;max-height:60dvh;overflow-y:auto"></div>
+    <div id="offBody" class="dlg-scroll" aria-live="polite" style="font-size:13px;line-height:1.55;max-height:60dvh;overflow-y:auto"></div>
     <div class="mydlg-btns"><button id="offClose" class="primary">Schließen</button></div>
   </div>
 </div>

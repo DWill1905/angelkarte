@@ -1,5 +1,20 @@
 # Changelog
 
+## SW v140 – 2026-07-19
+
+### Changed
+- **UX-Validierungspass mit ui-ux-pro-max-Skill.** Der pauschale Design-System-Vorschlag
+  (Grün-Dashboard-Palette, App-Store-Landingpage) passte nicht zur bestehenden Bathymetrie-
+  Identität und wurde verworfen. Die gezielte Regel-Abfrage (Domain `web`: Safe Areas, Touch
+  Targets, Accessibility) hat drei echte, kleine Lücken gefunden:
+  - Kategorie-Chip-Reihe hatte 6px Abstand zwischen den Chips, Guideline verlangt
+    mindestens 8dp zwischen Touch-Targets – auf `--space-2` (8px) angehoben.
+  - `#fbStatus` (Speicher-/Import-Rückmeldungen im Fangbuch) und `#offBody` (Offline-Karten-
+    Fortschritt/Ergebnis) aktualisierten sich dynamisch, ohne `aria-live` – Screenreader-
+    Nutzer bekamen davon nichts mit. Beide jetzt `aria-live="polite"`.
+  Alles andere aus der Checkliste (Touch-Target-Größe, Safe-Area-Insets, Rollen/Traits,
+  Icon-Labels, Reduced-Motion) war durch frühere Runden bereits abgedeckt.
+
 ## SW v139 – 2026-07-19
 
 ### Fixed
