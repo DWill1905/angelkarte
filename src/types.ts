@@ -57,8 +57,12 @@ export interface Spot {
   myId?: number;
   /** Eigene Farbe für Polylines/Marker (überschreibt Kategorie-Farbe). */
   farbe?: string;
-  /** Zusatzhinweis zu Schonzeiten dieses Gewässers. */
+  /** Zusatzhinweis zu Schonzeiten dieses Gewässers (reiner Anzeigetext im Popup). */
   schonzeitInfo?: string;
+  /** Konkrete, abweichende Schonzeit/Maß für einzelne Arten NUR an diesem Spot (z.B.
+      strengere Vereinsregel). Anders als schonzeitInfo wird das im Fangbuch tatsächlich
+      geprüft (checkFang() nimmt hier einen Treffer statt der regionsweiten state.SCHON). */
+  schonzeitOverride?: Schonzeit[];
   /** Beschreibung der Strecke (Flussabschnitte). */
   strecke?: string;
   /** Gewässercharakter. Fehlt er, wird er aus cat/line/note abgeleitet. */

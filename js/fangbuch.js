@@ -58,7 +58,11 @@ export function fbFischWert() {
     const and = inputById('fbFischAnd').value.trim();
     return (raw === SONSTIGE && and) ? and : raw;
 }
-fbSpotSel.onchange = syncFbSpotAnd;
+/* checkFang() kann seit dem spot-eigenen schonzeitOverride vom gewählten Gewaesser
+   abhängen - ohne diesen zweiten Aufruf blieb eine bereits angezeigte Pruefung nach
+   einem Spotwechsel stehen (z.B. "60 cm" vom vorigen Spot, obwohl der neue keine
+   eigene Regel hat). */
+fbSpotSel.onchange = () => { syncFbSpotAnd(); checkFang(); };
 export async function fbLoad() {
     try {
         const r = await store.get('fangbuch');
@@ -515,12 +519,20 @@ export function checkFang() {
     let len = lenRaw;
     if (!isNaN(len) && (len < 0 || len > 300))
         len = NaN; /* unplausibel ignorieren – Wels kann in D legitim >250 cm erreichen */
-    const sc = state.SCHON.find(x => x.fisch === fisch);
+    /* Manche Spots haben eine strengere Vereinsregel für einzelne Arten (z.B. ein höheres
+       Mindestmaß) - schonzeitOverride greift dann statt der regionsweiten state.SCHON.
+       Vorher stand so etwas nur als Anzeigetext im Popup (schonzeitInfo), ohne dass das
+       Fangbuch die eigentliche Prüfung danach ausrichtete. */
+    const spotObj = state.SPOTS.find(s => s.name === fbSpotSel.value);
+    const override = spotObj?.schonzeitOverride?.find(x => x.fisch === fisch);
+    const sc = override || state.SCHON.find(x => x.fisch === fisch);
     let msgs = [], bad = false;
     /* Sonst verschwindet eine unplausible Länge beim Speichern kommentarlos (siehe fbSave) -
        ohne Hinweis merkt man das erst viel später beim Blick auf den gespeicherten Eintrag. */
     if (!isNaN(lenRaw) && isNaN(len))
         msgs.push('⚠ ' + lenRaw + ' cm liegt außerhalb 0–300 cm und wird beim Speichern nicht übernommen.');
+    if (override)
+        msgs.push('ℹ An diesem Gewässer gilt eine abweichende Vereinsregel für ' + fisch + ' – strenger geprüft als die regionsweiten Werte im Regeln-Tab.');
     if (!sc) {
         msgs.push('ℹ Für „' + fisch + '“ liegen in dieser Region keine Schonzeit-/Maßdaten vor – bitte Erlaubnisschein prüfen. KEINE Freigabe!');
     }

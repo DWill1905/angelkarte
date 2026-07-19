@@ -918,7 +918,8 @@ export const SPOTS_BY: Spot[] = [
    karte:'Tageskarte Fischwaid München e.V. – seit 2025 ausschließlich online über hejfish',
    note:'⚠ Gastangler dürfen laut Vereinsordnung nur EINE Handangel mit einer Bissanzeige führen, ausschließlich vom Ufer (kein Boot, kein Waten/Wathose). Hecht-Mindestmaß hier vereinsseitig 60 cm statt der bayernweiten 50 cm. EU-Vogelschutzgebiet (Ramsar-Fläche seit 1976, bis zu 100.000 Wasservögel im Sommer) – Betriebsgelände und Vogelschutzzone am Südufer des Westteils sind komplett gesperrt, im Ostteil zeitweise Einschränkungen, Beschilderung beachten. Nachtangeln auf Aal laut Quellenlage bis 1 Uhr erlaubt.',
    kartenLinks:[{label:'hejfish – Fischwaid München',url:'https://www.hejfish.com/m/fischereiverein-fischwaid-muenchen-e-v-2022'},{label:'Verein – Speichersee',url:'https://www.fischwaid-muenchen.de/?page_id=2128'}],
-   hotspots:[],warn:true,zugang:'ufer',schonzeitInfo:'Hecht hier vereinsseitig ab 60 cm (bayernweit 50 cm) – strengere Vereinsregel gilt vorrangig.'},
+   hotspots:[],warn:true,zugang:'ufer',schonzeitInfo:'Hecht hier vereinsseitig ab 60 cm (bayernweit 50 cm) – strengere Vereinsregel gilt vorrangig.',
+   schonzeitOverride:[{fisch:'Hecht',von:[2,15],bis:[4,30],mm:'ab 60 cm (Vereinsregel Fischwaid München, bayernweit nur 50 cm)'}]},
 
   {name:'Langwieder See',wasser:'see-tief',verif:'B',nr:'Versehrten Fischereiverein München e.V. · A8 Ausf. München-Langwied',cat:'raub',
    arten:['Hecht','Zander','Wels','Karpfen','Barsch','Rotauge','Brachse','Schleie','Aal','Regenbogenforelle'],
@@ -948,7 +949,13 @@ export const SPOTS_BY: Spot[] = [
    karte:'Tageskarte Fischwaid München e.V. – seit 2025 ausschließlich online über hejfish',
    note:'Als tiefes, isoliertes Gewässer (kein Flussanschluss) gilt für Seeforelle hier vermutlich die kürzere Schonzeit für geschlossene Gewässer (01.10.–15.01. statt 01.10.–15.03.) – im Zweifel Vereinsordnung/Erlaubnisschein prüfen. Klares Wasser: feine Vorfächer, Naturkost im Vorteil.',
    kartenLinks:[{label:'hejfish – Fischwaid München',url:'https://www.hejfish.com/m/fischereiverein-fischwaid-muenchen-e-v-2022'}],
-   hotspots:[],warn:false,zugang:'ufer',schonzeitInfo:'Seeforelle hier vermutlich schon ab 16.01. wieder fangbar (geschlossenes Gewässer) statt erst ab 16.03.'}
+   /* Bewusst KEIN schonzeitOverride: die "geschlossenes Gewässer"-Ausnahme ist hier nur
+      "vermutlich" belegt, nicht sicher. Ein Override würde das Fangbuch ab 16.01. "erlaubt"
+      anzeigen lassen - im Fehlerfall (falls die kürzere Frist doch nicht greift) hieße das,
+      einem Nutzer einen noch geschonten Fisch als fangbar zu bestätigen. Lieber die
+      strengere, sicher richtige regionsweite Frist (bis 15.03.) durchsetzen und die
+      Unsicherheit nur als Hinweistext zeigen. */
+   hotspots:[],warn:false,zugang:'ufer',schonzeitInfo:'Seeforelle hier vermutlich schon ab 16.01. wieder fangbar (geschlossenes Gewässer) statt erst ab 16.03. – im Fangbuch bewusst NICHT automatisch freigegeben (unsichere Rechtsgrundlage), gilt dort weiter bis 15.03.'}
 ];
 
 /* Schonzeiten: AVBayFiG (Ausführungsverordnung Bayerisches Fischereigesetz), Fassung

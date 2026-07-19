@@ -89,7 +89,21 @@
    "hotspots": [],
    "warn": true,
    "zugang": "ufer",
-   "schonzeitInfo": "Hecht hier vereinsseitig ab 60 cm (bayernweit 50 cm) – strengere Vereinsregel gilt vorrangig."
+   "schonzeitInfo": "Hecht hier vereinsseitig ab 60 cm (bayernweit 50 cm) – strengere Vereinsregel gilt vorrangig.",
+   "schonzeitOverride": [
+    {
+     "fisch": "Hecht",
+     "von": [
+      2,
+      15
+     ],
+     "bis": [
+      4,
+      30
+     ],
+     "mm": "ab 60 cm (Vereinsregel Fischwaid München, bayernweit nur 50 cm)"
+    }
+   ]
   },
   {
    "name": "Langwieder See",
@@ -181,7 +195,7 @@
    "hotspots": [],
    "warn": false,
    "zugang": "ufer",
-   "schonzeitInfo": "Seeforelle hier vermutlich schon ab 16.01. wieder fangbar (geschlossenes Gewässer) statt erst ab 16.03."
+   "schonzeitInfo": "Seeforelle hier vermutlich schon ab 16.01. wieder fangbar (geschlossenes Gewässer) statt erst ab 16.03. – im Fangbuch bewusst NICHT automatisch freigegeben (unsichere Rechtsgrundlage), gilt dort weiter bis 15.03."
   }
  ],
  "schon": [

@@ -10,6 +10,22 @@ Die ausführliche technische Historie vor 1.0.0 (jede einzelne der früheren
 `beisszeit-shell-vN`-Versionen mit Ursache, Testabdeckung, betroffenen Dateien) steht
 weiterhin in **[CHANGELOG-ARCHIV.md](CHANGELOG-ARCHIV.md)**.
 
+## [1.2.0] – 2026-07-19
+
+### Hinzugefügt
+- **Spot-eigene Schonzeit-/Maß-Ausnahmen werden jetzt im Fangbuch tatsächlich geprüft.**
+  Bisher war `schonzeitInfo` (z.B. "Hecht hier vereinsseitig ab 60 cm") reiner
+  Anzeigetext im Popup – `checkFang()` prüfte trotzdem nur gegen das regionsweite Maß,
+  hätte also einen 55-cm-Hecht am Ismaninger Speichersee fälschlich als "in Ordnung"
+  durchgehen lassen. Neues Feld `schonzeitOverride` je Spot wird jetzt vorrangig
+  geprüft; bereits für den Ismaninger Speichersee (Hecht ab 60 cm) gesetzt. Bewusst
+  NICHT gesetzt für eine zweite, unsicher belegte Ausnahme (Hollerner See, Seeforelle)
+  – dort bliebe im Fehlerfall ein noch geschonter Fisch fälschlich freigegeben, das
+  Risiko ist in diese Richtung schwerer als im Zweifel zu streng zu prüfen.
+- Dabei einen zweiten Bug im selben Zug gefunden und behoben: ein Wechsel des
+  Gewässers im Fangbuch-Formular löste bisher keine neue Maßprüfung aus – eine bereits
+  angezeigte Warnung blieb nach dem Spotwechsel fälschlich stehen.
+
 ## [1.1.0] – 2026-07-19
 
 ### Hinzugefügt
