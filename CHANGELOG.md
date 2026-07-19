@@ -1,5 +1,17 @@
 # Changelog
 
+## SW v144 – 2026-07-19 (Design-Audit Runde 2/10)
+
+### Fixed
+- **Nicht gewählte Ansicht-Option ("Pro") im Menü sah wie deaktiviert aus.** Die unselektierte
+  Schaltfläche wurde komplett per `opacity:.55` abgedunkelt – Rahmen, Füllung *und* Text
+  zusammen. Rechnerisch blieb davon nur noch ein Textkontrast von ~2,2:1 übrig (WCAG AA
+  verlangt 4,5:1) – für eine anklickbare, aktiv wählbare Option zu wenig, und optisch kaum
+  von einem echten `disabled`-Zustand zu unterscheiden. Jetzt wie bei den übrigen Chips/Tabs
+  im Rest der App: unselektiert bleibt der Titel auf voller Textfarbe, nur die Beschreibung
+  ist dezent abgesetzt (`opacity:.75`), Auswahl/Nicht-Auswahl unterscheidet sich weiterhin klar
+  über Rahmen/Füllung.
+
 ## SW v143 – 2026-07-19 (Design-Audit Runde 1/10)
 
 ### Fixed
