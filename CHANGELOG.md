@@ -1,5 +1,14 @@
 # Changelog
 
+## SW v157 – 2026-07-19 (Design-Audit Vorschlag 2/20)
+
+### Fixed
+- **Manifest-Beschreibung versprach einen "KI-Guide", den es nicht gibt.** Die App nutzt
+  bewusst kein LLM/KI, sondern ein transparentes, offengelegtes Bewertungsmodell (siehe
+  "Ehrlichkeitsregeln" in `rating.ts` – der Prozentwert ist explizit "KEINE
+  Fangwahrscheinlichkeit"). Die öffentliche Installationsbeschreibung widersprach damit der
+  eigenen Ehrlichkeits-Philosophie der App. Jetzt "Chancen-Bewertung" statt "KI-Guide".
+
 ## SW v156 – 2026-07-19 (Design-Audit Vorschlag 1/20)
 
 ### Fixed
