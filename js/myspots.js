@@ -2,6 +2,7 @@ import { byId, inputById } from './dom.js';
 import { state, store } from './state.js';
 import { applyFilters, buildChips, buildMarkers } from './map.js';
 import { esc } from './util.js';
+import { tripSave, updateTripBadge } from './trip.js';
 export var myPending = null;
 /** Wird beim Bearbeiten eines bestehenden eigenen Spots gesetzt (myId), sonst null -
     steuert in saveMySpot(), ob ein neuer Eintrag angelegt oder ein bestehender aktualisiert wird. */
@@ -61,11 +62,12 @@ export async function saveMySpot() {
     const tipp = inputById('myTipp').value.trim();
     const tiefe = (() => { const t = parseFloat(inputById('myTiefe').value); return (!isNaN(t) && t > 0 && t <= 80) ? t : null; })();
     const list = await loadMySpots(state.REGION.id);
-    let m, editId = myEditId;
+    let m, editId = myEditId, altName = null;
     if (editId != null) {
         m = list.find(x => x.id === editId);
         if (!m)
             return closeMyDlg();
+        altName = m.name;
         m.name = name;
         m.tipp = tipp;
         m.tiefe = tiefe;
@@ -88,6 +90,20 @@ export async function saveMySpot() {
         }
     }
     state.SPOTS.push(mySpotObj(m));
+    /* Die Trip-Liste merkt sich Spots nur ueber den Namen (kein stabiler Fremdschluessel) -
+       ohne diesen Abgleich waere ein umbenannter, vorgemerkter eigener Spot in der Trip-
+       Liste/im Tagesplan verwaist: der Name in state.trip zeigt dann auf nichts mehr. */
+    if (altName != null && altName !== name) {
+        let geaendert = false;
+        state.trip.forEach(t => { if (t.region === state.REGION.id && t.name === altName) {
+            t.name = name;
+            geaendert = true;
+        } });
+        if (geaendert) {
+            await tripSave();
+            updateTripBadge();
+        }
+    }
     buildMarkers();
     buildChips();
     applyFilters();
@@ -96,9 +112,11 @@ export async function saveMySpot() {
 window.delMySpot = async function (id) {
     if (!state.REGION)
         return;
-    const list = (await loadMySpots(state.REGION.id)).filter(m => m.id !== id);
+    const list = await loadMySpots(state.REGION.id);
+    const geloescht = list.find(m => m.id === id);
+    const rest = list.filter(m => m.id !== id);
     try {
-        await store.set('myspots:' + state.REGION.id, JSON.stringify(list));
+        await store.set('myspots:' + state.REGION.id, JSON.stringify(rest));
     }
     catch { }
     const i = state.SPOTS.findIndex(sp => sp.myId === id);
@@ -107,6 +125,16 @@ window.delMySpot = async function (id) {
         if (sp.marker && state.map.hasLayer(sp.marker))
             state.map.removeLayer(sp.marker);
         state.SPOTS.splice(i, 1);
+    }
+    /* Denselben verwaisten Trip-Eintrag vermeiden wie beim Umbenennen - ein geloeschter
+       eigener Spot darf nicht als Geisterzeile in der Trip-Liste/im Tagesplan haengen bleiben. */
+    if (geloescht) {
+        const vorher = state.trip.length;
+        state.trip = state.trip.filter(t => !(t.region === state.REGION.id && t.name === geloescht.name));
+        if (state.trip.length !== vorher) {
+            await tripSave();
+            updateTripBadge();
+        }
     }
     state.map.closePopup();
     buildChips();

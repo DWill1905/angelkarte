@@ -80,3 +80,48 @@ describe('Eigene Spots bearbeiten', () => {
     assert.ok(app.state.SPOTS.some((s) => s.my && s.name === 'Erster'), 'der ursprüngliche Spot sollte unverändert erhalten bleiben');
   });
 });
+
+describe('Trip-Liste bleibt synchron mit umbenannten/gelöschten eigenen Spots', () => {
+  /* Bug, den die neue Bearbeiten-Funktion selbst eingeführt hätte: die Trip-Liste merkt sich
+     Spots nur über den Namen (kein stabiler Fremdschlüssel). Ohne Abgleich würde ein
+     umbenannter, vorgemerkter eigener Spot in der Trip-Liste/im Tagesplan als Geisterzeile
+     auf einen nicht mehr existierenden Namen zeigen. */
+  test('Umbenennen eines vorgemerkten eigenen Spots aktualisiert den Namen in der Trip-Liste', async () => {
+    await legeSpotAn('Steg Nord', '3', '');
+    const spot = app.state.SPOTS.find((s) => s.my && s.name === 'Steg Nord');
+    await app.toggleTrip('Steg Nord');
+    assert.ok(app.inTrip('Steg Nord'), 'Spot sollte vorgemerkt sein');
+
+    await ctx.window.editMySpot(spot.myId);
+    doc.getElementById('myName').value = 'Steg Süd';
+    await app.saveMySpot();
+
+    assert.ok(!app.inTrip('Steg Nord'), 'alter Name sollte nicht mehr in der Trip-Liste stehen');
+    assert.ok(app.inTrip('Steg Süd'), 'Trip-Liste sollte dem neuen Namen folgen, statt verwaist zu bleiben');
+    assert.equal(app.state.trip.filter((t) => t.region === app.state.REGION.id).length, 1,
+      'Umbenennen darf keinen zweiten/doppelten Trip-Eintrag erzeugen');
+  });
+
+  test('Löschen eines vorgemerkten eigenen Spots entfernt ihn auch aus der Trip-Liste', async () => {
+    await legeSpotAn('Bald weg', '1', '');
+    const spot = app.state.SPOTS.find((s) => s.my && s.name === 'Bald weg');
+    await app.toggleTrip('Bald weg');
+    assert.ok(app.inTrip('Bald weg'));
+
+    await ctx.window.delMySpot(spot.myId);
+
+    assert.ok(!app.inTrip('Bald weg'), 'gelöschter Spot darf nicht als Geisterzeile in der Trip-Liste hängen bleiben');
+  });
+
+  test('Umbenennen eines NICHT vorgemerkten Spots lässt die Trip-Liste unangetastet', async () => {
+    await legeSpotAn('Unbeachtet', '1', '');
+    const spot = app.state.SPOTS.find((s) => s.my && s.name === 'Unbeachtet');
+    const tripVorher = app.state.trip.length;
+
+    await ctx.window.editMySpot(spot.myId);
+    doc.getElementById('myName').value = 'Unbeachtet Umbenannt';
+    await app.saveMySpot();
+
+    assert.equal(app.state.trip.length, tripVorher, 'ohne Trip-Eintrag darf sich an state.trip nichts ändern');
+  });
+});

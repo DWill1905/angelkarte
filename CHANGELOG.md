@@ -1,5 +1,18 @@
 # Changelog
 
+## SW v122 – 2026-07-18
+
+### Fixed
+- **Trip-Liste verwaiste beim Umbenennen/Löschen eines vorgemerkten eigenen Spots.** Eigene
+  Regression aus der kürzlich hinzugefügten „Eigene Spots bearbeiten"-Funktion: die
+  Trip-Liste merkt sich Spots nur über den Namen (kein stabiler Fremdschlüssel) – wurde ein
+  vorgemerkter eigener Spot umbenannt, zeigte die Trip-Liste weiterhin den alten Namen, ohne
+  „Route"-Button und unsichtbar für den Tagesplan (`tagesplan()` findet den Spot über
+  `state.SPOTS.find(s => s.name === n)` nicht mehr und lässt ihn stillschweigend fallen).
+  Dieselbe Lücke bestand schon vorher beim Löschen. `saveMySpot()` und `delMySpot()`
+  gleichen die Trip-Liste jetzt mit ab: Umbenennen aktualisiert den Namen dort mit,
+  Löschen entfernt den Eintrag. Drei neue Tests.
+
 ## SW v121 – 2026-07-18
 
 ### Fixed
