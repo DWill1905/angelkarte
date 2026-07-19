@@ -1,5 +1,13 @@
 # Changelog
 
+## SW v148 – 2026-07-19 (Design-Audit Runde 6/10)
+
+### Fixed
+- **Uneinheitliches Hover-Feedback bei den Karten-Buttons (Desktop/Maus).** Vollbild-Button
+  hatte bereits einen `:hover`-Zustand, die beiden direkt danebenliegenden Buttons (Standort,
+  Werkzeuge) sowie der Legende-Button nicht – auf drei optisch zusammengehörigen Kontrollen
+  reagierte nur eine auf die Maus. Jetzt einheitlich.
+
 ## SW v147 – 2026-07-19 (Design-Audit Runde 5/10)
 
 ### Fixed
