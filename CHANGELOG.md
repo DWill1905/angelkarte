@@ -1,5 +1,13 @@
 # Changelog
 
+## SW v151 – 2026-07-19 (Design-Audit Runde 9/10)
+
+### Fixed
+- **Wetter-Chip und Gewässer-Tipp-Button in der Kopfzeile ohne jedes Interaktions-Feedback.**
+  Letzte zwei Lücken derselben Serie (Runden 6–8): beide Header-Buttons hatten weder
+  `:hover` noch `:active` noch überhaupt eine `transition` definiert. Jetzt press- und
+  hover-Feedback konsistent mit dem Rest der App.
+
 ## SW v150 – 2026-07-19 (Design-Audit Runde 8/10)
 
 ### Fixed
