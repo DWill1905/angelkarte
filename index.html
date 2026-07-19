@@ -828,6 +828,10 @@
   .dlg-scroll::-webkit-scrollbar-thumb,.spot-list::-webkit-scrollbar-thumb,.scrollpane::-webkit-scrollbar-thumb{
     background:var(--shoal);border-radius:var(--radius-full);border:2px solid transparent;background-clip:padding-box}
   .dlg-scroll,.spot-list,.scrollpane{scrollbar-width:thin;scrollbar-color:var(--shoal) transparent}
+  /* Ohne das kann ein Scroll-Gesture am Ende einer Liste/eines Dialogs auf die Seite
+     "durchschlagen" (Scroll Chaining) - auf iOS als PWA (ohne Browser-Chrome drumherum,
+     der das sonst abfedert) wirkt der Bounce-Effekt der Seite dahinter besonders unruhig. */
+  .dlg-scroll,.spot-list,.scrollpane{overscroll-behavior:contain}
 
   /* Konsistenter Fokus-Ring: bisher nur an 4 vereinzelten Stellen definiert, Tastaturnutzung
      verließ sich sonst auf den (teils unsichtbaren) Browser-Default. */

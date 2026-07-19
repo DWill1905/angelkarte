@@ -1,5 +1,13 @@
 # Changelog
 
+## SW v156 – 2026-07-19 (Design-Audit Vorschlag 1/20)
+
+### Fixed
+- **Scroll Chaining bei Listen/Dialogen:** Ein Scroll-Gesture am Ende der Platzliste oder
+  eines Dialogs konnte auf die Seite dahinter durchschlagen (Bounce-Effekt) – auf iOS als
+  installierte PWA ohne Browser-Chrome drumherum besonders unruhig. `overscroll-behavior:
+  contain` auf allen scrollbaren Containern ergänzt.
+
 ## SW v155 – 2026-07-19
 
 ### Fixed
