@@ -1,5 +1,26 @@
 # Changelog
 
+## SW v133 – 2026-07-19
+
+### Changed
+- **Design-Vertiefung: Fortschrittsring bekommt Ampel-Farben, Titel-Hierarchie
+  vereinheitlicht.** Reine Optik, alle 441 Tests unverändert grün:
+  - Der Fortschrittsring neben der Chancen-Prozentzahl war immer blau, unabhängig vom Wert.
+    Er folgt jetzt derselben Sterne-Schwelle wie `sterneAus()` (nicht neu erfunden) und
+    derselben Ampel-Sprache wie die einzelnen Gründe (`.rate-g.ja`/`.nein`): grün ab 4
+    Sternen, rot bei 1–2 Sternen, blau dazwischen.
+  - Dialog-/Karten-Titel (h3-Ebene: Regeln-Karten, Fangbuch-Formular, Vollbild-Panel,
+    Werkzeug-Dialoge, Popup-Titel, Regionsname, Tagesplan) drifteten unsystematisch zwischen
+    16px und 17px, obwohl sie dieselbe Hierarchie-Stufe sind – jetzt einheitlich über einen
+    `--fs-title`-Token. Die weit größere Zahl an Fließtext-/Datenzeilen-Größen bleibt bewusst
+    unangetastet (eigener, größerer Folge-Schritt).
+  - Kategorie-Badge im Popup (RAUBFISCH/FRIEDFISCH) auf die Radius-Skala umgestellt (4px →
+    `--radius-sm`).
+  - Kontrastprüfung durchgeführt (WCAG-Formel gegen alle Text-/Hintergrund-Kombinationen):
+    keine Verstöße gefunden, Kategoriefarben werden nirgends als Fließtext verwendet.
+    Icon-System bereits konsistent (eine zentrale `ICON()`-Funktion, keine abweichenden
+    Stroke-Widths) – kein Handlungsbedarf.
+
 ## SW v132 – 2026-07-19
 
 ### Changed

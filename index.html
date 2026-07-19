@@ -43,6 +43,11 @@
     /* Spacing-Skala (8px-Basis) – für neu geschriebene/überarbeitete Regeln, bestehende
        Werte bleiben unangetastet (eigener Folge-Schritt wie schon bei den Radius-Tokens). */
     --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px; --space-5:24px; --space-6:32px;
+    /* Typo-Skala: Dialog-/Karten-Titel (h3-Ebene) drifteten unsystematisch zwischen 16px und
+       17px, obwohl sie dieselbe Hierarchie-Stufe sind (Dialog-Überschrift). Hier vereinheit-
+       licht; die weit größere Zahl an Fließtext-/Datenzeilen-Größen bleibt unangetastet
+       (eigener, größerer Folge-Schritt, dasselbe Vorgehen wie bei Radius/Spacing). */
+    --fs-title:17px; --fs-h1:22px;
   }
   @media(prefers-reduced-motion:no-preference){
     * { scroll-behavior:smooth; }
@@ -75,7 +80,7 @@
   }
   header>*{position:relative;z-index:1}
   .eyebrow{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--dusk);margin-bottom:1px;font-weight:600;opacity:.7}
-  .region-title{font-family:"Lato","Segoe UI",Calibri,sans-serif;font-size:17px;font-weight:800;color:#f6fbfa;
+  .region-title{font-family:"Lato","Segoe UI",Calibri,sans-serif;font-size:var(--fs-title);font-weight:800;color:#f6fbfa;
     background:transparent;border:0;border-radius:6px;padding:1px 22px 1px 2px;margin-top:1px;max-width:100%;
     cursor:pointer;letter-spacing:-.005em;-webkit-appearance:none;appearance:none;
     overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
@@ -83,7 +88,7 @@
     background-repeat:no-repeat;background-position:right 2px center;background-size:15px}
   .region-title:focus-visible{outline:2px solid var(--dusk);outline-offset:2px;border-radius:4px}
   .region-title option{background:#16323c;color:var(--text);font-size:14px;font-weight:500}
-  h1{font-family:"Lato","Segoe UI",Calibri,sans-serif;font-size:22px;font-weight:900;color:#f6fbfa;letter-spacing:-.005em;line-height:1.1}
+  h1{font-family:"Lato","Segoe UI",Calibri,sans-serif;font-size:var(--fs-h1);font-weight:900;color:#f6fbfa;letter-spacing:-.005em;line-height:1.1}
   h1 .tilde{color:var(--dusk);font-weight:500}
   .sun{font-family:"Space Mono",ui-monospace,monospace;font-size:10.5px;color:var(--muted);margin-top:4px;letter-spacing:-.02em}
 
@@ -416,9 +421,9 @@
   .leaflet-popup-content{margin:14px 16px;line-height:1.45;min-width:230px}
   .leaflet-popup-tip{background:var(--paper)}
   .pop-cat{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
-    color:#fff;border-radius:4px;padding:2px 7px;margin-bottom:5px;margin-right:4px}
+    color:#fff;border-radius:var(--radius-sm);padding:2.5px 8px;margin-bottom:5px;margin-right:4px}
   .pop-nr{font-family:"Space Mono",monospace;font-size:10px;color:#4a5b5f;letter-spacing:0}
-  .pop-title{font-family:"Lato","Segoe UI",Calibri,sans-serif;font-size:17px;font-weight:700;margin-bottom:2px;letter-spacing:-.01em}
+  .pop-title{font-family:"Lato","Segoe UI",Calibri,sans-serif;font-size:var(--fs-title);font-weight:700;margin-bottom:2px;letter-spacing:-.01em}
   .pop-badges{display:flex;flex-wrap:wrap;gap:5px;margin:5px 0 3px}
   .pop-badge{font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:var(--radius-full);line-height:1.25;white-space:nowrap}
   .pop-badge.stop{background:#fbe3df;color:#a3352a;border:1px solid #f0c2ba}
@@ -471,11 +476,15 @@
      kein SVG nötig: conic-gradient für den Bogen, radial-gradient-Maske schneidet die
      Mitte raus (macht aus dem gefüllten Kreis einen Ring). */
   .rate-ring{
-    --pct:0;width:20px;height:20px;border-radius:50%;flex:0 0 auto;
-    background:conic-gradient(var(--dusk) calc(var(--pct)*1%),rgba(35,79,91,.15) 0);
+    --pct:0;--ring-col:var(--dusk);width:20px;height:20px;border-radius:50%;flex:0 0 auto;
+    background:conic-gradient(var(--ring-col) calc(var(--pct)*1%),rgba(35,79,91,.15) 0);
     -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 calc(100% - 3px));
     mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 calc(100% - 3px));
   }
+  /* Dieselbe Ampel-Sprache wie .rate-g.ja/.nein (grün/rot) statt einer neu erfundenen Skala. */
+  .rate-ring.gut{--ring-col:#22a457}
+  .rate-ring.mittel{--ring-col:var(--dusk)}
+  .rate-ring.schwach{--ring-col:#d0402e}
   .rate-body{padding:2px 0 8px 4px}
   .rate-g{font-size:12px;line-height:1.45;padding:1.5px 0}
   .rate-g.ja{color:#1c6138}
@@ -529,7 +538,7 @@
   /* ===== Regeln ===== */
   .scrollpane{overflow-y:auto;padding:14px;flex:1 1 auto;min-height:0;-webkit-overflow-scrolling:touch}
   .card{background:var(--shelf);border:1px solid var(--shoal);border-radius:12px;padding:14px 15px;margin-bottom:12px}
-  .card h3{font-family:"Lato","Segoe UI",Calibri,sans-serif;font-weight:700;font-size:16px;margin-bottom:9px;color:#f4faf9;letter-spacing:-.01em}
+  .card h3{font-family:"Lato","Segoe UI",Calibri,sans-serif;font-weight:700;font-size:var(--fs-title);margin-bottom:9px;color:#f4faf9;letter-spacing:-.01em}
   .rule-row{display:flex;align-items:center;justify-content:space-between;gap:10px;
     padding:8px 0;border-bottom:1px solid var(--line);font-size:13px}
   .rule-row:last-child{border-bottom:0}
@@ -546,7 +555,7 @@
 
   /* ===== Fangbuch ===== */
   .fb-form{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-md);padding:13px;margin-bottom:12px}
-  .fb-form h3{font-family:"Lato","Segoe UI",Calibri,sans-serif;font-weight:700;font-size:16px;margin-bottom:10px;color:#f4faf9}
+  .fb-form h3{font-family:"Lato","Segoe UI",Calibri,sans-serif;font-weight:700;font-size:var(--fs-title);margin-bottom:10px;color:#f4faf9}
   .fb-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-2)}
   .fb-grid .full{grid-column:1/-1}
   label{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
@@ -627,7 +636,7 @@
   @keyframes dlgIn{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}
   @media(prefers-reduced-motion:reduce){ .mydlg-wrap,.mydlg-wrap>*{animation:none} }
   .mydlg{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;width:100%;max-width:380px}
-  .mydlg h3{font-family:"Lato","Segoe UI",Calibri,sans-serif;font-weight:700;font-size:17px;margin-bottom:10px;color:#f4faf9}
+  .mydlg h3{font-family:"Lato","Segoe UI",Calibri,sans-serif;font-weight:700;font-size:var(--fs-title);margin-bottom:10px;color:#f4faf9}
   .mydlg-btns{display:flex;gap:var(--space-2);margin-top:14px}
   .mydlg-btns button{flex:1;border:1px solid var(--line);border-radius:8px;padding:11px;font-size:14px;font-weight:700;cursor:pointer;background:var(--panel-2);color:var(--text)}
   .mydlg-btns .ghost{background:var(--panel-2);color:var(--text);border:1px solid var(--line)}
@@ -646,7 +655,7 @@
   .detail-card{background:var(--paper);width:100%;max-width:520px;margin:0 auto;height:100dvh;display:flex;flex-direction:column}
   .detail-head{display:flex;align-items:center;gap:var(--space-2);padding:calc(14px + env(safe-area-inset-top)) 16px 12px;
     background:var(--panel);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:2}
-  .detail-head h3{flex:1;font-family:"Lato","Segoe UI",Calibri,sans-serif;font-weight:800;font-size:16px;color:#f4faf9;margin:0}
+  .detail-head h3{flex:1;font-family:"Lato","Segoe UI",Calibri,sans-serif;font-weight:800;font-size:var(--fs-title);color:#f4faf9;margin:0}
   .detail-body{flex:1;overflow-y:auto;padding:14px 16px calc(20px + env(safe-area-inset-bottom));background:var(--paper);color:var(--ink)}
   .detail-body .tackle-body,.detail-body .pop-details-body{border-radius:var(--radius-md)}
   .detail-body .pop-details-body .pop-row{margin-bottom:9px}
@@ -656,7 +665,7 @@
   .plan-card{background:var(--panel);width:100%;max-width:520px;margin:0 auto;height:100dvh;
     display:flex;flex-direction:column;border-left:1px solid var(--line);border-right:1px solid var(--line)}
   .plan-head{display:flex;align-items:center;gap:var(--space-2);padding:14px 16px 10px}
-  .plan-head h3{flex:1;margin:0;font-family:"Lato","Segoe UI",Calibri,sans-serif;font-weight:700;font-size:17px;color:#f4faf9}
+  .plan-head h3{flex:1;margin:0;font-family:"Lato","Segoe UI",Calibri,sans-serif;font-weight:700;font-size:var(--fs-title);color:#f4faf9}
   .plan-head h3 .ic{width:1em;height:1em;vertical-align:-.1em;margin-right:5px;color:var(--dusk)}
   .plan-x{background:none;border:0;color:var(--muted);font-size:20px;line-height:1;cursor:pointer;padding:4px 8px;border-radius:8px}
   .plan-x:hover{background:rgba(22,50,60,.5);color:var(--text)}

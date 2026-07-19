@@ -490,9 +490,12 @@ export function ratingHtml(s, hotspot = null) {
         /* Nur noch eine Zahl statt Sterne + Prozent nebeneinander fuer denselben Wert -
            dieselbe Dopplung, die anderswo im Code bewusst vermieden wird (siehe Kommentar
            weiter unten zu "keine zwei Prozentwerte fuer dieselbe Sache"). */
+        /* Ring-Farbe folgt derselben Sterne-Schwelle wie sterneAus() (nicht neu erfunden) -
+           dieselbe Ampel-Sprache wie bei den einzelnen Gruenden (.rate-g.ja/.nein). */
+        const ringTon = b.sterne >= 4 ? 'gut' : b.sterne <= 2 ? 'schwach' : 'mittel';
         const kopf = `<summary class="rate-kopf">
         <span class="rate-art">${esc(b.art)}</span>
-        ${b.geschont ? '' : `<span class="rate-ring" style="--pct:${b.prozent}" aria-hidden="true"></span>`}
+        ${b.geschont ? '' : `<span class="rate-ring ${ringTon}" style="--pct:${b.prozent}" aria-hidden="true"></span>`}
         <span class="rate-proz${b.geschont ? ' zu' : ''}">${b.geschont ? 'geschont' : b.prozent + '\u202F%'}</span>
       </summary>`;
         /* Progressive Disclosure: bekannte Signale zeigen, Qualitäts-Metadaten (fehlende Signale +
