@@ -9,7 +9,7 @@ export const state: AppState = {
   active: {},
   userPos: null, userMarker: null,
   uidLast: 0,
-  WX: null, WXH: null, WXD: null, PEGEL: null, wxKey: '', satAn: false,
+  WX: null, WXH: null, WXD: null, PEGEL: null, wxKey: '', wxError: false, satAn: false,
   fbMem: [], persistent: true, fbSaving: false,
   trip: [], /* Merkliste: [{region,name}] */
   map: null,

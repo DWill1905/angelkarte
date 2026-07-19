@@ -81,3 +81,39 @@ describe('Pegel & Wassertemperatur', () => {
     assert.ok(app.state.WXD, 'Tagesmittel müssen im State liegen');
   });
 });
+
+describe('Wetter-Chip im Header: Lade- vs. Fehlerzustand', () => {
+  /* Vorher zeigte der Chip in beiden Fällen nur "–", ohne dass zu erkennen war, ob noch
+     geladen wird oder der Abruf endgültig fehlgeschlagen ist (z.B. offline). */
+  test('vor jedem Abruf: Lade-Zustand ("–" + .loading, kein Fehler-Symbol)', () => {
+    app.state.WX = null; app.state.wxError = false;
+    app.wxChipSetzen();
+    const chip = doc.getElementById('wxChip');
+    assert.equal(chip.textContent, '–');
+    assert.ok(chip.classList.contains('loading'), 'Lade-Puls muss aktiv sein');
+    assert.ok(!chip.classList.contains('warn'));
+  });
+
+  test('fehlgeschlagener Abruf: Warnsymbol statt "–", kein Lade-Puls mehr', async () => {
+    mock.stationen = [];
+    app.state.wxKey = ''; app.state.WX = null; app.state.wxError = false;
+    ctx.window.fetch = async () => { throw new Error('offline'); };
+    await app.loadWeather();
+    const chip = doc.getElementById('wxChip');
+    assert.equal(app.state.wxError, true);
+    assert.equal(chip.textContent, '⚠');
+    assert.ok(!chip.classList.contains('loading'), 'kein Lade-Puls mehr, der Abruf ist fertig (fehlgeschlagen)');
+    assert.match(chip.title, /nicht verfügbar/);
+    ctx.window.fetch = fetchImpl;
+  });
+
+  test('erfolgreicher Abruf nach einem Fehler räumt Fehler- und Lade-Zustand wieder auf', async () => {
+    mock.stationen = [NAH(), FERN()];
+    app.state.wxKey = ''; app.state.WX = null; app.state.wxError = true;
+    await app.loadWeather();
+    const chip = doc.getElementById('wxChip');
+    assert.equal(app.state.wxError, false, 'Erfolg muss den Fehler-Zustand zurücksetzen');
+    assert.ok(!chip.classList.contains('loading'));
+    assert.match(chip.textContent, /°/, 'zeigt wieder die Temperatur: ' + chip.textContent);
+  });
+});

@@ -71,6 +71,7 @@ export async function loadWeather() {
         const dirs = ['N', 'NO', 'O', 'SO', 'S', 'SW', 'W', 'NW'];
         const dir = dirs[Math.round((c.wind_direction_10m || 0) / 45) % 8];
         state.WX = { temp: c.temperature_2m, wind: c.wind_speed_10m, dirDeg: c.wind_direction_10m || 0, dir, press: c.surface_pressure, trendVal, code: c.weather_code };
+        state.wxError = false;
         /* Stundenreihe merken – damit der Planer auch andere Tage mit ECHTER Vorhersage rechnen kann
            statt das heutige Wetter auf morgen zu übertragen. Zeitstempel sind lokal (timezone=auto). */
         state.WXH = d.hourly && d.hourly.time ? d.hourly : null;
@@ -96,6 +97,9 @@ export async function loadWeather() {
     catch (e) {
         el.textContent = '';
         state.wxKey = '';
+        /* Chip soll sich vom Lade-Zustand unterscheiden statt stillschweigend beim „–" zu bleiben. */
+        state.wxError = true;
+        wxChipSetzen();
     }
 }
 /** Wetter für einen Zeitpunkt.
@@ -324,10 +328,21 @@ export function wxChipSetzen() {
         return;
     const wx = state.WX;
     if (!wx) {
-        chip.textContent = '–';
+        /* Lade- und Fehlerzustand sahen bisher identisch aus (nur „–", ohne Hinweis worauf).
+           wxError unterscheidet: dauerhaft fehlgeschlagen (Warnsymbol) vs. noch unterwegs (Puls). */
         chip.classList.remove('warn');
+        chip.classList.toggle('loading', !state.wxError);
+        if (state.wxError) {
+            chip.textContent = '⚠';
+            chip.title = 'Wetter nicht verfügbar – ohne Netz nur lokal berechnete Werte (Sonne, Mond, Beißfenster)';
+        }
+        else {
+            chip.textContent = '–';
+            chip.title = 'Wetter wird geladen …';
+        }
         return;
     }
+    chip.classList.remove('loading');
     const pfeil = wx.trendVal <= -1.5 ? '⇘' : wx.trendVal >= 1.5 ? '⇗' : '→';
     const sturm = wx.wind >= 35;
     chip.textContent = Math.round(wx.temp) + '° ' + pfeil + (sturm ? ' ⚠' : '');

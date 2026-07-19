@@ -310,6 +310,9 @@ export interface AppState {
   WXD: { time: string[]; mean: (number | null)[] } | null;
   PEGEL: Pegel | null;
   wxKey: string;
+  /** true = letzter Wetterabruf ist fehlgeschlagen (z.B. offline) – für die Anzeige im
+      Header-Chip, der sonst Lade- und Fehlerzustand nicht unterscheiden könnte. */
+  wxError: boolean;
   fbMem: Fang[];
   persistent: boolean;
   fbSaving: boolean;

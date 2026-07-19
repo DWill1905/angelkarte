@@ -126,6 +126,9 @@
     border-radius:var(--radius-md);border:1px solid var(--shoal);background:rgba(22,50,60,.55);
     color:var(--text);font-family:'Space Mono',monospace;font-size:12.5px;cursor:pointer;white-space:nowrap}
   #wxChip.warn{border-color:var(--warn);color:#ffd0c4}
+  #wxChip.loading{animation:wxpuls 1.6s ease-in-out infinite}
+  @keyframes wxpuls{0%,100%{opacity:1}50%{opacity:.45}}
+  @media(prefers-reduced-motion:reduce){ #wxChip.loading{animation:none} }
   #saisonTip{width:44px;height:44px;border-radius:var(--radius-md);border:1px solid var(--shoal);background:rgba(22,50,60,.55);
     color:var(--dusk);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex:0 0 auto}
   #saisonTip svg,#saisonTip .ic{width:20px;height:20px}

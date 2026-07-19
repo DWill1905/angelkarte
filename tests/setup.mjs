@@ -47,7 +47,7 @@ import { bewerteSpot, bewerteAlle, sterneAus, sterneText } from './rating.js';
 import { jahreszeit } from './saison.js';
 import { saison } from './tackle.js';
 import { daysUntilMD, fmtDate, fmtMD, haversine, inSchonzeit, inWindow, masseAus, mondStaerke, moonTimes, solunar, sunTimes } from './astro.js';
-import { wtSchaetzung, loadWeather } from './weather.js';
+import { wtSchaetzung, loadWeather, wxChipSetzen } from './weather.js';
 window.__app = { state, popupHtml, mapsLink, spotVisible, sperrWarnung, locApply, cacheViewport, openOffline,
   fbInsights, fbModellCheck, fbRestore, parseFangDatum, beissfensterJetzt, fbRender, fbSortiert, fbCsv, checkFang, fangTeilenText,
   toggleTrip, inTrip, openTrip, tripReady, schilfLaden, schilfAus, schilfAktiv,
@@ -58,7 +58,7 @@ window.__app = { state, popupHtml, mapsLink, spotVisible, sperrWarnung, locApply
   bewerteSpot, bewerteAlle, sterneAus, sterneText, jahreszeit, saison, computeScore, tagesScore,
   ladeNotiz, speichereNotiz, checkErlaubnisAblauf, openPack, wochenIcs,
   inWindow, inSchonzeit, daysUntilMD, masseAus, fmtMD, fmtDate, solunar, haversine, sunTimes, mondStaerke, moonTimes,
-  wtSchaetzung, loadWeather };
+  wtSchaetzung, loadWeather, wxChipSetzen };
 `);
   try {
     execFileSync(ESBUILD, [entry, '--bundle', '--format=iife', '--outfile=' + BUNDLE], { stdio: 'pipe' });

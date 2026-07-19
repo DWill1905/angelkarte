@@ -1,5 +1,18 @@
 # Changelog
 
+## SW v128 – 2026-07-19
+
+### Changed
+- **Design-Audit Phase 3: Wetter-Chip unterscheidet jetzt Lade- von Fehlerzustand.** Der
+  Chip im Header zeigte bisher in beiden Fällen nur „–", ohne erkennbar zu machen, ob noch
+  geladen wird oder der Abruf (z.B. offline) endgültig gescheitert ist – der einzige
+  permanent sichtbare Live-Datenpunkt im Header hatte kein bewusstes Leer-/Fehlerbild.
+  Neues `state.wxError`: solange noch kein Ergebnis da ist, pulsiert der Chip dezent
+  (`#wxChip.loading`, respektiert `prefers-reduced-motion`); schlägt der Abruf fehl, zeigt
+  er ein ⚠-Symbol mit Tooltip „Wetter nicht verfügbar – ohne Netz nur lokal berechnete
+  Werte (Sonne, Mond, Beißfenster)". Ein erneuter erfolgreicher Abruf setzt beides zurück.
+  Drei neue Tests.
+
 ## SW v127 – 2026-07-19
 
 ### Changed
