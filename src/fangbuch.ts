@@ -383,6 +383,15 @@ export function checkFang(){
   }
   if(sc){
     if(inSchonzeit(sc)){bad=true;msgs.push('⛔ '+fisch+' ist aktuell geschont ('+fmtMD(sc.von)+'–'+fmtMD(sc.bis)+') – zurücksetzen!');}
+    /* Arten ohne Mindestmaß können hier trotzdem eine echte Pflicht tragen: laut Erlaubnisschein
+       (siehe schonQuelle/Regeln-Tab) muss ein gefangener Fisch entnommen werden, weil "ohne Maß"
+       nicht "freigestellt" heißt. Die Info stand bisher nur im Regeln-Tab, das Fangbuch selbst
+       - wo genau diese Entscheidung (Häkchen "entnommen") getroffen wird - sagte dazu nichts. */
+    if(sc.ruecksetzverbot){
+      const entnommen=inputById('fbEntnommen').checked;
+      if(!entnommen){bad=true;msgs.push('⛔ '+fisch+' hat kein Mindestmaß – Rücksetzverbot! Muss entnommen werden (Häkchen setzen).');}
+      else msgs.push('✓ Entnahme korrekt – '+fisch+' hat kein Mindestmaß und darf nicht zurückgesetzt werden.');
+    }
     const m=masseAus(sc.mm);
     if(!isNaN(len)){
       if(m.min&&len<m.min){bad=true;msgs.push('⛔ Untermaßig: '+len+' cm < '+m.min+' cm – zurücksetzen!');}
@@ -438,6 +447,7 @@ export function checkFang(){
 }
 selectById('fbFisch').onchange=checkFang;
 inputById('fbLaenge').oninput=checkFang;
+inputById('fbEntnommen').onchange=checkFang;
 
 
 byId('fbSave').onclick=async ()=>{

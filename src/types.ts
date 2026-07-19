@@ -106,6 +106,9 @@ export interface Schonzeit {
   bis: MonatTag | null;
   /** Freitext, z.B. "Entnahmefenster 50–90 cm" oder "ab 50 cm". */
   mm: string;
+  /** true = Art ohne Mindestmaß, die laut Erlaubnisschein nicht zurückgesetzt werden darf
+      (jeder gefangene Fisch gilt automatisch als "über Maß"). */
+  ruecksetzverbot?: boolean;
 }
 
 /** Saisonaler Hinweisbanner. */

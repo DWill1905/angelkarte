@@ -1,5 +1,22 @@
 # Changelog
 
+## SW v129 – 2026-07-19
+
+### Fixed
+- **Fachlicher Fix: Rücksetzverbot (Rhein/Mainz) war im Fangbuch komplett unenforced.**
+  Barsch, Wels und Brachse haben laut Erlaubnisschein kein Mindestmaß – die Region weist
+  selbst darauf hin (`schonQuelle`, Packliste, Regeln-Tab): "Fische ohne Mindestmaß dürfen
+  NICHT zurückgesetzt werden". Diese Info stand aber nur als Anzeige-Text in den
+  Schonzeit-Daten (`mm: "– (kein Maß; Rücksetzverbot!)"`) und wurde im Fangbuch selbst –
+  wo die Entscheidung "entnommen ja/nein" tatsächlich getroffen wird – nie geprüft:
+  `masseAus()` findet in diesem Text keine Zahl, also blieb `checkFang()` für diese drei
+  Arten stumm, ob entnommen oder nicht. Neues strukturiertes Feld
+  `Schonzeit.ruecksetzverbot`; `checkFang()` warnt jetzt, wenn eine so markierte Art NICHT
+  entnommen wird, und bestätigt, wenn doch. Die Checkbox "Fisch entnommen" löst die Prüfung
+  jetzt auch live per `change`-Handler aus (vorher nur Fischart/Länge). Dieselbe Lücke wie
+  zuvor bei den unenforced Tageslimits (Elbe/Main) – nur diesmal keine Zahlengrenze,
+  sondern eine Ja/Nein-Regel. Fünf neue Tests.
+
 ## SW v128 – 2026-07-19
 
 ### Changed

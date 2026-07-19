@@ -211,6 +211,72 @@ describe('Regionale Tageslimits im Maßcheck', () => {
   });
 });
 
+describe('Rücksetzverbot (Arten ohne Mindestmaß, die entnommen werden müssen)', () => {
+  /* Mainz/Rhein: Barsch, Wels, Brachse haben kein Mindestmaß - der Erlaubnisschein verbietet
+     laut schonQuelle/Regeln-Tab trotzdem, sie zurückzusetzen. Die Info stand bisher nur im
+     Regeln-Tab; das Fangbuch selbst, wo die Entscheidung (Häkchen "entnommen") tatsächlich
+     getroffen wird, sagte dazu komplett nichts - unabhängig davon, ob entnommen oder nicht. */
+  test('Barsch NICHT entnommen: Warnung, da Rücksetzverbot verletzt', async () => {
+    await loadRegion(ctx, 'mainz');
+    doc.querySelector('[data-view="fangbuch"]').click();
+    doc.getElementById('fbFisch').value = 'Barsch';
+    doc.getElementById('fbEntnommen').checked = false;
+    app.checkFang();
+    const html = doc.getElementById('fbCheck').innerHTML;
+    assert.match(html, /Rücksetzverbot/, 'Rücksetzverbot muss im Fangbuch selbst auftauchen: ' + html);
+    assert.match(html, /bad/);
+  });
+
+  test('Barsch entnommen: Bestätigung statt Warnung', async () => {
+    await loadRegion(ctx, 'mainz');
+    doc.querySelector('[data-view="fangbuch"]').click();
+    doc.getElementById('fbFisch').value = 'Barsch';
+    doc.getElementById('fbEntnommen').checked = true;
+    app.checkFang();
+    const html = doc.getElementById('fbCheck').innerHTML;
+    assert.match(html, /Entnahme korrekt/);
+    assert.match(html, /ok/);
+    assert.doesNotMatch(html, /bad/);
+  });
+
+  test('Wels und Brachse tragen dieselbe Regel, andere Arten (Hecht) nicht', async () => {
+    await loadRegion(ctx, 'mainz');
+    doc.querySelector('[data-view="fangbuch"]').click();
+    doc.getElementById('fbEntnommen').checked = false;
+    for (const fisch of ['Wels', 'Brachse']) {
+      doc.getElementById('fbFisch').value = fisch;
+      app.checkFang();
+      assert.match(doc.getElementById('fbCheck').innerHTML, /Rücksetzverbot/, fisch + ' muss die Regel tragen');
+    }
+    doc.getElementById('fbFisch').value = 'Hecht';
+    doc.getElementById('fbLaenge').value = '';
+    app.checkFang();
+    assert.doesNotMatch(doc.getElementById('fbCheck').innerHTML, /Rücksetzverbot/, 'Hecht hat ein Mindestmaß, keine Rücksetzverbot-Warnung');
+  });
+
+  test('Toggle der Checkbox aktualisiert die Warnung live (change-Listener)', async () => {
+    await loadRegion(ctx, 'mainz');
+    doc.querySelector('[data-view="fangbuch"]').click();
+    doc.getElementById('fbFisch').value = 'Wels';
+    const cb = doc.getElementById('fbEntnommen');
+    cb.checked = false;
+    cb.onchange();
+    assert.match(doc.getElementById('fbCheck').innerHTML, /bad/);
+    cb.checked = true;
+    cb.onchange();
+    assert.match(doc.getElementById('fbCheck').innerHTML, /Entnahme korrekt/);
+  });
+
+  test('Andere Regionen (z.B. Elbe) kennen kein Rücksetzverbot für Barsch', async () => {
+    await loadRegion(ctx, 'elbe');
+    doc.querySelector('[data-view="fangbuch"]').click();
+    doc.getElementById('fbFisch').value = 'Barsch';
+    doc.getElementById('fbEntnommen').checked = false;
+    app.checkFang();
+    assert.doesNotMatch(doc.getElementById('fbCheck').innerHTML, /Rücksetzverbot/);
+  });
+});
+
 describe('parseFangDatum – beide Formate', () => {
   test('deutsches Format (so wird gespeichert)', () => {
     const d = app.parseFangDatum('9.7.2026');

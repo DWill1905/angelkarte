@@ -673,7 +673,8 @@
    "fisch": "Barsch",
    "von": null,
    "bis": null,
-   "mm": "– (kein Maß; Rücksetzverbot!)"
+   "mm": "– (kein Maß; Rücksetzverbot!)",
+   "ruecksetzverbot": true
   },
   {
    "fisch": "Aal",
@@ -739,13 +740,15 @@
    "fisch": "Wels",
    "von": null,
    "bis": null,
-   "mm": "– (kein Maß; Rücksetzverbot!)"
+   "mm": "– (kein Maß; Rücksetzverbot!)",
+   "ruecksetzverbot": true
   },
   {
    "fisch": "Brachse",
    "von": null,
    "bis": null,
-   "mm": "– (kein Maß; Rücksetzverbot!)"
+   "mm": "– (kein Maß; Rücksetzverbot!)",
+   "ruecksetzverbot": true
   },
   {
    "fisch": "Rotauge",
