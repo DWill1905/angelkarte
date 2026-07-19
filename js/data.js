@@ -646,7 +646,14 @@ export const SCHON_HE = [
     { fisch: 'Schleie', von: [5, 1], bis: [6, 30], mm: 'Entnahmefenster 25–45 cm' },
     { fisch: 'Bachforelle', von: [10, 1], bis: [3, 31], mm: 'Atl. Forelle: Entnahmefenster 25–60 cm' },
     { fisch: 'Barsch', von: null, bis: null, mm: '– (kein gesetzl. Maß)' },
-    { fisch: 'Wels', von: null, bis: null, mm: '– (in HE keine Schonzeit/kein Maß)' }
+    { fisch: 'Wels', von: null, bis: null, mm: '– (in HE keine Schonzeit/kein Maß)' },
+    /* Döbel ist an drei Gießen-Spots Zielart, fehlte hier komplett - im Fangbuch erschien
+       dadurch immer "keine Daten vorliegen, KEINE Freigabe" statt einer echten Aussage.
+       Recherche deutet an, dass fuer nicht-heimische/gebietsfremde Arten (wie bei Zander)
+       teils eine Entnahmepflicht statt Schonzeit gilt "in bestimmten Gebieten" - das ist
+       aber nicht sicher genug belegt, um es hier zu behaupten (anders als bei Zander, wo
+       die Quelle eindeutig war). Bewusst nur die sicher belegte Kernaussage. */
+    { fisch: 'Döbel', von: null, bis: null, mm: '– (kein gesetzl. Maß, keine Schonzeit)' }
 ];
 export const REGION_HE = { id: 'giessen', geprueft: '2026-07', name: 'Gießen / Lahntal (Hessen)', nachtangeln: 'frei', kurz: 'Gießen & Lahn', packliste: ['Staatl. Fischereischein + Erlaubnisschein (IG Lahn / VSA / ASV je Gewässer)', 'Lange Spinnrute 20–40 g für die Lahn-Strömung', 'DropShot-Setup fürs Abklopfen vom Ufer', 'Stahl-/Titanvorfach (Hecht/Zander Pflicht am Wasser)', 'Wathose fürs Fliegenfischen an den Wehren', 'Kescher, Abhakmatte, Kopflampe'],
     koederfisch: ['Grundel breitet sich auch in der Lahn aus – als toter Köderfisch am Grund auf Zander/Wels/Aal top.', 'Lebender Köderfisch verboten (Tierschutzgesetz).', 'An Vereinsgewässern Köderfischregeln des Erlaubnisscheins prüfen.', 'Döbel und Rotaugen sind klassische Lahn-Köderfische (wo erlaubt).'],

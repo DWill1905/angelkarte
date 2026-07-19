@@ -10,6 +10,25 @@ Die ausführliche technische Historie vor 1.0.0 (jede einzelne der früheren
 `beisszeit-shell-vN`-Versionen mit Ursache, Testabdeckung, betroffenen Dateien) steht
 weiterhin in **[CHANGELOG-ARCHIV.md](CHANGELOG-ARCHIV.md)**.
 
+## [1.2.1] – 2026-07-19
+
+### Behoben
+- **Gießen/Lahntal: Döbel war an drei Spots als Zielart gelistet, fehlte aber komplett
+  in der Schonzeiten-Tabelle der Region.** Jeder geloggte Döbel-Fang im Fangbuch zeigte
+  dadurch "keine Daten vorliegen – KEINE Freigabe", obwohl Döbel in Hessen laut
+  Quellenlage kein Mindestmaß und keine Schonzeit hat (wie bereits für Barsch/Wels in
+  derselben Region hinterlegt). Ergänzt – Verhalten jetzt konsistent mit den anderen
+  unregulierten Arten. Ein Hinweis auf eine möglicherweise regional geltende
+  Entnahmepflicht (wie bei Zander) wurde bewusst NICHT übernommen, da dafür keine
+  ausreichend sichere Quelle vorlag.
+  Gefunden durch einen gezielten Abgleich aller an Gießen-Spots gelisteten Zielarten
+  gegen die Schonzeiten-Tabelle der Region. Derselbe automatisierte Abgleich über alle
+  sieben Regionen zeigt: dieselbe Lücke (Art als Zielfisch gelistet, aber nicht in der
+  Schonzeiten-Tabelle – meist Brachse/Rotauge/Regenbogenforelle) besteht noch in fünf
+  weiteren Regionen. Bewusst nicht im selben Schritt mitgefixt, da jede Region eine
+  eigene, ähnlich sorgfältige Rechtsrecherche bräuchte wie München – als eigene
+  Folgeaufgabe zu behandeln, nicht nebenbei zu raten.
+
 ## [1.2.0] – 2026-07-19
 
 ### Hinzugefügt
