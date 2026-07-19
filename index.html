@@ -33,6 +33,19 @@
        mit Abstand häufigste) als Tokens; die übrigen Ad-hoc-Werte werden schrittweise in
        einem eigenen Folge-Schritt darauf migriert, nicht in einem Rutsch. */
     --radius-sm:6px; --radius-md:10px; --radius-lg:14px; --radius-full:999px;
+    /* Elevation-Skala: bisher ~15 verschiedene box-shadow-Werte ohne System (mal hart, mal
+       weich, unterschiedliche Deckkraft). Vier Stufen nach Schwebehöhe, weicher/größerer
+       Blur als die alten Werte für einen ruhigeren, moderneren Eindruck. */
+    --shadow-sm:0 2px 8px rgba(8,24,28,.35);
+    --shadow-md:0 6px 20px rgba(8,24,28,.4);
+    --shadow-lg:0 12px 32px rgba(8,24,28,.45);
+    --shadow-xl:0 20px 48px rgba(8,24,28,.5);
+    /* Spacing-Skala (8px-Basis) – für neu geschriebene/überarbeitete Regeln, bestehende
+       Werte bleiben unangetastet (eigener Folge-Schritt wie schon bei den Radius-Tokens). */
+    --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px; --space-5:24px; --space-6:32px;
+  }
+  @media(prefers-reduced-motion:no-preference){
+    * { scroll-behavior:smooth; }
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html,body{height:100%}
@@ -81,18 +94,25 @@
   .banner.show{display:block}
   .banner b{color:#ffd9cf}
 
-  .tabs{display:flex;background:rgba(44,89,102,.9);border-bottom:1px solid var(--shoal);backdrop-filter:blur(8px)}
+  /* Segmented Control statt Underline-Tabs: der aktive Reiter bekommt eine gefüllte Pille
+     statt nur einer Unterstreichung - liest sich auf den ersten Blick eindeutiger als
+     "ausgewählt" (üblich in iOS/Material-Toggle-Gruppen) und wirkt weniger wie ein
+     Browser-Standard-Tab. */
+  .tabs{display:flex;gap:var(--space-1);background:rgba(22,50,60,.55);border-bottom:1px solid var(--shoal);
+    backdrop-filter:blur(8px);padding:6px 10px}
   .tab{
     flex:1;background:none;border:0;color:var(--muted);font-size:12px;font-weight:700;
-    letter-spacing:.08em;text-transform:uppercase;padding:10px 4px;cursor:pointer;
-    border-bottom:2px solid transparent;opacity:.5;transition:opacity .15s,color .15s;
+    letter-spacing:.06em;text-transform:uppercase;padding:9px 4px;cursor:pointer;
+    border-radius:var(--radius-full);opacity:.75;
   }
-  .tab:hover{opacity:.8}
-  .tab[aria-selected="true"]{color:#f4faf9;border-bottom-color:var(--dusk);opacity:1;background:rgba(110,168,196,.10)}
-  .tab:focus-visible{outline:2px solid var(--dusk);outline-offset:-2px}
+  .tab:hover{opacity:1;background:rgba(255,255,255,.06)}
+  .tab[aria-selected="true"]{color:#0d3540;opacity:1;background:var(--dusk);font-weight:800;box-shadow:var(--shadow-sm)}
+  .tab:focus-visible{outline:2px solid var(--dusk);outline-offset:2px}
 
   .view{display:none;min-height:0;overflow:hidden;grid-row:4;position:relative;flex-direction:column}
-  .view.active{display:flex}
+  .view.active{display:flex;animation:viewIn .16s ease}
+  @keyframes viewIn{from{opacity:0}to{opacity:1}}
+  @media(prefers-reduced-motion:reduce){ .view.active{animation:none} }
 
   /* ===== Karte ===== */
   .chips{display:flex;gap:6px;overflow-x:auto;padding:8px 14px;background:var(--panel);
@@ -114,21 +134,24 @@
   .chip:focus-visible{outline:2px solid var(--salmo);outline-offset:2px}
   .chips.sub{background:var(--ink);padding-top:6px;padding-bottom:6px;box-shadow:inset 0 4px 6px -4px rgba(0,0,0,.6)}
   .chips.sub .chip{background:rgba(35,79,91,.4);border-color:var(--dusk);color:#dcebee;min-height:40px;padding:8px 11px}
-  .chips.sub .chip.on{background:var(--dusk);border-color:var(--dusk);color:#0d3540;opacity:1;font-weight:700;box-shadow:0 0 0 3px rgba(110,168,196,.2)}
+  .chips.sub .chip.on{background:var(--dusk);border-color:var(--dusk);color:#0d3540;opacity:1;font-weight:700;box-shadow:0 0 0 3px rgba(110,168,196,.2);
+    animation:chipPop .22s cubic-bezier(.34,1.56,.64,1)}
+  @keyframes chipPop{0%{transform:scale(.9)}60%{transform:scale(1.04)}100%{transform:scale(1)}}
+  @media(prefers-reduced-motion:reduce){ .chips.sub .chip.on{animation:none} }
   .chip.gone{display:none}
   .chip.dim{opacity:.4;filter:grayscale(.55)}
   .saison-i{margin-left:auto;flex:0 0 auto;width:18px;height:18px;border-radius:50%;border:1px solid var(--dusk);
     color:var(--dusk);display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;font-style:italic}
   /* --- Vollbild-Knopf --- */
   /* --- Wetter-Chip im Header --- */
-  .hdr-right{position:absolute;top:calc(12px + env(safe-area-inset-top));right:14px;z-index:20;display:flex;align-items:center;gap:8px}
+  .hdr-right{position:absolute;top:calc(12px + env(safe-area-inset-top));right:14px;z-index:20;display:flex;align-items:center;gap:var(--space-2)}
   #wxChip{display:inline-flex;align-items:center;gap:6px;height:44px;padding:0 12px;
     border-radius:var(--radius-md);border:1px solid var(--shoal);background:rgba(22,50,60,.55);
     color:var(--text);font-family:'Space Mono',monospace;font-size:12.5px;cursor:pointer;white-space:nowrap}
   #wxChip.warn{border-color:var(--warn);color:#ffd0c4}
-  #wxChip.loading{animation:wxpuls 1.6s ease-in-out infinite}
+  #wxChip.loading,.loading-pulse{animation:wxpuls 1.6s ease-in-out infinite}
   @keyframes wxpuls{0%,100%{opacity:1}50%{opacity:.45}}
-  @media(prefers-reduced-motion:reduce){ #wxChip.loading{animation:none} }
+  @media(prefers-reduced-motion:reduce){ #wxChip.loading,.loading-pulse{animation:none} }
   #saisonTip{width:44px;height:44px;border-radius:var(--radius-md);border:1px solid var(--shoal);background:rgba(22,50,60,.55);
     color:var(--dusk);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex:0 0 auto}
   #saisonTip svg,#saisonTip .ic{width:20px;height:20px}
@@ -143,7 +166,7 @@
   #menuBtn{position:absolute;top:calc(12px + env(safe-area-inset-top));left:14px;z-index:20;
     width:44px;height:44px;border-radius:var(--radius-md);border:1px solid var(--shoal);
     background:rgba(22,50,60,.55);display:flex;flex-direction:column;justify-content:center;
-    align-items:center;gap:4px;cursor:pointer;padding:0}
+    align-items:center;gap:var(--space-1);cursor:pointer;padding:0}
   #menuBtn span{display:block;width:17px;height:2px;background:var(--text);border-radius:2px}
   header{position:relative;padding-left:64px;padding-right:136px}
   /* Sichtbarkeit über eine Klasse, nicht über das hidden-Attribut: `display:flex` würde
@@ -203,7 +226,7 @@
   body.sicht-einfach #tFore{display:none}
   body.sicht-einfach [data-reihe="karte"]{grid-template-columns:1fr}
 
-  .tool-gruppen{display:flex;flex-direction:column;gap:4px}
+  .tool-gruppen{display:flex;flex-direction:column;gap:var(--space-1)}
   .tool-gruppe{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dusk);
     margin:12px 0 2px;font-weight:700}
   .tool-reihe{display:grid;grid-template-columns:1fr 1fr;gap:7px}
@@ -212,7 +235,7 @@
   .fbtool.plan{background:linear-gradient(180deg,rgba(166,212,232,.20),rgba(166,212,232,.10));
     border-color:var(--dusk);color:var(--text);font-weight:700;width:100%;justify-content:center;
     padding:12px;font-size:13.5px}
-  .plan-tage{display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--ink);
+  .plan-tage{display:flex;align-items:center;gap:var(--space-2);padding:8px 14px;background:var(--ink);
     border-bottom:1px solid var(--line);flex-shrink:0}
   .plan-tage button{width:34px;height:30px;border-radius:8px;border:1px solid var(--shoal);
     background:rgba(22,50,60,.6);color:var(--text);font-size:12px;cursor:pointer;flex:0 0 auto}
@@ -225,7 +248,7 @@
   .plan-fl .l{color:var(--muted)}
   .plan-fl .major .z{color:var(--amber);font-weight:700}
   .plan-hero{margin-bottom:12px;padding-bottom:11px;border-bottom:1px solid var(--line)}
-  .plan-kpi{display:flex;align-items:baseline;gap:12px}
+  .plan-kpi{display:flex;align-items:baseline;gap:var(--space-3)}
   .plan-proz{font-family:'Space Mono',monospace;font-size:30px;font-weight:700;color:#f4faf9;line-height:1}
   .plan-basis{font-size:11.5px;color:var(--muted);margin-top:4px}
   .plan-satz{font-size:13.5px;line-height:1.5;font-weight:500;color:var(--text);
@@ -235,7 +258,7 @@
   .plan-pers{font-size:12px;color:var(--dusk);margin:-6px 0 12px;padding-left:2px}
   .plan-sec{margin-top:12px}
   .plan-sec h4{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dusk);margin-bottom:5px}
-  .plan-f{display:flex;align-items:center;gap:8px;padding:3px 0;font-size:12.5px}
+  .plan-f{display:flex;align-items:center;gap:var(--space-2);padding:3px 0;font-size:12.5px}
   /* Balken statt nackter Zahl: zeigt die relative Staerke des Grundes, ohne wie Debug-Output
      zu wirken - die Reihenfolge (schon sortiert) plus die Balkenlaenge sagen dasselbe wie
      vorher die Dezimalzahl, nur lesbarer. */
@@ -250,12 +273,13 @@
   .plan-rangliste summary{font-size:11.5px;color:var(--dusk);cursor:pointer;padding:4px 0;list-style:revert}
   .plan-rangliste .plan-alt{padding-left:6px}
   .fsbtn{position:absolute;z-index:500;display:flex;align-items:center;justify-content:center;
-    width:40px;height:40px;border-radius:11px;border:1px solid var(--shoal);
+    width:44px;height:44px;border-radius:var(--radius-md);border:1px solid var(--shoal);
     background:rgba(22,50,60,.86);color:var(--text);cursor:pointer;
-    backdrop-filter:blur(3px);
+    backdrop-filter:blur(6px);box-shadow:var(--shadow-sm);
     top:calc(12px + env(safe-area-inset-top));
     right:calc(12px + env(safe-area-inset-right))}
   .fsbtn:hover{background:rgba(22,50,60,.96)}
+  .fsbtn:active{transform:scale(.94)}
   .fsbtn .ic{width:18px;height:18px}
 
   /* --- Vollbildmodus: Header, Tabs und Saison-Leiste weichen --- */
@@ -280,11 +304,19 @@
   #saisonInfo{position:fixed;top:calc(54px + env(safe-area-inset-top));right:12px;z-index:600;
     width:min(320px,calc(100vw - 24px));max-height:60dvh;overflow-y:auto;
     background:rgba(16,38,45,.97);border:1px solid var(--shoal);border-radius:12px;
-    box-shadow:0 12px 30px rgba(0,0,0,.5);padding:12px 14px;font-size:12.5px;line-height:1.5;color:var(--muted)}
+    box-shadow:var(--shadow-lg);padding:12px 14px;font-size:12.5px;line-height:1.5;color:var(--muted)}
   #saisonInfo b{color:var(--text)}
   #saisonInfo .jz{font-weight:700;color:var(--dusk)}
   #saisonInfo .quelle{margin-top:6px;font-size:11px;opacity:.8}
   .pin-fokus svg{filter:drop-shadow(0 0 5px rgba(166,212,232,.95))}
+  /* Leichtes Hover-/Tap-Feedback auf Marken - wichtig: die Skalierung sitzt auf dem inneren
+     SVG, nicht auf .spot-pin selbst, weil Leaflet .spot-pin per Inline-Style positioniert
+     (transform:translate3d) - eine eigene transform-Regel dort würde die Positionierung
+     überschreiben statt sie zu ergänzen. */
+  .spot-pin svg{transition:transform .12s ease;transform-origin:50% 100%}
+  .spot-pin:hover svg{transform:scale(1.1)}
+  .spot-pin:active svg{transform:scale(.92)}
+  @media(prefers-reduced-motion:reduce){ .spot-pin svg{transition:none} }
   #sperrWarn{flex:0 0 auto;background:#4a201a;border-bottom:1px solid #7a3527;color:#ffd0c4;
     font-size:12px;padding:8px 14px;line-height:1.4}
   #sperrWarn b{color:#ffb3a0}
@@ -293,13 +325,13 @@
   .marker-cluster-small,.marker-cluster-medium,.marker-cluster-large{background:rgba(124,77,255,.3)}
   .marker-cluster-small div,.marker-cluster-medium div,.marker-cluster-large div{background:#7c4dff;color:#fff;border:2px solid #fff}
   .marker-cluster div{font-family:'Space Mono',monospace;font-weight:700}
-  .marker-cluster{box-shadow:0 2px 12px rgba(0,0,0,.6)}
+  .marker-cluster{box-shadow:var(--shadow-sm)}
   .legende{position:absolute;left:12px;bottom:calc(46px + 30px);z-index:500;font-size:11.5px}
   .leg-toggle{background:rgba(16,38,45,.92);color:var(--text);border:1px solid var(--shoal);border-radius:var(--radius-md);
-    padding:7px 11px;font-weight:700;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.45)}
+    padding:7px 11px;font-weight:700;cursor:pointer;box-shadow:var(--shadow-sm);backdrop-filter:blur(6px)}
   .leg-body{position:absolute;left:0;bottom:100%;margin-bottom:7px;background:rgba(16,38,45,.96);border:1px solid var(--shoal);border-radius:var(--radius-md);
-    padding:8px 11px;box-shadow:0 4px 16px rgba(0,0,0,.5);max-width:230px;white-space:nowrap}
-  .leg-row{display:flex;align-items:center;gap:8px;padding:2px 0;color:var(--muted);line-height:1.3}
+    padding:8px 11px;box-shadow:var(--shadow-md);max-width:230px;white-space:nowrap;backdrop-filter:blur(6px)}
+  .leg-row{display:flex;align-items:center;gap:var(--space-2);padding:2px 0;color:var(--muted);line-height:1.3}
   .leg-dot{width:12px;height:12px;border-radius:50%;flex:0 0 auto;border:1.5px solid #fff}
   .leg-cluster{width:17px;height:17px;border-radius:50%;background:#7c4dff;border:2px solid #fff;
     display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;flex:0 0 auto}
@@ -325,7 +357,7 @@
     width:48px;height:48px;border-radius:50%;font-size:0;
     background:#f4faf9;color:#16323c;border:1px solid rgba(0,0,0,.15);
     display:flex;align-items:center;justify-content:center;
-    cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.45);
+    cursor:pointer;box-shadow:var(--shadow-md);transition:transform .12s ease,background .15s;
   }
   .locbtn svg,.locbtn .ic{width:24px;height:24px}
   .locbtn.active{background:var(--dusk);color:#0d3540}
@@ -334,7 +366,7 @@
     width:44px;height:44px;border-radius:50%;font-size:0;
     background:rgba(18,40,47,.94);color:#eaf6ff;border:1px solid var(--shoal);
     display:flex;align-items:center;justify-content:center;cursor:pointer;
-    box-shadow:0 4px 16px rgba(0,0,0,.45);backdrop-filter:blur(6px)}
+    box-shadow:var(--shadow-md);backdrop-filter:blur(6px);transition:transform .12s ease}
   .toolsfab svg,.toolsfab .ic{width:21px;height:21px}
   .toolsfab:active{transform:scale(.94)}
 
@@ -342,8 +374,12 @@
     display:flex;flex-direction:column;transition:max-height .25s ease;flex-shrink:0}
   .sheet.collapsed{max-height:46px}
   .sheet.collapsed .spot-list{display:none}
-  .sheet-handle{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;
+  .sheet-handle{position:relative;display:flex;align-items:center;justify-content:space-between;padding:16px 14px 10px;
     cursor:pointer;flex-shrink:0;user-select:none}
+  /* Grip-Griff: übliche Bottom-Sheet-Affordanz, macht "hier ziehen/tippen" auf den ersten
+     Blick erkennbar statt nur über den kleinen Pfeil rechts. */
+  .sheet-handle::before{content:'';position:absolute;top:6px;left:50%;transform:translateX(-50%);
+    width:32px;height:4px;border-radius:var(--radius-full);background:var(--shoal);opacity:.7}
   .sheet-handle h2{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--dusk);font-weight:600}
   .sheet-handle .arrow{color:var(--muted);font-size:12px;transition:transform .25s}
   .sheet.collapsed .arrow{transform:rotate(180deg)}
@@ -363,7 +399,20 @@
 
   /* Popup */
   .leaflet-popup-content-wrapper{background:var(--paper);color:var(--ink);border-radius:var(--radius-md);
-    box-shadow:0 6px 22px rgba(0,0,0,.5)}
+    /* Zweischichtiger Schatten (enger Kontaktschatten + weiter weicher Streuschatten) wirkt
+       ruhiger/hochwertiger als ein einzelner harter Schatten. */
+    box-shadow:0 2px 6px rgba(8,24,28,.28),var(--shadow-lg)}
+  .leaflet-popup{animation:popIn .18s cubic-bezier(.2,.8,.3,1.1)}
+  @keyframes popIn{from{opacity:0;transform:translateY(6px) scale(.98)}to{opacity:1;transform:none}}
+  @media(prefers-reduced-motion:reduce){ .leaflet-popup{animation:none} }
+  /* Schließen-Kreuz war nur ein nacktes "×" ohne Trefferfläche/Feedback - jetzt ein runder
+     Button wie die übrigen Icon-Buttons der App (#menuClose, .plan-x). */
+  .leaflet-popup-close-button{
+    width:28px!important;height:28px!important;display:flex!important;
+    align-items:center;justify-content:center;border-radius:50%!important;
+    top:8px!important;right:8px!important;transition:background .15s;
+  }
+  .leaflet-popup-close-button:hover{background:rgba(35,79,91,.1)}
   .leaflet-popup-content{margin:14px 16px;line-height:1.45;min-width:230px}
   .leaflet-popup-tip{background:var(--paper)}
   .pop-cat{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
@@ -418,6 +467,15 @@
   .rate-art{font-weight:700;font-size:13px;color:var(--ink);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .rate-proz{font-family:'Space Mono',monospace;font-size:12.5px;font-weight:700;color:var(--ink);text-align:right;white-space:nowrap}
   .rate-proz.zu{color:#b23b30;font-size:11.5px}
+  /* Kompakter Fortschrittsring neben der Prozentzahl - reine CSS-Ableitung aus --pct,
+     kein SVG nötig: conic-gradient für den Bogen, radial-gradient-Maske schneidet die
+     Mitte raus (macht aus dem gefüllten Kreis einen Ring). */
+  .rate-ring{
+    --pct:0;width:20px;height:20px;border-radius:50%;flex:0 0 auto;
+    background:conic-gradient(var(--dusk) calc(var(--pct)*1%),rgba(35,79,91,.15) 0);
+    -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 calc(100% - 3px));
+    mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 calc(100% - 3px));
+  }
   .rate-body{padding:2px 0 8px 4px}
   .rate-g{font-size:12px;line-height:1.45;padding:1.5px 0}
   .rate-g.ja{color:#1c6138}
@@ -445,7 +503,7 @@
   .tk-grp{margin-bottom:4px}
   .tk-grp-h{font-size:11px;font-weight:800;letter-spacing:.02em;color:#16323c;margin:9px 0 5px;display:flex;align-items:center;gap:5px}
   .tk-grp:first-child .tk-grp-h{margin-top:0}
-  .tk-row{display:grid;grid-template-columns:72px 1fr;gap:8px;padding:2.5px 0;font-size:12px;line-height:1.4}
+  .tk-row{display:grid;grid-template-columns:72px 1fr;gap:var(--space-2);padding:2.5px 0;font-size:12px;line-height:1.4}
   .tk-row .k{font-weight:700;color:#16323c}
   .tk-free{font-size:11.5px;color:#3a5058;line-height:1.45;padding:6px 0 1px;margin-top:5px;border-top:1px solid #d7e3e0}
   .tk-free b{color:#16323c}
@@ -489,7 +547,7 @@
   /* ===== Fangbuch ===== */
   .fb-form{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-md);padding:13px;margin-bottom:12px}
   .fb-form h3{font-family:"Lato","Segoe UI",Calibri,sans-serif;font-weight:700;font-size:16px;margin-bottom:10px;color:#f4faf9}
-  .fb-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .fb-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-2)}
   .fb-grid .full{grid-column:1/-1}
   label{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
   input,select{width:100%;background:var(--panel-2);border:1px solid var(--line);border-radius:7px;
@@ -504,8 +562,19 @@
   .fb-entry .sub{font-size:11px;color:var(--muted)}
   .fb-del{background:none;border:0;color:var(--muted);cursor:pointer;padding:6px;display:inline-flex;align-items:center}
   .fb-del .ic,.fb-edit .ic{width:16px;height:16px}
-  .fb-empty{text-align:center;color:var(--muted);font-size:13px;padding:24px 10px;line-height:1.5}
-  .fb-status{font-size:11px;color:var(--muted);text-align:center;margin-top:8px}
+  /* Einheitliches Empty-State-Bild (Fangbuch, Trip-Liste, Spotliste ohne Treffer): dezenter
+     Kreis als visueller Anker statt reiner Fließtext - macht "hier ist noch nichts" auf den
+     ersten Blick erkennbar statt wie eine Fehlermeldung zu wirken. */
+  .fb-empty{text-align:center;color:var(--muted);font-size:13px;padding:28px 16px;line-height:1.55}
+  .fb-empty::before{content:'';display:block;width:40px;height:40px;margin:0 auto 12px;border-radius:50%;
+    background:radial-gradient(circle,rgba(166,212,232,.16),rgba(166,212,232,.04));border:1px solid rgba(166,212,232,.25)}
+  .fb-empty b{color:var(--text)}
+  /* Toast-artige Pille statt reinem Fließtext für Speicher-/Import-Rückmeldungen -
+     hebt sich sichtbar vom umgebenden Text ab, ohne ein eigenes Popup-System zu brauchen. */
+  .fb-status{font-size:11px;color:var(--muted);text-align:center;margin:10px auto 0;
+    background:rgba(22,50,60,.4);border:1px solid var(--line);border-radius:var(--radius-full);
+    padding:6px 12px;width:fit-content}
+  .fb-status:empty{display:none;padding:0;margin:0;border:0}
   .fbcheck{border-radius:8px;padding:9px 11px;font-size:12.5px;line-height:1.5;margin-top:2px}
   .fbcheck.ok{background:rgba(124,201,143,.14);color:#a8dcae;border:1px solid rgba(124,201,143,.25)}
   .fbcheck.bad{background:rgba(214,69,69,.16);color:#f0b6a8;font-weight:600;border:1px solid rgba(214,69,69,.3)}
@@ -517,7 +586,7 @@
      genau wissen will, klappt auf; die Transparenz bleibt (nur einen Klick weiter). */
   .rate-verif-toggle{margin-top:8px}
   .rate-verif-toggle summary{cursor:pointer;list-style:none;font-size:10.5px;color:var(--muted);
-    font-weight:600;display:flex;align-items:center;gap:4px}
+    font-weight:600;display:flex;align-items:center;gap:var(--space-1)}
   .rate-verif-toggle summary::-webkit-details-marker{display:none}
   .rate-verif-toggle summary::after{content:'\203A';margin-left:2px;font-weight:400}
   .rate-verif-toggle[open] summary::after{content:'–'}
@@ -526,7 +595,7 @@
   .mydlg h3 .ic{width:1em;height:1em;vertical-align:-.1em;margin-right:5px;color:var(--dusk)}
   .sun .ic{width:13px;height:13px;vertical-align:-.15em;color:var(--dusk)}
   #wxline .ic{width:13px;height:13px;vertical-align:-.15em;color:var(--dusk)}
-  .calrow{display:flex;align-items:center;gap:8px;margin:4px 0;font-size:11px}
+  .calrow{display:flex;align-items:center;gap:var(--space-2);margin:4px 0;font-size:11px}
   .calrow .cfish{min-width:74px;color:var(--text)}
   .calbar{flex:1;display:flex;height:14px;border-radius:4px;overflow:hidden;border:1px solid var(--line)}
   .calbar .m{flex:1;border-right:1px solid rgba(0,0,0,.25)}
@@ -543,18 +612,26 @@
   .fbtool{flex:1;border:1px solid var(--line);background:var(--panel-2);color:var(--text);border-radius:8px;padding:9px;font-size:12.5px;cursor:pointer}
   .insight{background:var(--panel-2);border:1px solid var(--line);border-radius:var(--radius-md);padding:12px;margin-top:10px;font-size:12.5px;line-height:1.6}
   .insight h4{font-family:"Lato","Segoe UI",Calibri,sans-serif;font-weight:700;font-size:14px;margin-bottom:7px;color:#f4faf9}
-  .insight .bar{display:flex;align-items:center;gap:8px;margin:3px 0}
+  .insight .bar{display:flex;align-items:center;gap:var(--space-2);margin:3px 0}
   .insight .bar span:first-child{min-width:92px;color:var(--muted)}
   .insight .barfill{height:9px;background:var(--forelle);border-radius:5px;min-width:3px}
 
-  .mydlg-wrap{position:fixed;inset:0;background:rgba(6,16,18,.72);z-index:1200;display:flex;align-items:center;justify-content:center;padding:20px}
+  .mydlg-wrap{position:fixed;inset:0;background:rgba(6,16,18,.72);z-index:1200;display:flex;align-items:center;justify-content:center;padding:20px;
+    animation:dlgBackdrop .16s ease}
   .mydlg-wrap[hidden]{display:none!important}
+  /* Dialoge blendeten bisher hart ein/aus (display:none <-> flex) - ein sanftes Eintreten
+     wirkt weniger abrupt. Wirkt auf den direkten Kindknoten, egal ob .mydlg/.plan-card/
+     .detail-card, damit alle Dialogvarianten denselben Effekt bekommen. */
+  .mydlg-wrap>*{animation:dlgIn .2s cubic-bezier(.2,.8,.3,1.1)}
+  @keyframes dlgBackdrop{from{opacity:0}to{opacity:1}}
+  @keyframes dlgIn{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}
+  @media(prefers-reduced-motion:reduce){ .mydlg-wrap,.mydlg-wrap>*{animation:none} }
   .mydlg{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;width:100%;max-width:380px}
   .mydlg h3{font-family:"Lato","Segoe UI",Calibri,sans-serif;font-weight:700;font-size:17px;margin-bottom:10px;color:#f4faf9}
-  .mydlg-btns{display:flex;gap:8px;margin-top:14px}
+  .mydlg-btns{display:flex;gap:var(--space-2);margin-top:14px}
   .mydlg-btns button{flex:1;border:1px solid var(--line);border-radius:8px;padding:11px;font-size:14px;font-weight:700;cursor:pointer;background:var(--panel-2);color:var(--text)}
   .mydlg-btns .ghost{background:var(--panel-2);color:var(--text);border:1px solid var(--line)}
-  .mydlg-btns .primary{background:var(--forelle);color:#3a2f10;border:0}
+  .mydlg-btns .primary{background:linear-gradient(180deg,#eaad48,#e8a33d);color:#3a2f10;border:0;box-shadow:0 2px 10px rgba(232,163,61,.35)}
 
   /* Fade-Hinweis am oberen/unteren Rand scrollbarer Dialog-Inhalte: dieselbe Opacity-Masken-
      Technik wie bei den Chip-Reihen (chipsFadeInit), nur vertikal. Klassen fade-t/fade-b
@@ -567,7 +644,7 @@
   /* Vollbild-Panel für Tackle / Gewässer & Methode – Atemraum links/rechts, Leaflet-Logo bleibt hinter dem Panel */
   #detailSheet{align-items:stretch;padding:0}
   .detail-card{background:var(--paper);width:100%;max-width:520px;margin:0 auto;height:100dvh;display:flex;flex-direction:column}
-  .detail-head{display:flex;align-items:center;gap:8px;padding:calc(14px + env(safe-area-inset-top)) 16px 12px;
+  .detail-head{display:flex;align-items:center;gap:var(--space-2);padding:calc(14px + env(safe-area-inset-top)) 16px 12px;
     background:var(--panel);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:2}
   .detail-head h3{flex:1;font-family:"Lato","Segoe UI",Calibri,sans-serif;font-weight:800;font-size:16px;color:#f4faf9;margin:0}
   .detail-body{flex:1;overflow-y:auto;padding:14px 16px calc(20px + env(safe-area-inset-bottom));background:var(--paper);color:var(--ink)}
@@ -578,7 +655,7 @@
   #planDlg{align-items:stretch;padding:0}
   .plan-card{background:var(--panel);width:100%;max-width:520px;margin:0 auto;height:100dvh;
     display:flex;flex-direction:column;border-left:1px solid var(--line);border-right:1px solid var(--line)}
-  .plan-head{display:flex;align-items:center;gap:8px;padding:14px 16px 10px}
+  .plan-head{display:flex;align-items:center;gap:var(--space-2);padding:14px 16px 10px}
   .plan-head h3{flex:1;margin:0;font-family:"Lato","Segoe UI",Calibri,sans-serif;font-weight:700;font-size:17px;color:#f4faf9}
   .plan-head h3 .ic{width:1em;height:1em;vertical-align:-.1em;margin-right:5px;color:var(--dusk)}
   .plan-x{background:none;border:0;color:var(--muted);font-size:20px;line-height:1;cursor:pointer;padding:4px 8px;border-radius:8px}
@@ -603,8 +680,8 @@
     border:1px solid var(--line);font-size:12.5px;color:var(--dusk)}
   .plan-fenster b{color:#eaf6ff}
   .plan-foot{padding:10px 14px;border-top:1px solid var(--line)}
-  .plan-foot button{width:100%;border:0;border-radius:9px;padding:12px;font-size:14px;font-weight:800;
-    cursor:pointer;background:#e8a33d;color:#2a2008;box-shadow:0 2px 8px rgba(232,163,61,.4)}
+  .plan-foot button{width:100%;border:0;border-radius:var(--radius-md);padding:12px;font-size:14px;font-weight:800;
+    cursor:pointer;background:linear-gradient(180deg,#eaad48,#e8a33d);color:#2a2008;box-shadow:0 2px 10px rgba(232,163,61,.4)}
   .plan-foot button[hidden]{display:none}
   footer{grid-row:6;background:rgba(18,40,47,.94);border-top:1px solid var(--shoal);
     padding:7px 14px calc(7px + env(safe-area-inset-bottom));font-size:11px;color:#a7bcc2;letter-spacing:.01em}
@@ -621,7 +698,7 @@
     #map{flex:1;min-height:0;height:auto}
     .sheet{position:absolute;top:auto;right:14px;bottom:14px;width:320px;
       max-height:calc(100% - 28px);border:1px solid var(--line);border-radius:var(--radius-lg);
-      box-shadow:0 10px 30px rgba(13,40,48,.4);z-index:500;overflow:hidden}
+      box-shadow:var(--shadow-lg);z-index:500;overflow:hidden}
     .sheet.collapsed{max-height:52px}
     .locbtn{right:calc(320px + 28px);bottom:28px}
     .scrollpane{max-width:720px;margin:0 auto;width:100%}
@@ -629,6 +706,43 @@
   @media(prefers-reduced-motion:reduce){
     .sheet,.sheet-handle .arrow,.tab{transition:none}
   }
+
+  /* Tastile Rückmeldung: bisher hatten nur die zwei Karten-FABs ein Press-Feedback, alle
+     übrigen tappbaren Elemente fühlten sich beim Antippen "tot" an. Ein Klick-Frame reicht. */
+  .chip,.tab,.spot-item,.pop-btn,.mydlg-btns button,.fbtool,.menu-item,
+  .fb-share,.fb-edit,.fb-del,.leg-toggle,.region-title{
+    transition:transform .1s ease,background .15s,border-color .15s,opacity .15s,color .15s;
+  }
+  .chip:active,.tab:active,.spot-item:active,.pop-btn:active,.mydlg-btns button:active,
+  .fbtool:active,.menu-item:active,.fb-share:active,.fb-edit:active,.fb-del:active,.leg-toggle:active{
+    transform:scale(.96);
+  }
+  @media(prefers-reduced-motion:reduce){
+    .chip,.tab,.spot-item,.pop-btn,.mydlg-btns button,.fbtool,.menu-item,
+    .fb-share,.fb-edit,.fb-del,.leg-toggle,.region-title{transition:background .15s,border-color .15s,color .15s}
+    .chip:active,.tab:active,.spot-item:active,.pop-btn:active,.mydlg-btns button:active,
+    .fbtool:active,.menu-item:active,.fb-share:active,.fb-edit:active,.fb-del:active,.leg-toggle:active{transform:none}
+  }
+
+  /* Themed Scrollbar (Webkit/Blink) für scrollbare Dialoge & Spotliste statt Browser-Default */
+  .dlg-scroll::-webkit-scrollbar,.spot-list::-webkit-scrollbar,.scrollpane::-webkit-scrollbar{width:8px}
+  .dlg-scroll::-webkit-scrollbar-track,.spot-list::-webkit-scrollbar-track,.scrollpane::-webkit-scrollbar-track{background:transparent}
+  .dlg-scroll::-webkit-scrollbar-thumb,.spot-list::-webkit-scrollbar-thumb,.scrollpane::-webkit-scrollbar-thumb{
+    background:var(--shoal);border-radius:var(--radius-full);border:2px solid transparent;background-clip:padding-box}
+  .dlg-scroll,.spot-list,.scrollpane{scrollbar-width:thin;scrollbar-color:var(--shoal) transparent}
+
+  /* Konsistenter Fokus-Ring: bisher nur an 4 vereinzelten Stellen definiert, Tastaturnutzung
+     verließ sich sonst auf den (teils unsichtbaren) Browser-Default. */
+  .pop-btn:focus-visible,.mydlg-btns button:focus-visible,.fbtool:focus-visible,
+  .menu-item:focus-visible,.spot-item:focus-visible,.fb-share:focus-visible,
+  .fb-edit:focus-visible,.fb-del:focus-visible,.leg-toggle:focus-visible,
+  input:focus-visible,select:focus-visible,textarea:focus-visible{
+    outline:2px solid var(--dusk);outline-offset:2px;
+  }
+
+  /* Eingabefelder: sanfter Fokus statt hartem Farbsprung */
+  input,select,textarea{transition:border-color .15s,box-shadow .15s}
+  input:focus,select:focus,textarea:focus{border-color:var(--dusk);box-shadow:0 0 0 3px rgba(166,212,232,.18)}
 </style>
 </head>
 <body>
@@ -753,7 +867,7 @@
       </div>
       <button class="fb-save" id="fbSave">Fang speichern</button>
       <div class="fb-status" id="fbStatus"></div>
-    <div id="fbTools" style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap"></div>
+    <div id="fbTools" style="display:flex;gap:var(--space-2);margin-top:8px;flex-wrap:wrap"></div>
     <input id="fbFile" type="file" accept="application/json,.json" hidden>
     <div id="fbInsights"></div>
     </div>

@@ -492,6 +492,7 @@ export function ratingHtml(s, hotspot = null) {
            weiter unten zu "keine zwei Prozentwerte fuer dieselbe Sache"). */
         const kopf = `<summary class="rate-kopf">
         <span class="rate-art">${esc(b.art)}</span>
+        ${b.geschont ? '' : `<span class="rate-ring" style="--pct:${b.prozent}" aria-hidden="true"></span>`}
         <span class="rate-proz${b.geschont ? ' zu' : ''}">${b.geschont ? 'geschont' : b.prozent + '\u202F%'}</span>
       </summary>`;
         /* Progressive Disclosure: bekannte Signale zeigen, Qualitäts-Metadaten (fehlende Signale +

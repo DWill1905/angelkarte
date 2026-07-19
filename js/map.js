@@ -560,7 +560,7 @@ export async function openOffline() {
         offlineAbort.abort(); // ein evtl. noch laufender vorheriger Versuch
     offlineAbort = new AbortController();
     const mySignal = offlineAbort.signal;
-    body.innerHTML = '<p style="color:var(--muted)">Sichere den aktuellen Kartenausschnitt (aktuelle + eine tiefere Zoomstufe) für die Offline-Nutzung …</p><p id="offProg" style="font-family:\'Space Mono\',monospace;margin-top:8px">0 %</p>';
+    body.innerHTML = '<p style="color:var(--muted)">Sichere den aktuellen Kartenausschnitt (aktuelle + eine tiefere Zoomstufe) für die Offline-Nutzung …</p><p id="offProg" class="loading-pulse" style="font-family:\'Space Mono\',monospace;margin-top:8px">0 %</p>';
     const prog = (d, t) => { const el = byId('offProg'); if (el)
         el.textContent = Math.round(d / t * 100) + ' %  (' + d + '/' + t + ' Kacheln)'; };
     const res = await cacheViewport(prog, mySignal);

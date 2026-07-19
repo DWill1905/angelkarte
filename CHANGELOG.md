@@ -1,5 +1,43 @@
 # Changelog
 
+## SW v132 – 2026-07-19
+
+### Changed
+- **UI-Modernisierung: 20 Design-/Motion-Verbesserungen.** Reine Optik, keine
+  Funktionsänderung – alle 441 Tests unverändert grün, da nur CSS und rein präsentative
+  Zusatzmarkup (Fortschrittsring, Grip-Griff) angefasst wurden:
+  1. Elevation-Tokens (`--shadow-sm/md/lg/xl`) statt Ad-hoc-Schatten, auf Dialoge, Popup,
+     FABs, Sheet-Panel, Marker-Cluster, Legende angewendet
+  2. Dialoge blenden jetzt sanft ein (Fade+Scale) statt hart umzuschalten
+  3. Tastile `:active`-Rückmeldung (Press-Scale) auf Chips, Tabs, Buttons, Listeneinträgen
+  4. Tableiste (Karte/Regeln/Fangbuch) als Segmented Control mit gefüllter aktiver Pille
+     statt Underline
+  5. Kompakter Fortschrittsring neben der Chancen-Prozentzahl (reines CSS, `conic-gradient`
+     + Masken-Trick, aus `--pct` abgeleitet)
+  6. Themed Scrollbar für Dialoge und Spotliste statt Browser-Default
+  7. Konsistenter Fokus-Ring auf allen interaktiven Elementen (vorher nur 4 vereinzelte
+     Stellen)
+  8. Grip-Griff am Sheet-Handle (übliche Bottom-Sheet-Affordanz)
+  9. Zweischichtiger, weicherer Popup-Schatten + sanftes Eintreten
+  10. Sanfter Fokus-Glow auf Eingabefeldern/Selects
+  11. Kleiner Feder-Bounce beim Auswählen eines Fischart-Chips
+  12. Einheitliches Empty-State-Bild (Kreis-Anker) für Fangbuch, Trip-Liste, Spotliste ohne
+     Treffer
+  13. Speicher-/Import-Rückmeldungen als Pille statt reinem Fließtext
+  14. Lade-Puls (vom Wetter-Chip) auch für den Offline-Karten-Fortschritt
+  15. Sanftes Einblenden beim Wechsel zwischen Karte/Regeln/Fangbuch
+  16. Spacing-Tokens (`--space-1..6`) eingeführt, auf die häufigsten exakten `gap`-Treffer
+     angewendet (wie bei den Radius-Tokens: Migration der übrigen Werte als Folge-Schritt)
+  17. Amber-CTAs (Fang speichern, primäre Dialog-Buttons, Tagesplan-CTA) mit Gradient/Glow
+     vereinheitlicht
+  18. Leichte Hover-/Tap-Skalierung auf Karten-Markern (sitzt bewusst auf dem inneren SVG,
+     nicht auf dem von Leaflet positionierten Element)
+  19. Popup-Schließen-Kreuz als runder Button mit echter Trefferfläche statt nacktem "×"
+  20. Schwebende Werkzeugleiste (Standort/Vollbild/Werkzeuge/Legende) auf einheitliche
+     Größe (44px), Schatten und Blur vereinheitlicht – Vollbild-Button war zuvor mit 40px
+     unter dem Touch-Ziel-Minimum
+  Alles respektiert `prefers-reduced-motion`.
+
 ## SW v131 – 2026-07-19
 
 ### Fixed

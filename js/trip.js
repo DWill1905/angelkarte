@@ -131,7 +131,7 @@ function renderRoute() {
 export function openTrip() {
     const body = byId('tripBody');
     if (!state.trip.length) {
-        body.innerHTML = '<p>Noch keine Spots vorgemerkt.</p><p style="color:var(--muted);margin-top:8px;font-size:12px">Tippe in einem Spot-Popup auf <b>☆ Merken</b>, um ihn hier zu sammeln – z.B. für die Tagesplanung.</p>';
+        body.innerHTML = '<div class="fb-empty">Noch keine Spots vorgemerkt.<br>Tippe in einem Spot-Popup auf <b>☆ Merken</b>, um ihn hier zu sammeln – z.B. für die Tagesplanung.</div>';
         tripDlg.hidden = false;
         return;
     }
