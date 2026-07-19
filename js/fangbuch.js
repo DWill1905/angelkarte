@@ -38,13 +38,17 @@ export const ANDERES = 'Anderes Gewässer';
 export const SONSTIGE = 'Sonstige';
 export function syncFbSpotAnd() {
     const wrap = byId('fbSpotAndWrap');
+    const an = fbSpotSel.value === ANDERES;
     if (wrap)
-        wrap.hidden = fbSpotSel.value !== ANDERES;
+        wrap.hidden = !an;
+    inputById('fbSpotAnd').required = an;
 }
 export function syncFbFischAnd() {
     const wrap = byId('fbFischAndWrap');
+    const an = fbFischSel.value === SONSTIGE;
     if (wrap)
-        wrap.hidden = fbFischSel.value !== SONSTIGE;
+        wrap.hidden = !an;
+    inputById('fbFischAnd').required = an;
 }
 /** Bei "Sonstige" + ausgefülltem Freitext zählt der eingetippte Artname - so greift z.B.
     die Schonzeit-Prüfung unten auch dann, wenn die Region für die getippte Art (die im
@@ -645,6 +649,18 @@ byId('fbSave').onclick = async () => {
         return;
     state.fbSaving = true;
     try {
+        /* "Sonstige"/"Anderes Gewässer" ohne ausgefuellten Freitext wuerden sonst als
+           woertlicher Platzhalter-Wert gespeichert - genau die Falle, die das Freitextfeld
+           eigentlich vermeiden soll. Kein <form>, daher manuelle Pruefung wie bei myTiefe. */
+        const fischAndEl = inputById('fbFischAnd'), spotAndEl = inputById('fbSpotAnd');
+        if (!fischAndEl.checkValidity()) {
+            fischAndEl.reportValidity();
+            return;
+        }
+        if (!spotAndEl.checkValidity()) {
+            spotAndEl.reportValidity();
+            return;
+        }
         await fbReady; /* verhindert, dass fbLoad einen frischen Eintrag überschreibt */
         const fisch = fbFischWert();
         let laenge = parseInt(inputById('fbLaenge').value, 10);

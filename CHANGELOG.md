@@ -1,5 +1,22 @@
 # Changelog
 
+## SW v176 – 2026-07-19 (Design-Audit Vorschlag 20/20)
+
+### Fixed
+- **Fangbuch: "Sonstige"/"Anderes Gewässer" ließ sich ohne ausgefüllten Freitext
+  speichern – und landete dann wortwörtlich als Fischart bzw. Gewässername im
+  Eintrag.** Die Freitextfelder aus einem früheren Fund dieses Audits (Vorschlag zur
+  "Dead-End-Auswahl") lösen das Datenverlust-Problem nur, wenn sie auch wirklich
+  ausgefüllt werden – bislang gab es aber keine Prüfung davor: Auswahl "Sonstige"
+  treffen, Freitextfeld leer lassen, direkt speichern (oder Enter drücken) genügte,
+  um genau den nichtssagenden Platzhalterwert zu speichern, den das Freitextfeld
+  eigentlich vermeiden sollte. Behoben mit derselben manuellen Validierung wie beim
+  Tiefe-Feld eigener Spots (kein `<form>` im Markup, daher `required` + `checkValidity()`
+  /`reportValidity()` statt nativem Formular-Submit): Speichern wird blockiert, das
+  leere Feld bekommt Fokus und die native Validierungsmeldung, bis ein Wert eingetragen
+  ist. Per Playwright verifiziert: leer speichern → 0 neue Einträge, Fokus auf dem
+  Freitextfeld; ausgefüllt speichern → Eintrag wird wie erwartet angelegt.
+
 ## SW v175 – 2026-07-19 (Design-Audit Vorschlag 19/20)
 
 ### Fixed
