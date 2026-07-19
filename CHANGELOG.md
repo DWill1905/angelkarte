@@ -1,5 +1,24 @@
 # Changelog
 
+## SW v172 – 2026-07-19 (Design-Audit Vorschlag 16/20)
+
+### Fixed
+- **Ausgewählter Zustand bei Tab-Leiste und Ansicht-Umschalter ("Einfach"/"Pro") war
+  unter Windows-Kontrastmodus nicht mehr vom nicht ausgewählten Zustand zu
+  unterscheiden.** Beide markieren "aktiv" bisher nur über eine eigene Hintergrundfarbe
+  (`--dusk`); forced-colors ersetzt solche Farben durch Systemfarben, die ausgewählte
+  und nicht ausgewählte Elemente auf denselben Ton abbilden können – beim Tab sogar so,
+  dass der ausgewählte Tab (opakes Weiß) vor dem weißen Seitenhintergrund komplett
+  verschwand. Mit den dafür vorgesehenen Systemfarben `Highlight`/`HighlightText`
+  behoben (plus Rand als zweites, hintergrundunabhängiges Signal beim Tab).
+  Zusätzlicher Fund während der Umsetzung: Die erste Fassung des Umschalter-Fixes griff
+  nie, weil ihre `@media(forced-colors:active)`-Regel im CSS *vor* der allgemeinen
+  `.menu-sicht button.on`-Regel stand – bei gleicher Spezifität gewinnt die spätere
+  Regel unabhängig davon, ob ihre Media-Query zutrifft. Behoben, indem die
+  forced-colors-Regel hinter die Basisregel verschoben wurde; per Computed-Style-Check
+  unter `forced-colors:active` verifiziert (ausgewählt: `Highlight`-Hintergrund +
+  `HighlightText`-Text, nicht ausgewählt: unverändert).
+
 ## SW v171 – 2026-07-19 (Design-Audit Vorschlag 15/20)
 
 ### Fixed

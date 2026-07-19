@@ -132,6 +132,13 @@
   }
   .tab:hover{opacity:1;background:rgba(255,255,255,.06)}
   .tab[aria-selected="true"]{color:#0d3540;opacity:1;background:var(--dusk);font-weight:700;box-shadow:var(--shadow-sm)}
+  /* Unter forced-colors verschwimmen viele eigene Hintergrundfarben zu Weiß/Canvas - der
+     ausgewählte Tab wurde von den unausgewählten nicht mehr unterscheidbar. Highlight/
+     HighlightText sind die dafür vorgesehenen Systemfarben (die aktuelle Auswahlfarbe
+     des Nutzers), zusätzlich ein Rand als zweites, hintergrundunabhängiges Signal. */
+  @media(forced-colors:active){
+    .tab[aria-selected="true"]{background:Highlight;color:HighlightText}
+  }
   .tab:focus-visible{outline:2px solid var(--dusk);outline-offset:2px}
 
   .view{display:none;min-height:0;overflow:hidden;grid-row:4;position:relative;flex-direction:column}
@@ -238,6 +245,10 @@
   .menu-sicht button.on{border-color:var(--dusk);background:var(--dusk)}
   .menu-sicht button.on b{color:#0d3540}
   .menu-sicht button.on small{color:rgba(13,53,64,.72)}
+  @media(forced-colors:active){
+    .menu-sicht button.on{background:Highlight;border-color:Highlight}
+    .menu-sicht button.on b,.menu-sicht button.on small{color:HighlightText}
+  }
   .menu-liste{display:flex;flex-direction:column;gap:6px}
   .menu-item{display:flex;align-items:center;gap:9px;background:rgba(22,50,60,.35);
     border:1px solid var(--line);border-radius:9px;padding:10px 12px;color:var(--text);
