@@ -1,5 +1,14 @@
 # Changelog
 
+## SW v169 – 2026-07-19 (Design-Audit Vorschlag 13/20)
+
+### Added
+- **Enter zum Speichern:** Kein `<form>`-Element im ganzen Markup bedeutete, Enter in einem
+  Textfeld (Fangbuch: Länge, Köder, Freitextfelder; eigener Spot: Name, Tiefe, Notiz) tat
+  bisher nichts – jeder Fang/Spot musste per Mausklick/Tap gespeichert werden. Jetzt
+  speichert Enter direkt, ohne die App auf `<form>` umzustellen (kein Risiko für die
+  bestehende, bewusst manuelle Validierungslogik).
+
 ## SW v168 – 2026-07-19 (Design-Audit Vorschlag 12/20)
 
 ### Fixed

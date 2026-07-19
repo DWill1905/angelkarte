@@ -630,6 +630,16 @@ selectById('fbFisch').onchange = () => { syncFbFischAnd(); checkFang(); };
 inputById('fbFischAnd').oninput = checkFang;
 inputById('fbLaenge').oninput = checkFang;
 inputById('fbEntnommen').onchange = checkFang;
+/* Kein <form> im Markup (bewusst, siehe dom.ts) - Enter in einem Textfeld tat bisher
+   nichts, ein Fang ließ sich nur per Klick auf "Fang speichern" abschließen. */
+['fbFischAnd', 'fbLaenge', 'fbSpotAnd', 'fbKoeder'].forEach(id => {
+    const el = inputById(id);
+    if (el)
+        el.addEventListener('keydown', e => { if (e.key === 'Enter') {
+            e.preventDefault();
+            byId('fbSave').click();
+        } });
+});
 byId('fbSave').onclick = async () => {
     if (state.fbSaving)
         return;

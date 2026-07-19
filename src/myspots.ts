@@ -105,6 +105,11 @@ window.delMySpot=async function(id){
 byId('mySave').onclick=saveMySpot;
 byId('myCancel').onclick=closeMyDlg;
 myDlg.addEventListener('click',e=>{if(e.target===myDlg)closeMyDlg();});
+/* Kein <form> im Markup - Enter in einem der drei Felder tat bisher nichts. */
+['myName','myTiefe','myTipp'].forEach(id=>{
+  const el=inputById(id);
+  if(el) el.addEventListener('keydown',e=>{ if((e as KeyboardEvent).key==='Enter'){ e.preventDefault(); saveMySpot(); } });
+});
 state.map.on('contextmenu',e=>{ if(!state.REGION)return; myPending=[e.latlng.lat,e.latlng.lng]; openMyDlg(); });
 /* iOS/Touch: contextmenu feuert bei Long-Press nicht zuverlässig -> eigener Halte-Timer */
 export let lpTimer=null,lpStart=null,lpMoved=false;
