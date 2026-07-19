@@ -612,7 +612,7 @@ export const SPOTS_HE = [
             { name: 'Dillmündung (Dillspitze)', saison: 'ganzjährig', lat: 50.5604, lng: 8.5029, tipp: 'Mündungsbereich der Dill in die Lahn – Strömungskante zieht Barsch, Hecht und Döbel. Streckenende km 13.' },
             { name: 'Auslauf Naunheimer Schleuse', saison: 'ganzjährig', lat: 50.57562, lng: 8.52680, tipp: 'Streckenanfang der ASV-Gaststrecke direkt am Schleusenauslauf – strömungsberuhigte Kanten, Barsch und Hecht.' }
         ], warn: false, zugang: 'ufer' },
-    { name: 'Wißmarer See', wasser: 'see-flach', verif: 'B', nr: 'AC Wißmar · Lahnschleife bei Wettenberg', cat: 'raub',
+    { name: 'Wißmarer See', wasser: 'see-flach', verif: 'B', nr: 'AC Wißmar · Lahnschleife bei Wettenberg', cat: 'raub', keinAnfuettern: true,
         arten: ['Zander', 'Hecht', 'Barsch', 'Aal', 'Karpfen', 'Schleie'],
         lat: 50.64193, lng: 8.69152,
         fisch: 'Zander, Hecht, Barsch, Aal, Karpfen, Schleie, Weißfische',

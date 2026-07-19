@@ -203,4 +203,17 @@ describe('Darstellung im Popup', () => {
     assert.match(html, /Kunstköder/, 'Kunstköder-Sektion fehlt');
     assert.match(html, /Naturköder/, 'Naturköder-Sektion fehlt');
   });
+
+  test('Anfütterverbot am Wißmarer See schlägt auf die Köder-/Montage-Empfehlung durch', async () => {
+    /* Die Spotnotiz sagt explizit "Anfüttern verboten" - das strukturierte Feld keinAnfuettern
+       fehlte trotzdem, wodurch die Tackle-Ableitung für Karpfen/Schleie einen normalen
+       Futterkorb/Method-Feeder empfahl und damit der eigenen Gewässerregel widersprach. */
+    await loadRegion(ctx, 'giessen');
+    const spot = findSpot('giessen', 'Wißmarer See');
+    assert.ok(spot, 'Wißmarer See fehlt in den Testdaten');
+    assert.equal(spot.keinAnfuettern, true);
+    const html = app.popupHtml(spot);
+    assert.match(html, /kein Futterkorb, kein Anfüttern/, 'Montage-Hinweis muss das Anfütterverbot nennen: ' + html);
+    assert.doesNotMatch(html, /Method-Feeder \/ Haar-Rig je nach Zielfisch/, 'darf nicht die normale Futterkorb-Empfehlung zeigen');
+  });
 });

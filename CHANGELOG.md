@@ -1,5 +1,17 @@
 # Changelog
 
+## SW v130 – 2026-07-19
+
+### Fixed
+- **Fachlicher Fix: Anfütterverbot am Wißmarer See (Gießen) war unenforced.** Die Spotnotiz
+  sagt explizit "Anfüttern verboten", das strukturierte Feld `keinAnfuettern` (steuert die
+  Tackle-Ableitung in `tackleHtml()`) war aber nicht gesetzt – die Köder-/Montage-Empfehlung
+  für Karpfen/Schleie schlug trotzdem ganz normal Method-Feeder/Futterkorb vor und
+  widersprach damit der eigenen Gewässerregel. `keinAnfuettern:true` ergänzt; einziger
+  betroffener Spot regionsübergreifend (alle anderen Vorkommen der Regel waren bereits
+  korrekt verdrahtet). Ein neuer Test – die Funktion hatte bisher trotz Verwendung in zwei
+  Modulen (tackle.ts, plan.ts) keine einzige Testabdeckung.
+
 ## SW v129 – 2026-07-19
 
 ### Fixed

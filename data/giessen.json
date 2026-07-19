@@ -213,6 +213,7 @@
    "verif": "B",
    "nr": "AC Wißmar · Lahnschleife bei Wettenberg",
    "cat": "raub",
+   "keinAnfuettern": true,
    "arten": [
     "Zander",
     "Hecht",
