@@ -1,5 +1,16 @@
 # Changelog
 
+## SW v124 – 2026-07-19
+
+### Changed
+- **Design-Audit Phase 1 (2/3): Touch-Ziele auf Mindestgröße angehoben.** Filter-Chips
+  (`.chip`, min-height 32px), die Fischart-Unterzeile (`.chips.sub .chip`, 28px) und die drei
+  Header-Icon-Buttons (`#menuBtn`, `#saisonTip`, `#wxChip`, 38px) lagen unter der
+  WCAG-2.5.5-Empfehlung von 44×44px. Für eine App, die für Einhand-Bedienung am Wasser
+  gedacht ist (Sonnenlicht, nasse/kalte Finger), erhöht das die Fehltipp-Quote unnötig.
+  Haupt-Filter-Chips und Header-Icons jetzt auf 44px, die dichtere Fischart-Unterzeile auf
+  40px als bewusster Kompromiss zwischen Trefferfläche und Zeilenlänge.
+
 ## SW v123 – 2026-07-19
 
 ### Changed

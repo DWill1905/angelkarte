@@ -103,12 +103,12 @@
     mask-image:linear-gradient(to right,transparent,#000 22px,#000 calc(100% - 22px),transparent)}
   .chip{display:flex;align-items:center;gap:6px;white-space:nowrap;font-size:12px;font-weight:500;
     color:var(--text);background:rgba(22,50,60,.6);border:1px solid var(--shoal);border-radius:10px;
-    padding:7px 12px;cursor:pointer;user-select:none;min-height:32px;transition:background .15s,border-color .15s}
+    padding:10px 12px;cursor:pointer;user-select:none;min-height:44px;transition:background .15s,border-color .15s}
   .chip .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
   .chip.off{opacity:.38}
   .chip:focus-visible{outline:2px solid var(--salmo);outline-offset:2px}
   .chips.sub{background:var(--ink);padding-top:6px;padding-bottom:6px;box-shadow:inset 0 4px 6px -4px rgba(0,0,0,.6)}
-  .chips.sub .chip{background:rgba(35,79,91,.4);border-color:var(--dusk);color:#dcebee;min-height:28px;padding:5px 11px}
+  .chips.sub .chip{background:rgba(35,79,91,.4);border-color:var(--dusk);color:#dcebee;min-height:40px;padding:8px 11px}
   .chips.sub .chip.on{background:var(--dusk);border-color:var(--dusk);color:#0d3540;opacity:1;font-weight:700;box-shadow:0 0 0 3px rgba(110,168,196,.2)}
   .chip.gone{display:none}
   .chip.dim{opacity:.4;filter:grayscale(.55)}
@@ -117,11 +117,11 @@
   /* --- Vollbild-Knopf --- */
   /* --- Wetter-Chip im Header --- */
   .hdr-right{position:absolute;top:calc(12px + env(safe-area-inset-top));right:14px;z-index:20;display:flex;align-items:center;gap:8px}
-  #wxChip{display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 12px;
+  #wxChip{display:inline-flex;align-items:center;gap:6px;height:44px;padding:0 12px;
     border-radius:10px;border:1px solid var(--shoal);background:rgba(22,50,60,.55);
     color:var(--text);font-family:'Space Mono',monospace;font-size:12.5px;cursor:pointer;white-space:nowrap}
   #wxChip.warn{border-color:var(--warn);color:#ffd0c4}
-  #saisonTip{width:38px;height:38px;border-radius:10px;border:1px solid var(--shoal);background:rgba(22,50,60,.55);
+  #saisonTip{width:44px;height:44px;border-radius:10px;border:1px solid var(--shoal);background:rgba(22,50,60,.55);
     color:var(--dusk);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex:0 0 auto}
   #saisonTip svg,#saisonTip .ic{width:20px;height:20px}
   #saisonTip[aria-expanded="true"]{background:var(--dusk);color:#0d3540}
@@ -133,7 +133,7 @@
 
   /* --- Hauptmenü --- */
   #menuBtn{position:absolute;top:calc(12px + env(safe-area-inset-top));left:14px;z-index:20;
-    width:38px;height:38px;border-radius:10px;border:1px solid var(--shoal);
+    width:44px;height:44px;border-radius:10px;border:1px solid var(--shoal);
     background:rgba(22,50,60,.55);display:flex;flex-direction:column;justify-content:center;
     align-items:center;gap:4px;cursor:pointer;padding:0}
   #menuBtn span{display:block;width:17px;height:2px;background:var(--text);border-radius:2px}
