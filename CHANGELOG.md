@@ -10,6 +10,25 @@ Die ausführliche technische Historie vor 1.0.0 (jede einzelne der früheren
 `beisszeit-shell-vN`-Versionen mit Ursache, Testabdeckung, betroffenen Dateien) steht
 weiterhin in **[CHANGELOG-ARCHIV.md](CHANGELOG-ARCHIV.md)**.
 
+## [1.5.1] – 2026-07-19
+
+### Geändert
+- **`tiefe`-Feld (Maximaltiefe) für 11 Seen nachgetragen.** Audit zur Tiefenkarten-Frage
+  ergab: eine flächendeckende, freie Tiefenkarten-Datenquelle für kleine deutsche Seen
+  existiert nicht (OpenSeaMap hat hier keine Abdeckung; die einzige echte Landes-WMS,
+  Mecklenburg-Vorpommern, ist lizenzrechtlich nur für private Nutzung freigegeben, nicht
+  für eine öffentliche App einbindbar). Die App hatte aber bereits ein strukturiertes
+  `tiefe`-Feld pro Spot, das Jigkopfgewicht und Rutenwahl mitsteuert (`tackle.ts`, Ström­ungs-
+  Bleiempfehlung in `plan.ts`) – befüllt war es bisher bei keinem der 113+ Spots, obwohl
+  viele Beschreibungen die Tiefe längst im Freitext nannten. Jetzt aus bereits recherchierten,
+  eindeutigen Angaben übernommen: Woblitzsee (7 m), Rätzsee (20 m), Klenzsee (20 m), Eicher
+  See (15 m), VSA Angelsee Heuchelheim (10 m), Dutenhofener See (11,4 m), Wißmarer See
+  (4,3 m), Feringasee (7 m), Langwieder See (8 m), Mittlerer-Isar-Kanal (4 m), Hollerner See
+  (17 m). Talsperre Saidenbach bewusst ausgelassen: die Texterwähnung ("Fische oft bis ~15 m
+  Tiefe") beschreibt den Aufenthaltsbereich der Fische, nicht die tatsächliche Maximaltiefe
+  der Talsperre (die real deutlich tiefer ist) – hier hätte eine falsche Zahl die Jigkopf-
+  Empfehlung eher verfälscht als verbessert.
+
 ## [1.5.0] – 2026-07-19
 
 ### Hinzugefügt

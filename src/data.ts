@@ -248,7 +248,7 @@ export const SCHON_SN: Schonzeit[] = [
 
 /* ============ Region: Mecklenburgische Kleinseenplatte (recherchiert 07/2026) ============ */
 export const SPOTS_MV: Spot[] = [
-  {name:'Woblitzsee',motor:'verbrenner',schleppen:false,wasser:'see-flach',trueb:true,zugang:'ufer',
+  {name:'Woblitzsee',motor:'verbrenner',schleppen:false,wasser:'see-flach',tiefe:7,trueb:true,zugang:'ufer',
     rig:'Stahl- oder Titanvorfach Pflichtprogramm (Hechtdichte!), H-Rute 40–80 g fürs Zanderjiggen, Echolot fürs Boot.',nr:'Obere Havel',cat:'raub',arten:['Hecht','Zander','Barsch','Aal','Karpfen','Schleie','Brachse'],
    lat:53.3001,lng:13.0102,
    fisch:'Hecht, Zander, Barsch, Aal, Karpfen, Schleie, Brachse (14 gemeldete Arten)',
@@ -323,7 +323,7 @@ export const SPOTS_MV: Spot[] = [
    kartenLinks:[{label:'Fischereihof Wesenberg',url:'https://fischerei-wesenberg.de'}],
    tackle:{rute:'Allround-Raubfischrute 20–60 g',koeder:'Gummifische 10–14 cm, Swimbaits; Barsch: 5–8 cm',jig:'10–21 g',vorfach:'Stahl/Titan 40 cm',zugang:'Boot – die fängigen Kanten liegen weit draußen',farben:{fruehjahr:'Naturdekore mit Kontrastpunkt (Barsch, roter Kopf) – klares Nachwinterwasser',sommer:'Naturtöne (Rotauge, Barsch); über Kraut gern Weiß/Perlmutt',herbst:'Kontrastreich (Feuertiger, Orange) – Hechte fressen sich Winterspeck an',winter:'Dezente Naturtöne, kleine Köder, extrem langsam führen'},warum:'Klassisches Kanten-Angeln, Echolot hilft beim Finden der Abbrüche. Entnahmefenster (Hecht 55–85, Zander 55–75 cm): große Fische MÜSSEN zurück – großer Gummikescher, Abhakmatte, Hakenlöser und Einzelhaken-Umbau gehören ins Gepäck.'},
    note:'Ruhiges Revier zwischen Wesenberg und Ahrensberg.',warn:false},
-  {name:'Rätzsee (bei Mirow/Canow)',motor:'elektro',schleppen:false,wasser:'see-tief',zugang:'ufer',verif:'B',
+  {name:'Rätzsee (bei Mirow/Canow)',motor:'elektro',schleppen:false,wasser:'see-tief',tiefe:20,zugang:'ufer',verif:'B',
     rig:'Vom Ufer an den erreichbaren Buchten: Spinnrute mit Stahlvorfach auf Hecht, DropShot auf Barsch; nur E-Motor auf dem Boot erlaubt.',nr:'Obere Havel · Meisterbereich Canow/Mirow',cat:'raub',arten:['Hecht','Zander','Barsch','Aal','Schleie','Karpfen','Wels'],
    lat:53.2870,lng:12.8590,
    fisch:'Hecht, Zander, Barsch, Aal, Schleie, Karpfen, Wels, Weißfisch (Artenangaben teils user-generated)',
@@ -335,7 +335,7 @@ export const SPOTS_MV: Spot[] = [
    hotspots:[
      {name:'Übergang zum Zirtowsee (Nordufer)',saison:'Mai–Okt',lat:53.3010,lng:12.8630,tipp:'Enge Verbindung zum Zirtowsee am Nordufer – Engstellen und Kanäle sind klassische Hecht- und Barschzüge. Vom Ufer bei Zirtow erreichbar. Lage ungefähr.'}
    ],warn:false},
-  {name:'Klenzsee (bei Canow)',motor:'elektro',schleppen:false,wasser:'see-tief',zugang:'boot',verif:'B',
+  {name:'Klenzsee (bei Canow)',motor:'elektro',schleppen:false,wasser:'see-tief',tiefe:20,zugang:'boot',verif:'B',
     rig:'Kräftige Spinn-/Baitcastrute für schwere Hechtköder + Stahlvorfach; Welsrute mit großem Köfi/Tauwurmbündel fürs Welsloch. Nur vom Boot sinnvoll.',nr:'Obere Havel · Meisterbereich Canow',cat:'raub',arten:['Hecht','Zander','Barsch','Wels','Aal','Karpfen','Schleie'],
    lat:53.2760,lng:12.8990,
    fisch:'Hecht, Zander, Barsch, Wels, Aal, Karpfen, Schleie, Weißfisch',
@@ -486,7 +486,7 @@ export const SPOTS_RLP: Spot[] = [
    hotspots:[
      {name:'Treburer Buhnenfeld (km 487–493)',saison:'Jun–Okt bei Normalpegel',lat:49.9550,lng:8.3250,tipp:'6 km Buhnenfeld auf der Nonnenaue – Fahrrad mitnehmen und Kilometer machen, die hinteren Buhnen sehen kaum Angler. Lage ungefähr, hessischer Schein nötig.'}
    ],warn:true},
-  {name:'Eicher See',rlpFruehjahr:true,wasser:'see-tief',zugang:'ufer',nr:'Anglervereinigung Worms',cat:'raub',
+  {name:'Eicher See',rlpFruehjahr:true,wasser:'see-tief',tiefe:15,zugang:'ufer',nr:'Anglervereinigung Worms',cat:'raub',
    schonzeitInfo:'Vereinsbestimmungen der AVW gelten zusätzlich zur FischGDV – Karte genau lesen.',
    arten:['Zander','Hecht','Wels','Barsch','Karpfen','Schleie','Aal','Brachse'],
    lat:49.7646,lng:8.4290,
@@ -600,7 +600,7 @@ export const SPOTS_HE: Spot[] = [
      {name:'Gleibach-Einlauf Launsbach',saison:'Frühjahr/Herbst',lat:50.5910,lng:8.6470,tipp:'Kühleres Zulaufwasser zieht Salmoniden und Weißfisch – Streckenanfang der Gießener Karte (unterhalb A480).'}
    ],warn:false,zugang:'ufer'},
 
-  {name:'VSA Angelsee Heuchelheim',wasser:'see-tief',verif:'B',nr:'VSA Gießen · Lahnpark',cat:'raub',
+  {name:'VSA Angelsee Heuchelheim',wasser:'see-tief',tiefe:10,verif:'B',nr:'VSA Gießen · Lahnpark',cat:'raub',
    arten:['Zander','Hecht','Karpfen','Barsch','Aal'],
    lat:50.56909,lng:8.62285,
    fisch:'Zander, Hecht, Karpfen, Barsch, gute Aale',
@@ -612,7 +612,7 @@ export const SPOTS_HE: Spot[] = [
      {name:'Steilufer Nordseite',saison:'Okt–Mär, Zander',lat:50.5698,lng:8.6232,tipp:'An der tiefen Kante (bis 10 m) mit Gummi/totem Köfi auf Zander; im Winter nur Kunstköder/Köderfisch erlaubt.'}
    ],warn:true,zugang:'ufer'},
 
-  {name:'Dutenhofener See',wasser:'see-tief',verif:'B',
+  {name:'Dutenhofener See',wasser:'see-tief',tiefe:11.4,verif:'B',
    rig:'Boot mit E-Motor/Ruder empfohlen (verkrautetes Ufer). Hechtcombo mit Stahlvorfach, Welszeug für die Nacht, Zandergummi an den Kanten.',nr:'Kiessee · zw. Gießen & Wetzlar',cat:'raub',
    arten:['Hecht','Zander','Wels','Barsch','Karpfen','Aal','Schleie'],
    lat:50.56701,lng:8.61113,
@@ -639,7 +639,7 @@ export const SPOTS_HE: Spot[] = [
      {name:'Auslauf Naunheimer Schleuse',saison:'ganzjährig',lat:50.57562,lng:8.52680,tipp:'Streckenanfang der ASV-Gaststrecke direkt am Schleusenauslauf – strömungsberuhigte Kanten, Barsch und Hecht.'}
    ],warn:false,zugang:'ufer'},
 
-  {name:'Wißmarer See',wasser:'see-flach',verif:'B',nr:'AC Wißmar · Lahnschleife bei Wettenberg',cat:'raub',keinAnfuettern:true,
+  {name:'Wißmarer See',wasser:'see-flach',tiefe:4.3,verif:'B',nr:'AC Wißmar · Lahnschleife bei Wettenberg',cat:'raub',keinAnfuettern:true,
    arten:['Zander','Hecht','Barsch','Aal','Karpfen','Schleie'],
    lat:50.64193,lng:8.69152,
    fisch:'Zander, Hecht, Barsch, Aal, Karpfen, Schleie, Weißfische',
@@ -920,7 +920,7 @@ export const REGION_MA: Region = {id:'main',geprueft:'2026-07',name:'Main / Fran
    Mittlere-Isar-Kanal (Ableitung der Isar am Wehr Oberföhring) plus vier Baggerseen im
    Münchner Norden/Westen – alle mit echten Tageskarten für Nicht-Mitglieder. */
 export const SPOTS_BY: Spot[] = [
-  {name:'Feringasee (Unterföhring)',wasser:'see-tief',verif:'B',nr:'Fischwaid München e.V. · Erlbachstraße',cat:'raub',
+  {name:'Feringasee (Unterföhring)',wasser:'see-tief',tiefe:7,verif:'B',nr:'Fischwaid München e.V. · Erlbachstraße',cat:'raub',
    arten:['Hecht','Zander','Barsch','Karpfen','Schleie','Regenbogenforelle'],
    lat:48.1929,lng:11.6649,
    fisch:'Hecht, Zander, Barsch, Karpfen, Schleie, schnellwüchsige Regenbogenforelle',
@@ -943,7 +943,7 @@ export const SPOTS_BY: Spot[] = [
    ],warn:true,zugang:'ufer',schonzeitInfo:'Hecht hier vereinsseitig ab 60 cm (bayernweit 50 cm) – strengere Vereinsregel gilt vorrangig.',
    schonzeitOverride:[{fisch:'Hecht',von:[2,15],bis:[4,30],mm:'ab 60 cm (Vereinsregel Fischwaid München, bayernweit nur 50 cm)'}]},
 
-  {name:'Langwieder See',wasser:'see-tief',verif:'B',nr:'Versehrten Fischereiverein München e.V. · A8 Ausf. München-Langwied',cat:'raub',
+  {name:'Langwieder See',wasser:'see-tief',tiefe:8,verif:'B',nr:'Versehrten Fischereiverein München e.V. · A8 Ausf. München-Langwied',cat:'raub',
    arten:['Hecht','Zander','Wels','Karpfen','Barsch','Rotauge','Brachse','Schleie','Aal','Regenbogenforelle'],
    lat:48.1825,lng:11.3985,
    fisch:'Hecht, Zander, Wels, Karpfen, Barsch, Rotauge, Brachse, Schleie, Aal, Regenbogenforelle',
@@ -955,7 +955,7 @@ export const SPOTS_BY: Spot[] = [
      {name:'Steg zum Lußsee',saison:'ganzjährig',lat:48.1865,lng:11.3965,tipp:'Der Steg zwischen Lußsee und Langwieder See gilt laut Erfahrungsberichten als eine der besseren Stellen – an der Kante entlang fischen. Nordwestufer zusätzlich mit flacheren Bereichen. Lage ungefähr.'}
    ],warn:true,zugang:'ufer'},
 
-  {name:'Mittlerer-Isar-Kanal (Oberföhring/St. Emmeram)',wasser:'kanal',verif:'B',nr:'Versehrten Fischereiverein München e.V. · Ableitung ab Isarwehr Oberföhring',cat:'salmo',
+  {name:'Mittlerer-Isar-Kanal (Oberföhring/St. Emmeram)',wasser:'kanal',tiefe:4,verif:'B',nr:'Versehrten Fischereiverein München e.V. · Ableitung ab Isarwehr Oberföhring',cat:'salmo',
    arten:['Bachforelle','Regenbogenforelle','Saibling','Barbe','Döbel','Hecht','Barsch','Aal'],
    lat:48.1706,lng:11.6210,
    fisch:'Bachforelle, Regenbogenforelle, Saibling, Barbe, Döbel, dazu Hecht &amp; Barsch, in der Dämmerung Aal',
@@ -967,7 +967,7 @@ export const SPOTS_BY: Spot[] = [
      {name:'Isarwehr Oberföhring (Kanaleinlauf)',saison:'ganzjährig',lat:48.1735,lng:11.6175,tipp:'Direkt am Wehr, wo der Kanal von der Isar abzweigt: Strömungsbruch und zusätzlicher Sauerstoffeintrag ziehen klassisch sowohl Salmoniden als auch Raubfisch an. Lage ungefähr.'}
    ],warn:true,zugang:'ufer'},
 
-  {name:'Hollerner See (Eching)',wasser:'see-tief',verif:'B',nr:'Fischwaid München e.V. &amp; FV Eching · „Am Fretz 1", 85386 Eching',cat:'raub',
+  {name:'Hollerner See (Eching)',wasser:'see-tief',tiefe:17,verif:'B',nr:'Fischwaid München e.V. &amp; FV Eching · „Am Fretz 1", 85386 Eching',cat:'raub',
    arten:['Hecht','Zander','Wels','Karpfen','Schleie','Regenbogenforelle','Seeforelle','Barsch','Aal','Brachse','Döbel'],
    lat:48.3103,lng:11.6255,
    fisch:'Hecht, Zander, Wels, Karpfen, Schleie, Regenbogenforelle, Seeforelle, Renke, Barsch, Aal, Brachse, Döbel',
