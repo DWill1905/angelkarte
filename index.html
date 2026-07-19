@@ -202,6 +202,11 @@
     background:rgba(22,50,60,.55);display:flex;flex-direction:column;justify-content:center;
     align-items:center;gap:var(--space-1);cursor:pointer;padding:0}
   #menuBtn span{display:block;width:17px;height:2px;background:var(--text);border-radius:2px}
+  /* Unter Windows-Kontrastmodus (forced-colors) verwirft der Browser background-color auf
+     "dekorativen" <span>s ohne eigenen Text - die drei Balken des Menü-Icons verschwanden
+     komplett zu einem leeren Quadrat. CanvasText ist das dafür vorgesehene Systemfarb-
+     Schlüsselwort (die aktuelle Vordergrundfarbe des Nutzers). */
+  @media(forced-colors:active){ #menuBtn span{background:CanvasText} }
   header{position:relative;padding-left:64px;padding-right:136px}
   /* Sichtbarkeit über eine Klasse, nicht über das hidden-Attribut: `display:flex` würde
      das Attribut sonst aushebeln, sobald eine Regel ohne !important dazwischenkommt.

@@ -1,5 +1,17 @@
 # Changelog
 
+## SW v170 – 2026-07-19 (Design-Audit Vorschlag 14/20)
+
+### Fixed
+- **Menü-Icon verschwand komplett unter Windows-Kontrastmodus (forced-colors).** Die drei
+  Balken des Hamburger-Icons sind reine `<span>`s mit `background-color` – genau die Art
+  von "dekorativem" Element, das der Browser im Kontrastmodus verwirft, weil er nicht
+  erkennt, dass hier eigentlich sichtbarer Icon-Inhalt gemeint ist. Ergebnis: ein leeres
+  Quadrat statt Menü-Button. Mit `CanvasText` (dem dafür vorgesehenen System-Farb-
+  Schlüsselwort) behoben und tatsächlich unter `forced-colors:active` verifiziert – der
+  Rest der App (Chips, Karten-Buttons, Kartenmarker) übersteht den Kontrastmodus bereits
+  unbeschadet.
+
 ## SW v169 – 2026-07-19 (Design-Audit Vorschlag 13/20)
 
 ### Added
