@@ -10,6 +10,25 @@ Die ausführliche technische Historie vor 1.0.0 (jede einzelne der früheren
 `beisszeit-shell-vN`-Versionen mit Ursache, Testabdeckung, betroffenen Dateien) steht
 weiterhin in **[CHANGELOG-ARCHIV.md](CHANGELOG-ARCHIV.md)**.
 
+## [1.4.1] – 2026-07-19
+
+### Geprüft, keine Fehler gefunden
+- Alle 18 Erzgebirge-Spots inkl. Hotspots und die 33 Stützpunkte der Fluss-Polylinien
+  (Mulde/Flöha) gegen offizielle/unabhängige Quellen geprüft: keine vertauschten
+  Koordinaten, kein falsches Gebiet, alle Werte liegen im erwarteten Gebiet
+  (50,69–51,03° N / 13,1–13,6° O). Einzelne Stichproben (Talsperre Saidenbach,
+  Talsperre Rauschenbach, Großhartmannsdorfer Großteich, Schlüsselteich) zeigen nur
+  die für handplatzierte Pins auf großen Seen übliche Abweichung von 200 m bis 1,1 km
+  zum jeweiligen Referenzpunkt (Damm/Zentrum) – kein Fehler.
+
+### Behoben
+- **Schlüsselteich (Freiberg): echte Gewässernummer C01-110 ergänzt** (bisher nur
+  Platzhalter "AVS") sowie die Lagebeschreibung präzisiert (mitten in der Altstadt,
+  nördlich des Meißner Rings).
+- **Talsperre Rauschenbach: Wasserfläche korrigiert** – bisher "~94 ha" (grob
+  geschätzt), tatsächlich 114,58 ha Gesamtfläche (99,43 ha deutsche + 15,15 ha
+  tschechische Seite).
+
 ## [1.4.0] – 2026-07-19
 
 ### Geändert

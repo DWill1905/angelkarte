@@ -74,7 +74,7 @@ export const SPOTS_SN: Spot[] = [
     methode:'Trinkwassertalsperre mit flach begehbaren Ufern (fast rundum beangelbar): im Frühjahr Hecht im Flachwasser, sonst Abbruchkanten in Wurfweite auf Zander/Barsch suchen, Grund auf Karpfen/Schleie',
     karte:'AVS-Gastkarte + TWT-Belehrung; LVSA-Jahresvollzahler ohne Zusatzerlaubnis. Gewässernummer vor Ort/Verzeichnis prüfen.',
     kartenLinks:[{label:'AVS Sachsen – Gastkarten',url:'https://angeln-sachsen.de/avs/gastangler/gastkarten'}],
-   note:'TWT nahe der tschechischen Grenze (Flöha + Wernsbach gestaut, ~94 ha). Angeln erlaubt AUSSER ~150 m direkt an der Staumauer und der tschechischen Seite. Kein Boot, kein Baden. Flach abfallende, gut begehbare Ufer – eine der zugänglicheren Talsperren der Region. Aktuelle TWT-Bestimmungen beim AVS prüfen.',
+   note:'TWT nahe der tschechischen Grenze (Flöha gestaut, 114,58 ha Gesamtfläche – 99,43 ha auf deutscher, 15,15 ha auf tschechischer Seite). Angeln erlaubt AUSSER ~150 m direkt an der Staumauer und der tschechischen Seite. Kein Boot, kein Baden. Flach abfallende, gut begehbare Ufer – eine der zugänglicheren Talsperren der Region. Aktuelle TWT-Bestimmungen beim AVS prüfen.',
     warn:false
   },
   {
@@ -167,12 +167,12 @@ export const SPOTS_SN: Spot[] = [
   {
     name:'Schlüsselteich (Freiberg)',zugang:'ufer',kkVerbot:{von:[2,1],bis:[4,30]},
     rig:'Feederrute mittel, Method-Körbe, 10er–12er Haken – stadtnah reicht leichtes Gepäck.',
-    arten:['Karpfen','Brachse','Schleie','Aal','Barsch'], nr:'AVS', cat:'fried', lat:50.9226, lng:13.3427,
+    arten:['Karpfen','Brachse','Schleie','Aal','Barsch'], nr:'C01-110', cat:'fried', lat:50.9226, lng:13.3427,
     fisch:'Karpfen, Brachse, Schleie, Aal, Barsch',
     methode:'Feeder & Method Feeder auf Karpfen, Madenbündel auf Brachse',
     karte:'AVS-Erlaubnisschein / Gastkarte',
     kartenLinks:[{label:'AVS Sachsen – Gastkarten',url:'https://angeln-sachsen.de/avs/gastangler/gastkarten'}],
-   note:'Stadtnah und gut erreichbar – solides Friedfischgewässer.',
+   note:'Stadtnah und gut erreichbar – solides Friedfischgewässer. Liegt mitten in der Freiberger Altstadt, nördlich des Meißner Rings.',
     warn:false
   },
     {
