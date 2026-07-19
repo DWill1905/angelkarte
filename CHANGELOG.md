@@ -1,5 +1,14 @@
 # Changelog
 
+## Design-Audit Runde 10/10 – 2026-07-19 (keine Code-Änderung)
+
+Abschließender Audit über alle Ansichten (Karte, Regeln, Fangbuch, alle Dialoge) zusätzlich
+bei 360×740 (schmales Android-Referenzgerät) sowie ein Review aller interaktiven Elemente
+gegen die in Runde 6–9 aufgebauten Hover-/Fokus-/Press-Gruppen: keine Überlappung, kein
+horizontaler Overflow außerhalb der bewusst scrollbaren Chip-Reihen, keine weiteren
+Controls ohne Zustands-Feedback gefunden. Runden 1–9 damit als geschlossen bestätigt –
+diese Runde ehrlich ohne Fix, um keine Änderungen ohne echten Befund zu erzwingen.
+
 ## SW v151 – 2026-07-19 (Design-Audit Runde 9/10)
 
 ### Fixed
