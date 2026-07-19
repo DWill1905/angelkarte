@@ -1,5 +1,13 @@
 # Changelog
 
+## SW v159 – 2026-07-19 (Design-Audit Vorschlag 4/20)
+
+### Added
+- **Manifest-Lücken:** `scope` explizit gesetzt (bisher impliziter Browser-Default) und
+  `categories` ergänzt (hilft manchen Install-Oberflächen bei der Einordnung). `og:image`
+  bekommt zusätzlich `width`/`height`, damit Vorschau-Crawler die quadratische Icon-Grafik
+  korrekt (statt geraten) einbetten.
+
 ## SW v158 – 2026-07-19 (Design-Audit Vorschlag 3/20)
 
 ### Added
