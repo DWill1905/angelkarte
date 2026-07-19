@@ -10,6 +10,17 @@ Die ausführliche technische Historie vor 1.0.0 (jede einzelne der früheren
 `beisszeit-shell-vN`-Versionen mit Ursache, Testabdeckung, betroffenen Dateien) steht
 weiterhin in **[CHANGELOG-ARCHIV.md](CHANGELOG-ARCHIV.md)**.
 
+## [1.3.0] – 2026-07-19
+
+### Hinzugefügt
+- **Konkrete Hotspots für 3 der 5 München-Spots recherchiert und ergänzt:** Einlauf am
+  Kraftwerk (Ismaninger Speichersee, dabei auch Barbe als bislang übersehene Zielart
+  nachgetragen), Steg zum Lußsee (Langwieder See), Isarwehr Oberföhring/Kanaleinlauf
+  (Mittlerer-Isar-Kanal). Für Feringasee und Hollerner See fand sich keine einzelne,
+  ausreichend sicher belegte Stelle – dort stattdessen die recherchierten allgemeinen
+  Struktur-/Zugangshinweise (Tiefe, Kanten, Wasserwacht-Bereich als leichter begehbare
+  Zone) in den Beschreibungstext eingearbeitet, statt eine Koordinate zu erfinden.
+
 ## [1.2.1] – 2026-07-19
 
 ### Behoben

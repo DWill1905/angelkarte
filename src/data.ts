@@ -911,21 +911,23 @@ export const SPOTS_BY: Spot[] = [
    arten:['Hecht','Zander','Barsch','Karpfen','Schleie','Regenbogenforelle'],
    lat:48.1929,lng:11.6649,
    fisch:'Hecht, Zander, Barsch, Karpfen, Schleie, schnellwüchsige Regenbogenforelle',
-   methode:'Ehemaliger Kiessee mit klarem Wasser nordöstlich von München, seit 1980 eines der wichtigsten Gewässer des Vereins. Spinnfischen ist laut Vereinsangaben die erfolgreichste Methode – Hecht ist der Hauptzielfisch, dazu gute Karpfen/Schleien und schnell wachsende Forellen. Lage ungefähr (Zufahrt/Parkplätze nur über die Erlbachstraße).',
+   methode:'Ehemaliger Kiessee mit klarem Wasser nordöstlich von München, seit 1980 eines der wichtigsten Gewässer des Vereins, bis ca. 7 m tief. Spinnfischen ist laut Vereinsangaben die erfolgreichste Methode – Hecht ist der Hauptzielfisch, dazu gute Karpfen/Schleien und schnell wachsende Forellen. Klassische Strukturen wie überall an Baggerseen: Schilfkanten, Seerosenfelder, versunkene Bäume, Stege/Pfähle sowie Buchten/Landzungen sind erste Anlaufstellen – ein einzelner "Über-Hotspot" ist für dieses Gewässer nicht dokumentiert, Fische wechseln je nach Temperatur/Wind. Lage ungefähr (Zufahrt/Parkplätze nur über die Erlbachstraße).',
    karte:'Tageskarte Fischwaid München e.V. – seit 2025 ausschließlich online über hejfish',
    note:'Kein eigener Nachweis einer Nachtangel-Sonderregel gefunden – allgemeine bayerische Regeln gelten, Vereinsordnung vor Ort/online prüfen.',
    kartenLinks:[{label:'hejfish – Fischwaid München',url:'https://www.hejfish.com/m/fischereiverein-fischwaid-muenchen-e-v-2022'},{label:'Verein – Gewässer',url:'https://www.fischwaid-muenchen.de/?page_id=42'}],
    hotspots:[],warn:false,zugang:'ufer'},
 
   {name:'Ismaninger Speichersee',wasser:'see-flach',verif:'B',nr:'Fischwaid München e.V. · zw. Ismaning &amp; Neufinsing',cat:'raub',
-   arten:['Hecht','Zander','Wels','Karpfen','Barsch','Schleie','Brachse','Regenbogenforelle'],
+   arten:['Hecht','Zander','Wels','Karpfen','Barsch','Schleie','Brachse','Barbe','Regenbogenforelle'],
    lat:48.2231,lng:11.7069,
-   fisch:'Hecht, Zander, Wels, Karpfen, Barsch, Schleie, Brachse, Regenbogenforelle (insges. rund 25 nachgewiesene Fischarten)',
+   fisch:'Hecht, Zander, Wels, Karpfen, Barsch, Schleie, Brachse, Barbe (am Kraftwerkseinlauf), Regenbogenforelle (insges. rund 25 nachgewiesene Fischarten)',
    methode:'Mit 5,8 km² der mit Abstand größte Baggersee/Speichersee der Region – flach und weitläufig statt tiefe Kiesgrube. Hecht, Barsch und Karpfen sind laut Vereinsangaben am häufigsten. Lage ungefähr, Koordinate markiert den zugänglichen Bereich nahe Ismaning – nicht das gesamte Gewässer ist befischbar (siehe Hinweis).',
    karte:'Tageskarte Fischwaid München e.V. – seit 2025 ausschließlich online über hejfish',
    note:'⚠ Gastangler dürfen laut Vereinsordnung nur EINE Handangel mit einer Bissanzeige führen, ausschließlich vom Ufer (kein Boot, kein Waten/Wathose). Hecht-Mindestmaß hier vereinsseitig 60 cm statt der bayernweiten 50 cm. EU-Vogelschutzgebiet (Ramsar-Fläche seit 1976, bis zu 100.000 Wasservögel im Sommer) – Betriebsgelände und Vogelschutzzone am Südufer des Westteils sind komplett gesperrt, im Ostteil zeitweise Einschränkungen, Beschilderung beachten. Nachtangeln auf Aal laut Quellenlage bis 1 Uhr erlaubt.',
    kartenLinks:[{label:'hejfish – Fischwaid München',url:'https://www.hejfish.com/m/fischereiverein-fischwaid-muenchen-e-v-2022'},{label:'Verein – Speichersee',url:'https://www.fischwaid-muenchen.de/?page_id=2128'}],
-   hotspots:[],warn:true,zugang:'ufer',schonzeitInfo:'Hecht hier vereinsseitig ab 60 cm (bayernweit 50 cm) – strengere Vereinsregel gilt vorrangig.',
+   hotspots:[
+     {name:'Einlauf am Kraftwerk',saison:'v.a. Herbst, Barbe',lat:48.2245,lng:11.7095,tipp:'Laut mehreren Quellen die bekannteste Stelle am See – Zulauf direkt nach dem Kraftwerk, im Herbst regelmäßig große Barben. Steile Uferböschung: langer Kescher/Seil hilfreich. Lage ungefähr.'}
+   ],warn:true,zugang:'ufer',schonzeitInfo:'Hecht hier vereinsseitig ab 60 cm (bayernweit 50 cm) – strengere Vereinsregel gilt vorrangig.',
    schonzeitOverride:[{fisch:'Hecht',von:[2,15],bis:[4,30],mm:'ab 60 cm (Vereinsregel Fischwaid München, bayernweit nur 50 cm)'}]},
 
   {name:'Langwieder See',wasser:'see-tief',verif:'B',nr:'Versehrten Fischereiverein München e.V. · A8 Ausf. München-Langwied',cat:'raub',
@@ -936,7 +938,9 @@ export const SPOTS_BY: Spot[] = [
    karte:'Tageskarte Versehrten Fischereiverein München e.V., Saison 01.05.–30.09., ~20 € + 10 € Pfand (Verkaufsstellen u.a. AKM Angel- u. Ködermarkt München, Fisherman\'s Partner München/Parsdorf)',
    note:'⚠ Aalangeln nur vom verankerten Boot, bis Mitternacht erlaubt – vom Ufer aus laut Vereinsordnung nicht gestattet. Allgemeines Nachtangelverbot: 1,5 h nach Sonnenuntergang bis 1 h vor Sonnenaufgang (für alle anderen Arten/Methoden). Zusätzlich Freizeitsee (Baden, Rudern) – am Wochenende/Sommer entsprechend belebt.',
    kartenLinks:[],
-   hotspots:[],warn:true,zugang:'ufer'},
+   hotspots:[
+     {name:'Steg zum Lußsee',saison:'ganzjährig',lat:48.1865,lng:11.3965,tipp:'Der Steg zwischen Lußsee und Langwieder See gilt laut Erfahrungsberichten als eine der besseren Stellen – an der Kante entlang fischen. Nordwestufer zusätzlich mit flacheren Bereichen. Lage ungefähr.'}
+   ],warn:true,zugang:'ufer'},
 
   {name:'Mittlerer-Isar-Kanal (Oberföhring/St. Emmeram)',wasser:'kanal',verif:'B',nr:'Versehrten Fischereiverein München e.V. · Ableitung ab Isarwehr Oberföhring',cat:'salmo',
    arten:['Bachforelle','Regenbogenforelle','Saibling','Barbe','Döbel','Hecht','Barsch','Aal'],
@@ -946,13 +950,15 @@ export const SPOTS_BY: Spot[] = [
    karte:'Tageskarte Versehrten Fischereiverein München e.V., Saison 01.05.–15.10., ~15 € + 10 € Pfand (Verkaufsstellen u.a. AKM Angel- u. Ködermarkt München, Fisherman\'s Partner München/Parsdorf)',
    note:'⚠ Nachtangeln hier laut Vereinsordnung verboten (1,5 h nach Sonnenuntergang bis 1 h vor Sonnenaufgang) – abweichend von der sonst freien Nachtangel-Regel in Bayern. Starke Strömung: festes Schuhwerk/Wathose, bei Hochwasser der Isar meiden.',
    kartenLinks:[],
-   hotspots:[],warn:true,zugang:'ufer'},
+   hotspots:[
+     {name:'Isarwehr Oberföhring (Kanaleinlauf)',saison:'ganzjährig',lat:48.1735,lng:11.6175,tipp:'Direkt am Wehr, wo der Kanal von der Isar abzweigt: Strömungsbruch und zusätzlicher Sauerstoffeintrag ziehen klassisch sowohl Salmoniden als auch Raubfisch an. Lage ungefähr.'}
+   ],warn:true,zugang:'ufer'},
 
   {name:'Hollerner See (Eching)',wasser:'see-tief',verif:'B',nr:'Fischwaid München e.V. &amp; FV Eching · „Am Fretz 1", 85386 Eching',cat:'raub',
    arten:['Hecht','Zander','Wels','Karpfen','Schleie','Regenbogenforelle','Seeforelle','Barsch','Aal','Brachse','Döbel'],
    lat:48.3103,lng:11.6255,
    fisch:'Hecht, Zander, Wels, Karpfen, Schleie, Regenbogenforelle, Seeforelle, Renke, Barsch, Aal, Brachse, Döbel',
-   methode:'41 ha großer, bis 17 m tiefer ehemaliger Kiessee mit auffällig türkisem, klarem Wasser nördlich von München (bei Unterschleißheim/Eching) – seit 1999 gemeinsam von Fischwaid München und dem Fischereiverein Eching bewirtschaftet. Tiefstes und klarstes der hier gelisteten Gewässer, entsprechend anspruchsvoll (Sichtangeln möglich, aber auch scheue Fische). Lage ungefähr, Parkplatz-Zufahrt „Am Fretz 1".',
+   methode:'41 ha großer, bis 17 m tiefer ehemaliger Kiessee mit auffällig türkisem, klarem Wasser nördlich von München (bei Unterschleißheim/Eching) – seit 1999 gemeinsam von Fischwaid München und dem Fischereiverein Eching bewirtschaftet. Tiefstes und klarstes der hier gelisteten Gewässer, entsprechend anspruchsvoll (Sichtangeln möglich, aber auch scheue Fische) – gilt laut Erfahrungsberichten als eher schwieriger See. Kanten und Krautfelder als erste Anlaufstellen; ein Großteil des Ufers ist steil (Seil empfehlenswert), rund um die Wasserwacht/das Erholungsgebiet ist der Zugang deutlich einfacher und ohne Steilufer. Eine Insel prägt die Struktur zusätzlich. Beste Zeiten laut Quellenlage Jan–Mai und Sep–Okt. Lage ungefähr, Parkplatz-Zufahrt „Am Fretz 1".',
    karte:'Tageskarte Fischwaid München e.V. – seit 2025 ausschließlich online über hejfish',
    note:'Als tiefes, isoliertes Gewässer (kein Flussanschluss) gilt für Seeforelle hier vermutlich die kürzere Schonzeit für geschlossene Gewässer (01.10.–15.01. statt 01.10.–15.03.) – im Zweifel Vereinsordnung/Erlaubnisschein prüfen. Klares Wasser: feine Vorfächer, Naturkost im Vorteil.',
    kartenLinks:[{label:'hejfish – Fischwaid München',url:'https://www.hejfish.com/m/fischereiverein-fischwaid-muenchen-e-v-2022'}],
