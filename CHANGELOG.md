@@ -10,6 +10,23 @@ Die ausführliche technische Historie vor 1.0.0 (jede einzelne der früheren
 `beisszeit-shell-vN`-Versionen mit Ursache, Testabdeckung, betroffenen Dateien) steht
 weiterhin in **[CHANGELOG-ARCHIV.md](CHANGELOG-ARCHIV.md)**.
 
+## [1.4.0] – 2026-07-19
+
+### Geändert
+- **Erzgebirge: Hecht- und Zander-Mindestmaß im Fangbuch auf 60 cm angehoben.** Die
+  LVSA-Gewässerordnung 2024 (bindend für praktisch jeden Spot der Region, da fast alle
+  einen AVS-/LVSA-Erlaubnisschein voraussetzen) schreibt für beide Arten 60 cm vor –
+  strenger als das gesetzliche SächsFischVO-Mindestmaß von 50 cm, das bisher allein
+  hinterlegt war. Ein Hecht/Zander mit 55 cm hätte das Fangbuch bislang fälschlich als
+  "in Ordnung" durchgehen lassen. Über vier unabhängige Suchanfragen konsistent
+  bestätigt (nur ein Ausreißer-Ergebnis mit abweichenden Werten, die verdächtig genau
+  denen der Mecklenburg-Region in dieser App glichen – vermutlich eine KI-Verwechslung
+  und bewusst verworfen). Quellenangabe im Regeln-Tab zeigt jetzt beide Werte
+  (Vereinsregel + gesetzliches Mindestmaß) transparent nebeneinander.
+- Zusätzlich ein Tageslimit für Hecht/Zander laut Gewässerordnung als Hinweis ergänzt
+  – die genaue Stückzahl wurde in den Quellen uneinheitlich wiedergegeben, deshalb
+  bewusst ohne konkrete Zahl im Fangbuch, nur als Prüfhinweis im Regeln-Tab.
+
 ## [1.3.1] – 2026-07-19
 
 ### Behoben

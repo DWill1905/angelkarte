@@ -221,10 +221,17 @@ export const SPOTS_SN: Spot[] = [
 ];
 
 /* Schonzeiten Sachsen (SächsFischVO 2022) – [Art, von(M,T), bis(M,T), Mindestmaß] */
+/* Hecht/Zander-Mindestmaß: die LVSA-Gewässerordnung (2024, gilt auf praktisch allen
+   Spots dieser Region - fast alle laufen über AVS-/LVSA-Erlaubnisschein) schreibt fuer
+   beide Arten 60 cm vor, staerker als das gesetzliche SächsFischVO-Mindestmaß von
+   50 cm. Fuer AVS-/LVSA-Erlaubnisschein-Inhaber ist die Vereinsregel bindend - deshalb
+   hier als durchgesetzter Wert hinterlegt, nicht die niedrigere Gesetzesuntergrenze.
+   Ausnahme: Richter's Angelteich (Privatgewässer, siehe dortiger schonzeitInfo-Hinweis)
+   - hat aber ohnehin nur Regenbogenforelle als Zielart, kein Konflikt. */
 export const SCHON_SN: Schonzeit[] = [
   {fisch:'Äsche', von:[1,1], bis:[6,15], mm:'35 cm (SächsFischVO)'},
-  {fisch:'Hecht', von:[2,1], bis:[4,30], mm:'50 cm'},
-  {fisch:'Zander', von:[2,1], bis:[5,31], mm:'50 cm'},
+  {fisch:'Hecht', von:[2,1], bis:[4,30], mm:'60 cm (LVSA-Gewässerordnung; gesetzl. SächsFischVO-Mindestmaß wäre 50 cm)'},
+  {fisch:'Zander', von:[2,1], bis:[5,31], mm:'60 cm (LVSA-Gewässerordnung; gesetzl. SächsFischVO-Mindestmaß wäre 50 cm)'},
   {fisch:'Bachforelle', von:[10,1], bis:[4,30], mm:'28 cm'},
   {fisch:'Regenbogenforelle', von:[10,1], bis:[4,30], mm:'25 cm (nur Fließgewässer)'},
   {fisch:'Karpfen', von:null, bis:null, mm:'40 cm'},
@@ -1021,7 +1028,7 @@ export const REGION_BY: Region = {id:'muenchen',geprueft:'2026-07',name:'Münche
 export const REGIONS_EMBEDDED: Region[] = [
  {id:'erzgebirge',geprueft:'2026-07',name:'Erzgebirge / Freiberg (Sachsen)',nachtangeln:'lvsa',kurz:'Erzgebirge',packliste:['Erlaubnisschein + Personalausweis','Fangbuch (vor Angelbeginn ausfüllen!)','Maßband &amp; Hakenlöser','TWT: KEINE Maden/Fleisch – nur erlaubte Köder','Salmo-Strecke: Wathose + Einzelhaken + Sprengringzange','Kescher, Kopflampe (Nachtangeln 1h nach SU)'],
   koederfisch:['Lebender Köderfisch ist in ganz Deutschland verboten (Tierschutzgesetz) – nur tote Köderfische verwenden.','Köderfische nur aus demselben Gewässer entnehmen (keine Verschleppung/Faunenverfälschung).','In Trinkwassertalsperren: Maden &amp; Fleisch als Köder verboten – Köderfisch dort tabu.','Fangbegrenzung Köderfische laut Erlaubnisschein beachten.'],
-  schonQuelle:'Quelle: SächsFischVO 2022 + LVSA-Gewässerordnung (Verbandsregeln).',
+  schonQuelle:'Quelle: SächsFischVO 2022 (gesetzliche Mindestwerte) + LVSA-Gewässerordnung 2024 (Verbandsregeln, auf AVS-/LVSA-Erlaubnisscheinen bindend und teils strenger – z.B. Hecht/Zander 60 statt gesetzlich 50 cm).',
   fusszeile:'Gastkarten: <a href="https://angeln-sachsen.de/avs/gastangler/gastkarten" target="_blank" rel="noopener">AVS Südsachsen</a>',
   spots:SPOTS_SN,schon:SCHON_SN,
   banner:[
@@ -1029,7 +1036,7 @@ export const REGIONS_EMBEDDED: Region[] = [
     {von:[5,1],bis:[5,31],text:'<b>Zander geschont bis 31.05.</b> – Hecht &amp; Barsch sind offen.'}
   ],
   regeln:[
-   {titel:'Raubfisch-Sperrfrist (LVSA)',punkte:['01.02.–30.04.: Angeln mit raubfischtauglichen Ködern in allen LVSA-Gewässern untersagt (faktisch Kunstköderverbot)','Barsch: max. 10/Tag, davon 5 über 30 cm','Fangbuch vor Angelbeginn ausfüllen','Nachtangelzeit: 1 h nach Sonnenuntergang bis 1 h vor Sonnenaufgang']},
+   {titel:'Raubfisch-Sperrfrist (LVSA)',punkte:['01.02.–30.04.: Angeln mit raubfischtauglichen Ködern in allen LVSA-Gewässern untersagt (faktisch Kunstköderverbot)','Hecht &amp; Zander: Mindestmaß 60 cm (Vereinsregel, strenger als das gesetzliche SächsFischVO-Maß von 50 cm)','Barsch: max. 10/Tag, davon 5 über 30 cm','Zusätzlich Tageslimit für Hecht/Zander laut Gewässerordnung – genaue Stückzahl je nach Quelle uneinheitlich wiedergegeben, im Zweifel aktuelle LVSA-Gewässerordnung/Erlaubnisschein prüfen','Fangbuch vor Angelbeginn ausfüllen','Nachtangelzeit: 1 h nach Sonnenuntergang bis 1 h vor Sonnenaufgang']},
    {titel:'Trinkwassertalsperren (Saidenbach, Dittersbach)',punkte:['TWT-Belehrung nötig – Nachweis im Fangbuch/Erlaubnisschein','Kein Boot, kein Belly, kein Waten, kein Baden','Anfüttern verboten – auch Futterkorb','Maden &amp; Fleisch als Köder verboten','Kein Nachtangeln, kein Zelten, kein Feuer','Fische nicht am Gewässer schlachten']},
    {titel:'Streckenfarben an Flüssen (Sachsen)',punkte:['<b style="color:#e8b93c">Gelb</b>: nur mit Jahres-Salmonidenschein des AVS','<b style="color:#6fae6f">Grün</b>: allgemeine Berechtigung, aber Salmonidenregeln','<b style="color:#7d9bc9">Blau</b> (Karte): allgemeines Angelgewässer','<b style="color:#c94f3d">Rot gestrichelt</b>: Sperrstrecke – Angeln verboten','Linienverlauf schematisch – maßgeblich sind die Schilder am Wasser']},
    {titel:'Salmonidenstrecken (Mulde, Flöha)',punkte:['01.01.–30.04.: Angeln komplett verboten','01.05.–30.09.: Flug- oder Spinnangel','01.10.–31.12.: nur Flugangel','Nur 1 Einzelhaken pro Köder (Drillinge tauschen), Salmonidenschein je nach Strecke','Nachtangeln verboten, Salmoniden nicht hältern']}
