@@ -1,5 +1,24 @@
 # Changelog
 
+## SW v139 – 2026-07-19
+
+### Fixed
+- **Nachbesserung zu v138: Menü-Button und Wetter-Icon waren nach dem ersten Fix immer noch
+  unerreichbar.** Eigener Denkfehler: Für `position:absolute`-Kinder ist die Bezugskante die
+  *Padding-Box*-Kante des positionierten Vorfahren – und die verschiebt sich NICHT, wenn man
+  nur `padding-top` erhöht (Padding liegt innerhalb der Padding-Box, zwischen ihrer Kante und
+  der Content-Box). v138 hatte `env(safe-area-inset-top)` deshalb fälschlich von `#menuBtn`/
+  `.hdr-right` entfernt, in der Annahme, `header`s größeres `padding-top` würde das schon
+  erledigen – tat es aber nicht, die beiden Buttons landeten dadurch wieder unter der
+  Statusleiste. Jetzt tragen `header` (für den fließenden Inhalt: Regions-Select) UND die
+  beiden absolut positionierten Buttons (für sich selbst) unabhängig voneinander ihren
+  eigenen Safe-Area-Zuschlag – keine der beiden Stellen verlässt sich auf die andere.
+  Zusätzlich `overflow:hidden` von `header` entfernt: die Buttons dürfen die von den
+  Fließinhalten bestimmte Header-Höhe geringfügig überragen, ohne abgeschnitten zu werden.
+  Diesmal mit simulierter Notch UND einem tatsächlichen Klick-Test verifiziert (nicht nur
+  Geometrie/Screenshot wie beim ersten Versuch – der hatte das Problem nicht aufgedeckt, weil
+  ein Screenshot keine echte Statusleisten-Überdeckung simuliert).
+
 ## SW v138 – 2026-07-19
 
 ### Fixed
