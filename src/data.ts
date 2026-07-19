@@ -63,7 +63,7 @@ export const SPOTS_SN: Spot[] = [
     methode:'Spinnfischen vom Ufer, Pose/Grund auf Karpfen & Schleie (TWT-Köderregeln!)',
     karte:'AVS-Erlaubnisschein + TWT-Belehrung',
     kartenLinks:[{label:'AVS Sachsen – Gastkarten',url:'https://angeln-sachsen.de/avs/gastangler/gastkarten'}],
-   note:'6 ha Vorsperre der TS Lichtenberg. Wegen der laufenden Hauptsperren-Sanierung vorab beim AVS prüfen, ob die Vorsperre beangelbar ist.',
+   note:'6 ha Vorsperre der TS Lichtenberg. Die Hauptsperre selbst ist wegen der ~30-Mio-€-Sanierung seit Herbst 2024 entleert und die Dammkrone laut Landestalsperrenverwaltung mindestens bis Ende 2026 gesperrt – die Vorsperre ist davon nicht zwingend betroffen, laut aktueller Quellenlage weiterhin mit Erlaubnisschein befischbar. Vor Anfahrt trotzdem beim AVS bestätigen, da sich der Baustellenbetrieb ändern kann.',
     warn:true
   },
   {
@@ -83,7 +83,7 @@ export const SPOTS_SN: Spot[] = [
     fisch:'vor Sanierung: Hecht, Barsch, Rotauge',
     methode:'—',
     karte:'—',
-    note:'ACHTUNG: Herbst 2024 für die Staudamm-Sanierung (~30 Mio €) vollständig entleert, Bauarbeiten laufen. Aktuell kein Angelbetrieb – Status beim AVS erfragen.',
+    note:'ACHTUNG: Seit Herbst 2024 für die Staudamm-Sanierung (~30 Mio €, Entnahmeturm + Dammdichtung) vollständig entleert. Die Dammkrone ist laut Landestalsperrenverwaltung Sachsen mindestens bis Ende 2026 komplett gesperrt (Lebensgefahr durch Bauarbeiten), Bauzeit insgesamt mind. 2 Jahre – kein Angelbetrieb möglich. Status/Wiedereröffnung beim AVS bzw. wasserwirtschaft.sachsen.de erfragen.',
     warn:true
   },
   {
@@ -230,7 +230,13 @@ export const SCHON_SN: Schonzeit[] = [
   {fisch:'Karpfen', von:null, bis:null, mm:'40 cm'},
   {fisch:'Schleie', von:null, bis:null, mm:'25 cm (keine Schonzeit in SN)'},
   {fisch:'Aal', von:null, bis:null, mm:'50 cm'},
-  {fisch:'Barsch', von:null, bis:null, mm:'– (LVSA: max. 10/Tag)'}
+  {fisch:'Barsch', von:null, bis:null, mm:'– (LVSA: max. 10/Tag)'},
+  /* Döbel (4 Mulde-/Flöha-Spots) und Brachse (Saidenbach/Rauschenbach/Schlüsselteich)
+     fehlten hier komplett, obwohl beide Zielart an mehreren Spots sind - dieselbe Luecke
+     wie bei Gießen/Döbel (siehe dortiger Fix). Fangbuch zeigte bislang faelschlich
+     "keine Daten vorliegen". */
+  {fisch:'Döbel', von:null, bis:null, mm:'ab 25 cm, keine Schonzeit'},
+  {fisch:'Brachse', von:null, bis:null, mm:'– (kein gesetzl. Maß, keine Schonzeit)'}
 ];
 
 /* ============ Region: Mecklenburgische Kleinseenplatte (recherchiert 07/2026) ============ */

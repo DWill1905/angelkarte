@@ -10,6 +10,28 @@ Die ausführliche technische Historie vor 1.0.0 (jede einzelne der früheren
 `beisszeit-shell-vN`-Versionen mit Ursache, Testabdeckung, betroffenen Dateien) steht
 weiterhin in **[CHANGELOG-ARCHIV.md](CHANGELOG-ARCHIV.md)**.
 
+## [1.3.1] – 2026-07-19
+
+### Behoben
+- **Erzgebirge: Döbel und Brachse fehlten in der Schonzeiten-Tabelle**, obwohl beide an
+  mehreren Spots (4× Döbel an Mulde-/Flöha-Strecken, 3× Brachse an Talsperren/Teichen)
+  als Zielart gelistet sind – dieselbe Lücke wie zuletzt bei Gießen/Döbel. Diesmal mit
+  konkretem Mindestmaß belegt: Döbel ab 25 cm (keine Schonzeit), Brachse ganz ohne
+  Regulierung – beide nach SächsFischVO 2022.
+- **Talsperre Lichtenberg/Vorsperre Dittersbach: Sanierungsstand aktualisiert.** Die
+  bestehende Notiz ("Bauarbeiten laufen") war noch korrekt, aber ungenau – aktuell
+  bestätigt: Dammkrone laut Landestalsperrenverwaltung Sachsen mindestens bis Ende 2026
+  gesperrt, Bauzeit insgesamt ≥ 2 Jahre. Für die separate Vorsperre Dittersbach dagegen
+  neu gefunden: sie ist von der Hauptsperren-Sanierung nicht zwingend betroffen und
+  laut aktueller Quellenlage weiterhin befischbar (vorher stand dort nur ein pauschales
+  "vorab prüfen").
+
+### Geprüft, keine Änderung nötig
+- Talsperre Rauschenbach hat trotz guter Beschreibung keine Hotspots – dazu keine
+  einzelne, ausreichend sicher belegte Stelle gefunden (bewusst keine erfunden).
+  Koordinaten aller Fluss-Spots (Mulde/Flöha-Strecken) gegen ihre hinterlegten
+  Polylinien geprüft – alle plausibel, keine Abweichung gefunden.
+
 ## [1.3.0] – 2026-07-19
 
 ### Hinzugefügt
