@@ -244,8 +244,17 @@ export async function fbRestore(file){
   if(!gueltig.length){ zeig('❌ Keine gültigen Fänge in der Datei.'); return {error:'leer'}; }
   /* MERGE statt Überschreiben: vorhandene Fänge bleiben, Duplikate werden übersprungen */
   const vorhanden=new Set(state.fbMem.map(fangKey));
+  const idsBelegt=new Set(state.fbMem.map(x=>x.id));
   let neu=0;
-  gueltig.forEach(e=>{ if(!vorhanden.has(fangKey(e))){ state.fbMem.push(e); vorhanden.add(fangKey(e)); neu++; } });
+  gueltig.forEach(e=>{
+    if(vorhanden.has(fangKey(e))) return;
+    /* Fremde/handbearbeitete Backups liefern nicht zwingend eine gültige, eindeutige id -
+       ohne diese wird der Eintrag über Löschen/Bearbeiten (Vergleich per id) unerreichbar,
+       weil mehrere Einträge dieselbe (oder gar keine) id teilen. */
+    if(typeof e.id!=='number'||!Number.isFinite(e.id)||idsBelegt.has(e.id)) e.id=uid();
+    idsBelegt.add(e.id);
+    state.fbMem.push(e); vorhanden.add(fangKey(e)); neu++;
+  });
   state.fbMem.sort((a,b)=>{const da=parseFangDatum(a.datum),db=parseFangDatum(b.datum);return (db?db.getTime():0)-(da?da.getTime():0);});
   await fbPersist();
   zeig('✓ '+neu+' neue Fänge importiert'+(gueltig.length-neu>0?' ('+(gueltig.length-neu)+' Duplikate übersprungen)':'')+'.');

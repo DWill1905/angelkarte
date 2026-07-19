@@ -1,5 +1,19 @@
 # Changelog
 
+## SW v131 – 2026-07-19
+
+### Fixed
+- **Fangbuch-Backup-Import: Einträge ohne (oder mit kollidierender) id waren nach dem
+  Import unlöschbar/unbearbeitbar.** `fbRestore()` verlangt beim Validieren bewusst keine
+  `id` (damit auch fremde/handbearbeitete JSON-Dateien importierbar bleiben), hat sie aber
+  nie nachträglich vergeben. Löschen/Bearbeiten vergleicht Einträge über `id` – fehlte sie
+  bei mehreren importierten Fängen gleichzeitig (immer `undefined`), trafen Löschen/
+  Bearbeiten keinen oder den falschen Eintrag, ohne Fehlermeldung. `fbRestore()` vergibt
+  jetzt für jeden Import-Eintrag ohne gültige, im Bestand noch freie id eine frische
+  (`uid()`) – vorhandene, eindeutige ids bleiben unangetastet. Drei neue Tests; die
+  bestehenden Backup-Tests liefen bisher selbst unbemerkt über genau diesen Weg (Fixtures
+  ohne id).
+
 ## SW v130 – 2026-07-19
 
 ### Fixed

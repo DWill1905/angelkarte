@@ -389,6 +389,36 @@ describe('Backup: Export und Import', () => {
     const r = await app.fbRestore({ text: async () => JSON.stringify({ faenge: [{ unsinn: true }] }) });
     assert.equal(r.error, 'leer');
   });
+
+  test('Import ohne id-Feld: jeder Eintrag bekommt eine eigene, eindeutige id (sonst unlöschbar)', async () => {
+    /* Fremde/handbearbeitete Backups liefern nicht zwingend eine id. Ohne Nachbesserung
+       teilten sich mehrere importierte Einträge dieselbe (fehlende) id - Löschen/Bearbeiten
+       vergleicht per id und traf dann keinen oder den falschen Eintrag. */
+    await app.fbRestore({ text: async () => JSON.stringify({ faenge: [
+      { datum: '1.7.2026', fisch: 'Zander', laenge: 55, spot: 'A', koeder: '' },
+      { datum: '2.7.2026', fisch: 'Hecht', laenge: 70, spot: 'B', koeder: '' },
+    ]})});
+    const ids = app.state.fbMem.map((e) => e.id);
+    ids.forEach((id) => assert.equal(typeof id, 'number', 'jede id muss eine Zahl sein'));
+    assert.equal(new Set(ids).size, ids.length, 'ids dürfen sich nicht überschneiden');
+  });
+
+  test('Import mit einer id, die bereits im Bestand existiert, bekommt eine neue', async () => {
+    app.state.fbMem.push({ id: 42, datum: '1.7.2026', fisch: 'Zander', laenge: 55, spot: 'A', koeder: '' });
+    await app.fbRestore({ text: async () => JSON.stringify({ faenge: [
+      { id: 42, datum: '9.9.2026', fisch: 'Wels', laenge: 90, spot: 'C', koeder: '' }, // Kollision, kein Duplikat inhaltlich
+    ]})});
+    assert.equal(app.state.fbMem.length, 2);
+    const ids = app.state.fbMem.map((e) => e.id);
+    assert.equal(new Set(ids).size, 2, 'kollidierende id muss ersetzt worden sein');
+  });
+
+  test('Import mit bereits gültiger, eindeutiger id behält diese (kein unnötiges Umschreiben)', async () => {
+    await app.fbRestore({ text: async () => JSON.stringify({ faenge: [
+      { id: 12345, datum: '1.7.2026', fisch: 'Zander', laenge: 55, spot: 'A', koeder: '' },
+    ]})});
+    assert.equal(app.state.fbMem[0].id, 12345);
+  });
 });
 
 describe('Modell-Abgleich (Fangbuch gegen Modell)', () => {
