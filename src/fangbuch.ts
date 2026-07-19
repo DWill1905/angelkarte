@@ -5,7 +5,7 @@ import { state, store } from './state.js';
 import { fmtMD, hhmm, inSchonzeit, masseAus, mondPhase, solunar } from './astro.js';
 import { uid } from './myspots.js';
 import { initRegions } from './region.js';
-import { ICON, esc } from './util.js';
+import { ICON, esc, de1 } from './util.js';
 import { regionCenter } from './ui.js';
 import { WT_OPT } from './tackle.js';
 import { loadWeather } from './weather.js';
@@ -70,8 +70,11 @@ export function fbCsv(){
   /* `||` würde den Wert 0 verschlucken: ein Drucktrend von 0.0 (stabile Lage) oder ein
      Pegel von 0 cm sind echte Messwerte, keine fehlenden. Deshalb überall auf null/undefined prüfen. */
   const val = (x: unknown): string | number => (x === null || x === undefined || x === '' ? '' : (x as string | number));
+  /* Semikolon als Trenner ist die deutsche Excel-Konvention - gerade deshalb, damit das
+     Komma für Dezimalzahlen frei bleibt. Drucktrend nutzte bisher trotzdem den englischen
+     Dezimalpunkt (z.B. "-1.5") und wurde von deutschem Excel dadurch als Text erkannt. */
   const rows=fbSortiert().map(e=>[e.datum,e.fisch,val(e.laenge),val(e.spot),val(e.koeder),e.entnommen?'ja':'nein',
-    e.ctx?val(e.ctx.zeit):'',e.ctx?val(e.ctx.mond):'',e.ctx?val(e.ctx.druck):'',e.ctx?val(e.ctx.trend):'',
+    e.ctx?val(e.ctx.zeit):'',e.ctx?val(e.ctx.mond):'',e.ctx?val(e.ctx.druck):'',(e.ctx&&e.ctx.trend!=null)?de1(e.ctx.trend):'',
     e.ctx?val(e.ctx.wind):'',e.ctx?val(e.ctx.pegel):'',e.ctx?val(e.ctx.wt):''
   ].map(v=>{v=String(v);return /[";\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;}).join(';'));
   const csv='\ufeff'+head.join(';')+'\n'+rows.join('\n');

@@ -1,5 +1,13 @@
 # Changelog
 
+## SW v168 – 2026-07-19 (Design-Audit Vorschlag 12/20)
+
+### Fixed
+- **CSV-Export nutzte Semikolon als Trenner (die deutsche Excel-Konvention – gerade damit
+  das Komma für Dezimalzahlen frei bleibt), der Drucktrend zeigte aber trotzdem den
+  englischen Dezimalpunkt** (z.B. "-1.5"). Deutsches Excel erkennt eine solche Zelle eher
+  als Text statt als Zahl. Jetzt konsistent mit Dezimalkomma.
+
 ## SW v167 – 2026-07-19 (Design-Audit Vorschlag 11/20)
 
 ### Fixed

@@ -413,7 +413,7 @@ describe('Bug: CSV-Export verschluckte den Wert 0', () => {
   test('ein Drucktrend von 0.0 (stabile Lage) bleibt erhalten', async () => {
     const f = await exportiere({ id: 1, datum: '1.7.2026', fisch: 'Zander', laenge: 55, spot: 'A', koeder: 'G',
       entnommen: false, ctx: { zeit: '20:00', mond: 'M', druck: 1013, trend: 0, wind: 'SW', pegel: 0, wt: 0 } });
-    assert.equal(f('Drucktrend'), '0', 'Der Wert 0 wurde durch `||` in einen leeren String verwandelt');
+    assert.equal(f('Drucktrend'), '0,0', 'Der Wert 0 wurde durch `||` in einen leeren String verwandelt');
     assert.equal(f('Pegel_cm'), '0');
     assert.equal(f('Wassertemp_C'), '0');
   });
