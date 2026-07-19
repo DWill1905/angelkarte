@@ -1,5 +1,15 @@
 # Changelog
 
+## SW v162 – 2026-07-19 (Nachbesserung zu Vorschlag 6/20)
+
+### Fixed
+- **Erste Fassung der Querformat-Korrektur reichte bei noch kürzeren Viewports nicht.**
+  Das reine Stauchen der Bottom-Abstände (v161) löste die Überlappung bei ~390px
+  Viewport-Höhe, brach aber bei ~320px (ältere/kleine Handys im Querformat) erneut. Robustere
+  Lösung: `toolsfab` zieht bei `max-height:480px` komplett aus dem Bottom-Stack raus und
+  steht oben neben `fsBtn` – kollisionsfrei unabhängig von der genauen Höhe. Mit
+  automatisierten Kollisionstests bei 320/360/390/430/480px verifiziert.
+
 ## SW v161 – 2026-07-19 (Design-Audit Vorschlag 6/20)
 
 ### Fixed

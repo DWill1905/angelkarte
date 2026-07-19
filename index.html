@@ -417,11 +417,15 @@
   .toolsfab svg,.toolsfab .ic{width:21px;height:21px}
   /* Querformat-Handy: die generosen Bottom-Offsets (für Portrait bemessen) liessen
      locbtn/toolsfab bis in den oben verankerten fsBtn hineinragen - beide landeten fast
-     übereinander, ein Tap auf "Werkzeuge" konnte stattdessen Vollbild treffen. */
+     übereinander, ein Tap auf "Werkzeuge" konnte stattdessen Vollbild treffen. Erste Fassung
+     (nur die Bottom-Abstände gestaucht) reichte bei noch kürzeren Viewports nicht mehr aus -
+     toolsfab zieht deshalb komplett aus dem Bottom-Stack raus und steht oben neben fsBtn,
+     das ist unabhängig von der genauen Viewport-Höhe kollisionsfrei. */
   @media(max-height:480px){
     .legende{bottom:calc(10px + env(safe-area-inset-bottom))}
     .locbtn{bottom:calc(10px + env(safe-area-inset-bottom))}
-    .toolsfab{bottom:calc(66px + env(safe-area-inset-bottom))}
+    .toolsfab{position:absolute;top:calc(12px + env(safe-area-inset-top));
+      right:calc(64px + env(safe-area-inset-right));bottom:auto}
   }
   .toolsfab:active{transform:scale(.94)}
 
