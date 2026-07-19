@@ -1,5 +1,12 @@
 # Changelog
 
+## SW v158 – 2026-07-19 (Design-Audit Vorschlag 3/20)
+
+### Added
+- **Keine `<meta name="description">`, keine Open-Graph-Tags.** Wird der App-Link geteilt
+  (WhatsApp, Slack, Signal …), gab es nichts, das die Vorschau steuert. Beschreibung und
+  `og:title`/`og:description`/`og:url`/`og:image` (App-Icon) ergänzt.
+
 ## SW v157 – 2026-07-19 (Design-Audit Vorschlag 2/20)
 
 ### Fixed
