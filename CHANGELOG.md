@@ -1,5 +1,14 @@
 # Changelog
 
+## SW v155 – 2026-07-19
+
+### Fixed
+- **Spotnamen in der Platzliste hatten kein `title`-Attribut** – bei ähnlich beginnenden
+  Namen (z. B. "Freiberger Mulde – gelbe Sa…" vs. "Freiberger Mulde – allgemei…") sahen
+  abgeschnittene Einträge in der schmalen Liste identisch aus, ohne Möglichkeit, den vollen
+  Namen zu sehen. Dieselbe Lösung wie beim Regionsnamen im Header: `title` liefert den
+  vollen Namen als Tooltip/Screenreader-Text nach.
+
 ## SW v154 – 2026-07-19
 
 ### Fixed

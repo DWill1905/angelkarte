@@ -395,7 +395,7 @@ export function renderList(){
     b.className='spot-item'+(state.userPos&&idx===0?' nearest':'');
     const meta=state.userPos?de1(s._d)+' km'+(idx===0?' ★':''):s.fisch.split(',')[0];
     b.innerHTML=`<span class="dot" style="background:${c.color}"></span>
-      <span class="name">${s.name}</span><span class="meta">${meta}</span>`;
+      <span class="name" title="${esc(s.name)}">${s.name}</span><span class="meta">${meta}</span>`;
     b.onclick=()=>{
       let opened=false;
       const open=()=>{if(!opened){opened=true;s.marker.openPopup(s.line?[s.lat,s.lng]:undefined);}};
