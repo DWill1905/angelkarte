@@ -1,5 +1,22 @@
 # Changelog
 
+## SW v173 – 2026-07-19 (Design-Audit Vorschlag 17/20)
+
+### Fixed
+- **Zwei weitere ausgewählte Zustände waren unter Windows-Kontrastmodus nicht mehr
+  erkennbar** – derselbe Fund wie bei Vorschlag 16, hier bei den Zielfisch-Filterchips
+  (`.chips.sub .chip.on`) und beim "Standort verfolgen"-Button (`.locbtn.active`).
+  Beide markieren "aktiv" nur über eine Hintergrundfarbe, die forced-colors zu
+  durchsichtigem/weißem Ton verblasst – bei den Chips wurden Rand und Hintergrund von
+  ausgewähltem und nicht ausgewähltem Chip praktisch identisch. Mit
+  `Highlight`/`HighlightText` behoben.
+- Beim Testen des `.locbtn`-Fixes zunächst ein Playwright-Timing-Artefakt aufgetreten
+  (Klassenwechsel und `getComputedStyle`-Auslesen im selben synchronen Callback lieferte
+  für `background-color` unter forced-colors einen veralteten Zwischenwert, `color`
+  dagegen schon den neuen) – nach Bekanntsein dieses Musters mit einem zweistufigen
+  Ablauf (Klasse setzen, kurz warten, dann erst auslesen) erneut geprüft: Fix greift
+  korrekt, kein zusätzliches `appearance:none` nötig.
+
 ## SW v172 – 2026-07-19 (Design-Audit Vorschlag 16/20)
 
 ### Fixed
