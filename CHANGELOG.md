@@ -1,5 +1,16 @@
 # Changelog
 
+## SW v171 – 2026-07-19 (Design-Audit Vorschlag 15/20)
+
+### Fixed
+- **"Fang speichern" – der wichtigste Button im Fangbuch – wurde unter Windows-
+  Kontrastmodus zu nicht unterscheidbarem Fließtext.** Der Button hat `border:0` und
+  verlässt sich komplett auf seinen Gradient-Hintergrund; forced-colors verwirft
+  Gradients, ohne eigenen Rand blieb nichts Sichtbares übrig, was ihn als Button
+  kennzeichnet (Nachbar-Button "Backup einlesen" blieb dagegen erkennbar, weil er einen
+  echten Rand hat). Gleiches Muster bei allen `.primary`-Buttons in den Dialogen. Mit
+  `border:1px solid ButtonText` behoben, unter `forced-colors:active` verifiziert.
+
 ## SW v170 – 2026-07-19 (Design-Audit Vorschlag 14/20)
 
 ### Fixed

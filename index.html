@@ -652,6 +652,10 @@
     -webkit-appearance:none;margin:0}
   .fb-save{width:100%;margin-top:10px;background:linear-gradient(180deg,#eaad48,#e8a33d);color:#2a2008;border:0;border-radius:var(--radius-md);
     padding:12px;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(232,163,61,.25)}
+  /* Unter forced-colors verwirft der Browser den Gradient-Hintergrund - ohne eigenen Rand
+     wird "Fang speichern" (der wichtigste Button im Fangbuch) zu nicht unterscheidbarem
+     Fließtext. Gilt genauso für .primary-Buttons in den Dialogen (gleiches Muster). */
+  @media(forced-colors:active){ .fb-save,.mydlg-btns .primary{border:1px solid ButtonText} }
   .fb-entry{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);
     border-radius:var(--radius-md);padding:10px 12px;margin-bottom:8px;font-size:13px}
   .fb-entry .info{flex:1;min-width:0}
