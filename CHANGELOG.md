@@ -1,5 +1,16 @@
 # Changelog
 
+## SW v137 – 2026-07-19
+
+### Changed
+- **Weitere Design-Konsolidierung.** Formularfelder (generisches `input,select` sowie die
+  Spot-Suche) hatten zwei unterschiedliche Radien (7px/9px) für dieselbe Art Element – jetzt
+  einheitlich `--radius-sm`. Solunar-Kalenderbalken (`.calbar`) ebenfalls auf die Radius-
+  Skala umgestellt (4px → `--radius-sm`). Die Schonzeit-Saisonbanner-Leiste am oberen
+  Bildschirmrand bekommt jetzt dieselbe sanfte Eintritts-Animation wie die
+  Sperrzonen-Warnung, statt abrupt dazustehen – beide sind dieselbe Art von Hinweis, sahen
+  sich bisher aber nicht ähnlich.
+
 ## SW v136 – 2026-07-19
 
 ### Changed
