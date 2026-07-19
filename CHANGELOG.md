@@ -1,5 +1,14 @@
 # Changelog
 
+## SW v153 – 2026-07-19
+
+### Fixed
+- **Schonzeit-Kalender: Monatszellen waren für Screenreader komplett unsichtbar** (leere
+  `<div>`s, nur Hintergrundfarbe, kein Text) und bei Rot-Grün-Sehschwäche nur an einem
+  moderaten Helligkeitsunterschied zu erkennen – für eine Anzeige mit rechtlicher Relevanz
+  (Schonzeiten) zu wenig. Jede Zelle hat jetzt `aria-label`/`title` ("Äsche Januar:
+  geschont") als redundante Textinformation, ohne die bestehende Farboptik zu ändern.
+
 ## SW v152 – 2026-07-19 (Design-Audit, 20 Verbesserungen)
 
 Zweiter vollständiger Audit-Durchlauf über die ganze App (alle Ansichten, alle ~15 Dialoge,

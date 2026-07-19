@@ -21,6 +21,7 @@ export function buildSchonUI() {
         schonEl.insertAdjacentHTML('beforeend', '<p class="fineprint" style="margin-top:10px">' + state.REGION.schonQuelle + '</p>');
     buildKalender();
 }
+const MONATE = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
 export function buildKalender() {
     const el = byId('schonKalender');
     if (!el)
@@ -39,7 +40,10 @@ export function buildKalender() {
                 const mid = m * 100 + 15;
                 zu = (v <= b) ? (mid >= v && mid <= b) : (mid >= v || mid <= b);
             }
-            cells += '<div class="m ' + (zu ? 'zu' : 'auf') + (m === nowM ? ' now' : '') + '"></div>';
+            /* Zellen waren bisher leere <div>s ohne Text - für Screenreader unsichtbar und bei
+               Rot/Grün-Sehschwäche nur an einem moderaten Helligkeitsunterschied zu erkennen. */
+            const label = esc(sc.fisch) + ' ' + MONATE[m - 1] + ': ' + (zu ? 'geschont' : 'offen');
+            cells += '<div class="m ' + (zu ? 'zu' : 'auf') + (m === nowM ? ' now' : '') + '" role="img" aria-label="' + label + '" title="' + label + '"></div>';
         }
         h += '<div class="calrow"><span class="cfish">' + esc(sc.fisch) + '</span><div class="calbar">' + cells + '</div></div>';
     });
