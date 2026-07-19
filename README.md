@@ -135,7 +135,13 @@ und blockiert bei Datenfehlern.
 ausgeliefert werden (GitHub Pages, lokaler Webserver o.ae.).
 
 Bei Aenderungen am Service Worker oder den Modulen die Cache-Version in `sw.js`
-(`beisszeit-shell-vN`) hochzaehlen, damit Clients die neue Version laden.
+(`beisszeit-shell-vX.Y.Z`) nach [Semantic Versioning](https://semver.org/lang/de/)
+hochzaehlen, damit Clients die neue Version laden: **PATCH** (x.y.Z) fuer Bugfixes/
+kleine Korrekturen, **MINOR** (x.Y.0) fuer neue, abwaertskompatible Funktionen,
+**MAJOR** (X.0.0) fuer Aenderungen, die bestehende Nutzung/Daten brechen koennten.
+Jede Aenderung bekommt einen kurzen Eintrag in `CHANGELOG.md` (Format: [Keep a
+Changelog](https://keepachangelog.com/de/1.1.0/)); die ausfuehrliche technische
+Historie vor 1.0.0 steht in `CHANGELOG-ARCHIV.md`.
 
 ## Datenqualitaet
 
