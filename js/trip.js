@@ -25,7 +25,9 @@ export async function tripSave() {
     try {
         await store.set(KEY, JSON.stringify(state.trip));
     }
-    catch (e) { }
+    catch (e) {
+        state.persistent = false;
+    }
 }
 export async function toggleTrip(name) {
     if (!state.REGION)

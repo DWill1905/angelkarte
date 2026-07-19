@@ -42,7 +42,9 @@ export async function initRegions() {
         try {
             await store.set('region', sel.value);
         }
-        catch (e) { }
+        catch (e) {
+            state.persistent = false;
+        }
     };
     loadRegion(start);
 }

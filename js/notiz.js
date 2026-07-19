@@ -33,5 +33,7 @@ export async function speichereNotiz(spotName, text) {
     try {
         await store.set(KEY(state.REGION.id), JSON.stringify(alle));
     }
-    catch (e) { /* Speicher voll o.ä. – Notiz gilt nur für diese Sitzung */ }
+    catch (e) {
+        state.persistent = false; /* Speicher voll o.ä. – Notiz gilt nur für diese Sitzung */
+    }
 }

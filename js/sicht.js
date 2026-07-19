@@ -36,7 +36,9 @@ export async function setzeSicht(s) {
     try {
         await store.set(KEY, s);
     }
-    catch (e) { /* Speicher voll – Sicht gilt für diese Sitzung */ }
+    catch (e) {
+        state.persistent = false; /* Speicher voll – Sicht gilt für diese Sitzung */
+    }
 }
 export async function ladeSicht() {
     /* Usability-Review (4/4): ein Erstbesuch landete bisher direkt in der dichtesten Ansicht

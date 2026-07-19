@@ -233,7 +233,9 @@ async function setErlaubnisDatum(v) {
     try {
         await store.set('erlaubnis:' + state.REGION.id, v);
     }
-    catch (e) { }
+    catch (e) {
+        state.persistent = false;
+    }
 }
 /** Vergleicht das gespeicherte Ablaufdatum mit heute (Tagesbasis, Mitternacht - "heute"
     gilt noch nicht als abgelaufen) und zeigt/versteckt die Kopfwarnung entsprechend. */
@@ -291,7 +293,9 @@ export async function openPack() {
             try {
                 await store.set('pack:' + state.REGION.id, JSON.stringify(st));
             }
-            catch (e) { }
+            catch (e) {
+                state.persistent = false;
+            }
         };
     });
     const erlEl = byId('packErlDatum');
@@ -303,7 +307,9 @@ byId('packClose').onclick = () => { packDlg.hidden = true; };
 byId('packReset').onclick = async () => { try {
     await store.set('pack:' + state.REGION.id, '{}');
 }
-catch (e) { } openPack(); };
+catch (e) {
+    state.persistent = false;
+} openPack(); };
 packDlg.addEventListener('click', e => { if (e.target === packDlg)
     packDlg.hidden = true; });
 export const biteDlg = byId('biteDlg');

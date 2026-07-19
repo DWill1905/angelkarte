@@ -31,7 +31,7 @@ export async function initRegions(){
     const r=state.REGIONS.find(x=>x.id===sel.value);
     sel.title=r.name;
     loadRegion(r);
-    try{await store.set('region',sel.value);}catch(e){}
+    try{await store.set('region',sel.value);}catch(e){state.persistent=false;}
   };
   loadRegion(start);
 }

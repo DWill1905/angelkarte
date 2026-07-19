@@ -38,7 +38,7 @@ function anwenden(s: Sicht): void {
 
 export async function setzeSicht(s: Sicht): Promise<void> {
   anwenden(s);
-  try { await store.set(KEY, s); } catch (e) { /* Speicher voll – Sicht gilt für diese Sitzung */ }
+  try { await store.set(KEY, s); } catch (e) { state.persistent = false; /* Speicher voll – Sicht gilt für diese Sitzung */ }
 }
 
 export async function ladeSicht(): Promise<Sicht> {

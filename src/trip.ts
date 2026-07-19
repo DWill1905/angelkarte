@@ -19,7 +19,7 @@ export async function tripLoad(){
   }catch(e){ state.trip=[]; }
 }
 export async function tripSave(){
-  try{ await store.set(KEY,JSON.stringify(state.trip)); }catch(e){}
+  try{ await store.set(KEY,JSON.stringify(state.trip)); }catch(e){state.persistent=false;}
 }
 export async function toggleTrip(name: string): Promise<void> {
   if(!state.REGION) return;

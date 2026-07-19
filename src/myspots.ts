@@ -68,7 +68,7 @@ export async function saveMySpot(){
     m={id:uid(),name,tipp,tiefe,lat:myPending[0],lng:myPending[1]};
     list.push(m);
   }
-  try{await store.set('myspots:'+state.REGION.id,JSON.stringify(list));}catch{}
+  try{await store.set('myspots:'+state.REGION.id,JSON.stringify(list));}catch{state.persistent=false;}
   if(editId!=null){
     const i=state.SPOTS.findIndex(sp=>sp.myId===editId);
     if(i>-1){ const old=state.SPOTS[i]; if(old.marker&&state.map.hasLayer(old.marker)) state.map.removeLayer(old.marker); state.SPOTS.splice(i,1); }
@@ -90,7 +90,7 @@ window.delMySpot=async function(id){
   const list=await loadMySpots(state.REGION.id);
   const geloescht=list.find(m=>m.id===id);
   const rest=list.filter(m=>m.id!==id);
-  try{await store.set('myspots:'+state.REGION.id,JSON.stringify(rest));}catch{}
+  try{await store.set('myspots:'+state.REGION.id,JSON.stringify(rest));}catch{state.persistent=false;}
   const i=state.SPOTS.findIndex(sp=>sp.myId===id);
   if(i>-1){const sp=state.SPOTS[i]; if(sp.marker&&state.map.hasLayer(sp.marker))state.map.removeLayer(sp.marker); state.SPOTS.splice(i,1);}
   /* Denselben verwaisten Trip-Eintrag vermeiden wie beim Umbenennen - ein geloeschter

@@ -1,5 +1,16 @@
 # Changelog
 
+## SW v160 – 2026-07-19 (Design-Audit Vorschlag 5/20)
+
+### Fixed
+- **Fehlgeschlagenes Speichern (z. B. voller Speicher, striktes privates Surfen) blieb
+  überall außer im Fangbuch komplett unbemerkt.** Region-Wechsel, eigene Spots, Trip-Liste,
+  Packliste, Erlaubnisschein-Datum, Notizen und die Einfach/Pro-Ansicht scheiterten still
+  (leere `catch`-Blöcke) – nur das Fangbuch selbst zeigte bei eigenen Speicherfehlern einen
+  Hinweis ("nur für diese Sitzung"). Alle Speicherstellen setzen jetzt bei einem Fehler
+  dasselbe globale Flag – ein Problem in irgendeinem Feature macht sich beim nächsten
+  Fangbuch-Eintrag bemerkbar, statt komplett unsichtbar zu bleiben.
+
 ## SW v159 – 2026-07-19 (Design-Audit Vorschlag 4/20)
 
 ### Added

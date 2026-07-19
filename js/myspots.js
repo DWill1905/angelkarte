@@ -86,7 +86,9 @@ export async function saveMySpot() {
     try {
         await store.set('myspots:' + state.REGION.id, JSON.stringify(list));
     }
-    catch { }
+    catch {
+        state.persistent = false;
+    }
     if (editId != null) {
         const i = state.SPOTS.findIndex(sp => sp.myId === editId);
         if (i > -1) {
@@ -125,7 +127,9 @@ window.delMySpot = async function (id) {
     try {
         await store.set('myspots:' + state.REGION.id, JSON.stringify(rest));
     }
-    catch { }
+    catch {
+        state.persistent = false;
+    }
     const i = state.SPOTS.findIndex(sp => sp.myId === id);
     if (i > -1) {
         const sp = state.SPOTS[i];

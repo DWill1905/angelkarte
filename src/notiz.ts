@@ -26,5 +26,5 @@ export async function speichereNotiz(spotName: string, text: string): Promise<vo
   const t = text.trim();
   if (t) alle[spotName] = t; else delete alle[spotName];
   try { await store.set(KEY(state.REGION.id), JSON.stringify(alle)); }
-  catch (e) { /* Speicher voll o.ä. – Notiz gilt nur für diese Sitzung */ }
+  catch (e) { state.persistent = false; /* Speicher voll o.ä. – Notiz gilt nur für diese Sitzung */ }
 }
