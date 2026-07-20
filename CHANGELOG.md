@@ -10,6 +10,31 @@ Die ausführliche technische Historie vor 1.0.0 (jede einzelne der früheren
 `beisszeit-shell-vN`-Versionen mit Ursache, Testabdeckung, betroffenen Dateien) steht
 weiterhin in **[CHANGELOG-ARCHIV.md](CHANGELOG-ARCHIV.md)**.
 
+## [1.5.2] – 2026-07-20
+
+### Geändert
+- **Erzgebirge-Regeln anhand der vollständigen LVSA-Gewässerordnung 2024 korrigiert**
+  (Nutzer hat den kompletten Originaltext geteilt – erste echte Primärquelle für diese
+  Region, bisher nur per Websuche recherchiert). Konkrete Korrekturen:
+  - Döbel & Brachse haben laut GWO Pkt. 3.3 gar **kein** Mindestmaß und keine Schonzeit
+    (die zuvor eingetragenen "ab 25 cm" bei Döbel waren aus einer Websuche übernommen
+    und falsch).
+  - Barsch-Tageslimit ergänzt: max. 10/Tag, davon max. 5 über 30 cm (Detail fehlte bisher).
+  - Raubfisch-Sperrfrist 01.02.–30.04. korrigiert: verboten ist **jede** Handangel zum
+    Raubfischfang (Kunstköder UND Köderfischangel), nicht nur Kunstköder – die alte
+    Formulierung "Kunstköderverbot" hätte fälschlich nahelegen können, Köderfischangeln
+    sei in der Zeit noch erlaubt.
+  - Präzises Tageslimit ergänzt (vorher als unsicher markiert): insgesamt max. 3 Fische
+    der fangmengenbelegten Arten/Tag, davon Hecht+Zander zusammen max. 2, plus die
+    Detailwerte je Art (GWO Pkt. 3.1).
+  - TWT-Köderregel korrigiert: verboten sind nur Fleisch, Leber, Blut, Molke und
+    Fleischmaden – normale Maden waren fälschlich als verboten dargestellt, sind es
+    laut GWO aber nicht.
+  - Sicherheitshinweis ergänzt: nicht von der Staumauer/den Absperrbauwerken selbst
+    angeln, 50 m Mindestabstand zu Ablassanlagen – der Hotspot "Staumauer-Bereich" an
+    der Talsperre Saidenbach wurde entsprechend präzisiert (Ufer neben der Mauer, nicht
+    die Mauer selbst), dazu kein Eisangeln ergänzt.
+
 ## [1.5.1] – 2026-07-19
 
 ### Geändert

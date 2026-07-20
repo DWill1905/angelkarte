@@ -8,17 +8,17 @@
   "Erlaubnisschein + Personalausweis",
   "Fangbuch (vor Angelbeginn ausfüllen!)",
   "Maßband &amp; Hakenlöser",
-  "TWT: KEINE Maden/Fleisch – nur erlaubte Köder",
+  "TWT: kein Fleisch/Leber/Blut/Molke/Fleischmaden – Maden/Wurm/Mais sind erlaubt",
   "Salmo-Strecke: Wathose + Einzelhaken + Sprengringzange",
   "Kescher, Kopflampe (Nachtangeln 1h nach SU)"
  ],
  "koederfisch": [
   "Lebender Köderfisch ist in ganz Deutschland verboten (Tierschutzgesetz) – nur tote Köderfische verwenden.",
   "Köderfische nur aus demselben Gewässer entnehmen (keine Verschleppung/Faunenverfälschung).",
-  "In Trinkwassertalsperren: Maden &amp; Fleisch als Köder verboten – Köderfisch dort tabu.",
+  "In Trinkwassertalsperren explizit verboten: Fleisch, Leber, Blut, Molke, Fleischmaden als Köder (LVSA-GWO 2024). Ob Köderfisch am jeweiligen Einzelgewässer zusätzlich eingeschränkt ist, steht ggf. im Gewässerverzeichnis – im Zweifel prüfen.",
   "Fangbegrenzung Köderfische laut Erlaubnisschein beachten."
  ],
- "schonQuelle": "Quelle: SächsFischVO 2022 (gesetzliche Mindestwerte) + LVSA-Gewässerordnung 2024 (Verbandsregeln, auf AVS-/LVSA-Erlaubnisscheinen bindend und teils strenger – z.B. Hecht/Zander 60 statt gesetzlich 50 cm).",
+ "schonQuelle": "Quelle: SächsFischVO 2022 (gesetzliche Mindestwerte) + LVSA-Gewässerordnung 2024, vollständiger Text (Verbandsregeln, auf AVS-/LVSA-Erlaubnisscheinen bindend und teils strenger – z.B. Hecht/Zander 60 statt gesetzlich 50 cm; Döbel &amp; Brachse laut GWO Pkt. 3.3 ohne Mindestmaß/Schonzeit).",
  "fusszeile": "Gastkarten: <a href=\"https://angeln-sachsen.de/avs/gastangler/gastkarten\" target=\"_blank\" rel=\"noopener\">AVS Südsachsen</a>",
  "spots": [
   {
@@ -36,7 +36,7 @@
      30
     ]
    },
-   "rig": "H-Spinnrute 20–60 g, Geflecht + FC-Vorfach. Erlaubte Köder: Kunstköder, Wurm, Mais/Teig – KEINE Maden, kein Fleisch, kein Anfüttern (TWT!).",
+   "rig": "H-Spinnrute 20–60 g, Geflecht + FC-Vorfach. Kunstköder, Wurm, Mais/Teig und Maden sind erlaubt – verboten sind Fleisch, Leber, Blut, Molke, Fleischmaden und Anfüttern (TWT!).",
    "arten": [
     "Barsch",
     "Hecht",
@@ -58,14 +58,14 @@
      "url": "https://angeln-sachsen.de/avs/gastangler/gastkarten"
     }
    ],
-   "note": "Trinkwassertalsperre: kein Boot, kein Waten, kein Anfüttern, keine Maden/Fleisch, kein Nachtangeln. Schonmaß 60 cm für ALLE Salmoniden. Parkplatz am NO-Ufer (Lippersdorfer Str.), Rundwanderweg erschließt alle Ufer.",
+   "note": "Trinkwassertalsperre: kein Boot, kein Waten, kein Anfüttern, kein Eisangeln, kein Nachtangeln. Als Köder verboten: Fleisch, Leber, Blut, Molke, Fleischmaden (LVSA-GWO 2024). Nicht von der Staumauer/den Absperrbauwerken selbst angeln, Mindestabstand 50 m zu Ablass-/Entnahmeanlagen. Schonmaß 60 cm für ALLE Salmoniden. Parkplatz am NO-Ufer (Lippersdorfer Str.), Rundwanderweg erschließt alle Ufer.",
    "hotspots": [
     {
-     "name": "Staumauer-Bereich",
+     "name": "Staumauer-Bereich (Zufahrtsufer, nicht die Staumauer selbst)",
      "saison": "Jul–Sep (Sommerloch-Taktik)",
      "lat": 50.734,
      "lng": 13.2318,
-     "tipp": "Tiefster Bereich der Talsperre. Sommer: Fische stehen tief – weite Würfe mit schweren Gummis, Barschtrupps über den Tiefenkanten suchen."
+     "tipp": "Tiefster Bereich der Talsperre. Vom angrenzenden Ufer werfen – NICHT von der Staumauer/den Absperrbauwerken aus angeln (verboten, Mindestabstand 50 m zu Ablassanlagen beachten). Sommer: Fische stehen tief – weite Würfe mit schweren Gummis, Barschtrupps über den Tiefenkanten suchen."
     },
     {
      "name": "Übergang Vorsperre Forchheim",
@@ -719,19 +719,19 @@
    "fisch": "Barsch",
    "von": null,
    "bis": null,
-   "mm": "– (LVSA: max. 10/Tag)"
+   "mm": "– (LVSA: max. 10/Tag, davon max. 5 über 30 cm)"
   },
   {
    "fisch": "Döbel",
    "von": null,
    "bis": null,
-   "mm": "ab 25 cm, keine Schonzeit"
+   "mm": "– (kein Mindestmaß, keine Schonzeit – LVSA-Gewässerordnung 2024)"
   },
   {
    "fisch": "Brachse",
    "von": null,
    "bis": null,
-   "mm": "– (kein gesetzl. Maß, keine Schonzeit)"
+   "mm": "– (kein Mindestmaß, keine Schonzeit – LVSA-Gewässerordnung 2024)"
   }
  ],
  "banner": [
@@ -744,7 +744,7 @@
     4,
     30
    ],
-   "text": "<b>Raubfisch-Sperrfrist aktiv:</b> 01.02.–30.04. Kunstköderverbot in LVSA-Gewässern (gilt NICHT am privaten Angelteich Gränitz), Hecht geschont."
+   "text": "<b>Raubfisch-Sperrfrist aktiv:</b> 01.02.–30.04. Handangeln zum Raubfischfang (Kunstköder UND Köderfisch) in allen LVSA-Gewässern untersagt (gilt NICHT am privaten Angelteich Gränitz), Hecht geschont."
   },
   {
    "von": [
@@ -762,21 +762,23 @@
   {
    "titel": "Raubfisch-Sperrfrist (LVSA)",
    "punkte": [
-    "01.02.–30.04.: Angeln mit raubfischtauglichen Ködern in allen LVSA-Gewässern untersagt (faktisch Kunstköderverbot)",
+    "01.02.–30.04.: JEDE Handangel zum Raubfischfang untersagt – nicht nur Kunstköder, auch die Köderfischangel (LVSA-GWO 2024, Pkt. 3.3)",
     "Hecht &amp; Zander: Mindestmaß 60 cm (Vereinsregel, strenger als das gesetzliche SächsFischVO-Maß von 50 cm)",
-    "Barsch: max. 10/Tag, davon 5 über 30 cm",
-    "Zusätzlich Tageslimit für Hecht/Zander laut Gewässerordnung – genaue Stückzahl je nach Quelle uneinheitlich wiedergegeben, im Zweifel aktuelle LVSA-Gewässerordnung/Erlaubnisschein prüfen",
+    "Tageslimit gesamt: max. 3 Fische der fangmengenbelegten Arten, davon Hecht+Zander zusammen max. 2 (LVSA-GWO 2024, Pkt. 3.1)",
+    "Je Art zusätzlich begrenzt: 1× Äsche/Lachs/Meerforelle/Seeforelle/Seesaibling; 2× Aal/Bachforelle/Bachsaibling/Graskarpfen/Hecht/Karpfen/Zander; 3× Barbe/Regenbogenforelle/Schleie",
+    "Barsch separat: max. 10/Tag, davon max. 5 über 30 cm",
     "Fangbuch vor Angelbeginn ausfüllen",
     "Nachtangelzeit: 1 h nach Sonnenuntergang bis 1 h vor Sonnenaufgang"
    ]
   },
   {
-   "titel": "Trinkwassertalsperren (Saidenbach, Dittersbach)",
+   "titel": "Trinkwassertalsperren (Saidenbach, Dittersbach, Rauschenbach)",
    "punkte": [
     "TWT-Belehrung nötig – Nachweis im Fangbuch/Erlaubnisschein",
-    "Kein Boot, kein Belly, kein Waten, kein Baden",
+    "Kein Boot, kein Belly, kein Waten, kein Baden, kein Eisangeln",
     "Anfüttern verboten – auch Futterkorb",
-    "Maden &amp; Fleisch als Köder verboten",
+    "Verboten als Köder: Fleisch, Leber, Blut, Molke, Fleischmaden (normale Maden, Wurm, Mais/Teig sind erlaubt)",
+    "Nicht von der Staumauer/den Absperrbauwerken angeln, Mindestabstand 50 m zu Ablass-/Entnahmeanlagen",
     "Kein Nachtangeln, kein Zelten, kein Feuer",
     "Fische nicht am Gewässer schlachten"
    ]

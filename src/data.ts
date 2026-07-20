@@ -41,15 +41,15 @@ export function fischArtenFor(ids: string[]): string[] {
 export const SPOTS_SN: Spot[] = [
   {
     name:'Talsperre Saidenbach',zugang:'ufer',keinBoot:true,keinAnfuettern:true,kkVerbot:{von:[2,1],bis:[4,30]},
-    rig:'H-Spinnrute 20–60 g, Geflecht + FC-Vorfach. Erlaubte Köder: Kunstköder, Wurm, Mais/Teig – KEINE Maden, kein Fleisch, kein Anfüttern (TWT!).',
+    rig:'H-Spinnrute 20–60 g, Geflecht + FC-Vorfach. Kunstköder, Wurm, Mais/Teig und Maden sind erlaubt – verboten sind Fleisch, Leber, Blut, Molke, Fleischmaden und Anfüttern (TWT!).',
     arten:['Barsch','Hecht','Karpfen','Schleie','Brachse','Zander'], nr:'C02-102', cat:'raub', lat:50.7358, lng:13.2342,
     fisch:'Barsch, Hecht, Karpfen, Schleie, Brasse, Weißfisch (Zander selten)',
     methode:'Gummifisch & Wobbler an den Kanten der Bachtäler, DropShot auf Barsch – weite Würfe nötig, Fische oft bis ~15 m Tiefe',
     karte:'AVS-Erlaubnisschein + TWT-Belehrung (Quittung im Fangbuch)',
     kartenLinks:[{label:'AVS Sachsen – Gastkarten',url:'https://angeln-sachsen.de/avs/gastangler/gastkarten'}],
-   note:'Trinkwassertalsperre: kein Boot, kein Waten, kein Anfüttern, keine Maden/Fleisch, kein Nachtangeln. Schonmaß 60 cm für ALLE Salmoniden. Parkplatz am NO-Ufer (Lippersdorfer Str.), Rundwanderweg erschließt alle Ufer.',
+   note:'Trinkwassertalsperre: kein Boot, kein Waten, kein Anfüttern, kein Eisangeln, kein Nachtangeln. Als Köder verboten: Fleisch, Leber, Blut, Molke, Fleischmaden (LVSA-GWO 2024). Nicht von der Staumauer/den Absperrbauwerken selbst angeln, Mindestabstand 50 m zu Ablass-/Entnahmeanlagen. Schonmaß 60 cm für ALLE Salmoniden. Parkplatz am NO-Ufer (Lippersdorfer Str.), Rundwanderweg erschließt alle Ufer.',
     hotspots:[
-      {name:'Staumauer-Bereich',saison:'Jul–Sep (Sommerloch-Taktik)',lat:50.7340,lng:13.2318,tipp:'Tiefster Bereich der Talsperre. Sommer: Fische stehen tief – weite Würfe mit schweren Gummis, Barschtrupps über den Tiefenkanten suchen.'},
+      {name:'Staumauer-Bereich (Zufahrtsufer, nicht die Staumauer selbst)',saison:'Jul–Sep (Sommerloch-Taktik)',lat:50.7340,lng:13.2318,tipp:'Tiefster Bereich der Talsperre. Vom angrenzenden Ufer werfen – NICHT von der Staumauer/den Absperrbauwerken aus angeln (verboten, Mindestabstand 50 m zu Ablassanlagen beachten). Sommer: Fische stehen tief – weite Würfe mit schweren Gummis, Barschtrupps über den Tiefenkanten suchen.'},
       {name:'Übergang Vorsperre Forchheim',saison:'Mai–Jun + Okt',lat:50.7284,lng:13.2736,tipp:'Kante zwischen flacher Vorsperre und Hauptbecken – klassischer Zug für Hecht und Barsch, im Frühsommer zuerst warm.'},
       {name:'Ufer: Nordostufer am Parkplatz',saison:'ganzjährig',lat:50.7420,lng:13.2430,tipp:'Bester Uferabschnitt (Luftbild): offene Wiesenkanten ohne Schilf, freie Wurfbahn Richtung Tiefenlinie. Kürzester Weg vom Parkplatz Lippersdorfer Str. Beschilderung der erlaubten Bereiche beachten!'}
     ],
@@ -237,13 +237,14 @@ export const SCHON_SN: Schonzeit[] = [
   {fisch:'Karpfen', von:null, bis:null, mm:'40 cm'},
   {fisch:'Schleie', von:null, bis:null, mm:'25 cm (keine Schonzeit in SN)'},
   {fisch:'Aal', von:null, bis:null, mm:'50 cm'},
-  {fisch:'Barsch', von:null, bis:null, mm:'– (LVSA: max. 10/Tag)'},
-  /* Döbel (4 Mulde-/Flöha-Spots) und Brachse (Saidenbach/Rauschenbach/Schlüsselteich)
-     fehlten hier komplett, obwohl beide Zielart an mehreren Spots sind - dieselbe Luecke
-     wie bei Gießen/Döbel (siehe dortiger Fix). Fangbuch zeigte bislang faelschlich
-     "keine Daten vorliegen". */
-  {fisch:'Döbel', von:null, bis:null, mm:'ab 25 cm, keine Schonzeit'},
-  {fisch:'Brachse', von:null, bis:null, mm:'– (kein gesetzl. Maß, keine Schonzeit)'}
+  {fisch:'Barsch', von:null, bis:null, mm:'– (LVSA: max. 10/Tag, davon max. 5 über 30 cm)'},
+  /* Döbel und Brachse (LVSA-Gewässerordnung 2024, Pkt. 3.3, dort unter dem Namen "Blei"
+     geführt – regionale Bezeichnung für Brachse/Blei, Abramis brama) stehen wörtlich auf
+     der Liste "keine Schonzeiten und Mindestmaße". Der zuvor hier eingetragene Döbel-Wert
+     "ab 25 cm" war aus einer Websuche übernommen und wird durch die jetzt vorliegende
+     Primärquelle (Nutzer hat den vollständigen GWO-Text geteilt) widerlegt. */
+  {fisch:'Döbel', von:null, bis:null, mm:'– (kein Mindestmaß, keine Schonzeit – LVSA-Gewässerordnung 2024)'},
+  {fisch:'Brachse', von:null, bis:null, mm:'– (kein Mindestmaß, keine Schonzeit – LVSA-Gewässerordnung 2024)'}
 ];
 
 /* ============ Region: Mecklenburgische Kleinseenplatte (recherchiert 07/2026) ============ */
@@ -1026,18 +1027,18 @@ export const REGION_BY: Region = {id:'muenchen',geprueft:'2026-07',name:'Münche
   hinweis:'Angaben ohne Gewähr, recherchiert 07/2026 (Fischwaid München e.V., Versehrten Fischereiverein München e.V., LBV, diverse Angel-Gewässerdatenbanken). Maßgeblich sind immer der jeweilige Erlaubnisschein, die Gewässerordnung des Vereins und die Beschilderung vor Ort. Koordinaten der Seen/des Kanals sind Näherungswerte (Zufahrts-/Parkplatzbereich), keine vermessenen Angelstellen.'};
 
 export const REGIONS_EMBEDDED: Region[] = [
- {id:'erzgebirge',geprueft:'2026-07',name:'Erzgebirge / Freiberg (Sachsen)',nachtangeln:'lvsa',kurz:'Erzgebirge',packliste:['Erlaubnisschein + Personalausweis','Fangbuch (vor Angelbeginn ausfüllen!)','Maßband &amp; Hakenlöser','TWT: KEINE Maden/Fleisch – nur erlaubte Köder','Salmo-Strecke: Wathose + Einzelhaken + Sprengringzange','Kescher, Kopflampe (Nachtangeln 1h nach SU)'],
-  koederfisch:['Lebender Köderfisch ist in ganz Deutschland verboten (Tierschutzgesetz) – nur tote Köderfische verwenden.','Köderfische nur aus demselben Gewässer entnehmen (keine Verschleppung/Faunenverfälschung).','In Trinkwassertalsperren: Maden &amp; Fleisch als Köder verboten – Köderfisch dort tabu.','Fangbegrenzung Köderfische laut Erlaubnisschein beachten.'],
-  schonQuelle:'Quelle: SächsFischVO 2022 (gesetzliche Mindestwerte) + LVSA-Gewässerordnung 2024 (Verbandsregeln, auf AVS-/LVSA-Erlaubnisscheinen bindend und teils strenger – z.B. Hecht/Zander 60 statt gesetzlich 50 cm).',
+ {id:'erzgebirge',geprueft:'2026-07',name:'Erzgebirge / Freiberg (Sachsen)',nachtangeln:'lvsa',kurz:'Erzgebirge',packliste:['Erlaubnisschein + Personalausweis','Fangbuch (vor Angelbeginn ausfüllen!)','Maßband &amp; Hakenlöser','TWT: kein Fleisch/Leber/Blut/Molke/Fleischmaden – Maden/Wurm/Mais sind erlaubt','Salmo-Strecke: Wathose + Einzelhaken + Sprengringzange','Kescher, Kopflampe (Nachtangeln 1h nach SU)'],
+  koederfisch:['Lebender Köderfisch ist in ganz Deutschland verboten (Tierschutzgesetz) – nur tote Köderfische verwenden.','Köderfische nur aus demselben Gewässer entnehmen (keine Verschleppung/Faunenverfälschung).','In Trinkwassertalsperren explizit verboten: Fleisch, Leber, Blut, Molke, Fleischmaden als Köder (LVSA-GWO 2024). Ob Köderfisch am jeweiligen Einzelgewässer zusätzlich eingeschränkt ist, steht ggf. im Gewässerverzeichnis – im Zweifel prüfen.','Fangbegrenzung Köderfische laut Erlaubnisschein beachten.'],
+  schonQuelle:'Quelle: SächsFischVO 2022 (gesetzliche Mindestwerte) + LVSA-Gewässerordnung 2024, vollständiger Text (Verbandsregeln, auf AVS-/LVSA-Erlaubnisscheinen bindend und teils strenger – z.B. Hecht/Zander 60 statt gesetzlich 50 cm; Döbel &amp; Brachse laut GWO Pkt. 3.3 ohne Mindestmaß/Schonzeit).',
   fusszeile:'Gastkarten: <a href="https://angeln-sachsen.de/avs/gastangler/gastkarten" target="_blank" rel="noopener">AVS Südsachsen</a>',
   spots:SPOTS_SN,schon:SCHON_SN,
   banner:[
-    {von:[2,1],bis:[4,30],text:'<b>Raubfisch-Sperrfrist aktiv:</b> 01.02.–30.04. Kunstköderverbot in LVSA-Gewässern (gilt NICHT am privaten Angelteich Gränitz), Hecht geschont.'},
+    {von:[2,1],bis:[4,30],text:'<b>Raubfisch-Sperrfrist aktiv:</b> 01.02.–30.04. Handangeln zum Raubfischfang (Kunstköder UND Köderfisch) in allen LVSA-Gewässern untersagt (gilt NICHT am privaten Angelteich Gränitz), Hecht geschont.'},
     {von:[5,1],bis:[5,31],text:'<b>Zander geschont bis 31.05.</b> – Hecht &amp; Barsch sind offen.'}
   ],
   regeln:[
-   {titel:'Raubfisch-Sperrfrist (LVSA)',punkte:['01.02.–30.04.: Angeln mit raubfischtauglichen Ködern in allen LVSA-Gewässern untersagt (faktisch Kunstköderverbot)','Hecht &amp; Zander: Mindestmaß 60 cm (Vereinsregel, strenger als das gesetzliche SächsFischVO-Maß von 50 cm)','Barsch: max. 10/Tag, davon 5 über 30 cm','Zusätzlich Tageslimit für Hecht/Zander laut Gewässerordnung – genaue Stückzahl je nach Quelle uneinheitlich wiedergegeben, im Zweifel aktuelle LVSA-Gewässerordnung/Erlaubnisschein prüfen','Fangbuch vor Angelbeginn ausfüllen','Nachtangelzeit: 1 h nach Sonnenuntergang bis 1 h vor Sonnenaufgang']},
-   {titel:'Trinkwassertalsperren (Saidenbach, Dittersbach)',punkte:['TWT-Belehrung nötig – Nachweis im Fangbuch/Erlaubnisschein','Kein Boot, kein Belly, kein Waten, kein Baden','Anfüttern verboten – auch Futterkorb','Maden &amp; Fleisch als Köder verboten','Kein Nachtangeln, kein Zelten, kein Feuer','Fische nicht am Gewässer schlachten']},
+   {titel:'Raubfisch-Sperrfrist (LVSA)',punkte:['01.02.–30.04.: JEDE Handangel zum Raubfischfang untersagt – nicht nur Kunstköder, auch die Köderfischangel (LVSA-GWO 2024, Pkt. 3.3)','Hecht &amp; Zander: Mindestmaß 60 cm (Vereinsregel, strenger als das gesetzliche SächsFischVO-Maß von 50 cm)','Tageslimit gesamt: max. 3 Fische der fangmengenbelegten Arten, davon Hecht+Zander zusammen max. 2 (LVSA-GWO 2024, Pkt. 3.1)','Je Art zusätzlich begrenzt: 1× Äsche/Lachs/Meerforelle/Seeforelle/Seesaibling; 2× Aal/Bachforelle/Bachsaibling/Graskarpfen/Hecht/Karpfen/Zander; 3× Barbe/Regenbogenforelle/Schleie','Barsch separat: max. 10/Tag, davon max. 5 über 30 cm','Fangbuch vor Angelbeginn ausfüllen','Nachtangelzeit: 1 h nach Sonnenuntergang bis 1 h vor Sonnenaufgang']},
+   {titel:'Trinkwassertalsperren (Saidenbach, Dittersbach, Rauschenbach)',punkte:['TWT-Belehrung nötig – Nachweis im Fangbuch/Erlaubnisschein','Kein Boot, kein Belly, kein Waten, kein Baden, kein Eisangeln','Anfüttern verboten – auch Futterkorb','Verboten als Köder: Fleisch, Leber, Blut, Molke, Fleischmaden (normale Maden, Wurm, Mais/Teig sind erlaubt)','Nicht von der Staumauer/den Absperrbauwerken angeln, Mindestabstand 50 m zu Ablass-/Entnahmeanlagen','Kein Nachtangeln, kein Zelten, kein Feuer','Fische nicht am Gewässer schlachten']},
    {titel:'Streckenfarben an Flüssen (Sachsen)',punkte:['<b style="color:#e8b93c">Gelb</b>: nur mit Jahres-Salmonidenschein des AVS','<b style="color:#6fae6f">Grün</b>: allgemeine Berechtigung, aber Salmonidenregeln','<b style="color:#7d9bc9">Blau</b> (Karte): allgemeines Angelgewässer','<b style="color:#c94f3d">Rot gestrichelt</b>: Sperrstrecke – Angeln verboten','Linienverlauf schematisch – maßgeblich sind die Schilder am Wasser']},
    {titel:'Salmonidenstrecken (Mulde, Flöha)',punkte:['01.01.–30.04.: Angeln komplett verboten','01.05.–30.09.: Flug- oder Spinnangel','01.10.–31.12.: nur Flugangel','Nur 1 Einzelhaken pro Köder (Drillinge tauschen), Salmonidenschein je nach Strecke','Nachtangeln verboten, Salmoniden nicht hältern']}
   ],
