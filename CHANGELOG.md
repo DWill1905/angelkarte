@@ -10,6 +10,15 @@ Die ausführliche technische Historie vor 1.0.0 (jede einzelne der früheren
 `beisszeit-shell-vN`-Versionen mit Ursache, Testabdeckung, betroffenen Dateien) steht
 weiterhin in **[CHANGELOG-ARCHIV.md](CHANGELOG-ARCHIV.md)**.
 
+## [1.5.3] – 2026-07-20
+
+### Hinzugefügt
+- **Kinder-Regel für die Kleinseenplatte (Seenfischerei Obere Havel) ergänzt**: Kinder bis
+  zum vollendeten 14. Lebensjahr (ohne Fischereischein) dürfen dort nur mit einer
+  Friedfischrute angeln, kein Nachtangeln – aus einem vom Nutzer geteilten Originalauszug
+  der Kartenregeln, der Rest des Auszugs deckte sich bereits exakt mit den vorhandenen
+  Daten (Entnahmefenster, Tageslimit, Abstandsregeln – keine Änderung nötig).
+
 ## [1.5.2] – 2026-07-20
 
 ### Geändert
