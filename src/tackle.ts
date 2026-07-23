@@ -211,7 +211,7 @@ export function tackleHtml(s: Spot): string {
   const jetzt = saison();
   const w = wasserTyp(s);
   const LABEL: Record<keyof Farben, string> = { fruehjahr: 'Frühjahr', sommer: 'Sommer', herbst: 'Herbst', winter: 'Winter' };
-  const SDOT: Record<keyof Farben, string> = { fruehjahr: '#6fae6f', sommer: '#e8b93c', herbst: '#d98a3d', winter: '#6ea8c4' };
+  const SDOT: Record<keyof Farben, string> = { fruehjahr: '#5C7A3D', sommer: '#C79000', herbst: '#A6521F', winter: '#3A608F' };
   const row = (k: string, v: string) => `<div class="tk-row"><span class="k">${k}</span><span>${esc(v)}</span></div>`;
   const farbBlock = (farben: Farben) => {
     const zeilen = (Object.keys(LABEL) as (keyof Farben)[]).map((k) => {

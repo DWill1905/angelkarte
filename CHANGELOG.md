@@ -10,6 +10,27 @@ Die ausführliche technische Historie vor 1.0.0 (jede einzelne der früheren
 `beisszeit-shell-vN`-Versionen mit Ursache, Testabdeckung, betroffenen Dateien) steht
 weiterhin in **[CHANGELOG-ARCHIV.md](CHANGELOG-ARCHIV.md)**.
 
+## [1.6.0] – 2026-07-23
+
+### Geändert
+- **Material-3-Redesign: das dunkle "Tiefengradient"-Theme ist einem hellen Material-3-Design
+  gewichen** (Vorlage: Nutzer-Mockup „Beisszeit Karte (Material 3)"). Neues Farbsystem
+  (Primary-Teal `#196C74`, Tonal-Paletten pro Kategorie inkl. Sperrzonen/Eigene-Spots/Info,
+  Fluss-Streckenfarben, Tackle-Saisonpunkte), Roboto statt Space Grotesk/Space Mono (System-
+  Monospace für Zahlen), abgerundete Karten-/Chip-/Button-Formen, gerundetes Kartenfenster mit
+  Abstand statt randlos, kompakte Auf/Unter/Mond-Zeile unter dem Regionstitel im Header. Die
+  bestehenden Radius-/Schatten-/Spacing-Tokens, Motion- und Barrierefreiheits-Arbeit
+  (forced-colors, reduzierte Bewegung, Fokus-Ringe, Kontrast-Fixes) bleiben vollständig
+  erhalten – nur die Farbwerte wechseln von dunkel auf hell.
+- **Spot-Details ziehen vom Leaflet-Popup ins Bottom-Sheet um.** Ein Marker-, Hotspot- oder
+  Listenklick öffnet die Detailkarte jetzt am Ende der Spotliste (gemeinsamer
+  Scrollcontainer) statt in einer Popup-Bubble – `selectSpot()`/`selectHotspot()` (map.ts)
+  ersetzen `bindPopup()`/`openPopup()`/`closePopup()` vollständig. Die bisherige
+  Popup-Anreicherung (Distanz, Wind-Taktik, Wassertemperatur-Hinweis, Trip-Button, Notiz)
+  ist als `enhanceDetail()` in tools.ts exportiert. Ausgewählte Zeile wird in der Liste
+  hervorgehoben; Regionswechsel, Löschen oder Bearbeiten eines eigenen Spots räumen eine
+  offene Detailkarte automatisch ab, statt veraltete Daten stehen zu lassen.
+
 ## [1.5.0] – 2026-07-19
 
 ### Hinzugefügt

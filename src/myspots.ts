@@ -2,7 +2,7 @@
 import type { Spot } from './types';
 import { byId, inputById } from './dom.js';
 import { state, store } from './state.js';
-import { applyFilters, buildChips, buildMarkers } from './map.js';
+import { applyFilters, buildChips, buildMarkers, deselectSpot } from './map.js';
 import { esc, ICON } from './util.js';
 import { tripSave, updateTripBadge } from './trip.js';
 export var myPending=null;
@@ -82,6 +82,9 @@ export async function saveMySpot(){
     state.trip.forEach(t=>{ if(t.region===state.REGION.id&&t.name===altName){ t.name=name; geaendert=true; } });
     if(geaendert){ await tripSave(); updateTripBadge(); }
   }
+  /* Beim Bearbeiten wird der alte Spot-Datensatz durch einen neuen ersetzt (siehe oben) -
+     eine offene Detailkarte würde sonst mit veralteten Daten (altem Namen/Notiz) weiterleben. */
+  if(editId!=null) deselectSpot();
   buildMarkers(); buildChips(); applyFilters();
   closeMyDlg();
 }
@@ -100,7 +103,7 @@ window.delMySpot=async function(id){
     state.trip=state.trip.filter(t=>!(t.region===state.REGION.id&&t.name===geloescht.name));
     if(state.trip.length!==vorher){ await tripSave(); updateTripBadge(); }
   }
-  state.map.closePopup(); buildChips(); applyFilters();
+  deselectSpot(); buildChips(); applyFilters();
 };
 byId('mySave').onclick=saveMySpot;
 byId('myCancel').onclick=closeMyDlg;

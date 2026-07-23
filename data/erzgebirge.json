@@ -784,10 +784,10 @@
   {
    "titel": "Streckenfarben an Flüssen (Sachsen)",
    "punkte": [
-    "<b style=\"color:#e8b93c\">Gelb</b>: nur mit Jahres-Salmonidenschein des AVS",
-    "<b style=\"color:#6fae6f\">Grün</b>: allgemeine Berechtigung, aber Salmonidenregeln",
-    "<b style=\"color:#7d9bc9\">Blau</b> (Karte): allgemeines Angelgewässer",
-    "<b style=\"color:#c94f3d\">Rot gestrichelt</b>: Sperrstrecke – Angeln verboten",
+    "<b style=\"color:#C79000\">Gelb</b>: nur mit Jahres-Salmonidenschein des AVS",
+    "<b style=\"color:#5C7A3D\">Grün</b>: allgemeine Berechtigung, aber Salmonidenregeln",
+    "<b style=\"color:#3A608F\">Blau</b> (Karte): allgemeines Angelgewässer",
+    "<b style=\"color:#BA1A1A\">Rot gestrichelt</b>: Sperrstrecke – Angeln verboten",
     "Linienverlauf schematisch – maßgeblich sind die Schilder am Wasser"
    ]
   },

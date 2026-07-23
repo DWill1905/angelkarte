@@ -51,8 +51,8 @@ export function setTripBtn(btn, drin) {
     btn.textContent = drin ? '★ Gemerkt' : '☆ Merken';
     btn.setAttribute('aria-pressed', String(drin));
     btn.classList.toggle('on', drin);
-    btn.style.background = drin ? '#2f5b4a' : '';
-    btn.style.color = drin ? '#b9e6cf' : '';
+    btn.style.background = drin ? 'var(--tonal)' : '';
+    btn.style.color = drin ? 'var(--tonal-fg)' : '';
 }
 window.toggleTripSpot = async function (name) { await toggleTrip(name); };
 /* Badge am Werkzeuge-Button: Anzahl gemerkter Spots */

@@ -3,7 +3,7 @@ import { byId, selectById } from './dom.js';
 import { state, store } from './state.js';
 import { REGIONS_EMBEDDED } from './data.js';
 import { buildFbOptions, checkFang } from './fangbuch.js';
-import { applyFilters, buildChips, buildLegend, buildMarkers, buildRheinKm, syncFishChips, sperrWarnung } from './map.js';
+import { applyFilters, buildChips, buildLegend, buildMarkers, buildRheinKm, deselectSpot, syncFishChips, sperrWarnung } from './map.js';
 import { loadMySpots, mySpotObj } from './myspots.js';
 import { buildRegeln, buildSchonUI } from './regeln.js';
 import { buildBanner, buildSaisonBar, sunLine } from './ui.js';
@@ -38,6 +38,7 @@ export async function initRegions(){
 
 export async function loadRegion(r){
   const myToken=++state.loadToken;
+  deselectSpot(); /* Detailkarte im Sheet gehört sonst noch zum vorigen Revier */
   if(state.REGION) state.SPOTS.forEach(sp=>{
     if(sp.marker){ if(state.cluster) state.cluster.removeLayer(sp.marker); if(state.map.hasLayer(sp.marker)) state.map.removeLayer(sp.marker); }
     (sp.hotMarkers||[]).forEach(m=>{ if(state.cluster) state.cluster.removeLayer(m); if(state.map.hasLayer(m)) state.map.removeLayer(m); });

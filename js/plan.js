@@ -19,6 +19,7 @@ import { FUTTERKORB_ARTEN, OHNE_ANFUETTERN, WT_OPT, tackleFor, wasserTyp } from 
 import { bewerteSpot, sterneAus, artZeitprofil, stroemungsLage } from './rating.js';
 import { jahreszeit } from './saison.js';
 import { wtSchaetzung } from './weather.js';
+import { selectHotspot, selectSpot } from './map.js';
 import { fischArtenFor, FISH } from './data.js';
 /* Geometrie liegt in geo.ts – hier nur re-exportiert, damit bestehende Aufrufer bleiben können. */
 export { peilung, himmelsrichtung, winkelDiff, istAuflandig } from './geo.js';
@@ -535,11 +536,10 @@ function goToKandidat() {
         dlg.hidden = true;
     if (letzterKandidat && state.map) {
         state.map.flyTo([letzterKandidat.lat, letzterKandidat.lng], 14, { duration: 0.7 });
-        const m = letzterKandidat.hotspot
-            ? (letzterKandidat.spot.hotMarkers || [])[(letzterKandidat.spot.hotspots || []).indexOf(letzterKandidat.hotspot)]
-            : letzterKandidat.spot.marker;
-        if (m && typeof m.openPopup === 'function')
-            setTimeout(() => m.openPopup(), 750);
+        if (letzterKandidat.hotspot)
+            selectHotspot(letzterKandidat.spot, letzterKandidat.hotspot);
+        else
+            selectSpot(letzterKandidat.spot);
     }
 }
 /* --- Tages-Blätterer -------------------------------------------------------

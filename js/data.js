@@ -1,12 +1,14 @@
+/* Material-3-Tonal-Paletten je Kategorie: `color` = kräftiger Marker-/Dot-Ton (Karte, Chips),
+   `bg`/`fg` = helles Tonal-Paar für Badges im Spot-Detail (Popup/Sheet). */
 export const CATS = {
-    eigen: { label: 'Eigene Spots', color: '#c9699e' },
-    info: { label: 'Service/Kartenausgabe', color: '#b58cc9' },
-    raub: { label: 'Raubfisch', color: '#e4572e' },
-    salmo: { label: 'Salmoniden', color: '#5cc0dc' },
-    fried: { label: 'Friedfisch', color: '#8fb069' },
-    fluss: { label: 'Fluss allgemein', color: '#7d9bc9' },
-    forelle: { label: 'Forellenteich', color: '#e8b93c' },
-    sperr: { label: 'Gesperrt/eingeschränkt', color: '#8a93a0' }
+    eigen: { label: 'Eigene Spots', color: '#8E4A87', bg: '#FFD7F4', fg: '#390336' },
+    info: { label: 'Service/Kartenausgabe', color: '#5B5F63', bg: '#DFE3E3', fg: '#1B1E1F' },
+    raub: { label: 'Raubfisch', color: '#196C74', bg: '#9EEFF3', fg: '#002022' },
+    salmo: { label: 'Salmoniden', color: '#5C7A3D', bg: '#DDE9C8', fg: '#1B2A0E' },
+    fried: { label: 'Friedfisch', color: '#7C5800', bg: '#FFDEA6', fg: '#271900' },
+    fluss: { label: 'Fluss allgemein', color: '#3A608F', bg: '#D3E4FF', fg: '#001C3B' },
+    forelle: { label: 'Forellenteich', color: '#8C4058', bg: '#FFD9E3', fg: '#31101B' },
+    sperr: { label: 'Gesperrt/eingeschränkt', color: '#BA1A1A', bg: '#FFDAD6', fg: '#410002' }
 };
 /* Zielfisch-Filter: Chip-ID → tatsächliche Artennamen in Spot.arten.
    Liegt hier (nicht in map.ts), damit auch der „Heute"-Planer (plan.ts) den aktiven
@@ -998,7 +1000,7 @@ export const REGIONS_EMBEDDED = [
         regeln: [
             { titel: 'Raubfisch-Sperrfrist (LVSA)', punkte: ['01.02.–30.04.: Angeln mit raubfischtauglichen Ködern in allen LVSA-Gewässern untersagt (faktisch Kunstköderverbot)', 'Hecht &amp; Zander: Mindestmaß 60 cm (Vereinsregel, strenger als das gesetzliche SächsFischVO-Maß von 50 cm)', 'Barsch: max. 10/Tag, davon 5 über 30 cm', 'Zusätzlich Tageslimit für Hecht/Zander laut Gewässerordnung – genaue Stückzahl je nach Quelle uneinheitlich wiedergegeben, im Zweifel aktuelle LVSA-Gewässerordnung/Erlaubnisschein prüfen', 'Fangbuch vor Angelbeginn ausfüllen', 'Nachtangelzeit: 1 h nach Sonnenuntergang bis 1 h vor Sonnenaufgang'] },
             { titel: 'Trinkwassertalsperren (Saidenbach, Dittersbach)', punkte: ['TWT-Belehrung nötig – Nachweis im Fangbuch/Erlaubnisschein', 'Kein Boot, kein Belly, kein Waten, kein Baden', 'Anfüttern verboten – auch Futterkorb', 'Maden &amp; Fleisch als Köder verboten', 'Kein Nachtangeln, kein Zelten, kein Feuer', 'Fische nicht am Gewässer schlachten'] },
-            { titel: 'Streckenfarben an Flüssen (Sachsen)', punkte: ['<b style="color:#e8b93c">Gelb</b>: nur mit Jahres-Salmonidenschein des AVS', '<b style="color:#6fae6f">Grün</b>: allgemeine Berechtigung, aber Salmonidenregeln', '<b style="color:#7d9bc9">Blau</b> (Karte): allgemeines Angelgewässer', '<b style="color:#c94f3d">Rot gestrichelt</b>: Sperrstrecke – Angeln verboten', 'Linienverlauf schematisch – maßgeblich sind die Schilder am Wasser'] },
+            { titel: 'Streckenfarben an Flüssen (Sachsen)', punkte: ['<b style="color:#C79000">Gelb</b>: nur mit Jahres-Salmonidenschein des AVS', '<b style="color:#5C7A3D">Grün</b>: allgemeine Berechtigung, aber Salmonidenregeln', '<b style="color:#3A608F">Blau</b> (Karte): allgemeines Angelgewässer', '<b style="color:#BA1A1A">Rot gestrichelt</b>: Sperrstrecke – Angeln verboten', 'Linienverlauf schematisch – maßgeblich sind die Schilder am Wasser'] },
             { titel: 'Salmonidenstrecken (Mulde, Flöha)', punkte: ['01.01.–30.04.: Angeln komplett verboten', '01.05.–30.09.: Flug- oder Spinnangel', '01.10.–31.12.: nur Flugangel', 'Nur 1 Einzelhaken pro Köder (Drillinge tauschen), Salmonidenschein je nach Strecke', 'Nachtangeln verboten, Salmoniden nicht hältern'] }
         ],
         hinweis: 'Angaben ohne Gewähr, nach SächsFischVO 2022 und LVSA-Gewässerordnung 2024. Maßgeblich: Erlaubnisschein, Gewässerverzeichnis, Beschilderung. Äsche vielerorts ganzjährig geschont – vor Ort prüfen. Gastkarten: angeln-sachsen.de' },

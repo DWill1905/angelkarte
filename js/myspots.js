@@ -1,6 +1,6 @@
 import { byId, inputById } from './dom.js';
 import { state, store } from './state.js';
-import { applyFilters, buildChips, buildMarkers } from './map.js';
+import { applyFilters, buildChips, buildMarkers, deselectSpot } from './map.js';
 import { esc, ICON } from './util.js';
 import { tripSave, updateTripBadge } from './trip.js';
 export var myPending = null;
@@ -113,6 +113,10 @@ export async function saveMySpot() {
             updateTripBadge();
         }
     }
+    /* Beim Bearbeiten wird der alte Spot-Datensatz durch einen neuen ersetzt (siehe oben) -
+       eine offene Detailkarte würde sonst mit veralteten Daten (altem Namen/Notiz) weiterleben. */
+    if (editId != null)
+        deselectSpot();
     buildMarkers();
     buildChips();
     applyFilters();
@@ -147,7 +151,7 @@ window.delMySpot = async function (id) {
             updateTripBadge();
         }
     }
-    state.map.closePopup();
+    deselectSpot();
     buildChips();
     applyFilters();
 };

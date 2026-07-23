@@ -60,7 +60,7 @@ export function kbHtml(){
   bekannt.forEach(f=>{
     const sc=state.SCHON.find(x=>x.fisch===f||(f==='Forelle'&&/forelle/i.test(x.fisch)));
     const zu=sc&&inSchonzeit(sc);
-    h+='<p style="margin-bottom:9px"><b>'+f+':</b> '+(zu?'<span style="color:#f0b6a8">⛔ aktuell geschont ('+fmtMD(sc.von)+'–'+fmtMD(sc.bis)+') – nicht gezielt beangeln!</span> ':'')+KB[f][se]+'</p>';
+    h+='<p style="margin-bottom:9px"><b>'+f+':</b> '+(zu?'<span style="color:var(--warn)">⛔ aktuell geschont ('+fmtMD(sc.von)+'–'+fmtMD(sc.bis)+') – nicht gezielt beangeln!</span> ':'')+KB[f][se]+'</p>';
   });
   unbekannt.forEach(f=>{ h+='<p style="margin-bottom:9px;color:var(--muted)"><b>'+f+':</b> Friedfisch/Sonderart – kein Raubfisch-Köderprofil hinterlegt. Grundmontage mit Naturköder (Wurm, Mais, Made), an Struktur und in der Dämmerung.</p>'; });
   if(state.WX){
@@ -73,7 +73,7 @@ export function kbHtml(){
     else if(state.WX.wt>=18&&state.WX.wt<23) h+='<p style="margin-bottom:9px"><b>Wasser '+Math.round(state.WX.wt)+'°C:</b> optimales Aktivitätsfenster für Zander &amp; Barsch.</p>';
   }
   const mn=new Date().getMonth()+1;
-  if(mn>=4&&mn<=6) h+='<p style="margin-bottom:9px;color:#e8c98c"><b>Laichzeit-Rücksicht:</b> Flachbuchten und Schilfkanten sind jetzt Kinderstube – dort behutsam, Laichfische zurücksetzen, viele Arten sind ohnehin geschont.</p>';
+  if(mn>=4&&mn<=6) h+='<p style="margin-bottom:9px;color:var(--amber)"><b>Laichzeit-Rücksicht:</b> Flachbuchten und Schilfkanten sind jetzt Kinderstube – dort behutsam, Laichfische zurücksetzen, viele Arten sind ohnehin geschont.</p>';
   h+='<p style="color:var(--muted)">Wasser trüb: Schockfarben (firetiger, chartreuse) und laute Köder · Wasser klar: Naturdekore, leiser, dünnere Vorfächer.</p>';
   return h;
 }
@@ -155,8 +155,8 @@ export function openLead(){
     h+='<div class="card"><h3 style="font-size:13px">Rhein / Fließgewässer</h3><ul style="margin-left:16px">'
       +'<li><b>Normalpegel, Buhnenfeld:</b> Jigkopf 10–21 g – so leicht wie möglich, dass es noch tickt</li>'
       +'<li><b>Hauptstrom / tiefe Rinne:</b> 21–40 g, damit der Köder Grundkontakt hält</li>'
-      +(hoch?'<li style="color:#f0b6a8"><b>⚠ Hochwasser aktuell ('+state.PEGEL.value+' cm):</b> 40–60 g nötig oder auf Hafenausfahrt ausweichen</li>':'')
-      +(steigend?'<li style="color:#e8c98c"><b>Pegel steigt stark:</b> Strömung nimmt zu – 10 g mehr einplanen als sonst</li>':'')
+      +(hoch?'<li style="color:var(--warn)"><b>⚠ Hochwasser aktuell ('+state.PEGEL.value+' cm):</b> 40–60 g nötig oder auf Hafenausfahrt ausweichen</li>':'')
+      +(steigend?'<li style="color:var(--amber)"><b>Pegel steigt stark:</b> Strömung nimmt zu – 10 g mehr einplanen als sonst</li>':'')
       +'<li><b>Faustregel:</b> leichtester Kopf, mit dem du in 5–8 s Grundkontakt bekommst</li></ul></div>';
   } else {
     h+='<div class="card"><h3 style="font-size:13px">Stillgewässer / See</h3><ul style="margin-left:16px">'
@@ -290,7 +290,7 @@ function renderBite(){
       const aktiv=heute&&nowMs>=wdw.from&&nowMs<=wdw.to;
       const vorbei=heute&&nowMs>wdw.to;
       const top=wdw.type==='major'&&druckGut; /* Major + fallender Druck = Top */
-      const farbe=top?'#f0c14b':wdw.type==='major'?'var(--amber)':'var(--dusk)';
+      const farbe=top?'#B8860B':wdw.type==='major'?'var(--amber)':'var(--dusk)';
       h+='<div style="display:flex;align-items:center;gap:9px;margin:7px 0;'+(vorbei?'opacity:.45':'')+'">'
         +'<span style="min-width:8px;width:8px;height:8px;border-radius:50%;background:'+farbe+';display:inline-block"></span>'
         +'<b style="min-width:96px">'+hhmm(wdw.from)+'–'+hhmm(wdw.to)+'</b>'
@@ -629,19 +629,21 @@ function wtHinweis(wt,arten){
   return t;
 }
 
-/* Distanz im Popup nachtragen */
-state.map.on('popupopen',e=>{
-  document.body.classList.add('popup-offen'); /* Karten-Controls ausblenden, kein Layer-Salat beim Scrollen */
-  const wrap=e.popup.getElement();
-  if(wrap) wrap.querySelectorAll('.tackle > summary, .pop-details > summary').forEach((sum: Element)=>{
+/** Reichert eine gerenderte Spot-Detailkarte (im Sheet: `popupHtml`/`hotPopup`) mit
+    dynamischen Werten an – Distanz, Wassertemperatur-Hinweis, Wind-Taktik, Trip-Button-
+    Zustand, eigene Notiz – und fängt Klicks auf „Gewässer & Methode“/Tackle ab, um sie
+    im Vollbild-Panel statt eng im Sheet zu öffnen. */
+export function enhanceDetail(wrap: HTMLElement | null): void {
+  if(!wrap) return;
+  wrap.querySelectorAll('.tackle > summary, .pop-details > summary').forEach((sum: Element)=>{
     sum.addEventListener('click',(ev: Event)=>{
-      ev.preventDefault(); /* nicht im engen Popup aufklappen – Vollbild-Panel öffnen */
+      ev.preventDefault(); /* nicht eng aufklappen – Vollbild-Panel öffnen */
       const det=sum.parentElement;
       const body=det && det.querySelector('.tackle-body, .pop-details-body');
       oeffneDetail((sum.textContent||'').replace(/[\u203A+\u2013\s]+$/,'').trim(), body?body.outerHTML:'');
     });
   });
-  const wtEl=e.popup.getElement().querySelector('[data-wt]');
+  const wtEl=wrap.querySelector('[data-wt]') as HTMLElement|null;
   if(wtEl){
     const wt=(state.PEGEL&&typeof state.PEGEL.wt==='number')?state.PEGEL.wt:(state.WX&&typeof state.WX.wt==='number'?state.WX.wt:null);
     const arten=(wtEl.dataset.wt||'').split(',').map(x=>x.trim()).filter(Boolean);
@@ -649,9 +651,9 @@ state.map.on('popupopen',e=>{
     if(txt) wtEl.innerHTML='<b>Wassertemperatur</b>'+txt;
     else wtEl.remove();
   }
-  const tEl=e.popup.getElement().querySelector('.pop-btn.trip');
+  const tEl=wrap.querySelector('.pop-btn.trip') as HTMLElement|null;
   if(tEl) setTripBtn(tEl,inTrip(tEl.dataset.spot));
-  const wEl=e.popup.getElement().querySelector('[data-wind]');
+  const wEl=wrap.querySelector('[data-wind]') as HTMLElement|null;
   if(wEl){
     if(state.WX&&state.WX.wind>=8){
       const dirs=['Nord','Nordost','Ost','Südost','Süd','Südwest','West','Nordwest'];
@@ -661,21 +663,20 @@ state.map.on('popupopen',e=>{
       wEl.innerHTML='<b>Wind-Taktik jetzt</b>Wenig Wind ('+Math.round(state.WX.wind)+' km/h) – Uferwahl frei, Kanten und Struktur entscheiden.';
     } else wEl.remove();
   }
-  const el=e.popup.getElement().querySelector('[data-dist]');
+  const el=wrap.querySelector('[data-dist]') as HTMLElement|null;
   if(el){
-    const [la,ln]=el.dataset.dist.split(',').map(Number);
+    const [la,ln]=(el.dataset.dist||'').split(',').map(Number);
     const c=state.map.getCenter();
     const ref=state.userPos||[c.lat,c.lng];
     el.textContent='~'+de1(haversine(ref[0],ref[1],la,ln))+' km '+(state.userPos?'von dir':'von Kartenmitte');
   }
-  const notizEl=e.popup.getElement().querySelector('.notiz-ta') as HTMLTextAreaElement|null;
+  const notizEl=wrap.querySelector('.notiz-ta') as HTMLTextAreaElement|null;
   if(notizEl){
     const name=notizEl.dataset.notizSpot||'';
-    ladeNotiz(name).then(txt=>{ if(notizEl.value==='') notizEl.value=txt; }); /* Popup evtl. laengst zu/neu geoeffnet */
+    ladeNotiz(name).then(txt=>{ if(notizEl.value==='') notizEl.value=txt; }); /* Detail evtl. laengst zu/neu geoeffnet */
     notizEl.onblur=()=>{ speichereNotiz(name,notizEl.value); };
   }
-});
-state.map.on('popupclose',()=>document.body.classList.remove('popup-offen'));
+}
 
 /* Vollbild-Panel für Tackle / Gewässer & Methode. */
 function oeffneDetail(titel: string, html: string): void {

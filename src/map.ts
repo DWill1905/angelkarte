@@ -7,7 +7,7 @@ import { ratingHtml } from './rating.js';
 import { fokusFor, hotspotAktiv, istKante, spotImFokus } from './saison.js';
 import { fmtMD, haversine } from './astro.js';
 import { CATS, FISH, fischArtenFor } from './data.js';
-import { openTools } from './tools.js';
+import { openTools, enhanceDetail } from './tools.js';
 import { sunLine } from './ui.js';
 import { ICON, chipsFadeInit, esc, de1 } from './util.js';
 import { loadWeather } from './weather.js';
@@ -75,7 +75,7 @@ export function popupHtml(s: Spot): string {
      Kopf → Chancen heute → aktuelle Bedingungen → Warnung → Erlaubnis → Details (zu) → Aktionen.
      Vorher standen die Erlaubnisformalitäten vor der Fangchance, und Methode/Rig/Strecke
      bliesen das Popup auf 15 Zeilen auf. */
-  return `<span class="pop-cat" style="background:${c.color}">${c.label}</span><span class="pop-nr">${s.nr}</span>
+  return `<span class="pop-cat" style="background:${c.bg};color:${c.fg}">${c.label}</span><span class="pop-nr">${s.nr}</span>
     <div class="pop-title">${s.name}</div>
     <div class="pop-dist" data-dist="${s.lat},${s.lng}"></div>
     ${badgesHtml(s)}
@@ -108,7 +108,7 @@ export function popupHtml(s: Spot): string {
       <a class="pop-btn nav" href="${mapsLink(s)}" target="_blank" rel="noopener">Route</a>
       <button class="pop-btn log" onclick="prefillFang('${s.name.replace(/'/g,"\\'")}')">Fang loggen</button>
       ${s.cat!=='sperr'&&s.cat!=='info'?`<button class="pop-btn trip" data-spot="${esc(s.name)}" aria-pressed="false" onclick="toggleTripSpot('${s.name.replace(/'/g,"\\'")}')">☆ Merken</button>`:''}
-      ${s.my?'<button class="pop-btn" onclick="editMySpot('+s.myId+')">Bearbeiten</button><button class="pop-btn" style="background:#4a201a;color:#f0b6a8" onclick="delMySpot('+s.myId+')">Löschen</button>':''}
+      ${s.my?'<button class="pop-btn" onclick="editMySpot('+s.myId+')">Bearbeiten</button><button class="pop-btn" style="background:var(--error-container);color:var(--on-error-container)" onclick="delMySpot('+s.myId+')">Löschen</button>':''}
     </div>`;
 }
 
@@ -153,7 +153,7 @@ function dimFishChips(){
   });
 }
 
-export const LINECOL={gelb:'#e8b93c',gruen:'#6fae6f',allg:'#7d9bc9',sperr:'#c94f3d'};
+export const LINECOL={gelb:'#C79000',gruen:'#5C7A3D',allg:'#3A608F',sperr:'#BA1A1A'};
 
 /* Einklappbare Karten-Legende: erklärt die Pin-Farben (nur die in der Region vorhandenen Kategorien)
    und die Cluster. Farben stammen aus CATS – eine Quelle. */
@@ -188,7 +188,8 @@ export function buildRheinKm(){
   });
 }
 export function hotPopup(parent,h){
-  return `<span class="pop-cat" style="background:${CATS[parent.cat].color}">Hotspot</span>
+  const c=CATS[parent.cat];
+  return `<span class="pop-cat" style="background:${c.bg};color:${c.fg}">Hotspot</span>
     <div class="pop-title">${h.name}</div>
     <div class="pop-dist">gehört zu ${parent.name}</div>
     ${h.saison?'<div class="pop-row"><b>Beste Zeit</b>'+h.saison+'</div>':''}
@@ -205,12 +206,12 @@ export function buildMarkers(){
       const kante=istKante(h)&&(fk.jahreszeit==='herbst'||fk.jahreszeit==='winter');
       return L.circleMarker([h.lat,h.lng],{
         radius: aktiv?(kante?8:6):5,
-        color: kante?'#f0bc5c':'#fff',
+        color: kante?'#8a5e0f':'#fff',
         weight: kante?3:2,
         fillColor: CATS[s.cat].color,
         fillOpacity: aktiv?.95:.35,
         opacity: aktiv?1:.45,
-      }).bindPopup(hotPopup(s,h),{autoPanPadding:[20,60]})
+      }).on('click',()=>selectHotspot(s,h))
         .bindTooltip(h.name+(aktiv?'':' · außerhalb der Saison')+(kante?' · Tiefenkante':''));
     });
     if(s.line){
@@ -218,10 +219,10 @@ export function buildMarkers(){
         color:LINECOL[s.farbe]||CATS[s.cat].color,
         weight:5,opacity:.85,
         dashArray:s.farbe==='sperr'?'7 7':null
-      }).bindPopup(popupHtml(s),{autoPanPadding:[20,60]});
+      }).on('click',()=>selectSpot(s));
     }else{
       s.marker=L.marker([s.lat,s.lng],{icon:pinIcon(s.cat,spotImFokus(s)),title:s.name})
-        .bindPopup(popupHtml(s),{autoPanPadding:[20,60]});
+        .on('click',()=>selectSpot(s));
     }
   });
 }
@@ -318,12 +319,12 @@ export function sperrWarnung(){
 export function locApply(p){
   state.userPos=[p.coords.latitude,p.coords.longitude];
   if(state.userMarker) state.userMarker.remove();
-  state.userMarker=L.circleMarker(state.userPos,{radius:7,color:'#fff',fillColor:'#6ea8c4',fillOpacity:.95,weight:2})
+  state.userMarker=L.circleMarker(state.userPos,{radius:7,color:'#fff',fillColor:'#196C74',fillOpacity:.95,weight:2})
     .addTo(state.map).bindTooltip('Du');
   state.map.setView(state.userPos,11);
   renderList();
   sperrWarnung();
-  if(sheet) sheet.classList.remove('collapsed'); /* Spotliste zeigen, damit nächste Spots sichtbar */
+  setSheetOpen(true); /* Spotliste zeigen, damit nächste Spots sichtbar */
   state.wxKey=''; loadWeather();
   if(typeof sunLine==='function') sunLine();
 }
@@ -361,12 +362,28 @@ locBtn.onclick=()=>{
   );
 };
 
-/* Spotliste */
+/* Spotliste + Spot-Detail. Ersetzt die frühere Leaflet-Popup-Bubble: Auswahl (per Marker-
+   oder Listenklick) rendert die Detailkarte unten im selben Scrollcontainer wie die Liste –
+   kein separates Popup-DOM mehr, dafür teilen sich Liste und Detail eine Render-Funktion. */
 export const listEl=byId('spotList'), countEl=byId('spotCount');
 export const sortEl=byId('spotSort');
 export const searchEl=inputById('spotSearch');
 export let spotQuery='';
 export const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+export let selectedSpot: Spot|null=null;
+export let selectedHotspot: any=null;
+
+function detailBlockHtml(): string {
+  if(!selectedSpot) return '';
+  const inner = selectedHotspot ? hotPopup(selectedSpot,selectedHotspot) : popupHtml(selectedSpot);
+  return `<div class="spot-detail-label">Spot-Ansicht</div>
+    <div class="spot-detail" id="spotDetailBox">
+      <button class="spot-detail-x" id="spotDetailClose" type="button" aria-label="Schließen">${ICON('x')}</button>
+      ${inner}
+    </div>`;
+}
+
 export function renderList(){
   listEl.innerHTML='';
   let vis=state.SPOTS.filter(spotVisible);
@@ -388,35 +405,33 @@ export function renderList(){
     listEl.innerHTML=spotQuery
       ? '<div class="fb-empty" style="padding:20px">Kein Treffer für „'+esc(spotQuery)+'". Suchbegriff löschen oder anderen Namen/Fischart probieren.</div>'
       : '<div class="fb-empty" style="padding:20px">Keine Gewässer sichtbar – die Filter oben blenden gerade alles aus. Tippe Kategorie- oder Zielfisch-Chips an, um sie wieder einzublenden.</div>';
-    return;
+  }else{
+    vis.forEach((s,idx)=>{
+      const c=CATS[s.cat], b=document.createElement('button');
+      b.className='spot-item'+(state.userPos&&idx===0?' nearest':'')+(s===selectedSpot?' selected':'');
+      const meta=state.userPos?de1(s._d)+' km'+(idx===0?' ★':''):s.fisch.split(',')[0];
+      b.innerHTML=`<span class="dot" style="background:${c.color}"></span>
+        <span class="name" title="${esc(s.name)}">${s.name}</span><span class="meta">${meta}</span>`;
+      b.onclick=()=>{
+        selectSpot(s);
+        if(s.line) state.map.fitBounds(s.marker.getBounds(),{padding:[40,40]});
+        else if(reduceMotion) state.map.setView([s.lat,s.lng],13);
+        else state.map.flyTo([s.lat,s.lng],13,{duration:.6});
+      };
+      listEl.appendChild(b);
+    });
   }
-  vis.forEach((s,idx)=>{
-    const c=CATS[s.cat], b=document.createElement('button');
-    b.className='spot-item'+(state.userPos&&idx===0?' nearest':'');
-    const meta=state.userPos?de1(s._d)+' km'+(idx===0?' ★':''):s.fisch.split(',')[0];
-    b.innerHTML=`<span class="dot" style="background:${c.color}"></span>
-      <span class="name" title="${esc(s.name)}">${s.name}</span><span class="meta">${meta}</span>`;
-    b.onclick=()=>{
-      let opened=false;
-      const open=()=>{if(!opened){opened=true;s.marker.openPopup(s.line?[s.lat,s.lng]:undefined);}};
-      if(s.line){
-        state.map.fitBounds(s.marker.getBounds(),{padding:[40,40]});
-        state.map.once('moveend',open); setTimeout(open,800);
-      }else if(reduceMotion){state.map.setView([s.lat,s.lng],13);open();}
-      else{
-        state.map.flyTo([s.lat,s.lng],13,{duration:.6});
-        state.map.once('moveend',open);
-        setTimeout(open,800); /* Fallback: Ziel = aktuelle Ansicht */
-      }
-      if(window.innerWidth<820) sheet.classList.add('collapsed');
-    };
-    listEl.appendChild(b);
-  });
+  listEl.insertAdjacentHTML('beforeend',detailBlockHtml());
+  if(selectedSpot){
+    enhanceDetail(byId('spotDetailBox'));
+    const x=byId('spotDetailClose'); if(x) x.onclick=deselectSpot;
+  }
 }
 renderList();
 
 export const sheet=byId('sheet'), handle=byId('sheetHandle');
-export function toggleSheet(){ sheet.classList.toggle('collapsed'); }
+export function setSheetOpen(open: boolean): void { sheet.classList.toggle('collapsed',!open); }
+export function toggleSheet(){ setSheetOpen(sheet.classList.contains('collapsed')); }
 handle.onclick=toggleSheet;
 if(searchEl){
   searchEl.oninput=()=>{ spotQuery=searchEl.value.trim(); renderList(); };
@@ -424,6 +439,34 @@ if(searchEl){
   searchEl.onclick=e=>e.stopPropagation();
 }
 handle.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleSheet();}};
+
+/** Spot auswählen: öffnet die Detailkarte unten im Sheet (statt eines Leaflet-Popups). */
+export function selectSpot(s: Spot): void {
+  selectedSpot=s; selectedHotspot=null;
+  setSheetOpen(true); setDetailOffen(true); renderList(); scrollToDetail();
+}
+/** Hotspot (Unterpunkt eines Spots) auswählen – eigene, schlankere Detailkarte. */
+export function selectHotspot(parent: Spot, h: any): void {
+  selectedSpot=parent; selectedHotspot=h;
+  setSheetOpen(true); setDetailOffen(true); renderList(); scrollToDetail();
+}
+/** Auswahl aufheben – z.B. über den ✕-Knopf der Detailkarte oder nach dem Löschen eines eigenen Spots. */
+export function deselectSpot(): void {
+  selectedSpot=null; selectedHotspot=null;
+  setDetailOffen(false); renderList();
+}
+/* body.detail-offen blendet die Karten-FABs aus, solange eine Detailkarte offen ist – sie
+   sind relativ zum unteren Rand der ganzen Ansicht positioniert und würden über einem hohen
+   Sheet schweben statt darunter zu bleiben. Nur bei aktiver Detailkarte, nicht schon beim
+   bloßen Ausklappen der Liste (die bleibt kurz genug, um mit den FABs zu koexistieren). */
+function setDetailOffen(offen: boolean): void { document.body.classList.toggle('detail-offen',offen); }
+function scrollToDetail(): void {
+  requestAnimationFrame(()=>{
+    const box=byId('spotDetailBox');
+    /* jsdom (Testumgebung) kennt scrollIntoView nicht – im echten Browser immer vorhanden. */
+    if(box&&typeof (box as any).scrollIntoView==='function') box.scrollIntoView({block:'nearest',behavior:reduceMotion?'auto':'smooth'});
+  });
+}
 
 
 /* ===== Offline-Kacheln: aktuellen Ausschnitt sichern (OSM-policy-konform, kein Bulk) ===== */

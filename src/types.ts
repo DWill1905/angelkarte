@@ -189,10 +189,13 @@ export interface Tackle {
   warum?: string;
 }
 
-/** Kategorie-Metadaten (Label + Farbe). */
+/** Kategorie-Metadaten (Label + Farben). `color` ist der kräftige Marker-/Dot-Ton
+    (Karte, Chips, Legende); `bg`/`fg` sind das helle M3-Tonal-Paar für Badges (Popup). */
 export interface CatInfo {
   label: string;
   color: string;
+  bg: string;
+  fg: string;
 }
 
 /** Ein Solunar-Beißfenster. */
